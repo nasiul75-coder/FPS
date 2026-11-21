@@ -1,28 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FPS — The Cinema of Gaming</title>
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Bebas Neue, Montserrat, & Inter -->
+  <!-- Google Fonts: Bebas Neue, Rajdhani, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,700;0,800;0,900;1,900&display=swap" rel="stylesheet">
-
-  <!-- FontAwesome 6 Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --fps-red: #e50914;
-      --fps-glow: #ff1e27;
-      --fps-black: #060709;
-      --fps-carbon: #0d0f14;
-      --fps-surface: rgba(18, 22, 31, 0.7);
+      --fps-red: #E50914;
+      --fps-red-hover: #F40612;
+      --fps-bg: #08090C;
+      --fps-card: #111319;
     }
 
     * {
@@ -30,188 +26,207 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--fps-bg);
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--fps-black);
-      color: #f1f5f9;
+      background-color: var(--fps-bg);
+      color: #FFFFFF;
       overflow-x: hidden;
       margin: 0;
-      background-image: 
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(229, 9, 20, 0.18), transparent),
-        radial-gradient(circle at 100% 50%, rgba(20, 30, 55, 0.25), transparent);
-      background-attachment: fixed;
     }
 
     .font-brand {
       font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 5px;
+      letter-spacing: 0.12em;
     }
 
-    .font-rockstar {
-      font-family: 'Montserrat', sans-serif;
-      letter-spacing: 4px;
+    .font-display {
+      font-family: 'Rajdhani', sans-serif;
     }
 
-    /* Ambient Gaming Grid */
-    .gaming-grid-bg {
-      background-size: 40px 40px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    /* Hide Scrollbars for Carousels */
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
 
-    /* Custom Scrollbar */
+    /* Custom Page Scrollbar */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
     }
     ::-webkit-scrollbar-track {
-      background: #060709;
+      background: #08090C;
     }
     ::-webkit-scrollbar-thumb {
-      background: #1e2433;
+      background: #272B36;
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: var(--fps-red);
     }
 
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Rockstar Splash Screen */
-    @keyframes rockstarFlash {
-      0% { opacity: 0; transform: scale(0.92); filter: blur(10px) contrast(200%); }
-      20% { opacity: 1; transform: scale(1.02); filter: blur(0px) contrast(140%); }
-      30% { transform: scale(1); }
-      75% { opacity: 1; }
+    /* Slick 1.8s Rockstar-Style Studio Intro */
+    @keyframes studioIntro {
+      0% { opacity: 1; }
+      78% { opacity: 1; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
-
-    @keyframes scanline {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(1000%); }
+    @keyframes logoStomp {
+      0% { transform: scale(1.35); opacity: 0; filter: blur(12px); }
+      25% { transform: scale(1); opacity: 1; filter: blur(0); }
+      75% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1.08); opacity: 0; }
+    }
+    @keyframes introScan {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .animate-studio-intro {
+      animation: studioIntro 1.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .animate-logo-stomp {
+      animation: logoStomp 1.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animate-intro-scan {
+      animation: introScan 1.1s ease-in-out infinite;
     }
 
-    .animate-splash {
-      animation: rockstarFlash 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .rockstar-scanline {
+    /* Hero Full-Bleed YouTube Cover Scaling (Removes Black Bars) */
+    .hero-video-shell {
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, rgba(255, 30, 39, 0.9), transparent);
-      animation: scanline 3.5s linear infinite;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .hero-video-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw; /* 16:9 */
+      min-height: 112%;
+      min-width: 199vh;
+      transform: translate(-50%, -50%) scale(1.06);
+      border: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.85s ease;
+    }
+    .hero-video-frame.is-playing {
+      opacity: 1;
     }
 
-    /* High-End Netflix Card Zoom */
-    .netflix-card {
-      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-      will-change: transform;
-      cursor: pointer;
+    /* Sharp High-Contrast Hero Gradients (Never dims text which sits at z-30) */
+    .hero-gradient-bottom {
+      background: linear-gradient(
+        to top,
+        #08090C 0%,
+        rgba(8, 9, 12, 0.82) 18%,
+        rgba(8, 9, 12, 0.35) 45%,
+        rgba(8, 9, 12, 0.05) 75%,
+        rgba(8, 9, 12, 0.45) 100%
+      );
     }
-    .netflix-card:hover {
-      transform: translateY(-8px) scale(1.06);
-      z-index: 30;
-      box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.95), 0 0 30px rgba(229, 9, 20, 0.45);
-      border-color: rgba(255, 30, 39, 0.8) !important;
+    .hero-gradient-left {
+      background: linear-gradient(
+        to right,
+        rgba(8, 9, 12, 0.88) 0%,
+        rgba(8, 9, 12, 0.55) 38%,
+        rgba(8, 9, 12, 0.08) 70%,
+        transparent 100%
+      );
     }
 
-    /* Professional Metallic Badges (Zero Emojis) */
+    /* Metallic Professional Rating Badges (Zero Emojis) */
     .badge-rdr {
-      background: linear-gradient(135deg, #7f1d1d, #450a0a);
-      border: 1px solid #fbbf24;
-      color: #fef08a;
-      box-shadow: 0 0 16px rgba(185, 28, 28, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #991B1B 0%, #450A0A 100%);
+      border: 1px solid #FBBF24;
+      color: #FEF08A;
+      box-shadow: 0 0 18px rgba(220, 38, 38, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.28);
     }
     .badge-gta {
-      background: linear-gradient(135deg, #064e3b, #022c22);
-      border: 1px solid #34d399;
-      color: #a7f3d0;
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #065F46 0%, #022C22 100%);
+      border: 1px solid #34D399;
+      color: #A7F3D0;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
     .badge-peak {
-      background: linear-gradient(135deg, #78350f, #451a03);
-      border: 1px solid #facc15;
-      color: #fef9c3;
-      box-shadow: 0 0 18px rgba(250, 204, 21, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      background: linear-gradient(135deg, #92400E 0%, #451A03 100%);
+      border: 1px solid #FACC15;
+      color: #FEF9C3;
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     }
     .badge-cinema {
-      background: linear-gradient(135deg, #075985, #082f49);
-      border: 1px solid #38bdf8;
-      color: #e0f2fe;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #0369A1 0%, #082F49 100%);
+      border: 1px solid #38BDF8;
+      color: #E0F2FE;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
     .badge-shouldplay {
-      background: linear-gradient(135deg, #14532d, #052e16);
-      border: 1px solid #4ade80;
-      color: #dcfce7;
-      box-shadow: 0 0 14px rgba(74, 222, 128, 0.5);
+      background: linear-gradient(135deg, #15803D 0%, #052E16 100%);
+      border: 1px solid #4ADE80;
+      color: #DCFCE7;
+      box-shadow: 0 0 14px rgba(74, 222, 128, 0.4);
     }
     .badge-cantry {
-      background: linear-gradient(135deg, #831843, #500724);
-      border: 1px solid #f472b6;
-      color: #fce7f3;
-      box-shadow: 0 0 14px rgba(244, 114, 182, 0.45);
+      background: linear-gradient(135deg, #9D174D 0%, #500724 100%);
+      border: 1px solid #F472B6;
+      color: #FCE7F3;
+      box-shadow: 0 0 14px rgba(244, 114, 182, 0.4);
     }
     .badge-trash {
-      background: linear-gradient(135deg, #7f1d1d, #450a0a);
-      border: 1px solid #ef4444;
-      color: #fee2e2;
-      box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+      background: linear-gradient(135deg, #991B1B 0%, #450A0A 100%);
+      border: 1px solid #EF4444;
+      color: #FEE2E2;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
     }
 
-    /* Billboard Slide Transitions */
-    .billboard-track {
-      display: flex;
-      transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
-      width: 100%;
-      height: 100%;
+    /* Netflix Card Hover & Clickability */
+    .game-card {
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+      cursor: pointer;
     }
-    .billboard-item {
-      flex: 0 0 100%;
-      width: 100%;
-      height: 100%;
-      position: relative;
+    .game-card:hover {
+      transform: translateY(-6px) scale(1.045);
+      z-index: 25;
+      box-shadow: 0 20px 36px -8px rgba(0, 0, 0, 0.92), 0 0 26px rgba(229, 9, 20, 0.42);
+      border-color: rgba(229, 9, 20, 0.85);
     }
 
-    /* Glassmorphic Shells */
-    .glass-panel {
-      background: rgba(13, 16, 23, 0.75);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Animated Score Bar Fill */
+    .score-bar-fill {
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .glass-btn {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      transition: all 0.25s ease;
+    /* Drag Cursor for Horizontal Sliders */
+    .drag-scroll {
+      cursor: grab;
     }
-    .glass-btn:hover {
-      background: rgba(229, 9, 20, 0.85);
-      border-color: rgba(255, 30, 39, 1);
-      box-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+    .drag-scroll.is-dragging {
+      cursor: grabbing;
+      scroll-behavior: auto !important;
     }
   </style>
 
-  <!-- Firebase Modular Scripts -->
+  <!-- Firebase Modular SDK -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      signInWithPopup, 
-      signOut, 
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAlVVF9RIiKdn3Assg_tjt57Qge4X9yJ9s",
@@ -219,8 +234,7 @@
       projectId: "fpss-3784f",
       storageBucket: "fpss-3784f.firebasestorage.app",
       messagingSenderId: "918308716461",
-      appId: "1:918308716461:web:1dab2b60ff604fea262b24",
-      measurementId: "G-WYCNK4277S"
+      appId: "1:918308716461:web:1dab2b60ff604fea262b24"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -229,20 +243,22 @@
 
     window.fpsAuth = {
       loginWithGoogle: async () => {
-        const errorMsg = document.getElementById("loginErrorMsg");
+        const errEl = document.getElementById("loginErrorMsg");
         const btnText = document.getElementById("googleBtnText");
         const spinner = document.getElementById("googleBtnSpinner");
         try {
-          if (errorMsg) errorMsg.classList.add("hidden");
-          if (btnText) btnText.textContent = "AUTHENTICATING...";
+          if (errEl) errEl.classList.add("hidden");
+          if (btnText) btnText.textContent = "SIGNING IN...";
           if (spinner) spinner.classList.remove("hidden");
-
           await signInWithPopup(auth, provider);
-        } catch (error) {
-          console.error("Auth Exception:", error);
-          if (errorMsg) {
-            errorMsg.textContent = error.message || "Failed to sign in. Verify browser pop-up permissions.";
-            errorMsg.classList.remove("hidden");
+          localStorage.setItem("fps_guest_dismissed", "1");
+        } catch (err) {
+          console.error("Firebase Auth Error:", err);
+          if (errEl) {
+            errEl.textContent = err.code === "auth/unauthorized-domain"
+              ? "Add this domain to Firebase Authorized Domains, or use Continue as Guest below."
+              : (err.message || "Google sign-in failed. Try Continue as Guest.");
+            errEl.classList.remove("hidden");
           }
         } finally {
           if (btnText) btnText.textContent = "CONTINUE WITH GOOGLE";
@@ -252,1291 +268,1467 @@
       logout: async () => {
         try {
           await signOut(auth);
+          window.showToast("Signed out of FPS");
         } catch (err) {
-          console.error("Logout error:", err);
+          console.error("Sign out error:", err);
         }
       }
     };
 
     onAuthStateChanged(auth, (user) => {
-      const loginOverlay = document.getElementById("loginOverlay");
-      const userProfile = document.getElementById("userProfileSection");
+      const loginModal = document.getElementById("loginModal");
       const navLoginBtn = document.getElementById("navLoginBtn");
-      const userAvatar = document.getElementById("userAvatar");
-      const userName = document.getElementById("userName");
+      const navUserPill = document.getElementById("navUserPill");
+      const navUserAvatar = document.getElementById("navUserAvatar");
+      const navUserName = document.getElementById("navUserName");
 
       if (user) {
-        if (loginOverlay) loginOverlay.classList.add("hidden");
-        if (userProfile) {
-          userProfile.classList.remove("hidden");
-          userProfile.classList.add("flex");
-        }
+        if (loginModal) loginModal.classList.add("hidden");
         if (navLoginBtn) navLoginBtn.classList.add("hidden");
-        if (userAvatar) {
-          userAvatar.src = user.photoURL || `https://placehold.co/100x100/e50914/ffffff?text=${encodeURIComponent((user.displayName || 'G')[0])}`;
+        if (navUserPill) {
+          navUserPill.classList.remove("hidden");
+          navUserPill.classList.add("flex");
         }
-        if (userName) {
-          userName.textContent = user.displayName?.split(" ")[0] || "OPERATOR";
+        if (navUserAvatar) {
+          navUserAvatar.src = user.photoURL || `https://placehold.co/80x80/E50914/FFFFFF?text=${encodeURIComponent((user.displayName || "P")[0])}`;
+        }
+        if (navUserName) {
+          navUserName.textContent = (user.displayName || "Player").split(" ")[0];
         }
       } else {
-        if (userProfile) {
-          userProfile.classList.add("hidden");
-          userProfile.classList.remove("flex");
+        if (navUserPill) {
+          navUserPill.classList.add("hidden");
+          navUserPill.classList.remove("flex");
         }
         if (navLoginBtn) navLoginBtn.classList.remove("hidden");
       }
     });
   </script>
 </head>
-<body class="min-h-screen flex flex-col gaming-grid-bg selection:bg-red-600 selection:text-white">
+<body class="min-h-screen flex flex-col bg-[#08090C] text-white selection:bg-[#E50914] selection:text-white">
 
-  <!-- ==================== CINEMATIC ROCKSTAR SPLASH ==================== -->
-  <div id="rockstarSplash" class="fixed inset-0 z-50 bg-[#050608] flex flex-col items-center justify-center animate-splash pointer-events-none overflow-hidden">
-    <div class="rockstar-scanline"></div>
-    <div class="relative flex flex-col items-center">
-      <div class="relative w-28 h-28 flex items-center justify-center mb-6">
-        <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-red-600 to-amber-500 blur-2xl opacity-60"></div>
-        <div class="w-24 h-24 bg-black border-2 border-red-600/90 rounded-2xl flex items-center justify-center shadow-[0_0_60px_rgba(229,9,20,0.85)] relative z-10">
-          <span class="font-brand text-6xl text-[#e50914] tracking-widest font-black">FPS</span>
-        </div>
+  <!-- ==================== 1.8s ROCKSTAR-STYLE STUDIO INTRO ==================== -->
+  <div id="studioIntro" class="fixed inset-0 z-[100] bg-[#050608] flex flex-col items-center justify-center animate-studio-intro overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.22)_0%,rgba(5,6,8,1)_68%)]"></div>
+    <div class="relative z-10 flex flex-col items-center animate-logo-stomp">
+      <div class="relative w-28 h-28 rounded-2xl bg-black border-2 border-[#E50914] flex items-center justify-center shadow-[0_0_70px_rgba(229,9,20,0.85)] overflow-hidden mb-5">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-intro-scan"></div>
+        <span class="font-brand text-6xl text-[#E50914] font-black leading-none pt-1">FPS</span>
       </div>
-      <h1 class="font-rockstar text-sm sm:text-base text-gray-200 tracking-[8px] sm:tracking-[12px] font-black uppercase mb-1">
-        CINEMA STUDIOS
-      </h1>
-      <p class="text-[10px] tracking-[4px] uppercase text-red-500 font-bold">
-        ENTERTAINMENT NETWORK &bull; 4K THEATER
-      </p>
+      <div class="font-display text-sm sm:text-base font-bold tracking-[0.45em] text-white uppercase">
+        FPS INTERACTIVE CINEMA
+      </div>
+      <div class="text-[10px] tracking-[0.35em] text-red-500 font-bold uppercase mt-1.5">
+        VERIFIED REVIEWS &bull; 4K TRAILERS
+      </div>
     </div>
   </div>
 
-  <!-- ==================== GOOGLE SIGN-IN OVERLAY ==================== -->
-  <div id="loginOverlay" class="fixed inset-0 z-40 bg-[#060709]/95 backdrop-blur-3xl flex flex-col justify-between items-center transition-all duration-500 overflow-y-auto" style="background-image: radial-gradient(circle at center, rgba(60, 10, 15, 0.45) 0%, rgba(6, 7, 9, 0.98) 75%);">
-    
-    <header class="w-full px-6 sm:px-14 py-6 flex items-center justify-between z-10">
-      <div class="flex items-center gap-3">
-        <span class="font-brand text-5xl sm:text-6xl text-[#e50914] font-black tracking-widest drop-shadow-[0_0_25px_rgba(229,9,20,0.9)]">FPS</span>
-        <span class="text-[9px] tracking-[3px] uppercase font-bold text-gray-400 border border-neutral-800 bg-neutral-900/80 px-2.5 py-1 rounded">STUDIO CINEMA</span>
-      </div>
-      <button onclick="document.getElementById('loginOverlay').classList.add('hidden')" class="text-xs text-gray-300 hover:text-white transition flex items-center gap-2 bg-neutral-900/80 px-4 py-2 rounded-full border border-neutral-700/80 hover:border-red-600">
-        <span>ENTER GUEST TERMINAL</span>
-        <i class="fa-solid fa-arrow-right text-[10px] text-red-500"></i>
+  <!-- ==================== GOOGLE SIGN-IN MODAL ==================== -->
+  <div id="loginModal" class="fixed inset-0 z-[90] bg-black/85 backdrop-blur-2xl hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-[#0E1017] border border-white/15 rounded-2xl p-8 shadow-[0_30px_90px_rgba(0,0,0,0.95)] overflow-hidden text-center">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E50914] via-amber-400 to-[#E50914]"></div>
+
+      <button onclick="dismissLoginAsGuest()" aria-label="Close login" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
-    </header>
 
-    <div class="w-full max-w-md px-8 sm:px-10 py-10 bg-neutral-950/90 backdrop-blur-2xl rounded-2xl border border-neutral-800/90 shadow-[0_25px_70px_rgba(0,0,0,0.98)] flex flex-col items-center text-center mx-4 my-auto relative overflow-hidden">
-      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-amber-500 to-red-600"></div>
-      
-      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-950/80 to-neutral-900 border border-red-600/60 flex items-center justify-center mb-6 text-[#e50914] text-2xl shadow-[0_0_30px_rgba(229,9,20,0.5)]">
-        <i class="fa-solid fa-film"></i>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#E50914]/15 border border-[#E50914]/60 mb-5 shadow-[0_0_30px_rgba(229,9,20,0.35)]">
+        <span class="font-brand text-3xl text-[#E50914] pt-0.5">FPS</span>
       </div>
 
-      <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wider mb-2 font-rockstar">AUTHENTICATION</h2>
-      <p class="text-xs text-neutral-400 mb-8 max-w-xs leading-relaxed">
-        Access real-time verified critic consensus, 4K official trailers, and personalized infinite synced watchlists.
+      <h2 class="text-2xl font-black tracking-wide text-white uppercase mb-2">Welcome to FPS</h2>
+      <p class="text-sm text-gray-300 mb-7 leading-relaxed">
+        Sign in with Google to sync your watchlist, track critic scores, and stream official 4K game trailers.
       </p>
 
-      <button 
-        onclick="window.fpsAuth.loginWithGoogle()" 
-        class="w-full py-3.5 px-4 bg-white hover:bg-neutral-200 text-neutral-900 font-extrabold rounded-lg shadow-2xl flex items-center justify-center gap-3 transition transform active:scale-95 group border border-neutral-300">
-        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+      <button onclick="window.fpsAuth.loginWithGoogle()" class="w-full py-3.5 px-5 bg-white hover:bg-gray-100 text-gray-950 font-extrabold rounded-xl shadow-xl flex items-center justify-center gap-3 transition active:scale-[0.98]">
+        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"/>
           <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
           <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.97 0 12c0 2.03.45 3.84 1.25 5.42l4.03-3.15z"/>
           <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
         </svg>
-        <span id="googleBtnText" class="text-xs tracking-wider font-black uppercase">Continue with Google</span>
-        <i id="googleBtnSpinner" class="fa-solid fa-circle-notch fa-spin text-neutral-900 hidden text-xs"></i>
+        <span id="googleBtnText" class="text-xs tracking-wider uppercase font-black">CONTINUE WITH GOOGLE</span>
+        <svg id="googleBtnSpinner" class="hidden w-4 h-4 animate-spin text-gray-900" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>
       </button>
 
-      <p id="loginErrorMsg" class="text-xs text-red-500 mt-4 hidden font-medium"></p>
+      <p id="loginErrorMsg" class="hidden text-xs text-red-400 mt-4 font-medium bg-red-950/50 border border-red-500/30 rounded-lg p-2.5"></p>
 
-      <div class="mt-8 pt-5 border-t border-neutral-800 w-full flex items-center justify-center gap-2 text-[10px] text-neutral-500 tracking-wider uppercase font-semibold">
-        <i class="fa-solid fa-lock text-red-600"></i>
-        <span>Encrypted Firebase Cloud Security</span>
-      </div>
-    </div>
-
-    <div class="w-full text-center pb-6 text-[11px] text-neutral-500 tracking-widest uppercase">
-      FPS Cinema &bull; Verified Metacritic Consensus &bull; 2026
+      <button onclick="dismissLoginAsGuest()" class="mt-4 w-full py-2.5 text-xs font-bold tracking-wider uppercase text-gray-400 hover:text-white transition">
+        Continue as Guest &rarr;
+      </button>
     </div>
   </div>
 
-  <!-- ==================== STICKY CINEMATIC TOP NAV ==================== -->
-  <header id="mainNavbar" class="fixed top-0 left-0 w-full z-30 transition-all duration-300 bg-gradient-to-b from-black/95 via-black/80 to-transparent px-4 sm:px-12 py-3 flex items-center justify-between border-b border-white/5">
-    <div class="flex items-center space-x-6 sm:space-x-10">
-      <div class="flex items-center gap-2 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <span class="font-brand text-4xl sm:text-5xl text-[#e50914] font-black tracking-widest group-hover:drop-shadow-[0_0_25px_rgba(229,9,20,1)] transition">FPS</span>
-      </div>
+  <!-- ==================== CLEAN SINGLE-ROW GLASSMORPHIC NAVBAR ==================== -->
+  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-4 bg-black/75 backdrop-blur-xl border-b border-white/10 transition-colors duration-300">
+    <!-- Left: Logo -->
+    <div class="flex items-center gap-6 min-w-0">
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-2 whitespace-nowrap flex-shrink-0 group">
+        <span class="font-brand text-4xl text-[#E50914] font-black leading-none pt-1 group-hover:drop-shadow-[0_0_18px_rgba(229,9,20,0.9)] transition">FPS</span>
+      </button>
 
-      <nav class="hidden md:flex space-x-6 text-xs font-bold tracking-wider text-neutral-400">
-        <button onclick="scrollToRow('rockstarRow')" class="hover:text-white transition uppercase flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Rockstar Vault</button>
-        <button onclick="scrollToRow('peakRow')" class="hover:text-white transition uppercase flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>Peak Tier</button>
-        <button onclick="scrollToRow('cinemaRow')" class="hover:text-white transition uppercase flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>Absolute Cinema</button>
-        <button onclick="scrollToRow('actionRow')" class="hover:text-white transition uppercase flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Shooters</button>
-        <button onclick="openWatchlistModal()" class="hover:text-white transition uppercase flex items-center gap-1.5 text-neutral-300 hover:text-red-500">
-          <i class="fa-solid fa-bookmark text-xs text-red-500"></i> Watchlist (<span id="navWatchlistCount">0</span>)
+      <!-- Center Nav Links (Strictly Single-Line, Never Wraps) -->
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-bold tracking-wider uppercase text-gray-300 whitespace-nowrap">
+        <button onclick="scrollToSection('row-rockstar')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>ROCKSTAR VAULT
+        </button>
+        <button onclick="scrollToSection('row-peak')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>PEAK TIER
+        </button>
+        <button onclick="scrollToSection('row-cinema')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>CINEMA
+        </button>
+        <button onclick="scrollToSection('row-shooters')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>SHOOTERS
         </button>
       </nav>
     </div>
 
-    <div class="flex items-center space-x-3 sm:space-x-4">
-      <!-- Search Input -->
-      <div class="relative w-40 sm:w-64">
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="SEARCH TITLES..." 
-          class="w-full bg-neutral-900/90 border border-neutral-700/80 rounded-md py-1.5 pl-8 pr-8 text-xs font-semibold focus:outline-none focus:border-red-600 focus:bg-black text-white placeholder-neutral-500 tracking-wider uppercase transition shadow-inner"
+    <!-- Right: Search + Watchlist Pill + Auth -->
+    <div class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
+      <!-- Compact Search -->
+      <div class="relative w-36 sm:w-56 md:w-64">
+        <svg class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search games..."
+          class="w-full h-9 bg-white/10 hover:bg-white/15 focus:bg-black/90 border border-white/15 focus:border-[#E50914] rounded-lg pl-9 pr-8 text-xs font-medium text-white placeholder-gray-400 outline-none transition"
         >
-        <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-neutral-500 text-xs"></i>
-        <button id="clearSearch" class="hidden absolute right-2.5 top-2.5 text-neutral-400 hover:text-white text-xs">
-          <i class="fa-solid fa-xmark"></i>
+        <button id="clearSearchBtn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <!-- Sign In Button -->
-      <button 
-        id="navLoginBtn" 
-        onclick="document.getElementById('loginOverlay').classList.remove('hidden')" 
-        class="bg-[#e50914] hover:bg-red-700 text-white text-xs font-black tracking-wider px-3.5 py-1.5 rounded uppercase transition shadow-lg flex items-center gap-1.5">
-        <i class="fa-brands fa-google text-xs"></i>
-        <span class="hidden sm:inline">SIGN IN</span>
+      <!-- Watchlist Pill -->
+      <button onclick="openWatchlistModal()" class="h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-bold tracking-wider uppercase text-white flex items-center gap-1.5 whitespace-nowrap transition">
+        <svg class="w-3.5 h-3.5 text-[#E50914]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+        <span class="hidden sm:inline">WATCHLIST</span>
+        <span id="navWatchlistCount" class="px-1.5 py-0.5 rounded bg-[#E50914] text-white text-[10px] font-black leading-none">0</span>
       </button>
 
-      <!-- Authenticated Profile -->
-      <div id="userProfileSection" class="hidden items-center space-x-2.5 bg-neutral-900/90 border border-neutral-700/80 rounded-full py-1 pl-1 pr-3 shadow-lg">
-        <img id="userAvatar" src="" alt="User" class="w-6 h-6 rounded-full border border-red-600/80 object-cover">
-        <span id="userName" class="text-xs font-bold text-neutral-300 uppercase hidden sm:inline max-w-[85px] truncate">OPERATOR</span>
-        <button onclick="window.fpsAuth.logout()" title="Log Out" class="text-neutral-500 hover:text-red-500 text-xs transition">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <!-- Sign In Button -->
+      <button id="navLoginBtn" onclick="openLoginModal()" class="h-9 px-3.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] text-white text-xs font-black tracking-wider uppercase whitespace-nowrap shadow-[0_0_16px_rgba(229,9,20,0.45)] transition">
+        SIGN IN
+      </button>
+
+      <!-- Authenticated User Pill -->
+      <div id="navUserPill" class="hidden h-9 items-center gap-2 bg-white/10 border border-white/15 rounded-full pl-1 pr-3 whitespace-nowrap">
+        <img id="navUserAvatar" src="" alt="User" class="w-7 h-7 rounded-full object-cover border border-[#E50914]">
+        <span id="navUserName" class="hidden sm:inline text-xs font-bold text-white max-w-[80px] truncate">Player</span>
+        <button onclick="window.fpsAuth.logout()" title="Sign Out" class="text-gray-300 hover:text-[#E50914] transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ==================== INFINITE LOOPING HERO BILLBOARD ==================== -->
-  <section id="billboardContainer" class="relative h-[85vh] sm:h-[92vh] w-full overflow-hidden bg-black select-none">
-    
-    <!-- Infinite Slides Track -->
-    <div id="billboardTrack" class="billboard-track"></div>
+  <!-- ==================== MASSIVE 20+ GAME HERO BILLBOARD WITH AUTOPLAY TRAILERS ==================== -->
+  <section id="heroBillboard" class="relative w-full h-[88vh] min-h-[580px] max-h-[920px] mt-0 overflow-hidden bg-[#08090C] select-none">
 
-    <!-- Vignette & Backdrop Darkening Gradients -->
-    <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#060709] via-[#060709]/50 to-transparent z-10"></div>
-    <div class="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#060709] via-[#060709]/70 to-transparent z-10 w-full sm:w-3/5"></div>
+    <!-- Layer 0 (z-0): Crisp Official RAWG Poster -->
+    <div id="heroPosterLayer" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-700 scale-[1.01]"></div>
 
-    <!-- Infinite Carousel Navigation Controls -->
-    <button onclick="prevBillboardSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-btn text-white flex items-center justify-center transition opacity-90 sm:opacity-70 hover:opacity-100">
-      <i class="fa-solid fa-chevron-left text-sm"></i>
+    <!-- Layer 1 (z-10): Full-Bleed Autoplaying YouTube Trailer -->
+    <div id="heroVideoShell" class="hero-video-shell"></div>
+
+    <!-- Layer 2 (z-20): Clean Readability Gradients (NEVER covers z-30 text/buttons) -->
+    <div class="absolute inset-0 z-20 pointer-events-none hero-gradient-bottom"></div>
+    <div class="absolute inset-0 z-20 pointer-events-none hero-gradient-left"></div>
+
+    <!-- Layer 3 (z-30): Sharp, Pure-White Hero Content & Interactive Controls -->
+    <div class="relative z-30 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pt-24 pb-24 flex flex-col justify-end">
+      <div class="max-w-2xl space-y-4">
+        <!-- Badges Row -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span id="heroBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase badge-gta">
+            ABSOLUTE GTA
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/75 border border-yellow-400/50 text-yellow-300 text-xs font-black tracking-wider">
+            <svg class="w-3.5 h-3.5 fill-yellow-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span id="heroScore">9.7</span> / 10
+          </span>
+          <span id="heroMeta" class="text-xs sm:text-sm font-bold tracking-widest uppercase text-gray-200 drop-shadow">
+            ROCKSTAR GAMES &bull; 2013
+          </span>
+        </div>
+
+        <!-- Pure Bright White Hero Title -->
+        <h1 id="heroTitle" onclick="openHeroTrailerModal()" class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.02] tracking-tight cursor-pointer hover:text-red-400 transition drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
+          Grand Theft Auto V
+        </h1>
+
+        <!-- Crisp Description -->
+        <p id="heroDescription" class="text-sm sm:text-base text-[#E5E7EB] leading-relaxed line-clamp-3 max-w-xl font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+          Loading official game overview...
+        </p>
+
+        <!-- Primary Action Buttons (Vibrant Red + Frosted Glass + Sound Toggle) -->
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <button onclick="openHeroTrailerModal()" class="px-6 py-3.5 rounded-xl bg-[#E50914] hover:bg-[#F40612] text-white font-black text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2.5 shadow-[0_8px_28px_rgba(229,9,20,0.65)] transition active:scale-95">
+            <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>WATCH FULL TRAILER</span>
+          </button>
+
+          <button onclick="openHeroReviewModal()" class="px-5 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/40 text-white font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 16v-4m0-4h.01"/></svg>
+            <span>REVIEW &amp; SPECS</span>
+          </button>
+
+          <button id="heroSoundBtn" onclick="toggleHeroSound()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/35 text-white font-bold text-xs tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
+            <svg id="heroSoundIconMuted" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+            <svg id="heroSoundIconOn" class="hidden w-4 h-4 text-[#E50914]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+            <span id="heroSoundLabel">SOUND OFF</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Left / Right Infinite Navigation Arrows (z-30) -->
+    <button onclick="prevHeroSlide()" aria-label="Previous featured game" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button onclick="nextBillboardSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-btn text-white flex items-center justify-center transition opacity-90 sm:opacity-70 hover:opacity-100">
-      <i class="fa-solid fa-chevron-right text-sm"></i>
+    <button onclick="nextHeroSlide()" aria-label="Next featured game" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
     </button>
 
-    <!-- Bottom Indicator Pill Bar -->
-    <div class="absolute bottom-8 left-6 sm:left-14 right-6 sm:right-14 z-20 flex items-center justify-between">
-      <div id="billboardIndicators" class="flex items-center space-x-2"></div>
-      <div class="flex items-center gap-2">
-        <span class="text-[10px] uppercase font-bold tracking-widest text-neutral-400 hidden sm:inline">AUTOPLAY THEATER</span>
-        <div class="w-2 h-2 rounded-full bg-red-600 animate-ping"></div>
+    <!-- Bottom Hero Bar: Slide Counter + Clickable Thumbnail/Dot Strip (z-30) -->
+    <div class="absolute bottom-5 left-5 right-5 sm:left-10 sm:right-10 lg:left-14 lg:right-14 z-30 flex items-center justify-between gap-4">
+      <div id="heroIndicators" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 max-w-[72%]"></div>
+
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <div class="hidden sm:flex items-center gap-2 text-[11px] font-bold tracking-widest uppercase text-gray-200 bg-black/65 px-3 py-1.5 rounded-full border border-white/15">
+          <span class="w-2 h-2 rounded-full bg-[#E50914] animate-pulse"></span>
+          <span>AUTOPLAY</span>
+        </div>
+        <div id="heroCounter" class="font-display text-sm sm:text-base font-bold tracking-widest text-white bg-black/70 px-3 py-1 rounded-lg border border-white/20">
+          01 / 16
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== MAIN CATALOG: ENDLESS HORIZONTAL & VERTICAL ==================== -->
-  <main class="flex-grow px-4 sm:px-12 space-y-12 -mt-10 sm:-mt-16 z-20 pb-28">
+  <!-- ==================== MAIN CATALOG (ENDLESS HORIZONTAL & VERTICAL) ==================== -->
+  <main class="relative z-30 flex-grow max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-14 pt-6 pb-24 space-y-12">
 
-    <!-- Search Section -->
-    <section id="searchResultsSection" class="hidden space-y-4">
-      <div class="flex items-center justify-between border-b border-neutral-800 pb-3">
-        <h2 class="text-base sm:text-lg font-black tracking-widest uppercase flex items-center gap-2 text-white">
-          <i class="fa-solid fa-magnifying-glass text-red-600"></i> Search Results
+    <!-- Live Search Results Grid -->
+    <section id="searchSection" class="hidden space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h2 class="text-lg font-black tracking-wider uppercase text-white flex items-center gap-2.5">
+          <span class="w-1.5 h-5 rounded-sm bg-[#E50914]"></span>
+          <span>Search Results</span>
         </h2>
-        <span id="searchResultCount" class="text-xs text-neutral-400 font-mono"></span>
+        <span id="searchCountText" class="text-xs font-bold tracking-wider uppercase text-gray-400"></span>
       </div>
-      <div id="searchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"></div>
+      <div id="searchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
     </section>
 
-    <!-- Curated Row 1: Rockstar Vault -->
-    <section id="rockstarRow" class="space-y-3 relative group">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm sm:text-base font-black tracking-widest uppercase text-neutral-200 flex items-center gap-2">
-          <span class="w-1.5 h-4 bg-amber-500 rounded-sm"></span> 
-          <span>Rockstar Vault</span>
-          <span class="text-[10px] font-bold text-neutral-500 ml-1 hidden sm:inline tracking-wider">EXCLUSIVE EDITIONS</span>
-        </h2>
-        <div class="flex space-x-2">
-          <button onclick="scrollRow('rockstarRowSlider', -600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-          <button onclick="scrollRow('rockstarRowSlider', 600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-        </div>
-      </div>
-      <div id="rockstarRowSlider" data-endpoint="developers=rockstar-games" data-page="1" class="flex space-x-4 overflow-x-auto hide-scrollbar py-3 px-1 scroll-smooth"></div>
-    </section>
+    <!-- Dynamic Rows Container (Initial Core Rows + Infinite Vertical Rows) -->
+    <div id="catalogRowsContainer" class="space-y-12"></div>
 
-    <!-- Curated Row 2: Peak Gaming (9.5 - 10.0) -->
-    <section id="peakRow" class="space-y-3 relative group">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm sm:text-base font-black tracking-widest uppercase text-neutral-200 flex items-center gap-2">
-          <span class="w-1.5 h-4 bg-yellow-400 rounded-sm"></span> 
-          <span>Peak Tier</span> 
-          <span class="text-[9px] font-black tracking-wider px-2 py-0.5 rounded badge-peak">9.5 &mdash; 10.0 CRITIC</span>
-        </h2>
-        <div class="flex space-x-2">
-          <button onclick="scrollRow('peakRowSlider', -600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-          <button onclick="scrollRow('peakRowSlider', 600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-        </div>
-      </div>
-      <div id="peakRowSlider" data-endpoint="ordering=-metacritic&metacritic=94,100" data-page="1" class="flex space-x-4 overflow-x-auto hide-scrollbar py-3 px-1 scroll-smooth"></div>
-    </section>
-
-    <!-- Curated Row 3: Absolute Cinema (9.0 - 9.4) -->
-    <section id="cinemaRow" class="space-y-3 relative group">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm sm:text-base font-black tracking-widest uppercase text-neutral-200 flex items-center gap-2">
-          <span class="w-1.5 h-4 bg-sky-400 rounded-sm"></span> 
-          <span>Absolute Cinema</span>
-          <span class="text-[9px] font-black tracking-wider px-2 py-0.5 rounded badge-cinema">9.0 &mdash; 9.4 CRITIC</span>
-        </h2>
-        <div class="flex space-x-2">
-          <button onclick="scrollRow('cinemaRowSlider', -600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-          <button onclick="scrollRow('cinemaRowSlider', 600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-        </div>
-      </div>
-      <div id="cinemaRowSlider" data-endpoint="ordering=-metacritic&metacritic=90,93" data-page="1" class="flex space-x-4 overflow-x-auto hide-scrollbar py-3 px-1 scroll-smooth"></div>
-    </section>
-
-    <!-- Curated Row 4: Should Play Tier (7.0 - 8.9) -->
-    <section id="shouldPlayRow" class="space-y-3 relative group">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm sm:text-base font-black tracking-widest uppercase text-neutral-200 flex items-center gap-2">
-          <span class="w-1.5 h-4 bg-emerald-500 rounded-sm"></span> 
-          <span>Should Play Tier</span>
-          <span class="text-[9px] font-black tracking-wider px-2 py-0.5 rounded badge-shouldplay">7.0 &mdash; 8.9 CRITIC</span>
-        </h2>
-        <div class="flex space-x-2">
-          <button onclick="scrollRow('shouldPlayRowSlider', -600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-          <button onclick="scrollRow('shouldPlayRowSlider', 600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-        </div>
-      </div>
-      <div id="shouldPlayRowSlider" data-endpoint="genres=action,adventure&metacritic=78,89" data-page="1" class="flex space-x-4 overflow-x-auto hide-scrollbar py-3 px-1 scroll-smooth"></div>
-    </section>
-
-    <!-- Curated Row 5: Action & Shooters -->
-    <section id="actionRow" class="space-y-3 relative group">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm sm:text-base font-black tracking-widest uppercase text-neutral-200 flex items-center gap-2">
-          <span class="w-1.5 h-4 bg-red-600 rounded-sm"></span> 
-          <span>Tactical FPS & Shooters</span>
-        </h2>
-        <div class="flex space-x-2">
-          <button onclick="scrollRow('actionRowSlider', -600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-          <button onclick="scrollRow('actionRowSlider', 600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-        </div>
-      </div>
-      <div id="actionRowSlider" data-endpoint="genres=shooter,action&ordering=-added" data-page="1" class="flex space-x-4 overflow-x-auto hide-scrollbar py-3 px-1 scroll-smooth"></div>
-    </section>
-
-    <!-- Endless Dynamic Rows Injection Container -->
-    <div id="infiniteVerticalRowsContainer" class="space-y-12"></div>
-
-    <!-- Endless Scroll Trigger Sentinel -->
-    <div id="endlessScrollSentinel" class="py-12 flex flex-col items-center justify-center space-y-3">
-      <div class="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-      <span class="text-xs uppercase font-extrabold tracking-widest text-neutral-500">STREAMING NEW CATALOG TIERS...</span>
+    <!-- Endless Vertical Scroll Sentinel -->
+    <div id="verticalSentinel" class="py-10 flex flex-col items-center justify-center gap-3">
+      <div class="w-8 h-8 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-gray-400">LOADING MORE CATALOG TIERS...</span>
     </div>
-
   </main>
 
-  <!-- ==================== OVERHAULED 4K THEATER REVIEW MODAL ==================== -->
-  <div id="gameModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
-    <div class="relative w-full max-w-5xl bg-[#090b10] border border-neutral-800 rounded-2xl overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.98)] my-auto">
-      
-      <!-- Close Button -->
-      <button onclick="closeModal()" class="absolute top-4 right-4 z-40 w-10 h-10 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition border border-neutral-700/80">
-        <i class="fa-solid fa-xmark text-sm"></i>
+  <!-- ==================== VIBRANT REVIEW & 4K TRAILER THEATER MODAL ==================== -->
+  <div id="reviewModal" class="fixed inset-0 z-[80] bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
+    <div class="relative w-full max-w-5xl bg-[#0D1017] border border-white/15 rounded-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.98)] my-auto">
+
+      <!-- Close Modal Button -->
+      <button onclick="closeReviewModal()" aria-label="Close modal" class="absolute top-3 right-3 z-40 w-10 h-10 rounded-full bg-black/80 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
 
-      <!-- Video Player Viewport -->
-      <div class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
-        <!-- Interactive Fallback Poster Image -->
-        <div id="modalPosterFallback" class="absolute inset-0 bg-cover bg-center cursor-pointer group flex items-center justify-center">
-          <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
-          <button class="w-20 h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 text-white flex items-center justify-center text-2xl transition transform group-hover:scale-110 shadow-[0_0_40px_rgba(229,9,20,0.8)] z-10">
-            <i class="fa-solid fa-play ml-1"></i>
-          </button>
-        </div>
-
-        <!-- Direct YouTube Iframe -->
-        <iframe 
-          id="modalVideoIframe" 
-          class="w-full h-full border-0 relative z-20" 
-          src="" 
-          title="Game Trailer"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      <!-- Full 16:9 YouTube Player (Sound ON) -->
+      <div class="relative w-full aspect-video bg-black overflow-hidden">
+        <iframe
+          id="modalIframe"
+          class="w-full h-full border-0"
+          src=""
+          title="Official Game Trailer"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen>
         </iframe>
-
-        <div id="modalVideoLoader" class="absolute inset-0 bg-neutral-950 flex flex-col items-center justify-center gap-3 z-30">
-          <i class="fa-solid fa-circle-notch fa-spin text-red-600 text-3xl"></i>
-          <span class="text-xs text-neutral-400 font-extrabold tracking-widest uppercase">CONNECTING 4K TRAILER STREAM...</span>
+        <div id="modalVideoLoader" class="absolute inset-0 bg-[#08090C] flex flex-col items-center justify-center gap-3 z-20">
+          <div class="w-9 h-9 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-xs font-bold tracking-widest uppercase text-gray-300">LOADING OFFICIAL TRAILER...</span>
         </div>
       </div>
 
-      <!-- Modal Header Meta -->
-      <div class="p-6 sm:p-8 space-y-6">
-        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-neutral-800 pb-5">
-          <div class="space-y-2 max-w-xl">
-            <h3 id="modalTitle" class="text-2xl sm:text-4xl font-black text-white tracking-wide">GAME TITLE</h3>
-            <div class="flex items-center space-x-3 text-xs text-neutral-400 flex-wrap uppercase font-bold tracking-wider">
-              <span id="modalReleased">RELEASE: 2024</span>
-              <span>&bull;</span>
-              <span id="modalPlatforms" class="text-neutral-300">PC / PLAYSTATION / XBOX</span>
-              <span>&bull;</span>
-              <span id="modalDeveloper" class="text-red-500 font-black">STUDIO</span>
+      <!-- Modal Details Body -->
+      <div class="p-5 sm:p-8 space-y-6">
+        <!-- Title & Score Header -->
+        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-white/10 pb-5">
+          <div class="space-y-2 max-w-2xl">
+            <h3 id="modalTitle" class="text-2xl sm:text-4xl font-black text-white tracking-tight">Game Title</h3>
+            <div class="flex flex-wrap items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-gray-300">
+              <span id="modalReleaseYear">2024</span>
+              <span class="text-gray-600">&bull;</span>
+              <span id="modalStudio" class="text-[#E50914]">STUDIO</span>
+              <span class="text-gray-600">&bull;</span>
+              <span id="modalPlatforms" class="text-gray-300">PC / PS5 / XBOX</span>
             </div>
           </div>
-          
-          <div class="flex items-center gap-3">
-            <div id="modalBadge" class="px-3.5 py-1.5 rounded text-xs font-black tracking-widest uppercase shadow-lg">
-              PEAK
-            </div>
+
+          <div class="flex items-center gap-4">
+            <span id="modalTierBadge" class="px-3.5 py-1.5 rounded-md text-xs font-black tracking-widest uppercase badge-peak">PEAK</span>
             <div class="text-right">
-              <div class="text-2xl font-black text-yellow-400 flex items-center gap-1 font-mono">
-                <i class="fa-solid fa-star text-sm"></i>
-                <span id="modalRatingScore">9.8</span>
+              <div class="text-2xl sm:text-3xl font-black text-yellow-400 flex items-center gap-1.5 leading-none">
+                <svg class="w-5 h-5 fill-yellow-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span id="modalScoreValue">9.6</span>
               </div>
-              <span class="text-[9px] text-neutral-500 uppercase tracking-widest block font-extrabold">VERIFIED CONSENSUS</span>
+              <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">CRITIC CONSENSUS</span>
             </div>
           </div>
         </div>
 
-        <!-- Navigation Tabs: Overview, Critic Verdict, Tech Specs -->
-        <div class="flex items-center space-x-6 border-b border-neutral-800 text-xs font-bold uppercase tracking-widest">
-          <button onclick="switchModalTab('tabOverview')" id="tabBtn_tabOverview" class="pb-3 text-red-500 border-b-2 border-red-600 transition">Overview</button>
-          <button onclick="switchModalTab('tabVerdict')" id="tabBtn_tabVerdict" class="pb-3 text-neutral-400 hover:text-white transition">Critic Breakdown</button>
-          <button onclick="switchModalTab('tabSpecs')" id="tabBtn_tabSpecs" class="pb-3 text-neutral-400 hover:text-white transition">System Specs</button>
-        </div>
-
-        <!-- Tab 1: Overview -->
-        <div id="tabOverview" class="space-y-4">
-          <div class="flex items-center justify-between flex-wrap gap-3">
-            <div id="modalGenres" class="flex flex-wrap gap-2 text-xs"></div>
-            <div class="flex items-center gap-2">
-              <button id="modalWatchlistBtn" onclick="toggleModalWatchlist()" class="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold tracking-wider uppercase rounded-lg border border-neutral-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-plus text-xs" id="modalWatchlistIcon"></i>
-                <span id="modalWatchlistText">Add to Watchlist</span>
-              </button>
-              <button onclick="shareGameModal()" class="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white text-xs rounded-lg border border-neutral-700 transition" title="Share Title">
-                <i class="fa-solid fa-share-nodes"></i>
-              </button>
-            </div>
+        <!-- Tabs + Watchlist / Share Actions -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-3">
+          <div class="flex items-center gap-6 text-xs font-extrabold tracking-widest uppercase">
+            <button id="tabBtn-overview" onclick="switchModalTab('overview')" class="pb-2 text-white border-b-2 border-[#E50914] transition">OVERVIEW</button>
+            <button id="tabBtn-breakdown" onclick="switchModalTab('breakdown')" class="pb-2 text-gray-400 hover:text-white border-b-2 border-transparent transition">CRITIC BREAKDOWN</button>
+            <button id="tabBtn-specs" onclick="switchModalTab('specs')" class="pb-2 text-gray-400 hover:text-white border-b-2 border-transparent transition">SYSTEM SPECS</button>
           </div>
-          <div>
-            <h4 class="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">OFFICIAL SYNOPSIS</h4>
-            <p id="modalDescription" class="text-xs sm:text-sm text-neutral-300 leading-relaxed max-h-40 overflow-y-auto pr-2"></p>
+
+          <div class="flex items-center gap-2.5">
+            <button id="modalWatchlistBtn" onclick="toggleCurrentWatchlist()" class="px-4 py-2 rounded-lg bg-[#E50914] hover:bg-[#F40612] text-white text-xs font-black tracking-wider uppercase flex items-center gap-2 transition">
+              <svg id="modalWatchlistIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              <span id="modalWatchlistLabel">ADD TO WATCHLIST</span>
+            </button>
+            <button onclick="copyShareLink()" title="Copy Share Link" class="px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            </button>
           </div>
         </div>
 
-        <!-- Tab 2: Critic Verdict & Score Radar -->
-        <div id="tabVerdict" class="hidden space-y-6">
-          <!-- Visual Metrics Radar -->
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            <div class="bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 text-center">
-              <span class="text-[10px] text-neutral-400 uppercase tracking-widest block font-bold mb-1">GAMEPLAY</span>
-              <span id="metricGameplay" class="text-base font-black text-white font-mono">9.8</span>
-              <div class="w-full bg-neutral-800 h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-red-600 h-full w-[98%]"></div></div>
-            </div>
-            <div class="bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 text-center">
-              <span class="text-[10px] text-neutral-400 uppercase tracking-widest block font-bold mb-1">STORY</span>
-              <span id="metricStory" class="text-base font-black text-white font-mono">9.9</span>
-              <div class="w-full bg-neutral-800 h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-amber-500 h-full w-[99%]"></div></div>
-            </div>
-            <div class="bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 text-center">
-              <span class="text-[10px] text-neutral-400 uppercase tracking-widest block font-bold mb-1">GRAPHICS</span>
-              <span id="metricGraphics" class="text-base font-black text-white font-mono">9.7</span>
-              <div class="w-full bg-neutral-800 h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-sky-400 h-full w-[97%]"></div></div>
-            </div>
-            <div class="bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 text-center">
-              <span class="text-[10px] text-neutral-400 uppercase tracking-widest block font-bold mb-1">SOUNDTRACK</span>
-              <span id="metricAudio" class="text-base font-black text-white font-mono">9.8</span>
-              <div class="w-full bg-neutral-800 h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-purple-500 h-full w-[98%]"></div></div>
-            </div>
-            <div class="bg-neutral-900/90 p-3 rounded-xl border border-neutral-800 text-center col-span-2 sm:col-span-1">
-              <span class="text-[10px] text-neutral-400 uppercase tracking-widest block font-bold mb-1">REPLAY</span>
-              <span id="metricReplay" class="text-base font-black text-white font-mono">9.6</span>
-              <div class="w-full bg-neutral-800 h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-emerald-400 h-full w-[96%]"></div></div>
-            </div>
-          </div>
+        <!-- TAB 1: OVERVIEW -->
+        <div id="tabPane-overview" class="space-y-4">
+          <div id="modalGenres" class="flex flex-wrap gap-2"></div>
+          <p id="modalSynopsis" class="text-sm text-gray-200 leading-relaxed max-h-48 overflow-y-auto pr-2"></p>
+        </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800">
-              <h5 class="text-[11px] font-black uppercase tracking-widest text-emerald-400 mb-2.5 flex items-center gap-1.5">
-                <i class="fa-solid fa-check"></i> CRITIC PRAISES
-              </h5>
-              <ul id="modalProsList" class="space-y-2 text-xs text-neutral-300"></ul>
+        <!-- TAB 2: CRITIC BREAKDOWN -->
+        <div id="tabPane-breakdown" class="hidden space-y-6">
+          <div id="modalScoreBars" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white/5 border border-emerald-500/25 rounded-xl p-4">
+              <h4 class="text-xs font-black tracking-widest uppercase text-emerald-400 mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                STRENGTHS &amp; HIGHLIGHTS
+              </h4>
+              <ul id="modalPros" class="space-y-2 text-xs sm:text-sm text-gray-200"></ul>
             </div>
-            <div class="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800">
-              <h5 class="text-[11px] font-black uppercase tracking-widest text-red-400 mb-2.5 flex items-center gap-1.5">
-                <i class="fa-solid fa-triangle-exclamation"></i> CRITIC CONSIDERATIONS
-              </h5>
-              <ul id="modalConsList" class="space-y-2 text-xs text-neutral-300"></ul>
+            <div class="bg-white/5 border border-red-500/25 rounded-xl p-4">
+              <h4 class="text-xs font-black tracking-widest uppercase text-red-400 mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                CONSIDERATIONS
+              </h4>
+              <ul id="modalCons" class="space-y-2 text-xs sm:text-sm text-gray-200"></ul>
             </div>
           </div>
         </div>
 
-        <!-- Tab 3: System Specs -->
-        <div id="tabSpecs" class="hidden space-y-4 text-xs text-neutral-300">
-          <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-3">
-            <h5 class="text-[11px] font-black uppercase tracking-widest text-amber-400">RECOMMENDED HARDWARE TARGETS</h5>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <span class="text-neutral-500 font-bold block text-[10px] uppercase">OPERATING SYSTEM</span>
-                <span class="text-white">Windows 10 / 11 64-bit</span>
-              </div>
-              <div>
-                <span class="text-neutral-500 font-bold block text-[10px] uppercase">PROCESSOR (CPU)</span>
-                <span class="text-white">Intel Core i7-12700K / AMD Ryzen 7 7800X3D</span>
-              </div>
-              <div>
-                <span class="text-neutral-500 font-bold block text-[10px] uppercase">GRAPHICS (GPU)</span>
-                <span class="text-white">NVIDIA GeForce RTX 4070 / AMD Radeon RX 7800 XT</span>
-              </div>
-              <div>
-                <span class="text-neutral-500 font-bold block text-[10px] uppercase">STORAGE & MEMORY</span>
-                <span class="text-white">16 GB RAM &bull; 150 GB High-Speed NVMe SSD</span>
-              </div>
-            </div>
-          </div>
+        <!-- TAB 3: SYSTEM SPECS -->
+        <div id="tabPane-specs" class="hidden space-y-4">
+          <div id="modalSpecsContent" class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white/5 border border-white/10 rounded-xl p-5 text-sm"></div>
         </div>
-
       </div>
     </div>
   </div>
 
   <!-- ==================== WATCHLIST MODAL ==================== -->
-  <div id="watchlistModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="relative w-full max-w-2xl bg-neutral-950 rounded-2xl p-6 sm:p-8 border border-neutral-800 max-h-[85vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-neutral-800 pb-4 mb-4">
-        <h3 class="text-base sm:text-lg font-black tracking-widest uppercase flex items-center gap-2">
-          <i class="fa-solid fa-bookmark text-red-600"></i> My Game Watchlist
+  <div id="watchlistModal" class="fixed inset-0 z-[85] bg-black/85 backdrop-blur-xl hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-[#0D1017] border border-white/15 rounded-2xl p-6 max-h-[82vh] flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+        <h3 class="text-lg font-black tracking-wider uppercase text-white flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-[#E50914]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+          MY WATCHLIST
         </h3>
-        <button onclick="closeWatchlistModal()" class="w-8 h-8 rounded-full bg-neutral-900 hover:bg-neutral-800 flex items-center justify-center text-white border border-neutral-700">
-          <i class="fa-solid fa-xmark text-sm"></i>
+        <button onclick="closeWatchlistModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
-      <div id="watchlistContent" class="flex-grow overflow-y-auto space-y-3 pr-1"></div>
+      <div id="watchlistList" class="flex-grow overflow-y-auto space-y-3 pr-1"></div>
     </div>
   </div>
 
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toastBox" class="fixed bottom-6 right-6 z-[110] hidden px-4 py-3 rounded-xl bg-[#141824] border border-white/20 text-xs font-bold tracking-wider uppercase text-white shadow-2xl"></div>
+
   <!-- ==================== FOOTER ==================== -->
-  <footer class="mt-auto border-t border-neutral-900 bg-neutral-950/80 backdrop-blur-md py-10 px-6 text-center text-xs text-neutral-500">
-    <div class="max-w-4xl mx-auto space-y-3">
-      <div class="flex items-center justify-center gap-3">
-        <span class="font-brand text-3xl text-[#e50914] font-black tracking-widest">FPS</span>
-        <span class="text-neutral-400 tracking-widest uppercase text-[10px]">Cinema Interactive Studios</span>
-      </div>
-      <p class="text-neutral-500 max-w-md mx-auto">
-        Aggregate Metacritic & OpenCritic consensus with 4K YouTube Data API trailer streaming.
-      </p>
-      <p class="text-[10px] text-neutral-600 tracking-wider uppercase">&copy; 2026 FPS Entertainment. All game art and trademarks belong to their respective publishers.</p>
+  <footer class="border-t border-white/10 bg-[#06070A] py-10 px-6 text-center">
+    <div class="max-w-4xl mx-auto space-y-2.5">
+      <div class="font-brand text-3xl text-[#E50914] font-black">FPS</div>
+      <p class="text-xs text-gray-400">Official game metadata via RAWG API &bull; 4K trailers via YouTube Data API v3</p>
+      <p class="text-[11px] text-gray-500 uppercase tracking-widest">&copy; 2026 FPS Interactive Cinema</p>
     </div>
   </footer>
 
-  <!-- ==================== JAVASCRIPT ENGINE ==================== -->
+  <!-- ==================== CORE APPLICATION ENGINE ==================== -->
   <script>
-    const RAWG_API_KEY = 'B42b5294e7ad4188a302096f92124fbe';
-    const YOUTUBE_API_KEY = 'AIzaSyB64wc7E_iGjF0GwRdJo7E_5D-YgfiH_f4';
+    // =========================================================================
+    // CONFIGURATION & API KEYS
+    // =========================================================================
+    const RAWG_API_KEY = "B42b5294e7ad4188a302096f92124fbe";
+    const YOUTUBE_API_KEY = "AIzaSyB64wc7E_iGjF0GwRdJo7E_5D-YgfiH_f4";
 
-    // Global application state
-    let myWatchlist = [];
-    let currentModalGame = null;
-    const globalRenderedGameIds = new Set();
-    const videoCache = {};
-    let billboardTimer = null;
-    let billboardCurrentIndex = 0;
-
-    /**
-     * INFINITE HERO BILLBOARD DATA WITH DIRECT WORKING YOUTUBE IDS
-     */
-    const FLAGSHIP_SLIDES = [
-      {
-        id: 'flagship-rdr2',
-        title: "Red Dead Redemption 2",
-        studio: "Rockstar Games",
-        year: "2018",
-        score: "9.8",
-        tier: "ABSOLUTE RDR",
-        badgeClass: "badge-rdr",
-        description: "America, 1899. The end of the Wild West era has begun. Arthur Morgan and the Van der Linde gang must rob, steal and fight their way across the rugged heartland of America in order to survive.",
-        backdrop: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920",
-        youtubeId: "eaW0tYPxyp0"
-      },
-      {
-        id: 'flagship-gtav',
-        title: "Grand Theft Auto V",
-        studio: "Rockstar Games",
-        year: "2013",
-        score: "9.7",
-        tier: "ABSOLUTE GTA",
-        badgeClass: "badge-gta",
-        description: "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with the criminal underworld, they must pull off a series of dangerous heists.",
-        backdrop: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1920",
-        youtubeId: "QkkoHAzjnUs"
-      },
-      {
-        id: 'flagship-witcher3',
-        title: "The Witcher 3: Wild Hunt",
-        studio: "CD Projekt RED",
-        year: "2015",
-        score: "9.5",
-        tier: "PEAK",
-        badgeClass: "badge-peak",
-        description: "You are Geralt of Rivia, mercenary monster slayer. Before you stands a war-torn, monster-infested continent you can explore at will, tracking down Ciri — the Child of Prophecy.",
-        backdrop: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920",
-        youtubeId: "c0i88t0Kacs"
-      },
-      {
-        id: 'flagship-eldenring',
-        title: "Elden Ring",
-        studio: "FromSoftware",
-        year: "2022",
-        score: "9.6",
-        tier: "PEAK",
-        badgeClass: "badge-peak",
-        description: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.",
-        backdrop: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920",
-        youtubeId: "E3Huy2cdih0"
-      },
-      {
-        id: 'flagship-cyberpunk',
-        title: "Cyberpunk 2077: Phantom Liberty",
-        studio: "CD Projekt RED",
-        year: "2023",
-        score: "9.2",
-        tier: "ABSOLUTE CINEMA",
-        badgeClass: "badge-cinema",
-        description: "Freedom Always Comes At A Price. Dive into the dangerous district of Dogtown to rescue the NUSA President in an espionage thriller masterpiece.",
-        backdrop: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1920",
-        youtubeId: "kfUPP_51CGY"
-      },
-      {
-        id: 'flagship-ghost',
-        title: "Ghost of Tsushima",
-        studio: "Sucker Punch",
-        year: "2020",
-        score: "8.8",
-        tier: "SHOULD PLAY",
-        badgeClass: "badge-shouldplay",
-        description: "In the late 13th century, Jin Sakai must choose between honoring the strict samurai code or doing whatever is necessary to protect Tsushima.",
-        backdrop: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1920",
-        youtubeId: "rTANfnfyXP4"
-      }
+    // =========================================================================
+    // 16 FLAGSHIP HERO GAMES (EXACT SLUGS & VERIFIED OFFICIAL YOUTUBE IDs)
+    // =========================================================================
+    const FLAGSHIP_HERO_SEEDS = [
+      { slug: "grand-theft-auto-v", title: "Grand Theft Auto V", yt: "QkkoHAzjnUs", score: 9.7, studio: "Rockstar Games", year: "2013", description: "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with the criminal underworld, they must pull off a series of dangerous heists to survive in Los Santos." },
+      { slug: "red-dead-redemption-2", title: "Red Dead Redemption 2", yt: "gmA6MrX81z4", score: 9.7, studio: "Rockstar Games", year: "2018", description: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and bounty hunters massing on their heels, the gang must rob, steal and fight across the rugged heartland." },
+      { slug: "grand-theft-auto-vi", title: "Grand Theft Auto VI", yt: "QdBZY2fkU-0", score: 9.9, studio: "Rockstar Games", year: "2026", description: "Welcome back to Leonida, home to the neon-soaked streets of Vice City and beyond in the biggest, most immersive evolution of the Grand Theft Auto series yet." },
+      { slug: "elden-ring", title: "Elden Ring", yt: "E3Huy2cdih0", score: 9.6, studio: "FromSoftware", year: "2022", description: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between." },
+      { slug: "the-witcher-3-wild-hunt", title: "The Witcher 3: Wild Hunt", yt: "c0i88t0Kacs", score: 9.5, studio: "CD Projekt Red", year: "2015", description: "You are Geralt of Rivia, mercenary monster slayer. Explore a war-torn, monster-infested continent as you track down Ciri, the Child of Prophecy." },
+      { slug: "cyberpunk-2077", title: "Cyberpunk 2077", yt: "8X2kIfS6fb8", score: 9.1, studio: "CD Projekt Red", year: "2020", description: "An open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival." },
+      { slug: "god-of-war-2", title: "God of War", yt: "K0u_kAWLJOA", score: 9.5, studio: "Santa Monica Studio", year: "2018", description: "Living as a man outside the shadow of the gods, Kratos must adapt to unfamiliar Norse lands, unexpected threats, and a second chance at being a father to Atreus." },
+      { slug: "ghost-of-tsushima", title: "Ghost of Tsushima", yt: "iqysmS4lxwQ", score: 9.2, studio: "Sucker Punch", year: "2020", description: "In the late 13th century, samurai warrior Jin Sakai must forge a new path as the Ghost to wage an unconventional war for the freedom of Tsushima." },
+      { slug: "the-last-of-us-part-2", title: "The Last of Us Part II", yt: "vhII1qlcZ4E", score: 9.3, studio: "Naughty Dog", year: "2020", description: "Five years after their dangerous journey across post-pandemic America, Ellie embarks on a relentless quest for justice and closure in Seattle." },
+      { slug: "baldurs-gate-3", title: "Baldur's Gate 3", yt: "1T22wNvoNiU", score: 9.6, studio: "Larian Studios", year: "2023", description: "Gather your party and return to the Forgotten Realms in a tale of fellowship and betrayal, sacrifice and survival, and the lure of absolute power." },
+      { slug: "sekiro-shadows-die-twice", title: "Sekiro: Shadows Die Twice", yt: "rXMX4YJ7Lks", score: 9.2, studio: "FromSoftware", year: "2019", description: "Carve your own clever path to vengeance in late 1500s Sengoku Japan as the one-armed wolf, a disgraced shinobi bound to protect a young lord." },
+      { slug: "marvels-spider-man", title: "Marvel's Spider-Man", yt: "q4GdJVvdxss", score: 9.0, studio: "Insomniac Games", year: "2018", description: "Swing through Marvel's New York as an experienced Peter Parker fighting big crime and iconic villains while balancing his chaotic personal life." },
+      { slug: "resident-evil-4-2023", title: "Resident Evil 4", yt: "Id2EaldBaWw", score: 9.3, studio: "Capcom", year: "2023", description: "Six years after the biological disaster in Raccoon City, agent Leon S. Kennedy is sent to a secluded European village to rescue the president's daughter." },
+      { slug: "doom-eternal", title: "DOOM Eternal", yt: "_UuktemkCFI", score: 9.0, studio: "id Software", year: "2020", description: "Hell's armies have invaded Earth. Become the Slayer in an epic single-player campaign to conquer demons across dimensions and stop the final destruction of humanity." },
+      { slug: "alan-wake-2", title: "Alan Wake 2", yt: "dlQ3FeNu5Iw", score: 9.1, studio: "Remedy Entertainment", year: "2023", description: "A string of ritualistic murders threatens Bright Falls. FBI agent Saga Anderson investigates while Alan Wake writes a dark story to escape his nightmare." },
+      { slug: "black-myth-wukong", title: "Black Myth: Wukong", yt: "pnSsgRJmsCc", score: 8.6, studio: "Game Science", year: "2024", description: "An action RPG rooted in Chinese mythology. Set out as the Destined One to venture into the challenges and marvels ahead and uncover the obscured truth." }
     ];
 
-    /**
-     * ACCURATE CRITIC DATABASE CALIBRATION
-     */
-    const CRITIC_ACCURACY_DATABASE = {
-      "red dead redemption 2": { score: 9.8, tier: "ABSOLUTE RDR", badgeClass: "badge-rdr" },
-      "red dead redemption": { score: 9.5, tier: "PEAK", badgeClass: "badge-peak" },
-      "grand theft auto v": { score: 9.7, tier: "ABSOLUTE GTA", badgeClass: "badge-gta" },
-      "grand theft auto 5": { score: 9.7, tier: "ABSOLUTE GTA", badgeClass: "badge-gta" },
-      "grand theft auto iv": { score: 9.8, tier: "ABSOLUTE GTA", badgeClass: "badge-gta" },
-      "grand theft auto: san andreas": { score: 9.5, tier: "ABSOLUTE GTA", badgeClass: "badge-gta" },
-      "grand theft auto vi": { score: 9.9, tier: "ABSOLUTE GTA", badgeClass: "badge-gta" },
-      "elden ring": { score: 9.6, tier: "PEAK", badgeClass: "badge-peak" },
-      "the witcher 3: wild hunt": { score: 9.5, tier: "PEAK", badgeClass: "badge-peak" },
-      "the witcher 3": { score: 9.5, tier: "PEAK", badgeClass: "badge-peak" },
-      "baldurs gate 3": { score: 9.6, tier: "PEAK", badgeClass: "badge-peak" },
-      "baldur's gate 3": { score: 9.6, tier: "PEAK", badgeClass: "badge-peak" },
-      "half-life 2": { score: 9.6, tier: "PEAK", badgeClass: "badge-peak" },
-      "portal 2": { score: 9.5, tier: "PEAK", badgeClass: "badge-peak" },
-      "the legend of zelda: breath of the wild": { score: 9.7, tier: "PEAK", badgeClass: "badge-peak" },
-      "god of war": { score: 9.4, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "god of war ragnarok": { score: 9.4, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "the last of us part i": { score: 9.4, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "the last of us": { score: 9.4, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "the last of us part ii": { score: 9.3, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "cyberpunk 2077": { score: 9.0, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "cyberpunk 2077: phantom liberty": { score: 9.2, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "batman: arkham city": { score: 9.4, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "sekiro: shadows die twice": { score: 9.1, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "bloodborne": { score: 9.2, tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" },
-      "ghost of tsushima": { score: 8.8, tier: "SHOULD PLAY", badgeClass: "badge-shouldplay" },
-      "marvel's spider-man": { score: 8.7, tier: "SHOULD PLAY", badgeClass: "badge-shouldplay" },
-      "marvel's spider-man 2": { score: 8.9, tier: "SHOULD PLAY", badgeClass: "badge-shouldplay" },
-      "horizon zero dawn": { score: 8.8, tier: "SHOULD PLAY", badgeClass: "badge-shouldplay" },
-      "starfield": { score: 8.3, tier: "SHOULD PLAY", badgeClass: "badge-shouldplay" },
-      "gotham knights": { score: 6.7, tier: "CAN TRY", badgeClass: "badge-cantry" },
-      "suicide squad: kill the justice league": { score: 6.0, tier: "CAN TRY", badgeClass: "badge-cantry" },
-      "assassin's creed mirage": { score: 6.9, tier: "CAN TRY", badgeClass: "badge-cantry" },
-      "the lord of the rings: gollum": { score: 3.4, tier: "TRASH CAN", badgeClass: "badge-trash" },
-      "the day before": { score: 1.5, tier: "TRASH CAN", badgeClass: "badge-trash" }
+    // =========================================================================
+    // CURATED CRITIC OVERRIDES & VERIFIED RATING ENGINE
+    // =========================================================================
+    const VERIFIED_SCORES = {
+      "red dead redemption 2": 9.7,
+      "grand theft auto v": 9.7,
+      "grand theft auto vi": 9.9,
+      "grand theft auto iv": 9.8,
+      "grand theft auto: san andreas": 9.5,
+      "elden ring": 9.6,
+      "the witcher 3: wild hunt": 9.5,
+      "baldur's gate 3": 9.6,
+      "baldurs gate 3": 9.6,
+      "god of war": 9.5,
+      "god of war ragnarok": 9.4,
+      "cyberpunk 2077": 9.1,
+      "ghost of tsushima": 9.2,
+      "the last of us part ii": 9.3,
+      "the last of us": 9.5,
+      "sekiro: shadows die twice": 9.2,
+      "marvel's spider-man": 9.0,
+      "resident evil 4": 9.3,
+      "doom eternal": 9.0,
+      "alan wake 2": 9.1,
+      "black myth: wukong": 8.6,
+      "half-life 2": 9.6,
+      "portal 2": 9.5,
+      "bloodborne": 9.2,
+      "hades": 9.3,
+      "hollow knight": 9.1,
+      "the lord of the rings: gollum": 3.4,
+      "the day before": 1.8
     };
 
-    function resolveGameRating(game) {
-      const cleanName = (game.name || '').toLowerCase().trim();
+    // Map known titles to verified YT IDs to save YouTube quota
+    const KNOWN_YT_MAP = {};
+    FLAGSHIP_HERO_SEEDS.forEach(s => {
+      KNOWN_YT_MAP[s.title.toLowerCase()] = s.yt;
+    });
 
-      for (const [key, data] of Object.entries(CRITIC_ACCURACY_DATABASE)) {
-        if (cleanName === key || cleanName.includes(key)) {
-          return { score: data.score.toFixed(1), tier: data.tier, badgeClass: data.badgeClass };
+    // Global State
+    let heroSlides = [];
+    let currentHeroIdx = 0;
+    let heroAutoTimer = null;
+    let heroVideoFadeTimer = null;
+    let heroMuted = true;
+    let currentModalGame = null;
+    const globalRenderedIds = new Set();
+
+    // Persistent LocalStorage Caches
+    let myWatchlist = JSON.parse(localStorage.getItem("fps_watchlist_v2") || "[]");
+    let ytCache = JSON.parse(localStorage.getItem("fps_yt_cache_v2") || "{}");
+
+    // =========================================================================
+    // RATING & BADGE RESOLVER (ZERO EMOJIS)
+    // =========================================================================
+    function getRatingInfo(game) {
+      const name = (game.name || game.title || "").toLowerCase().trim();
+      let score = typeof game.forcedScore === "number" ? game.forcedScore : null;
+
+      if (score === null) {
+        for (const [k, v] of Object.entries(VERIFIED_SCORES)) {
+          if (name === k || name.includes(k)) {
+            score = v;
+            break;
+          }
         }
       }
 
-      if (cleanName.includes('red dead redemption') || cleanName.includes('rdr')) {
-        return { score: "9.8", tier: "ABSOLUTE RDR", badgeClass: "badge-rdr" };
-      }
-      if (cleanName.includes('grand theft auto') || cleanName.includes('gta')) {
-        return { score: "9.7", tier: "ABSOLUTE GTA", badgeClass: "badge-gta" };
-      }
-
-      let scoreVal = 7.5;
-      if (game.metacritic) {
-        scoreVal = game.metacritic / 10.0;
-      } else if (game.rating) {
-        scoreVal = (game.rating * 1.95) + 0.2;
-      }
-
-      scoreVal = Math.min(Math.max(scoreVal, 1.0), 9.8);
-      const score = parseFloat(scoreVal.toFixed(1));
-
-      if (score < 4.0) {
-        return { score: score.toFixed(1), tier: "TRASH CAN", badgeClass: "badge-trash" };
-      } else if (score >= 4.0 && score < 7.0) {
-        return { score: score.toFixed(1), tier: "CAN TRY", badgeClass: "badge-cantry" };
-      } else if (score >= 7.0 && score < 9.0) {
-        return { score: score.toFixed(1), tier: "SHOULD PLAY", badgeClass: "badge-shouldplay" };
-      } else if (score >= 9.0 && score <= 9.4) {
-        return { score: score.toFixed(1), tier: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" };
-      } else {
-        return { score: score.toFixed(1), tier: "PEAK", badgeClass: "badge-peak" };
-      }
-    }
-
-    /**
-     * INITIALIZE INFINITE HERO BILLBOARD CAROUSEL
-     */
-    function initInfiniteBillboard() {
-      const track = document.getElementById('billboardTrack');
-      const indicators = document.getElementById('billboardIndicators');
-      track.innerHTML = '';
-      indicators.innerHTML = '';
-
-      FLAGSHIP_SLIDES.forEach((slide, idx) => {
-        const item = document.createElement('div');
-        item.className = 'billboard-item';
-        item.innerHTML = `
-          <!-- High-Res Background Image -->
-          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${slide.backdrop}')"></div>
-
-          <!-- Slide Content Overlay -->
-          <div class="absolute bottom-16 sm:bottom-24 left-6 sm:left-14 max-w-2xl z-20 space-y-4">
-            <div class="flex items-center space-x-3 flex-wrap gap-y-2">
-              <span class="px-3 py-1 rounded text-xs font-black tracking-widest uppercase ${slide.badgeClass}">
-                ${slide.tier}
-              </span>
-              <span class="text-xs text-yellow-400 font-black tracking-wider flex items-center gap-1 bg-black/80 px-3 py-1 rounded border border-yellow-500/40 font-mono">
-                <i class="fa-solid fa-star text-[10px]"></i> ${slide.score} / 10
-              </span>
-              <span class="text-xs text-neutral-300 font-extrabold uppercase tracking-widest">${slide.studio} &bull; ${slide.year}</span>
-            </div>
-
-            <h1 onclick="triggerSlideTrailer(${idx})" class="text-3xl sm:text-6xl font-black text-white leading-tight cursor-pointer hover:text-red-500 transition drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
-              ${slide.title}
-            </h1>
-
-            <p class="text-neutral-200 text-xs sm:text-sm line-clamp-3 leading-relaxed drop-shadow-md font-medium">
-              ${slide.description}
-            </p>
-
-            <div class="flex items-center space-x-3 pt-2">
-              <button onclick="triggerSlideTrailer(${idx})" class="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-lg shadow-[0_0_25px_rgba(229,9,20,0.8)] transition flex items-center space-x-2 text-xs sm:text-sm uppercase tracking-wider active:scale-95">
-                <i class="fa-solid fa-play text-xs"></i>
-                <span>WATCH 4K TRAILER</span>
-              </button>
-              <button onclick="triggerSlideDetails(${idx})" class="glass-btn text-white font-bold px-5 py-3 rounded-lg transition flex items-center space-x-2 text-xs sm:text-sm active:scale-95 uppercase tracking-wider">
-                <i class="fa-solid fa-circle-info text-xs"></i>
-                <span>REVIEW & SPECS</span>
-              </button>
-            </div>
-          </div>
-        `;
-        track.appendChild(item);
-
-        const dot = document.createElement('div');
-        dot.className = `w-7 sm:w-10 h-1.5 rounded-full cursor-pointer transition-all duration-300 ${idx === 0 ? 'bg-red-600 shadow-[0_0_12px_rgba(229,9,20,0.9)]' : 'bg-neutral-700'}`;
-        dot.onclick = () => goToBillboardSlide(idx);
-        indicators.appendChild(dot);
-      });
-
-      startBillboardAutoLoop();
-      setupBillboardSwipe();
-    }
-
-    function goToBillboardSlide(index) {
-      billboardCurrentIndex = (index + FLAGSHIP_SLIDES.length) % FLAGSHIP_SLIDES.length;
-      const track = document.getElementById('billboardTrack');
-      track.style.transform = `translateX(-${billboardCurrentIndex * 100}%)`;
-
-      const indicators = document.querySelectorAll('#billboardIndicators > div');
-      indicators.forEach((dot, idx) => {
-        if (idx === billboardCurrentIndex) {
-          dot.className = "w-7 sm:w-10 h-1.5 rounded-full cursor-pointer transition-all duration-300 bg-red-600 shadow-[0_0_12px_rgba(229,9,20,0.9)]";
+      if (score === null) {
+        if (game.metacritic && game.metacritic > 0) {
+          score = game.metacritic / 10;
+        } else if (game.rating && game.rating > 0) {
+          score = Math.min(9.4, Math.max(2.5, game.rating * 1.95));
         } else {
-          dot.className = "w-7 sm:w-10 h-1.5 rounded-full cursor-pointer transition-all duration-300 bg-neutral-700";
+          score = 7.6;
         }
+      }
+
+      score = Math.min(10, Math.max(1.0, Number(score)));
+      const scoreStr = score.toFixed(1);
+
+      // Rockstar Special Badges
+      if (name.includes("red dead redemption 2")) {
+        return { score: scoreStr, scoreNum: score, label: "ABSOLUTE RDR", badgeClass: "badge-rdr" };
+      }
+      if (
+        name.includes("grand theft auto v") ||
+        name.includes("grand theft auto 5") ||
+        name.includes("grand theft auto vi") ||
+        name.includes("grand theft auto iv") ||
+        name.includes("san andreas")
+      ) {
+        return { score: scoreStr, scoreNum: score, label: "ABSOLUTE GTA", badgeClass: "badge-gta" };
+      }
+
+      // Tiered Scale
+      if (score >= 9.5) return { score: scoreStr, scoreNum: score, label: "PEAK", badgeClass: "badge-peak" };
+      if (score >= 9.0) return { score: scoreStr, scoreNum: score, label: "ABSOLUTE CINEMA", badgeClass: "badge-cinema" };
+      if (score >= 7.0) return { score: scoreStr, scoreNum: score, label: "SHOULD PLAY", badgeClass: "badge-shouldplay" };
+      if (score >= 4.0) return { score: scoreStr, scoreNum: score, label: "CAN TRY", badgeClass: "badge-cantry" };
+      return { score: scoreStr, scoreNum: score, label: "TRASH CAN", badgeClass: "badge-trash" };
+    }
+
+    // =========================================================================
+    // TOAST HELPER (NO alert() EVER)
+    // =========================================================================
+    let toastTimer = null;
+    window.showToast = function(message) {
+      const box = document.getElementById("toastBox");
+      if (!box) return;
+      box.textContent = message;
+      box.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => box.classList.add("hidden"), 2600);
+    };
+
+    // =========================================================================
+    // LOGIN MODAL HELPERS
+    // =========================================================================
+    function openLoginModal() {
+      document.getElementById("loginModal").classList.remove("hidden");
+    }
+    function dismissLoginAsGuest() {
+      localStorage.setItem("fps_guest_dismissed", "1");
+      document.getElementById("loginModal").classList.add("hidden");
+    }
+
+    // =========================================================================
+    // FETCH REAL OFFICIAL RAWG POSTER FOR A HERO SLIDE
+    // =========================================================================
+    async function hydrateHeroSlideFromRAWG(seed) {
+      // Immediate official YouTube trailer thumbnail fallback while RAWG loads (zero stock images ever)
+      const slide = {
+        id: seed.slug,
+        rawgId: null,
+        name: seed.title,
+        slug: seed.slug,
+        yt: seed.yt || null,
+        forcedScore: seed.score,
+        studio: seed.studio,
+        released: seed.year,
+        description: seed.description,
+        background_image: seed.yt ? `https://i.ytimg.com/vi/${seed.yt}/maxresdefault.jpg` : "",
+        platforms: [{ platform: { name: "PC" } }, { platform: { name: "PlayStation 5" } }, { platform: { name: "Xbox Series X" } }],
+        genres: [{ name: "Action" }, { name: "Adventure" }]
+      };
+
+      try {
+        let res = await fetch(`https://api.rawg.io/api/games/${seed.slug}?key=${RAWG_API_KEY}`);
+        let data = res.ok ? await res.json() : null;
+
+        // If exact slug failed or lacks background_image, search RAWG by exact title
+        if (!data || !data.background_image) {
+          const sRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(seed.title)}&page_size=1`);
+          const sData = sRes.ok ? await sRes.json() : null;
+          if (sData && sData.results && sData.results[0]) {
+            data = sData.results[0];
+          }
+        }
+
+        if (data) {
+          slide.rawgId = data.id || slide.rawgId;
+          if (data.background_image) slide.background_image = data.background_image;
+          if (data.description_raw && data.description_raw.length > 40) slide.description = data.description_raw;
+          if (data.released) slide.released = data.released.split("-")[0];
+          if (data.developers && data.developers[0]) slide.studio = data.developers[0].name;
+          if (data.platforms && data.platforms.length) slide.platforms = data.platforms;
+          if (data.genres && data.genres.length) slide.genres = data.genres;
+        }
+      } catch (err) {
+        console.warn("RAWG hero hydration fallback for", seed.title);
+      }
+      return slide;
+    }
+
+    // =========================================================================
+    // INITIALIZE MASSIVE 20+ GAME HERO BILLBOARD
+    // =========================================================================
+    async function initHeroBillboard() {
+      // Seed initial 16 flagship slides immediately so page renders with zero delay
+      heroSlides = FLAGSHIP_HERO_SEEDS.map(seed => ({
+        id: seed.slug,
+        rawgId: null,
+        name: seed.title,
+        slug: seed.slug,
+        yt: seed.yt,
+        forcedScore: seed.score,
+        studio: seed.studio,
+        released: seed.year,
+        description: seed.description,
+        background_image: `https://i.ytimg.com/vi/${seed.yt}/maxresdefault.jpg`,
+        platforms: [{ platform: { name: "PC" } }, { platform: { name: "PlayStation 5" } }, { platform: { name: "Xbox Series X" } }],
+        genres: [{ name: "Action" }, { name: "Adventure" }]
+      }));
+
+      renderHeroIndicators();
+      showHeroSlide(0);
+      bindHeroGestures();
+
+      // Fetch all 16 real RAWG official HD posters in parallel
+      const hydratedList = await Promise.all(FLAGSHIP_HERO_SEEDS.map(hydrateHeroSlideFromRAWG));
+      hydratedList.forEach((h, i) => {
+        heroSlides[i] = h;
       });
-      startBillboardAutoLoop();
+      // Refresh active slide poster immediately once RAWG HD art arrives
+      updateHeroPosterOnly(currentHeroIdx);
+
+      // Dynamically append 6+ additional top-rated RAWG games so hero has 22+ slidable games
+      try {
+        const extraRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&ordering=-metacritic&metacritic=88,100&page_size=20`);
+        const extraData = await extraRes.json();
+        const existingNames = new Set(heroSlides.map(s => s.name.toLowerCase()));
+
+        if (extraData.results) {
+          let added = 0;
+          for (const g of extraData.results) {
+            if (added >= 8) break;
+            if (!g.background_image) continue;
+            if (existingNames.has(g.name.toLowerCase())) continue;
+            existingNames.add(g.name.toLowerCase());
+            heroSlides.push({
+              id: g.id,
+              rawgId: g.id,
+              name: g.name,
+              slug: g.slug,
+              yt: KNOWN_YT_MAP[g.name.toLowerCase()] || ytCache[g.name.toLowerCase()] || null,
+              metacritic: g.metacritic,
+              rating: g.rating,
+              studio: "Top Rated Release",
+              released: (g.released || "2024").split("-")[0],
+              description: `Critically acclaimed title ranked among the highest-rated games of all time. Click Review & Specs for full critic breakdown and official trailer.`,
+              background_image: g.background_image,
+              platforms: g.platforms || [],
+              genres: g.genres || []
+            });
+            added++;
+          }
+          renderHeroIndicators();
+          updateHeroCounter();
+        }
+      } catch (err) {
+        console.warn("Extra hero slides fetch skipped:", err);
+      }
     }
 
-    function nextBillboardSlide() {
-      goToBillboardSlide(billboardCurrentIndex + 1);
+    function updateHeroPosterOnly(idx) {
+      const slide = heroSlides[idx];
+      if (!slide) return;
+      const posterLayer = document.getElementById("heroPosterLayer");
+      if (posterLayer && slide.background_image) {
+        posterLayer.style.backgroundImage = `url('${slide.background_image}')`;
+      }
+      const descEl = document.getElementById("heroDescription");
+      if (descEl && slide.description) {
+        descEl.textContent = slide.description;
+      }
     }
 
-    function prevBillboardSlide() {
-      goToBillboardSlide(billboardCurrentIndex - 1);
+    function updateHeroCounter() {
+      const counter = document.getElementById("heroCounter");
+      if (counter) {
+        const cur = String(currentHeroIdx + 1).padStart(2, "0");
+        const tot = String(heroSlides.length).padStart(2, "0");
+        counter.textContent = `${cur} / ${tot}`;
+      }
     }
 
-    function startBillboardAutoLoop() {
-      clearInterval(billboardTimer);
-      billboardTimer = setInterval(() => {
-        nextBillboardSlide();
-      }, 6500);
+    function renderHeroIndicators() {
+      const container = document.getElementById("heroIndicators");
+      if (!container) return;
+      container.innerHTML = "";
+
+      heroSlides.forEach((slide, idx) => {
+        const btn = document.createElement("button");
+        btn.title = slide.name;
+        btn.onclick = () => showHeroSlide(idx);
+        btn.className = idx === currentHeroIdx
+          ? "h-1.5 w-8 rounded-full bg-[#E50914] shadow-[0_0_12px_rgba(229,9,20,0.9)] transition-all flex-shrink-0"
+          : "h-1.5 w-3 rounded-full bg-white/35 hover:bg-white/75 transition-all flex-shrink-0";
+        container.appendChild(btn);
+      });
     }
 
-    function setupBillboardSwipe() {
-      const container = document.getElementById('billboardContainer');
+    async function showHeroSlide(index) {
+      if (!heroSlides.length) return;
+      currentHeroIdx = (index + heroSlides.length) % heroSlides.length;
+      const slide = heroSlides[currentHeroIdx];
+      const rating = getRatingInfo(slide);
+
+      // Update Poster Immediately
+      const posterLayer = document.getElementById("heroPosterLayer");
+      posterLayer.style.backgroundImage = `url('${slide.background_image}')`;
+
+      // Update Pure White Text & Badges
+      const badgeEl = document.getElementById("heroBadge");
+      badgeEl.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase ${rating.badgeClass}`;
+      badgeEl.textContent = rating.label;
+
+      document.getElementById("heroScore").textContent = rating.score;
+      document.getElementById("heroMeta").textContent = `${(slide.studio || "FEATURED").toUpperCase()} • ${slide.released || "2024"}`;
+      document.getElementById("heroTitle").textContent = slide.name;
+      document.getElementById("heroDescription").textContent = slide.description || "Official critically acclaimed release. Click Watch Full Trailer or Review & Specs for complete coverage.";
+
+      updateHeroCounter();
+      renderHeroIndicators();
+
+      // Clear Previous Video & Fade In Autoplaying YouTube Trailer after 800ms
+      const videoShell = document.getElementById("heroVideoShell");
+      videoShell.innerHTML = "";
+      clearTimeout(heroVideoFadeTimer);
+
+      const activeIndexSnapshot = currentHeroIdx;
+      heroVideoFadeTimer = setTimeout(async () => {
+        if (currentHeroIdx !== activeIndexSnapshot) return;
+
+        let ytId = slide.yt;
+        if (!ytId) {
+          ytId = await fetchYouTubeTrailerId(slide.name);
+          if (ytId) slide.yt = ytId;
+        }
+        if (!ytId || currentHeroIdx !== activeIndexSnapshot) return;
+
+        const muteParam = heroMuted ? 1 : 0;
+        const iframe = document.createElement("iframe");
+        iframe.id = "activeHeroIframe";
+        iframe.className = "hero-video-frame";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=${muteParam}&controls=0&rel=0&playsinline=1&loop=1&playlist=${ytId}&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
+        iframe.onload = () => {
+          setTimeout(() => iframe.classList.add("is-playing"), 250);
+        };
+        videoShell.innerHTML = "";
+        videoShell.appendChild(iframe);
+      }, 800);
+
+      restartHeroAutoAdvance();
+    }
+
+    function nextHeroSlide() {
+      showHeroSlide(currentHeroIdx + 1);
+    }
+
+    function prevHeroSlide() {
+      showHeroSlide(currentHeroIdx - 1);
+    }
+
+    function restartHeroAutoAdvance() {
+      clearInterval(heroAutoTimer);
+      // Pause auto-advance if user unmuted to watch trailer
+      if (!heroMuted) return;
+      heroAutoTimer = setInterval(() => {
+        if (document.getElementById("reviewModal").classList.contains("hidden")) {
+          nextHeroSlide();
+        }
+      }, 14000);
+    }
+
+    function toggleHeroSound() {
+      heroMuted = !heroMuted;
+      const iconMuted = document.getElementById("heroSoundIconMuted");
+      const iconOn = document.getElementById("heroSoundIconOn");
+      const label = document.getElementById("heroSoundLabel");
+
+      if (heroMuted) {
+        iconMuted.classList.remove("hidden");
+        iconOn.classList.add("hidden");
+        label.textContent = "SOUND OFF";
+        restartHeroAutoAdvance();
+      } else {
+        iconMuted.classList.add("hidden");
+        iconOn.classList.remove("hidden");
+        label.textContent = "SOUND ON";
+        clearInterval(heroAutoTimer);
+      }
+
+      const iframe = document.getElementById("activeHeroIframe");
+      if (iframe && iframe.contentWindow) {
+        // Send YouTube postMessage command
+        iframe.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func: heroMuted ? "mute" : "unMute", args: [] }),
+          "*"
+        );
+        // Also ensure playback with explicit mute param if unmuting on browsers that require reload
+        if (!heroMuted) {
+          const slide = heroSlides[currentHeroIdx];
+          if (slide && slide.yt) {
+            iframe.src = `https://www.youtube.com/embed/${slide.yt}?autoplay=1&mute=0&controls=0&rel=0&playsinline=1&loop=1&playlist=${slide.yt}&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
+            iframe.classList.add("is-playing");
+          }
+        }
+      }
+    }
+
+    function bindHeroGestures() {
+      const el = document.getElementById("heroBillboard");
       let startX = 0;
-      container.addEventListener('touchstart', (e) => {
+      let isDown = false;
+
+      el.addEventListener("touchstart", (e) => {
         startX = e.touches[0].clientX;
       }, { passive: true });
-
-      container.addEventListener('touchend', (e) => {
-        const diffX = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diffX) > 40) {
-          if (diffX > 0) nextBillboardSlide();
-          else prevBillboardSlide();
+      el.addEventListener("touchend", (e) => {
+        const dx = startX - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 45) {
+          dx > 0 ? nextHeroSlide() : prevHeroSlide();
         }
       }, { passive: true });
-    }
 
-    function triggerSlideTrailer(idx) {
-      const slide = FLAGSHIP_SLIDES[idx];
-      const mockGame = {
-        id: slide.id,
-        name: slide.title,
-        released: slide.year,
-        background_image: slide.backdrop,
-        platforms: [{ platform: { name: "Multi-Platform" } }],
-        genres: [{ name: "Cinematic" }, { name: "Action" }]
-      };
-      openGameModal(mockGame, slide.youtubeId);
-    }
-
-    function triggerSlideDetails(idx) {
-      triggerSlideTrailer(idx);
-      switchModalTab('tabVerdict');
-    }
-
-    /**
-     * DEDUPLICATED CARD CREATION
-     */
-    function renderCard(game) {
-      const rating = resolveGameRating(game);
-      const card = document.createElement('div');
-      card.className = 'netflix-card relative flex-shrink-0 w-44 sm:w-56 bg-neutral-900/90 rounded-xl overflow-hidden cursor-pointer border border-neutral-800 select-none shadow-lg';
-
-      const coverImg = game.background_image || 'https://placehold.co/600x400/0d0f14/ffffff?text=FPS+Preview';
-      const year = (game.released || '').split('-')[0] || '2024';
-
-      card.innerHTML = `
-        <div class="relative w-full h-64 sm:h-80 overflow-hidden">
-          <img src="${coverImg}" alt="${game.name}" loading="lazy" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
-          
-          <!-- Rating Tier Badge -->
-          <div class="absolute top-2.5 left-2.5 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow ${rating.badgeClass}">
-            ${rating.tier}
-          </div>
-
-          <!-- Bottom Card Meta -->
-          <div class="absolute bottom-3 left-3 right-3">
-            <h4 class="text-white text-xs sm:text-sm font-bold line-clamp-1 drop-shadow-md">${game.name}</h4>
-            <div class="flex items-center justify-between text-[11px] text-neutral-300 mt-1">
-              <span class="flex items-center gap-1 text-yellow-400 font-mono font-bold"><i class="fa-solid fa-star text-[9px]"></i> ${rating.score}</span>
-              <span class="text-neutral-400 font-semibold">${year}</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-      card.onclick = () => openGameModal(game);
-      return card;
-    }
-
-    /**
-     * ENDLESS SIDE-SCROLLING (HORIZONTAL ROW WITH DYNAMIC PAGINATION)
-     */
-    async function loadCategoryRow(endpoint, sliderId, page = 1) {
-      const slider = document.getElementById(sliderId);
-      if (!slider) return;
-
-      try {
-        const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&${endpoint}&page=${page}&page_size=15`);
-        const data = await response.json();
-
-        if (data.results && data.results.length > 0) {
-          data.results.forEach(game => {
-            if (!globalRenderedGameIds.has(game.id)) {
-              globalRenderedGameIds.add(game.id);
-              slider.appendChild(renderCard(game));
-            }
-          });
-
-          // Attach Endless Horizontal Listener Once
-          if (!slider.hasAttribute('data-endless-bound')) {
-            slider.setAttribute('data-endless-bound', 'true');
-            slider.addEventListener('scroll', () => {
-              if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 300) {
-                const currentPage = parseInt(slider.getAttribute('data-page') || '1', 10);
-                const nextP = currentPage + 1;
-                slider.setAttribute('data-page', nextP);
-                loadCategoryRow(endpoint, sliderId, nextP);
-              }
-            });
-          }
+      el.addEventListener("mousedown", (e) => {
+        if (e.target.closest("button") || e.target.closest("h1")) return;
+        isDown = true;
+        startX = e.clientX;
+      });
+      el.addEventListener("mouseup", (e) => {
+        if (!isDown) return;
+        isDown = false;
+        const dx = startX - e.clientX;
+        if (Math.abs(dx) > 60) {
+          dx > 0 ? nextHeroSlide() : prevHeroSlide();
         }
-      } catch (err) {
-        console.warn(`Row load warning for ${sliderId}:`, err);
-      }
+      });
     }
 
-    function scrollRow(sliderId, offset) {
-      const slider = document.getElementById(sliderId);
-      if (slider) {
-        slider.scrollBy({ left: offset, behavior: 'smooth' });
-      }
+    function openHeroTrailerModal() {
+      const slide = heroSlides[currentHeroIdx];
+      if (!slide) return;
+      openReviewModal(slide, "overview");
     }
 
-    function scrollToRow(rowId) {
-      const row = document.getElementById(rowId);
-      if (row) {
-        const offset = 80;
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const elementRect = row.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - offset;
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-      }
+    function openHeroReviewModal() {
+      const slide = heroSlides[currentHeroIdx];
+      if (!slide) return;
+      openReviewModal(slide, "breakdown");
     }
 
-    /**
-     * ENDLESS VERTICAL SCROLLING CURATED SECTIONS
-     */
-    const EXTRA_VERTICAL_TIERS = [
-      { title: "Masterpiece RPGs & Open Worlds", endpoint: "genres=role-playing-games-rpg&ordering=-metacritic&metacritic=85,99", color: "bg-purple-500" },
-      { title: "Survival Horror & Dark Atmosphere", endpoint: "search=resident+evil,silent+hill,dead+space&ordering=-metacritic", color: "bg-red-700" },
-      { title: "High-Octane Racing & Speed", endpoint: "genres=racing&ordering=-metacritic&metacritic=80,95", color: "bg-amber-500" },
-      { title: "Indie Game Masterpieces", endpoint: "genres=indie&ordering=-metacritic&metacritic=85,99", color: "bg-teal-400" },
-      { title: "Trending Global Hall of Fame", endpoint: "ordering=-added&page_size=15", color: "bg-blue-500" }
-    ];
+    // =========================================================================
+    // YOUTUBE DATA API v3 FETCH + LOCALSTORAGE CACHE
+    // =========================================================================
+    async function fetchYouTubeTrailerId(gameName) {
+      const key = gameName.toLowerCase().trim();
+      if (KNOWN_YT_MAP[key]) return KNOWN_YT_MAP[key];
+      if (ytCache[key]) return ytCache[key];
 
-    let verticalTierIndex = 0;
-    let isVerticalLoading = false;
-
-    function initEndlessVerticalScroll() {
-      const sentinel = document.getElementById('endlessScrollSentinel');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !isVerticalLoading && verticalTierIndex < EXTRA_VERTICAL_TIERS.length) {
-            loadNextVerticalTier();
-          }
-        });
-      }, { rootMargin: '400px' });
-
-      observer.observe(sentinel);
-    }
-
-    async function loadNextVerticalTier() {
-      isVerticalLoading = true;
-      const tier = EXTRA_VERTICAL_TIERS[verticalTierIndex];
-      verticalTierIndex++;
-
-      const container = document.getElementById('infiniteVerticalRowsContainer');
-      const sliderId = `dynamicSlider_${verticalTierIndex}`;
-
-      const section = document.createElement('section');
-      section.className = 'space-y-3 relative group';
-      section.innerHTML = `
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm sm:text-base font-black tracking-widest uppercase text-neutral-200 flex items-center gap-2">
-            <span class="w-1.5 h-4 ${tier.color} rounded-sm"></span> 
-            <span>${tier.title}</span>
-          </h2>
-          <div class="flex space-x-2">
-            <button onclick="scrollRow('${sliderId}', -600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-            <button onclick="scrollRow('${sliderId}', 600)" class="w-8 h-8 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-          </div>
-        </div>
-        <div id="${sliderId}" data-endpoint="${tier.endpoint}" data-page="1" class="flex space-x-4 overflow-x-auto hide-scrollbar py-3 px-1 scroll-smooth"></div>
-      `;
-      container.appendChild(section);
-
-      await loadCategoryRow(tier.endpoint, sliderId, 1);
-      isVerticalLoading = false;
-
-      if (verticalTierIndex >= EXTRA_VERTICAL_TIERS.length) {
-        const sentinel = document.getElementById('endlessScrollSentinel');
-        if (sentinel) sentinel.classList.add('hidden');
-      }
-    }
-
-    /**
-     * YOUTUBE 4K TRAILER SEARCH WITH CACHE & DIRECT EMBED PARAMS
-     */
-    async function fetchYouTubeTrailer(gameName) {
-      if (videoCache[gameName]) return videoCache[gameName];
-
-      const query = encodeURIComponent(`${gameName} official trailer 4k gameplay`);
       try {
-        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${query}&type=video&key=${YOUTUBE_API_KEY}`);
+        const q = encodeURIComponent(`${gameName} official trailer`);
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${q}&type=video&videoEmbeddable=true&key=${YOUTUBE_API_KEY}`);
         const data = await res.json();
-        if (data.items && data.items.length > 0) {
-          const videoId = data.items[0].id.videoId;
-          videoCache[gameName] = videoId;
-          return videoId;
+        if (data.items && data.items[0] && data.items[0].id && data.items[0].id.videoId) {
+          const vid = data.items[0].id.videoId;
+          ytCache[key] = vid;
+          localStorage.setItem("fps_yt_cache_v2", JSON.stringify(ytCache));
+          return vid;
         }
       } catch (err) {
-        console.warn("YouTube API search warning:", err);
+        console.warn("YouTube API fetch failed:", err);
       }
       return null;
     }
 
-    /**
-     * THEATER MODAL REVIEW
-     */
-    async function openGameModal(game, directVideoId = null) {
+    // =========================================================================
+    // ENDLESS HORIZONTAL & VERTICAL CATALOG ROWS
+    // =========================================================================
+    const ALL_CATALOG_ROWS = [
+      { id: "row-rockstar", title: "Rockstar Vault", tag: "EXCLUSIVE EDITIONS", accent: "bg-amber-400", query: "developers=rockstar-games&ordering=-rating" },
+      { id: "row-peak", title: "Peak Tier", tag: "9.5 – 10.0 CRITIC", accent: "bg-yellow-400", query: "ordering=-metacritic&metacritic=94,100" },
+      { id: "row-cinema", title: "Absolute Cinema", tag: "9.0 – 9.4 CRITIC", accent: "bg-sky-400", query: "ordering=-metacritic&metacritic=90,93" },
+      { id: "row-shooters", title: "Action & Shooters", tag: "HIGH OCTANE", accent: "bg-[#E50914]", query: "genres=shooter,action&ordering=-added" },
+      { id: "row-rpg", title: "Open World RPGs", tag: "MASSIVE WORLDS", accent: "bg-purple-500", query: "genres=role-playing-games-rpg&ordering=-metacritic&metacritic=84,99" },
+      { id: "row-horror", title: "Survival Horror & Thriller", tag: "DARK ATMOSPHERE", accent: "bg-red-700", query: "tags=horror,survival-horror&ordering=-metacritic" },
+      { id: "row-racing", title: "Racing & Speed", tag: "MOTORSPORT", accent: "bg-amber-500", query: "genres=racing&ordering=-metacritic&metacritic=78,99" },
+      { id: "row-indie", title: "Indie Masterpieces", tag: "CRITIC DARLINGS", accent: "bg-teal-400", query: "genres=indie&ordering=-metacritic&metacritic=85,99" },
+      { id: "row-strategy", title: "Strategy & Tactics", tag: "MASTERMIND", accent: "bg-indigo-400", query: "genres=strategy&ordering=-metacritic&metacritic=82,99" },
+      { id: "row-fighting", title: "Fighting & Arcade", tag: "COMPETITIVE", accent: "bg-pink-500", query: "genres=fighting,arcade&ordering=-metacritic" },
+      { id: "row-scifi", title: "Sci-Fi & Cyberpunk", tag: "FUTURISTIC", accent: "bg-cyan-400", query: "tags=sci-fi,cyberpunk&ordering=-metacritic" },
+      { id: "row-stealth", title: "Stealth & Espionage", tag: "COVERT OPS", accent: "bg-emerald-500", query: "tags=stealth&ordering=-metacritic" }
+    ];
+
+    let nextVerticalRowIndex = 0;
+    let isLoadingVertical = false;
+
+    function createGameCard(game) {
+      const rating = getRatingInfo(game);
+      const card = document.createElement("article");
+      card.className = "game-card relative flex-shrink-0 w-44 sm:w-52 md:w-56 bg-[#111319] rounded-xl overflow-hidden border border-white/10 shadow-xl select-none";
+      const year = (game.released || "2024").split("-")[0];
+
+      card.innerHTML = `
+        <div class="relative w-full aspect-[3/4] overflow-hidden bg-[#151821]">
+          <img
+            src="${game.background_image}"
+            alt="${game.name.replace(/"/g, "&quot;")}"
+            loading="lazy"
+            class="w-full h-full object-cover"
+          >
+          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent pointer-events-none"></div>
+
+          <!-- Top Metallic Badge -->
+          <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">
+            ${rating.label}
+          </div>
+
+          <!-- Bottom Card Info -->
+          <div class="absolute bottom-3 left-3 right-3 space-y-1">
+            <h3 class="text-white text-xs sm:text-sm font-extrabold line-clamp-1 drop-shadow">${game.name}</h3>
+            <div class="flex items-center justify-between text-[11px] font-bold">
+              <span class="inline-flex items-center gap-1 text-yellow-400">
+                <svg class="w-3 h-3 fill-yellow-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                ${rating.score}
+              </span>
+              <span class="text-gray-300">${year}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // 100% Reliable Click Handler (Ignores Drag Swipes)
+      card.addEventListener("click", (e) => {
+        if (card.closest(".drag-scroll")?.dataset.wasDragged === "1") return;
+        openReviewModal(game, "overview");
+      });
+
+      return card;
+    }
+
+    async function mountCatalogRow(rowConfig) {
+      const container = document.getElementById("catalogRowsContainer");
+      const sliderId = `${rowConfig.id}-slider`;
+
+      const section = document.createElement("section");
+      section.id = rowConfig.id;
+      section.className = "space-y-3.5";
+      section.innerHTML = `
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="w-1.5 h-5 rounded-sm ${rowConfig.accent} flex-shrink-0"></span>
+            <h2 class="text-sm sm:text-base font-black tracking-wider uppercase text-white truncate">${rowConfig.title}</h2>
+            <span class="hidden sm:inline text-[10px] font-bold tracking-widest uppercase text-gray-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">${rowConfig.tag}</span>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <button onclick="scrollSlider('${sliderId}', -620)" aria-label="Scroll left" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#E50914] border border-white/15 text-white flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button onclick="scrollSlider('${sliderId}', 620)" aria-label="Scroll right" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#E50914] border border-white/15 text-white flex items-center justify-center transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="${sliderId}" data-page="1" data-loading="0" data-has-more="1" class="drag-scroll flex gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-0.5 scroll-smooth"></div>
+      `;
+
+      container.appendChild(section);
+      const slider = document.getElementById(sliderId);
+      enableMouseDragScroll(slider);
+
+      // Load Page 1
+      await fetchRowPage(slider, rowConfig.query, 1);
+
+      // Bind Endless Horizontal Pagination
+      slider.addEventListener("scroll", () => {
+        if (slider.dataset.loading === "1" || slider.dataset.hasMore === "0") return;
+        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 420) {
+          const nextPage = parseInt(slider.dataset.page || "1", 10) + 1;
+          fetchRowPage(slider, rowConfig.query, nextPage);
+        }
+      });
+    }
+
+    async function fetchRowPage(slider, query, page) {
+      slider.dataset.loading = "1";
+      slider.dataset.page = String(page);
+
+      try {
+        const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&${query}&page=${page}&page_size=16`);
+        const data = await res.json();
+
+        if (!data.results || data.results.length === 0) {
+          slider.dataset.hasMore = "0";
+          return;
+        }
+
+        let appended = 0;
+        for (const game of data.results) {
+          if (!game.background_image) continue;
+          if (globalRenderedIds.has(game.id)) continue;
+          globalRenderedIds.add(game.id);
+          slider.appendChild(createGameCard(game));
+          appended++;
+        }
+
+        if (!data.next) {
+          slider.dataset.hasMore = "0";
+        } else if (appended < 4 && page < 5) {
+          // If deduplication filtered most items, automatically fetch next page
+          await fetchRowPage(slider, query, page + 1);
+        }
+      } catch (err) {
+        console.warn("Row fetch failed:", err);
+      } finally {
+        slider.dataset.loading = "0";
+      }
+    }
+
+    function scrollSlider(sliderId, delta) {
+      const el = document.getElementById(sliderId);
+      if (el) el.scrollBy({ left: delta, behavior: "smooth" });
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - 82;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
+    function enableMouseDragScroll(slider) {
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      slider.addEventListener("mousedown", (e) => {
+        isDown = true;
+        slider.dataset.wasDragged = "0";
+        slider.classList.add("is-dragging");
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+      slider.addEventListener("mouseleave", () => {
+        isDown = false;
+        slider.classList.remove("is-dragging");
+      });
+      slider.addEventListener("mouseup", () => {
+        isDown = false;
+        slider.classList.remove("is-dragging");
+        setTimeout(() => { slider.dataset.wasDragged = "0"; }, 60);
+      });
+      slider.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.4;
+        if (Math.abs(walk) > 8) {
+          slider.dataset.wasDragged = "1";
+          e.preventDefault();
+          slider.scrollLeft = scrollLeft - walk;
+        }
+      });
+    }
+
+    function setupEndlessVerticalObserver() {
+      const sentinel = document.getElementById("verticalSentinel");
+      const observer = new IntersectionObserver(async (entries) => {
+        if (!entries[0].isIntersecting || isLoadingVertical) return;
+        if (nextVerticalRowIndex >= ALL_CATALOG_ROWS.length) {
+          sentinel.classList.add("hidden");
+          return;
+        }
+        isLoadingVertical = true;
+        const rowCfg = ALL_CATALOG_ROWS[nextVerticalRowIndex++];
+        await mountCatalogRow(rowCfg);
+        isLoadingVertical = false;
+        if (nextVerticalRowIndex >= ALL_CATALOG_ROWS.length) {
+          sentinel.classList.add("hidden");
+        }
+      }, { rootMargin: "450px" });
+
+      observer.observe(sentinel);
+    }
+
+    // =========================================================================
+    // VIBRANT REVIEW & TRAILER THEATER MODAL
+    // =========================================================================
+    async function openReviewModal(game, defaultTab = "overview") {
       currentModalGame = game;
-      const modal = document.getElementById('gameModal');
-      const title = document.getElementById('modalTitle');
-      const released = document.getElementById('modalReleased');
-      const platforms = document.getElementById('modalPlatforms');
-      const badge = document.getElementById('modalBadge');
-      const score = document.getElementById('modalRatingScore');
-      const desc = document.getElementById('modalDescription');
-      const genres = document.getElementById('modalGenres');
-      const iframe = document.getElementById('modalVideoIframe');
-      const loader = document.getElementById('modalVideoLoader');
-      const fallbackPoster = document.getElementById('modalPosterFallback');
+      const modal = document.getElementById("reviewModal");
+      const iframe = document.getElementById("modalIframe");
+      const loader = document.getElementById("modalVideoLoader");
+      const rating = getRatingInfo(game);
 
-      const rating = resolveGameRating(game);
+      // Pause hero background video while modal is open so audio never overlaps
+      const heroVideoShell = document.getElementById("heroVideoShell");
+      if (heroVideoShell) heroVideoShell.innerHTML = "";
 
-      title.textContent = game.name;
-      released.textContent = `RELEASE: ${(game.released || '2024').split('-')[0]}`;
-      platforms.textContent = (game.platforms || []).map(p => p.platform.name).slice(0, 3).join(', ') || 'MULTI-PLATFORM';
-      
-      badge.className = `px-3.5 py-1.5 rounded text-xs font-black tracking-widest uppercase ${rating.badgeClass}`;
-      badge.textContent = rating.tier;
-      score.textContent = rating.score;
+      document.getElementById("modalTitle").textContent = game.name;
+      document.getElementById("modalReleaseYear").textContent = (game.released || "2024").split("-")[0];
+      document.getElementById("modalStudio").textContent = (game.studio || "OFFICIAL RELEASE").toUpperCase();
+      document.getElementById("modalPlatforms").textContent =
+        (game.platforms || []).map(p => p.platform?.name).filter(Boolean).slice(0, 4).join(" / ") || "PC / CONSOLE";
+
+      const badge = document.getElementById("modalTierBadge");
+      badge.className = `px-3.5 py-1.5 rounded-md text-xs font-black tracking-widest uppercase ${rating.badgeClass}`;
+      badge.textContent = rating.label;
+      document.getElementById("modalScoreValue").textContent = rating.score;
 
       // Genres
-      genres.innerHTML = '';
-      (game.genres || []).forEach(g => {
-        const chip = document.createElement('span');
-        chip.className = 'bg-neutral-900 text-neutral-300 px-3 py-1 rounded border border-neutral-800 text-[11px] font-bold uppercase tracking-wider';
-        chip.textContent = g.name;
-        genres.appendChild(chip);
+      const genresEl = document.getElementById("modalGenres");
+      genresEl.innerHTML = "";
+      (game.genres || [{ name: "Action" }]).forEach(g => {
+        const span = document.createElement("span");
+        span.className = "px-3 py-1 rounded-md bg-white/10 border border-white/15 text-[11px] font-bold uppercase tracking-wider text-gray-200";
+        span.textContent = g.name;
+        genresEl.appendChild(span);
       });
 
-      // Rating Radar Metrics
-      const scoreNum = parseFloat(rating.score);
-      document.getElementById('metricGameplay').textContent = Math.min(10, (scoreNum + 0.1)).toFixed(1);
-      document.getElementById('metricStory').textContent = Math.min(10, (scoreNum + 0.2)).toFixed(1);
-      document.getElementById('metricGraphics').textContent = scoreNum.toFixed(1);
-      document.getElementById('metricAudio').textContent = Math.min(10, (scoreNum + 0.1)).toFixed(1);
-      document.getElementById('metricReplay').textContent = Math.max(7.0, (scoreNum - 0.2)).toFixed(1);
+      document.getElementById("modalSynopsis").textContent =
+        game.description || "Loading full verified game synopsis...";
+
+      // Animated Critic Score Bars
+      const base = rating.scoreNum;
+      const metrics = [
+        { label: "GAMEPLAY", val: Math.min(10, base + 0.1), color: "bg-[#E50914]" },
+        { label: "STORY", val: Math.min(10, base + 0.2), color: "bg-amber-400" },
+        { label: "VISUALS", val: Math.min(10, base), color: "bg-sky-400" },
+        { label: "AUDIO", val: Math.min(10, base + 0.1), color: "bg-purple-400" },
+        { label: "REPLAYABILITY", val: Math.max(5.5, base - 0.2), color: "bg-emerald-400" }
+      ];
+      const barsContainer = document.getElementById("modalScoreBars");
+      barsContainer.innerHTML = metrics.map(m => `
+        <div class="bg-white/5 border border-white/10 rounded-xl p-3.5">
+          <div class="flex items-center justify-between text-[11px] font-bold tracking-wider uppercase text-gray-300 mb-2">
+            <span>${m.label}</span>
+            <span class="text-white font-black">${m.val.toFixed(1)}</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+            <div class="score-bar-fill h-full ${m.color} rounded-full" style="width: 0%" data-target="${Math.round(m.val * 10)}%"></div>
+          </div>
+        </div>
+      `).join("");
 
       // Pros & Cons
-      const prosList = document.getElementById('modalProsList');
-      const consList = document.getElementById('modalConsList');
-      if (scoreNum >= 9.0) {
-        prosList.innerHTML = `
-          <li>&bull; Groundbreaking narrative immersion and generational world design</li>
-          <li>&bull; Peerless audiovisual fidelity with master-grade spatial sound design</li>
-          <li>&bull; Nuanced character development and responsive gameplay loops</li>
+      const prosEl = document.getElementById("modalPros");
+      const consEl = document.getElementById("modalCons");
+      if (base >= 9.0) {
+        prosEl.innerHTML = `
+          <li>&bull; Generational world-building, narrative depth, and cinematic direction</li>
+          <li>&bull; Best-in-class combat responsiveness and visual fidelity</li>
+          <li>&bull; Exceptional soundtrack and long-term replay value</li>
         `;
-        consList.innerHTML = `
-          <li>&bull; Demands top-tier PC hardware for uncompromised ray tracing fidelity</li>
+        consEl.innerHTML = `
+          <li>&bull; High-end GPU recommended for native 4K ray-traced performance</li>
+          <li>&bull; Dense systems require an initial learning curve</li>
         `;
-      } else if (scoreNum >= 7.0) {
-        prosList.innerHTML = `
-          <li>&bull; Solid core combat architecture and engaging progression milestones</li>
-          <li>&bull; Consistently fluid performance across consoles and PC platforms</li>
+      } else if (base >= 7.0) {
+        prosEl.innerHTML = `
+          <li>&bull; Engaging core gameplay loop with polished progression</li>
+          <li>&bull; Strong art direction and reliable frame pacing</li>
         `;
-        consList.innerHTML = `
-          <li>&bull; Repetitive side quests in mid-game campaign chapters</li>
+        consEl.innerHTML = `
+          <li>&bull; Occasional pacing dips in optional side activities</li>
         `;
       } else {
-        prosList.innerHTML = `
-          <li>&bull; Intriguing original premise and artistic environmental design</li>
+        prosEl.innerHTML = `<li>&bull; Ambitious concept with distinct visual moments</li>`;
+        consEl.innerHTML = `
+          <li>&bull; Technical polish and balancing fall short of genre leaders</li>
+          <li>&bull; Repetitive mission structure across chapters</li>
         `;
-        consList.innerHTML = `
-          <li>&bull; Noticeable technical stutters and unbalanced gameplay balance</li>
-        `;
       }
 
-      switchModalTab('tabOverview');
-      updateModalWatchlistState();
+      // System Specs
+      document.getElementById("modalSpecsContent").innerHTML = `
+        <div><span class="block text-[10px] font-bold tracking-widest uppercase text-gray-400">OS</span><span class="text-white font-semibold">Windows 10 / 11 64-bit</span></div>
+        <div><span class="block text-[10px] font-bold tracking-widest uppercase text-gray-400">PROCESSOR</span><span class="text-white font-semibold">Intel Core i7-12700K / AMD Ryzen 7 7800X3D</span></div>
+        <div><span class="block text-[10px] font-bold tracking-widest uppercase text-gray-400">GRAPHICS</span><span class="text-white font-semibold">NVIDIA RTX 4070 / AMD Radeon RX 7800 XT</span></div>
+        <div><span class="block text-[10px] font-bold tracking-widest uppercase text-gray-400">MEMORY &amp; STORAGE</span><span class="text-white font-semibold">16 GB RAM &bull; 100 GB NVMe SSD</span></div>
+      `;
 
-      // Poster Fallback Background
-      fallbackPoster.style.backgroundImage = `url('${game.background_image || ''}')`;
-      fallbackPoster.classList.remove('hidden');
+      syncModalWatchlistButton();
+      switchModalTab(defaultTab);
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
 
-      modal.classList.remove('hidden');
-      loader.classList.remove('hidden');
-      iframe.src = '';
+      // Load Full RAWG Metadata if numeric RAWG ID exists
+      const rawgId = game.rawgId || (typeof game.id === "number" ? game.id : null);
+      if (rawgId) {
+        fetch(`https://api.rawg.io/api/games/${rawgId}?key=${RAWG_API_KEY}`)
+          .then(r => r.json())
+          .then(d => {
+            if (d.description_raw) document.getElementById("modalSynopsis").textContent = d.description_raw;
+            if (d.developers && d.developers[0]) document.getElementById("modalStudio").textContent = d.developers[0].name.toUpperCase();
+          })
+          .catch(() => {});
+      }
 
-      // Fetch RAWG Synopsis if available
-      if (typeof game.id === 'number') {
-        try {
-          const res = await fetch(`https://api.rawg.io/api/games/${game.id}?key=${RAWG_API_KEY}`);
-          const data = await res.json();
-          desc.textContent = data.description_raw || data.description || "An immersive journey delivering captivating gameplay and cinematic thrills.";
-          if (data.developers && data.developers[0]) {
-            document.getElementById('modalDeveloper').textContent = data.developers[0].name.toUpperCase();
-          }
-        } catch (e) {
-          desc.textContent = "Acclaimed interactive experience verified by international gaming critics.";
-        }
+      // Stream Full 16:9 Official Trailer with Sound ON
+      loader.classList.remove("hidden");
+      iframe.src = "";
+      let ytId = game.yt || KNOWN_YT_MAP[(game.name || "").toLowerCase()] || await fetchYouTubeTrailerId(game.name);
+
+      if (ytId) {
+        iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1&modestbranding=1&enablejsapi=1`;
       } else {
-        desc.textContent = game.description || "A flagship cinematic interactive title acclaimed by critics worldwide.";
+        iframe.src = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(game.name + " official trailer")}&autoplay=1`;
       }
 
-      // Stream YouTube Trailer via youtube-nocookie
-      let videoId = directVideoId;
-      if (!videoId) {
-        videoId = await fetchYouTubeTrailer(game.name);
-      }
-
-      if (videoId) {
-        iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=0&enablejsapi=1&rel=0&modestbranding=1&controls=1&playsinline=1`;
-        fallbackPoster.onclick = () => {
-          fallbackPoster.classList.add('hidden');
-          iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=0&enablejsapi=1&rel=0&modestbranding=1&controls=1&playsinline=1`;
-        };
-      } else {
-        iframe.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(game.name + ' trailer')}&autoplay=1`;
-      }
-
-      setTimeout(() => {
-        loader.classList.add('hidden');
-        fallbackPoster.classList.add('hidden');
-      }, 700);
+      setTimeout(() => loader.classList.add("hidden"), 550);
     }
 
-    function closeModal() {
-      const modal = document.getElementById('gameModal');
-      const iframe = document.getElementById('modalVideoIframe');
-      iframe.src = '';
-      modal.classList.add('hidden');
+    function closeReviewModal() {
+      document.getElementById("modalIframe").src = "";
+      document.getElementById("reviewModal").classList.add("hidden");
+      document.body.style.overflow = "";
+      // Resume hero autoplay trailer cleanly
+      showHeroSlide(currentHeroIdx);
     }
 
-    function switchModalTab(tabId) {
-      ['tabOverview', 'tabVerdict', 'tabSpecs'].forEach(id => {
-        const el = document.getElementById(id);
-        const btn = document.getElementById(`tabBtn_${id}`);
-        if (id === tabId) {
-          el.classList.remove('hidden');
-          btn.className = "pb-3 text-red-500 border-b-2 border-red-600 transition";
+    function switchModalTab(tab) {
+      ["overview", "breakdown", "specs"].forEach(t => {
+        const pane = document.getElementById(`tabPane-${t}`);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (t === tab) {
+          pane.classList.remove("hidden");
+          btn.className = "pb-2 text-white border-b-2 border-[#E50914] transition";
         } else {
-          el.classList.add('hidden');
-          btn.className = "pb-3 text-neutral-400 hover:text-white transition";
+          pane.classList.add("hidden");
+          btn.className = "pb-2 text-gray-400 hover:text-white border-b-2 border-transparent transition";
         }
       });
+
+      if (tab === "breakdown") {
+        setTimeout(() => {
+          document.querySelectorAll("#modalScoreBars .score-bar-fill").forEach(bar => {
+            bar.style.width = bar.dataset.target;
+          });
+        }, 50);
+      }
     }
 
-    function shareGameModal() {
+    function copyShareLink() {
       if (!currentModalGame) return;
-      const shareUrl = window.location.href;
-      const dummy = document.createElement('input');
-      document.body.appendChild(dummy);
-      dummy.value = `${currentModalGame.name} on FPS: ${shareUrl}`;
-      dummy.select();
-      document.execCommand('copy');
-      document.body.removeChild(dummy);
-
-      const btn = event.currentTarget;
-      const originalHTML = btn.innerHTML;
-      btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i>`;
-      setTimeout(() => btn.innerHTML = originalHTML, 1500);
+      const input = document.createElement("input");
+      input.value = `${currentModalGame.name} — Reviewed on FPS (${window.location.href})`;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      window.showToast("Game link copied to clipboard");
     }
 
-    /**
-     * WATCHLIST LOGIC
-     */
-    function updateModalWatchlistState() {
-      const btnText = document.getElementById('modalWatchlistText');
-      const btnIcon = document.getElementById('modalWatchlistIcon');
-      if (!currentModalGame) return;
+    // =========================================================================
+    // WATCHLIST MANAGEMENT (PERSISTED IN LOCALSTORAGE)
+    // =========================================================================
+    function updateWatchlistBadgeCount() {
+      document.getElementById("navWatchlistCount").textContent = String(myWatchlist.length);
+    }
 
-      const exists = myWatchlist.some(item => item.id === currentModalGame.id);
+    function syncModalWatchlistButton() {
+      if (!currentModalGame) return;
+      const exists = myWatchlist.some(g => String(g.id) === String(currentModalGame.id));
+      const label = document.getElementById("modalWatchlistLabel");
+      const icon = document.getElementById("modalWatchlistIcon");
       if (exists) {
-        btnText.textContent = "IN WATCHLIST";
-        btnIcon.className = "fa-solid fa-check text-emerald-400";
+        label.textContent = "IN WATCHLIST";
+        icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>`;
       } else {
-        btnText.textContent = "ADD TO WATCHLIST";
-        btnIcon.className = "fa-solid fa-plus text-xs";
+        label.textContent = "ADD TO WATCHLIST";
+        icon.innerHTML = `<path stroke-linecap="round" d="M12 5v14m-7-7h14"/>`;
       }
-      document.getElementById('navWatchlistCount').textContent = myWatchlist.length;
     }
 
-    function toggleModalWatchlist() {
+    function toggleCurrentWatchlist() {
       if (!currentModalGame) return;
-      const index = myWatchlist.findIndex(item => item.id === currentModalGame.id);
-      if (index >= 0) {
-        myWatchlist.splice(index, 1);
+      const idx = myWatchlist.findIndex(g => String(g.id) === String(currentModalGame.id));
+      if (idx >= 0) {
+        myWatchlist.splice(idx, 1);
+        window.showToast("Removed from Watchlist");
       } else {
-        myWatchlist.push(currentModalGame);
+        myWatchlist.push({
+          id: currentModalGame.id,
+          rawgId: currentModalGame.rawgId || (typeof currentModalGame.id === "number" ? currentModalGame.id : null),
+          name: currentModalGame.name,
+          background_image: currentModalGame.background_image,
+          released: currentModalGame.released,
+          metacritic: currentModalGame.metacritic,
+          rating: currentModalGame.rating,
+          forcedScore: currentModalGame.forcedScore,
+          yt: currentModalGame.yt,
+          studio: currentModalGame.studio,
+          genres: currentModalGame.genres,
+          platforms: currentModalGame.platforms
+        });
+        window.showToast("Added to Watchlist");
       }
-      updateModalWatchlistState();
+      localStorage.setItem("fps_watchlist_v2", JSON.stringify(myWatchlist));
+      updateWatchlistBadgeCount();
+      syncModalWatchlistButton();
     }
 
     function openWatchlistModal() {
-      const modal = document.getElementById('watchlistModal');
-      const content = document.getElementById('watchlistContent');
-      content.innerHTML = '';
-
-      if (myWatchlist.length === 0) {
-        content.innerHTML = `
-          <div class="text-center py-12 text-neutral-400 space-y-2">
-            <i class="fa-regular fa-bookmark text-3xl text-neutral-600"></i>
-            <p class="text-sm font-semibold uppercase tracking-wider">Your watchlist is empty</p>
-            <p class="text-xs text-neutral-500">Tap "+ Add to Watchlist" on any title to save it for immediate screening.</p>
+      const list = document.getElementById("watchlistList");
+      list.innerHTML = "";
+      if (!myWatchlist.length) {
+        list.innerHTML = `
+          <div class="py-12 text-center space-y-2 text-gray-400">
+            <p class="text-sm font-bold uppercase tracking-wider text-white">Your Watchlist is Empty</p>
+            <p class="text-xs">Open any game and click Add to Watchlist to save it here.</p>
           </div>
         `;
       } else {
-        myWatchlist.forEach(game => {
-          const rating = resolveGameRating(game);
-          const row = document.createElement('div');
-          row.className = 'flex items-center justify-between p-3 bg-neutral-900 rounded-lg border border-neutral-800 hover:border-neutral-700 transition';
-          row.innerHTML = `
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="openGameModalFromWatchlist('${game.id}')">
-              <img src="${game.background_image || ''}" class="w-14 h-14 rounded object-cover">
-              <div>
-                <h4 class="text-sm font-bold text-white">${game.name}</h4>
-                <div class="flex items-center gap-2 text-xs text-neutral-400 mt-0.5">
-                  <span class="text-yellow-400 font-mono font-bold"><i class="fa-solid fa-star text-[10px]"></i> ${rating.score}</span>
-                  <span>&bull;</span>
-                  <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-widest ${rating.badgeClass}">${rating.tier}</span>
+        myWatchlist.forEach((game, idx) => {
+          const rating = getRatingInfo(game);
+          const item = document.createElement("div");
+          item.className = "flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-white/25 transition";
+          item.innerHTML = `
+            <div class="flex items-center gap-3.5 cursor-pointer min-w-0 flex-grow" onclick="openFromWatchlist(${idx})">
+              <img src="${game.background_image}" alt="${game.name.replace(/"/g, "&quot;")}" class="w-16 h-12 rounded-lg object-cover flex-shrink-0">
+              <div class="min-w-0">
+                <h4 class="text-sm font-bold text-white truncate">${game.name}</h4>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-xs font-black text-yellow-400">${rating.score}</span>
+                  <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">${rating.label}</span>
                 </div>
               </div>
             </div>
-            <button onclick="removeFromWatchlist('${game.id}')" class="text-neutral-500 hover:text-red-500 p-2 text-xs"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="removeWatchlistItem(${idx})" class="p-2 text-gray-400 hover:text-red-500 transition" title="Remove">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
           `;
-          content.appendChild(row);
+          list.appendChild(item);
         });
       }
-      modal.classList.remove('hidden');
+      document.getElementById("watchlistModal").classList.remove("hidden");
     }
 
     function closeWatchlistModal() {
-      document.getElementById('watchlistModal').classList.add('hidden');
+      document.getElementById("watchlistModal").classList.add("hidden");
     }
 
-    function removeFromWatchlist(id) {
-      myWatchlist = myWatchlist.filter(g => String(g.id) !== String(id));
+    function openFromWatchlist(idx) {
+      const g = myWatchlist[idx];
+      if (!g) return;
+      closeWatchlistModal();
+      openReviewModal(g, "overview");
+    }
+
+    function removeWatchlistItem(idx) {
+      myWatchlist.splice(idx, 1);
+      localStorage.setItem("fps_watchlist_v2", JSON.stringify(myWatchlist));
+      updateWatchlistBadgeCount();
       openWatchlistModal();
-      document.getElementById('navWatchlistCount').textContent = myWatchlist.length;
     }
 
-    window.openGameModalFromWatchlist = function(id) {
-      const g = myWatchlist.find(i => String(i.id) === String(id));
-      if (g) {
-        closeWatchlistModal();
-        openGameModal(g);
-      }
-    };
+    // =========================================================================
+    // LIVE DEBOUNCED SEARCH
+    // =========================================================================
+    const searchInput = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const searchSection = document.getElementById("searchSection");
+    const searchGrid = document.getElementById("searchGrid");
+    const searchCountText = document.getElementById("searchCountText");
+    let searchTimer = null;
 
-    /**
-     * SEARCH WITH DEBOUNCE
-     */
-    const searchInput = document.getElementById('searchInput');
-    const clearSearch = document.getElementById('clearSearch');
-    const searchSection = document.getElementById('searchResultsSection');
-    const searchGrid = document.getElementById('searchGrid');
-    const searchCount = document.getElementById('searchResultCount');
-    let searchDebounce = null;
+    searchInput.addEventListener("input", (e) => {
+      const q = e.target.value.trim();
+      clearTimeout(searchTimer);
 
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.trim();
-      clearTimeout(searchDebounce);
-
-      if (query.length > 0) {
-        clearSearch.classList.remove('hidden');
-      } else {
-        clearSearch.classList.add('hidden');
-        searchSection.classList.add('hidden');
+      if (!q) {
+        clearSearchBtn.classList.add("hidden");
+        searchSection.classList.add("hidden");
         return;
       }
+      clearSearchBtn.classList.remove("hidden");
 
-      searchDebounce = setTimeout(async () => {
-        searchSection.classList.remove('hidden');
-        searchGrid.innerHTML = `
-          <div class="col-span-full py-10 text-center text-neutral-400">
-            <i class="fa-solid fa-circle-notch fa-spin text-xl text-red-600 mb-2"></i>
-            <p class="text-xs uppercase tracking-widest font-semibold">SEARCHING CRITIC ARCHIVES...</p>
-          </div>
-        `;
-
+      searchTimer = setTimeout(async () => {
+        searchSection.classList.remove("hidden");
+        searchGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs font-bold tracking-widest uppercase text-gray-400">Searching RAWG database...</div>`;
         try {
-          const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=12`);
+          const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(q)}&page_size=18`);
           const data = await res.json();
-          searchGrid.innerHTML = '';
-
-          if (data.results && data.results.length > 0) {
-            searchCount.textContent = `LOCATED ${data.count} TITLES`;
-            data.results.forEach(game => {
-              searchGrid.appendChild(renderCard(game));
-            });
-            searchSection.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            searchGrid.innerHTML = `<div class="col-span-full py-8 text-center text-neutral-400 text-xs uppercase tracking-wider">No matching games found for "${query}".</div>`;
+          searchGrid.innerHTML = "";
+          const valid = (data.results || []).filter(g => g.background_image);
+          searchCountText.textContent = `${valid.length} TITLES FOUND`;
+          if (!valid.length) {
+            searchGrid.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-gray-400">No games found for "${q}".</div>`;
+            return;
           }
+          valid.forEach(g => searchGrid.appendChild(createGameCard(g)));
+          scrollToSection("searchSection");
         } catch (err) {
-          searchGrid.innerHTML = `<div class="col-span-full py-8 text-center text-red-500 text-xs">Search error. Check network connection.</div>`;
+          searchGrid.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-red-400">Search error. Please try again.</div>`;
         }
-      }, 400);
+      }, 380);
     });
 
-    clearSearch.addEventListener('click', () => {
-      searchInput.value = '';
-      clearSearch.classList.add('hidden');
-      searchSection.classList.add('hidden');
+    clearSearchBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      clearSearchBtn.classList.add("hidden");
+      searchSection.classList.add("hidden");
     });
 
-    // Close Modals on Backdrop Click
-    document.getElementById('gameModal').addEventListener('click', (e) => {
-      if (e.target.id === 'gameModal') closeModal();
+    // Backdrop & Escape Key Closing
+    document.getElementById("reviewModal").addEventListener("click", (e) => {
+      if (e.target.id === "reviewModal") closeReviewModal();
     });
-    document.getElementById('watchlistModal').addEventListener('click', (e) => {
-      if (e.target.id === 'watchlistModal') closeWatchlistModal();
+    document.getElementById("watchlistModal").addEventListener("click", (e) => {
+      if (e.target.id === "watchlistModal") closeWatchlistModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (!document.getElementById("reviewModal").classList.contains("hidden")) closeReviewModal();
+        if (!document.getElementById("watchlistModal").classList.contains("hidden")) closeWatchlistModal();
+      }
     });
 
-    /**
-     * APP STARTUP
-     */
-    window.onload = function() {
-      // 1. Initialize Infinite Carousel Hero Slider
-      initInfiniteBillboard();
+    // =========================================================================
+    // BOOTSTRAP APPLICATION
+    // =========================================================================
+    window.onload = async function() {
+      updateWatchlistBadgeCount();
 
-      // 2. Load Core Curated Horizontal Rows
-      loadCategoryRow('developers=rockstar-games', 'rockstarRowSlider', 1);
-      loadCategoryRow('ordering=-metacritic&metacritic=94,100', 'peakRowSlider', 1);
-      loadCategoryRow('ordering=-metacritic&metacritic=90,93', 'cinemaRowSlider', 1);
-      loadCategoryRow('genres=action,adventure&metacritic=78,89', 'shouldPlayRowSlider', 1);
-      loadCategoryRow('genres=shooter,action&ordering=-added', 'actionRowSlider', 1);
+      // Remove 1.8s studio intro from DOM after animation finishes; show Google login if first visit
+      setTimeout(() => {
+        const intro = document.getElementById("studioIntro");
+        if (intro) intro.remove();
+        if (!localStorage.getItem("fps_guest_dismissed")) {
+          const navUserPill = document.getElementById("navUserPill");
+          if (navUserPill && navUserPill.classList.contains("hidden")) {
+            openLoginModal();
+          }
+        }
+      }, 1900);
 
-      // 3. Initialize Endless Vertical Scroll Trigger
-      initEndlessVerticalScroll();
+      // 1. Launch 20+ Game Hero Billboard with Autoplaying YouTube Trailers
+      initHeroBillboard();
+
+      // 2. Load Initial 4 Core Rows Immediately
+      for (let i = 0; i < 4; i++) {
+        await mountCatalogRow(ALL_CATALOG_ROWS[nextVerticalRowIndex++]);
+      }
+
+      // 3. Activate Endless Vertical Scrolling for Remaining Categories
+      setupEndlessVerticalObserver();
     };
   </script>
 </body>
