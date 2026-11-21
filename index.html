@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FPS — Game Rating & Reviews</title>
-
+  <title>FPS — Game Rating & Reviews | Official Platform</title>
+  
+  <!-- Preconnect & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,600;0,700;0,900;1,700;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -17,13 +19,14 @@
           colors: {
             brand: {
               yellow: '#FFAB00',
+              yellowHover: '#E09600',
               red: '#E50914',
               crimson: '#8B0000',
               gold: '#FFD700',
               gta: '#00FF66',
               bg: '#070709',
-              card: '#121218',
-              border: '#242430'
+              card: '#121217',
+              border: '#24242E'
             }
           },
           fontFamily: {
@@ -34,127 +37,140 @@
           }
         }
       }
-    };
+    }
   </script>
 
   <style>
+    /* Custom Scrollbars */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #070709; }
-    ::-webkit-scrollbar-thumb { background: #2A2A38; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #262630; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #E50914; }
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    /* Keyframes */
     @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 18px rgba(255, 171, 0, 0.45); }
-      50% { box-shadow: 0 0 42px rgba(255, 171, 0, 0.9); }
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 171, 0, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(255, 171, 0, 0.85); }
     }
-    .animate-fps-glow { animation: pulseGlow 2.2s infinite; }
+    .animate-fps-glow { animation: pulseGlow 2.5s infinite; }
 
     @keyframes livePulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.9); }
+      50% { opacity: 0.4; transform: scale(0.92); }
     }
     .live-dot { animation: livePulse 1.2s infinite; }
 
-    @keyframes titleReveal {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-reveal { animation: titleReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
+    /* Netflix Poster Hover */
     .netflix-card {
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
       will-change: transform;
     }
     .netflix-card:hover {
-      transform: scale(1.06) translateY(-5px);
-      box-shadow: 0 20px 34px -10px rgba(0, 0, 0, 0.95), 0 0 22px rgba(229, 9, 20, 0.3);
-      border-color: rgba(255, 171, 0, 0.55);
+      transform: scale(1.06) translateY(-4px);
+      box-shadow: 0 18px 30px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(229, 9, 20, 0.25);
       z-index: 20;
     }
 
+    /* RDR2 Shell Drop */
     @keyframes dropShellLeft {
-      0% { transform: translateY(-280px) rotate(-45deg); opacity: 0; }
-      70% { transform: translateY(0) rotate(12deg); opacity: 1; }
-      85% { transform: translateY(-24px) rotate(8deg); }
-      100% { transform: translateY(0) rotate(14deg); opacity: 1; }
+      0% { transform: translateY(-300px) rotate(-45deg); opacity: 0; }
+      70% { transform: translateY(0px) rotate(12deg); opacity: 1; }
+      85% { transform: translateY(-30px) rotate(8deg); }
+      100% { transform: translateY(0px) rotate(15deg); opacity: 1; }
     }
     @keyframes dropShellRight {
-      0% { transform: translateY(-320px) rotate(45deg); opacity: 0; }
-      65% { transform: translateY(0) rotate(-18deg); opacity: 1; }
-      80% { transform: translateY(-20px) rotate(-10deg); }
-      100% { transform: translateY(0) rotate(-12deg); opacity: 1; }
+      0% { transform: translateY(-350px) rotate(45deg); opacity: 0; }
+      65% { transform: translateY(0px) rotate(-18deg); opacity: 1; }
+      80% { transform: translateY(-25px) rotate(-10deg); }
+      100% { transform: translateY(0px) rotate(-12deg); opacity: 1; }
     }
     .shell-left { animation: dropShellLeft 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .shell-right { animation: dropShellRight 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.14s; }
+    .shell-right { animation: dropShellRight 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.15s; }
   </style>
 
+  <!-- Firebase Compat SDKs (Deferred & Safe) -->
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-[#070709] text-white font-sans antialiased selection:bg-brand-red selection:text-white overflow-x-hidden min-h-screen">
 
-  <!-- 1. ROCKSTAR-STYLE ANIMATED SPLASH SCREEN -->
-  <div id="splash-screen" class="fixed inset-0 z-[9999] bg-[#070709] flex flex-col items-center justify-center cursor-pointer select-none transition-opacity duration-500">
-    <div class="relative flex flex-col items-center scale-95 sm:scale-110">
-      <div class="relative w-64 sm:w-80 h-36 sm:h-44 bg-brand-yellow rounded-3xl p-2.5 border-4 border-[#070709] ring-4 ring-brand-yellow flex flex-col justify-between items-center overflow-hidden animate-fps-glow">
+  <!-- ========================================== -->
+  <!-- 1. ROCKSTAR STYLE INTRO SPLASH SCREEN -->
+  <!-- ========================================== -->
+  <div id="splash-screen" class="fixed inset-0 z-[9999] bg-[#070709] flex flex-col items-center justify-center cursor-pointer select-none transition-opacity duration-700">
+    <div class="relative flex flex-col items-center transform transition-transform duration-500 scale-95 sm:scale-110">
+      <!-- Animated Yellow Badge Logo -->
+      <div class="relative w-64 sm:w-80 h-36 sm:h-44 bg-brand-yellow rounded-3xl p-2.5 shadow-[0_0_50px_rgba(255,171,0,0.4)] border-4 border-[#070709] ring-4 ring-brand-yellow flex flex-col justify-between items-center overflow-hidden animate-fps-glow">
         <div class="w-full flex justify-between items-center pt-1 px-4">
           <span class="text-black font-barlow italic font-black text-xs sm:text-sm tracking-wider">OFFICIAL SYSTEM</span>
-          <span class="text-black font-mono font-bold text-xs">2026</span>
+          <span class="text-black font-mono font-bold text-xs">2026 EDITION</span>
         </div>
+        
         <div class="relative w-full flex items-center justify-center my-auto">
-          <span class="font-barlow italic font-black text-7xl sm:text-8xl tracking-tighter text-black leading-none pr-3">FPS</span>
-          <svg class="w-14 h-14 sm:w-16 sm:h-16 fill-white stroke-black stroke-[2.5] -ml-6 -mb-4 z-10 drop-shadow-[0_4px_8px_rgba(0,0,0,0.85)]" viewBox="0 0 24 24">
+          <span class="font-barlow italic font-black text-7xl sm:text-8xl tracking-tighter text-black leading-none drop-shadow-sm select-none pr-3">FPS</span>
+          <!-- Star overlapping S -->
+          <svg class="w-14 h-14 sm:w-16 sm:h-16 text-white filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] fill-white stroke-black stroke-[2.5] -ml-6 -mb-4 z-10" viewBox="0 0 24 24">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
         </div>
+
         <div class="w-full text-center pb-1 border-t-2 border-black/40 pt-1">
-          <span class="text-black font-barlow italic font-black text-sm sm:text-base tracking-[0.22em] uppercase">GAME RATING &amp; REVIEWS</span>
+          <span class="text-black font-barlow italic font-black text-sm sm:text-base tracking-[0.22em] uppercase">GAME RATING & REVIEWS</span>
         </div>
       </div>
+
+      <!-- Credit Subtitle -->
       <div class="mt-8 text-center space-y-1">
-        <div class="text-white font-barlow italic font-black tracking-[0.25em] text-lg sm:text-xl drop-shadow-[0_2px_12px_rgba(255,171,0,0.55)]">
+        <div class="text-white font-barlow italic font-black tracking-[0.25em] text-lg sm:text-xl drop-shadow-[0_2px_10px_rgba(255,171,0,0.5)]">
           MADE BY TANVIR HOSSAIN
         </div>
-        <p class="text-xs text-neutral-400 font-mono tracking-widest uppercase">TAP ANYWHERE TO SKIP</p>
+        <p class="text-xs text-neutral-400 font-mono tracking-widest uppercase">CLICK OR TAP ANYWHERE TO SKIP</p>
       </div>
     </div>
   </div>
+
+  <!-- Failsafe Splash Script -->
   <script>
-    (function () {
-      var s = document.getElementById('splash-screen');
-      function hide() {
-        if (!s || s.dataset.done) return;
-        s.dataset.done = '1';
-        s.style.opacity = '0';
-        s.style.pointerEvents = 'none';
-        setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 550);
+    (function() {
+      const splash = document.getElementById('splash-screen');
+      function dismissSplash() {
+        if (!splash || splash.style.opacity === '0') return;
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => splash.remove(), 750);
       }
-      setTimeout(hide, 1700);
-      if (s) {
-        s.addEventListener('click', hide);
-        s.addEventListener('touchstart', hide, { passive: true });
-      }
+      setTimeout(dismissSplash, 1800);
+      splash.addEventListener('click', dismissSplash);
+      splash.addEventListener('touchstart', dismissSplash, { passive: true });
     })();
   </script>
 
-  <!-- 2. RDR2 SHOTGUN SHELL SPECIAL INTRO -->
-  <div id="rdr2-special-intro" class="fixed inset-0 z-[9990] bg-[#0A0202] hidden flex-col items-center justify-center select-none overflow-hidden transition-opacity duration-500 cursor-pointer">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#5C0606]/35 via-black/60 to-black pointer-events-none"></div>
+  <!-- ========================================== -->
+  <!-- 2. RDR2 SPECIAL SHOTGUN LOADING INTRO -->
+  <!-- ========================================== -->
+  <div id="rdr2-special-intro" class="fixed inset-0 z-[9990] bg-[#0A0202] hidden flex-col items-center justify-center select-none overflow-hidden transition-opacity duration-500">
+    <!-- Red ambient backdrop -->
+    <div class="absolute inset-0 bg-radial from-[#5C0606]/40 via-transparent to-black pointer-events-none"></div>
+
     <div class="relative z-10 flex flex-col items-center text-center px-4">
+      <!-- Dropping Shells -->
       <div class="relative w-72 h-44 flex items-center justify-center">
-        <div class="absolute -translate-x-10 shell-left">
-          <svg class="w-24 h-24 drop-shadow-[0_15px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 64 64">
+        <!-- Shell 1 -->
+        <div class="absolute shell-left">
+          <svg class="w-24 h-24 filter drop-shadow-[0_15px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 64 64">
             <rect x="22" y="10" width="20" height="34" rx="2" fill="#8B0000" stroke="#FFD700" stroke-width="1.5"/>
             <rect x="22" y="44" width="20" height="12" rx="1" fill="#C59B27" stroke="#FFE27A" stroke-width="1.5"/>
             <circle cx="32" cy="50" r="3" fill="#5A4308"/>
             <text x="32" y="28" font-size="8" font-family="'Barlow Condensed', sans-serif" font-weight="900" fill="#FFE27A" text-anchor="middle">12 GA</text>
           </svg>
         </div>
-        <div class="absolute translate-x-10 shell-right">
-          <svg class="w-24 h-24 drop-shadow-[0_15px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 64 64">
+        <!-- Shell 2 -->
+        <div class="absolute shell-right">
+          <svg class="w-24 h-24 filter drop-shadow-[0_15px_20px_rgba(0,0,0,0.9)]" viewBox="0 0 64 64">
             <rect x="22" y="10" width="20" height="34" rx="2" fill="#6B0000" stroke="#FFD700" stroke-width="1.5"/>
             <rect x="22" y="44" width="20" height="12" rx="1" fill="#C59B27" stroke="#FFE27A" stroke-width="1.5"/>
             <circle cx="32" cy="50" r="3" fill="#5A4308"/>
@@ -162,56 +178,84 @@
           </svg>
         </div>
       </div>
-      <div class="mt-4 font-bebas text-5xl sm:text-7xl text-[#FF1A1A] tracking-widest drop-shadow-[0_0_24px_rgba(255,17,17,0.85)]">RED DEAD REDEMPTION II</div>
-      <div class="font-barlow italic font-black text-brand-gold text-2xl tracking-[0.2em] mt-1">ABSOLUTE RDR — 9.7 / 10</div>
-      <div class="font-mono text-xs text-neutral-400 mt-5 tracking-widest uppercase">LOADING ROCKSTAR VAULT...</div>
+
+      <div class="mt-4 font-bebas text-5xl sm:text-7xl text-[#FF1111] tracking-widest drop-shadow-[0_0_20px_rgba(255,17,17,0.8)]">
+        RED DEAD REDEMPTION II
+      </div>
+      <div class="font-barlow italic font-black text-brand-gold text-2xl tracking-[0.2em] mt-1">
+        ABSOLUTE RDR — 9.7 / 10 PEAK CINEMA
+      </div>
+      <div class="font-mono text-xs text-neutral-400 mt-6 tracking-widest uppercase">
+        LOADING ROCKSTAR VAULT MASTERPIECE...
+      </div>
     </div>
   </div>
 
-  <!-- 3. SINGLE-ROW NAVBAR -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#070709]/92 backdrop-blur-md border-b border-brand-border/70">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-5">
-      <a href="javascript:void(0)" onclick="app.navigateHome()" class="flex items-center gap-2.5 shrink-0 group">
-        <div class="w-12 h-8 sm:w-16 sm:h-10 bg-brand-yellow rounded-lg p-1 border-2 border-black flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(255,171,0,0.4)]">
-          <span class="font-barlow italic font-black text-xl sm:text-2xl text-black tracking-tighter leading-none pr-1">FPS</span>
-          <svg class="w-3.5 h-3.5 fill-white stroke-black stroke-[2] -ml-1.5 -mb-1" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
+  <!-- ========================================== -->
+  <!-- 3. TOP NAVIGATION BAR (SINGLE ROW FIXED) -->
+  <!-- ========================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#070709]/90 backdrop-blur-md border-b border-brand-border/60 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-6">
+      
+      <!-- Brand Logo -->
+      <a href="javascript:void(0)" onclick="app.navigateHome()" class="flex items-center gap-3 shrink-0 group">
+        <div class="w-12 h-8 sm:w-16 sm:h-10 bg-brand-yellow rounded-lg p-1 border-2 border-black flex flex-col justify-between items-center group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(255,171,0,0.4)]">
+          <div class="relative w-full flex items-center justify-center my-auto">
+            <span class="font-barlow italic font-black text-xl sm:text-2xl text-black tracking-tighter leading-none pr-1">FPS</span>
+            <svg class="w-3.5 h-3.5 text-white fill-white stroke-black stroke-[2] -ml-2 -mb-1" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
         </div>
-        <span class="hidden xl:inline-block font-barlow italic font-black tracking-wider text-lg text-white whitespace-nowrap">GAME RATING &amp; REVIEWS</span>
+        <span class="hidden md:inline-block font-barlow italic font-black tracking-wider text-lg text-white">
+          GAME RATING & REVIEWS
+        </span>
       </a>
 
-      <nav class="hidden lg:flex items-center gap-5 text-sm font-semibold text-neutral-300 whitespace-nowrap">
+      <!-- Quick Nav Links -->
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-neutral-300">
         <a href="javascript:void(0)" onclick="app.scrollToSection('section-rockstar')" class="hover:text-white transition">Rockstar Vault</a>
-        <a href="javascript:void(0)" onclick="app.scrollToSection('section-peak')" class="hover:text-white transition">Peak Tier</a>
+        <a href="javascript:void(0)" onclick="app.scrollToSection('section-peak')" class="hover:text-white transition">Peak (9.5+)</a>
         <a href="javascript:void(0)" onclick="app.scrollToSection('section-cinema')" class="hover:text-white transition">Absolute Cinema</a>
         <a href="javascript:void(0)" onclick="app.openMediaHouse()" class="flex items-center gap-1.5 text-brand-red font-bold hover:text-white transition">
-          <span class="w-2 h-2 rounded-full bg-brand-red live-dot"></span>MEDIA HOUSE
+          <span class="w-2 h-2 rounded-full bg-brand-red live-dot"></span>
+          MEDIA HOUSE
         </a>
       </nav>
 
-      <div class="flex items-center gap-2 sm:gap-3 ml-auto shrink-0">
+      <!-- Search, Wanna Play & User Profile -->
+      <div class="flex items-center gap-2 sm:gap-4 ml-auto">
+        <!-- Search Input -->
         <div class="relative flex items-center">
-          <input type="text" id="nav-search-input" placeholder="Search games..."
-            class="bg-neutral-900 border border-neutral-700/80 rounded-full px-3.5 py-1.5 pl-8 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-red w-32 sm:w-52 transition-all duration-300 focus:w-44 sm:focus:w-64"
-            oninput="app.handleSearchInput(event)" />
-          <svg class="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <input 
+            type="text" 
+            id="nav-search-input"
+            placeholder="Search games, studios..."
+            class="bg-neutral-900 border border-neutral-700/80 rounded-full px-4 py-1.5 pl-9 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-red w-36 sm:w-56 transition-all duration-300 focus:w-48 sm:focus:w-72"
+            oninput="app.handleSearchInput(event)"
+          />
+          <svg class="w-4 h-4 text-neutral-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <button id="search-clear-btn" onclick="app.clearSearch()" class="hidden absolute right-2.5 text-neutral-400 hover:text-white text-xs">✕</button>
+          <button id="search-clear-btn" onclick="app.clearSearch()" class="hidden absolute right-3 text-neutral-400 hover:text-white text-xs">✕</button>
         </div>
 
-        <button onclick="app.toggleWannaPlayDrawer()" class="flex items-center gap-1.5 bg-neutral-900 hover:bg-neutral-800 border border-brand-yellow/40 hover:border-brand-yellow px-3 py-1.5 rounded-full text-xs font-bold tracking-wider transition whitespace-nowrap">
-          <span class="text-brand-yellow font-bebas text-sm sm:text-base tracking-wide">WANNA PLAY</span>
-          <span id="nav-wanna-count" class="bg-brand-yellow text-black font-mono font-black text-xs px-1.5 rounded-full min-w-[20px] text-center">0</span>
+        <!-- WANNA PLAY Trigger -->
+        <button onclick="app.toggleWannaPlayDrawer()" class="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-brand-yellow/60 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold tracking-wider transition">
+          <span class="text-brand-yellow font-bebas text-base">WANNA PLAY</span>
+          <span id="nav-wanna-count" class="bg-brand-yellow text-black font-mono font-black text-xs px-1.5 py-0.2 rounded-full min-w-[20px] text-center">0</span>
         </button>
 
-        <button onclick="app.openMediaHouse()" title="Media House" class="lg:hidden flex items-center justify-center p-2 rounded-full bg-neutral-900 border border-brand-red/60 text-brand-red hover:bg-brand-red hover:text-white transition">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>
+        <!-- Media House Button (Mobile/Tablet visible) -->
+        <button onclick="app.openMediaHouse()" class="lg:hidden flex items-center justify-center p-2 rounded-full bg-neutral-900 border border-brand-red/50 text-brand-red hover:bg-brand-red hover:text-white transition">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/>
+          </svg>
         </button>
 
+        <!-- Auth Button / Avatar -->
         <div id="auth-container">
-          <button onclick="app.openAuthModal()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-xs sm:text-sm px-3.5 sm:px-5 py-1.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.5)] whitespace-nowrap">
+          <button onclick="app.openAuthModal()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-xs sm:text-sm px-3.5 sm:px-5 py-1.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.5)]">
             SIGN IN
           </button>
         </div>
@@ -219,210 +263,320 @@
     </div>
   </header>
 
-  <!-- 4. SEARCH VIEW -->
+  <!-- ========================================== -->
+  <!-- 4. SEARCH RESULTS VIEW (SEPARATE CONTAINER) -->
+  <!-- ========================================== -->
   <section id="search-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-16 min-h-screen">
-    <div class="flex items-center justify-between border-b border-brand-border pb-4 mb-6 gap-4">
+    <div class="flex items-center justify-between border-b border-brand-border pb-4 mb-6">
       <div>
-        <h2 class="font-bebas text-3xl sm:text-4xl tracking-wide text-white">
-          SEARCH RESULTS: <span id="search-query-label" class="text-brand-red font-barlow italic"></span>
+        <h2 class="font-bebas text-3xl sm:text-4xl tracking-wide text-white flex items-center gap-3">
+          SEARCH RESULTS FOR: <span id="search-query-label" class="text-brand-red font-barlow italic"></span>
         </h2>
-        <p id="search-count-label" class="text-xs sm:text-sm text-neutral-400 font-mono mt-1">Searching...</p>
+        <p id="search-count-label" class="text-xs sm:text-sm text-neutral-400 font-mono mt-1">Loading results...</p>
       </div>
-      <button onclick="app.clearSearch()" class="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-md text-xs font-bold uppercase transition shrink-0">
+      <button onclick="app.clearSearch()" class="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-md text-xs font-bold uppercase transition">
         ← BACK TO HOME
       </button>
     </div>
-    <div id="search-results-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+
+    <!-- Search Grid -->
+    <div id="search-results-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+      <!-- Search Cards Injected Here -->
+    </div>
   </section>
 
-  <!-- 5. HOME VIEW -->
+  <!-- ========================================== -->
+  <!-- 5. MAIN HOME VIEW CONTAINER -->
+  <!-- ========================================== -->
   <main id="home-view" class="relative pt-16 sm:pt-20">
-    <!-- 50-SECOND HERO BILLBOARD -->
-    <section class="relative w-full h-[74vh] sm:h-[82vh] max-h-[900px] bg-black overflow-hidden select-none">
-      <img id="hero-poster" src="" alt="Featured Game" class="absolute inset-0 w-full h-full object-cover object-center brightness-[0.65] transition-opacity duration-700 z-[1]" />
 
+    <!-- 5A. 50-SECOND 20+ GAME NETFLIX HERO BILLBOARD -->
+    <section class="relative w-full h-[72vh] sm:h-[82vh] max-h-[920px] bg-black overflow-hidden select-none">
+      <!-- Background Poster (z-1) -->
+      <img id="hero-poster" src="" alt="Hero Poster" class="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.65] transition-opacity duration-700 z-[1]" />
+      
+      <!-- Autoplaying YouTube Trailer (z-2) -->
       <div id="hero-video-wrapper" class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-[2] opacity-0 transition-opacity duration-1000">
-        <iframe id="hero-iframe" class="w-[140%] h-[140%] -ml-[20%] -mt-[10%] object-cover" src="" title="Hero Trailer" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe 
+          id="hero-iframe"
+          class="w-[140%] h-[140%] -ml-[20%] -mt-[10%] object-cover"
+          src="" 
+          title="Hero Trailer"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
       </div>
 
-      <div class="absolute inset-0 bg-gradient-to-t from-[#070709] via-[#070709]/45 to-transparent z-[3]"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-[#070709] via-[#070709]/65 to-transparent w-full lg:w-2/3 z-[3]"></div>
+      <!-- Cinema Gradient Overlays (z-3) -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#070709] via-[#070709]/40 to-transparent z-[3]"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#070709] via-[#070709]/60 to-transparent w-full lg:w-2/3 z-[3]"></div>
 
-      <div id="hero-info-box" class="absolute bottom-10 sm:bottom-16 left-4 sm:left-12 right-4 max-w-2xl z-[4] space-y-3 sm:space-y-4 animate-reveal">
-        <div class="flex items-center gap-2.5 flex-wrap">
-          <span id="hero-tier-badge" class="font-barlow italic font-black text-xs sm:text-sm px-3 py-1 rounded-md tracking-wider border">ABSOLUTE RDR</span>
-          <span id="hero-score-badge" class="font-mono text-xs sm:text-sm font-bold bg-black/70 border border-neutral-700 px-2.5 py-0.5 rounded text-brand-gold">★ 9.7 / 10</span>
-          <span id="hero-studio-badge" class="text-xs text-neutral-300 font-mono tracking-wider uppercase">ROCKSTAR GAMES • 2018</span>
+      <!-- Hero Content Information (z-4) -->
+      <div class="absolute bottom-10 sm:bottom-16 left-4 sm:left-12 max-w-2xl z-[4] space-y-3 sm:space-y-4">
+        <!-- Tier Badge & Metascore -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <span id="hero-tier-badge" class="font-barlow italic font-black text-xs sm:text-sm px-3 py-1 rounded-md tracking-wider border">
+            ABSOLUTE RDR
+          </span>
+          <span id="hero-score-badge" class="font-mono text-xs sm:text-sm font-bold bg-black/60 border border-neutral-700 px-2.5 py-0.5 rounded text-brand-gold">
+            ★ 9.7 / 10
+          </span>
+          <span id="hero-studio-badge" class="text-xs text-neutral-300 font-mono tracking-wider uppercase">
+            ROCKSTAR GAMES • 2018
+          </span>
         </div>
-        <h1 id="hero-title" class="font-bebas text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white leading-none drop-shadow-lg">RED DEAD REDEMPTION 2</h1>
-        <p id="hero-desc" class="text-xs sm:text-sm md:text-base text-neutral-200 line-clamp-3 leading-relaxed max-w-xl"></p>
 
+        <!-- Title -->
+        <h1 id="hero-title" class="font-bebas text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white leading-none drop-shadow-md">
+          RED DEAD REDEMPTION 2
+        </h1>
+
+        <!-- Description -->
+        <p id="hero-desc" class="text-xs sm:text-sm md:text-base text-neutral-300 line-clamp-3 leading-relaxed max-w-xl">
+          America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland.
+        </p>
+
+        <!-- 4 Distinct Action Buttons -->
         <div class="flex items-center gap-2 sm:gap-3 flex-wrap pt-2">
-          <button onclick="app.openHeroInMediaHouse()" class="flex items-center gap-2 bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-sm sm:text-base px-5 sm:px-7 py-2.5 rounded-md tracking-wider uppercase transition shadow-[0_0_22px_rgba(229,9,20,0.6)]">
+          <!-- Play / Media House -->
+          <button onclick="app.openHeroInMediaHouse()" class="flex items-center gap-2 bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-sm sm:text-base px-5 sm:px-7 py-2.5 rounded-md tracking-wider uppercase transition shadow-[0_0_20px_rgba(229,9,20,0.6)]">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            WATCH TRAILER
+            WATCH 4K TRAILER
           </button>
-          <button onclick="app.openHeroReviewModal()" class="flex items-center gap-2 bg-neutral-900/90 hover:bg-neutral-800 border border-neutral-600 text-white font-barlow italic font-black text-sm sm:text-base px-4 sm:px-6 py-2.5 rounded-md tracking-wider uppercase transition">
-            REVIEW &amp; SPECS
+
+          <!-- Review & Specs -->
+          <button onclick="app.openHeroReviewModal()" class="flex items-center gap-2 bg-neutral-900/90 hover:bg-neutral-800 border border-neutral-700 text-white font-barlow italic font-black text-sm sm:text-base px-4 sm:px-6 py-2.5 rounded-md tracking-wider uppercase transition">
+            <svg class="w-4 h-4 text-brand-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            REVIEW & SPECS
           </button>
-          <button id="hero-wanna-btn" onclick="app.toggleHeroWannaPlay()" class="flex items-center gap-2 bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-md transition">
+
+          <!-- Wanna Play Toggle -->
+          <button id="hero-wanna-btn" onclick="app.toggleHeroWannaPlay()" class="flex items-center gap-2 bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs sm:text-sm font-bold px-3 sm:px-4 py-2.5 rounded-md transition">
             + WANNA PLAY
           </button>
-          <button id="hero-sound-btn" onclick="app.toggleHeroSound()" class="flex items-center gap-1.5 bg-black/75 hover:bg-black border border-neutral-700 text-neutral-300 text-xs font-mono px-3 py-2.5 rounded-md transition">
+
+          <!-- Sound Mute/Unmute -->
+          <button id="hero-sound-btn" onclick="app.toggleHeroSound()" class="flex items-center gap-1.5 bg-black/70 hover:bg-black border border-neutral-700 text-neutral-300 text-xs font-mono px-3 py-2.5 rounded-md transition">
+            <svg id="hero-sound-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+            </svg>
             <span id="hero-sound-text">SOUND OFF</span>
           </button>
         </div>
       </div>
 
+      <!-- Slide Nav Arrows & Counter (z-4) -->
       <div class="absolute bottom-6 right-4 sm:right-12 z-[4] flex items-center gap-3">
-        <button onclick="app.prevHeroSlide()" class="p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-black border border-neutral-700 text-white transition hover:scale-110">❮</button>
-        <span id="hero-slide-counter" class="font-mono text-xs sm:text-sm tracking-widest text-neutral-300">01 / 16</span>
-        <button onclick="app.nextHeroSlide()" class="p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-black border border-neutral-700 text-white transition hover:scale-110">❯</button>
+        <button onclick="app.prevHeroSlide()" class="p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black border border-neutral-700 text-white transition hover:scale-110">
+          ❮
+        </button>
+        <span id="hero-slide-counter" class="font-mono text-xs sm:text-sm tracking-widest text-neutral-400">01 / 16</span>
+        <button onclick="app.nextHeroSlide()" class="p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black border border-neutral-700 text-white transition hover:scale-110">
+          ❯
+        </button>
       </div>
     </section>
 
-    <!-- HORIZONTAL CAROUSELS -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-12">
+    <!-- 5B. NETFLIX HORIZONTAL CAROUSELS -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-10 sm:space-y-14">
+      
+      <!-- ROW 1: ROCKSTAR VAULT -->
       <section id="section-rockstar" class="space-y-3">
-        <div class="flex items-center justify-between border-l-4 border-[#FF1A1A] pl-3">
+        <div class="flex items-center justify-between border-l-4 border-[#FF1111] pl-3">
           <div>
             <h2 class="font-bebas text-2xl sm:text-3xl tracking-wide text-white flex items-center gap-2">
-              ROCKSTAR VAULT <span class="text-xs font-mono font-bold bg-[#FF1A1A]/20 text-[#FF6666] border border-[#FF1A1A]/40 px-2 py-0.5 rounded">SPECIAL TIERS</span>
+              ROCKSTAR VAULT
+              <span class="text-xs font-mono font-bold bg-[#FF1111]/20 text-[#FF5555] border border-[#FF1111]/40 px-2 py-0.5 rounded">EXCLUSIVE SPECIAL TIERS</span>
             </h2>
-            <p class="text-xs text-neutral-400">The Pinnacle of Open World Interactive Cinema</p>
+            <p class="text-xs text-neutral-400 font-sans">The Pinnacle of Open World Interactive Cinema</p>
           </div>
           <div class="flex gap-2">
             <button onclick="app.scrollCarousel('carousel-rockstar', -1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❮</button>
             <button onclick="app.scrollCarousel('carousel-rockstar', 1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❯</button>
           </div>
         </div>
-        <div id="carousel-rockstar" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2"></div>
+        <div id="carousel-rockstar" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2">
+          <!-- Cards injected dynamically -->
+        </div>
       </section>
 
+      <!-- ROW 2: PEAK GAMING (9.5 - 10.0) -->
       <section id="section-peak" class="space-y-3">
         <div class="flex items-center justify-between border-l-4 border-brand-gold pl-3">
           <div>
             <h2 class="font-bebas text-2xl sm:text-3xl tracking-wide text-white flex items-center gap-2">
-              PEAK TIER <span class="text-xs font-mono font-bold bg-brand-gold/20 text-brand-gold border border-brand-gold/40 px-2 py-0.5 rounded">9.5 – 10.0</span>
+              PEAK TIER
+              <span class="text-xs font-mono font-bold bg-brand-gold/20 text-brand-gold border border-brand-gold/40 px-2 py-0.5 rounded">SCORE 9.5 – 10.0</span>
             </h2>
-            <p class="text-xs text-neutral-400">Flawless Masterpieces Certified by Universal Consensus</p>
+            <p class="text-xs text-neutral-400 font-sans">Flawless Masterpieces Certified by Universal Consensus</p>
           </div>
           <div class="flex gap-2">
             <button onclick="app.scrollCarousel('carousel-peak', -1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❮</button>
             <button onclick="app.scrollCarousel('carousel-peak', 1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❯</button>
           </div>
         </div>
-        <div id="carousel-peak" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2"></div>
+        <div id="carousel-peak" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2">
+          <!-- Cards injected -->
+        </div>
       </section>
 
+      <!-- ROW 3: ABSOLUTE CINEMA (9.0 - 9.4) -->
       <section id="section-cinema" class="space-y-3">
         <div class="flex items-center justify-between border-l-4 border-blue-500 pl-3">
           <div>
             <h2 class="font-bebas text-2xl sm:text-3xl tracking-wide text-white flex items-center gap-2">
-              ABSOLUTE CINEMA <span class="text-xs font-mono font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40 px-2 py-0.5 rounded">9.0 – 9.4</span>
+              ABSOLUTE CINEMA
+              <span class="text-xs font-mono font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40 px-2 py-0.5 rounded">SCORE 9.0 – 9.4</span>
             </h2>
-            <p class="text-xs text-neutral-400">Storytelling, Atmosphere &amp; Groundbreaking Direction</p>
+            <p class="text-xs text-neutral-400 font-sans">Storytelling, Atmosphere & Groundbreaking Direction</p>
           </div>
           <div class="flex gap-2">
             <button onclick="app.scrollCarousel('carousel-cinema', -1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❮</button>
             <button onclick="app.scrollCarousel('carousel-cinema', 1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❯</button>
           </div>
         </div>
-        <div id="carousel-cinema" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2"></div>
+        <div id="carousel-cinema" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2">
+          <!-- Cards injected -->
+        </div>
       </section>
 
+      <!-- ROW 4: ACTION, SHOOTERS & ADVENTURE -->
       <section class="space-y-3">
         <div class="flex items-center justify-between border-l-4 border-emerald-500 pl-3">
           <div>
             <h2 class="font-bebas text-2xl sm:text-3xl tracking-wide text-white flex items-center gap-2">
-              SHOULD PLAY <span class="text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded">7.0 – 8.9</span>
+              SHOULD PLAY
+              <span class="text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded">SCORE 7.0 – 8.9</span>
             </h2>
-            <p class="text-xs text-neutral-400">High Octane Gameplay &amp; Competitive Mechanics</p>
+            <p class="text-xs text-neutral-400 font-sans">High Octane Gameplay, Competitive Mechanics & Fun</p>
           </div>
           <div class="flex gap-2">
             <button onclick="app.scrollCarousel('carousel-shooters', -1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❮</button>
             <button onclick="app.scrollCarousel('carousel-shooters', 1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❯</button>
           </div>
         </div>
-        <div id="carousel-shooters" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2"></div>
+        <div id="carousel-shooters" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2">
+          <!-- Cards injected -->
+        </div>
       </section>
 
-      <div id="dynamic-categories-container" class="space-y-12"></div>
-
-      <div id="endless-scroll-sentinel" class="py-8 text-center">
+      <!-- Endless Vertical Sentinel -->
+      <div id="endless-scroll-sentinel" class="py-10 text-center">
         <div class="inline-flex items-center gap-3 bg-neutral-900 border border-neutral-800 px-6 py-2.5 rounded-full text-xs font-mono text-neutral-400">
           <span class="w-2 h-2 rounded-full bg-brand-red animate-ping"></span>
-          STREAMING EXPANDED CATALOG...
+          STREAMING EXPANDED CATALOG FROM RAWG DATABASE...
         </div>
       </div>
+      
+      <!-- Container for dynamically appended categories -->
+      <div id="dynamic-categories-container" class="space-y-12"></div>
     </div>
   </main>
 
-  <!-- 6. GAME REVIEW & SPECS MODAL -->
-  <div id="game-modal" class="fixed inset-0 z-[100] bg-black/92 backdrop-blur-xl hidden overflow-y-auto">
+  <!-- ========================================== -->
+  <!-- 6. GAME DETAILS & REVIEW THEATER MODAL -->
+  <!-- ========================================== -->
+  <div id="game-modal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl hidden overflow-y-auto">
     <div class="min-h-screen px-2 sm:px-4 py-6 sm:py-10 flex items-center justify-center">
-      <div class="relative w-full max-w-5xl bg-[#0D0D13] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl">
-        <button onclick="app.closeGameModal()" class="absolute top-4 right-4 z-30 w-9 h-9 rounded-full bg-black/80 hover:bg-brand-red text-white border border-neutral-700 transition">✕</button>
+      <div class="relative w-full max-w-5xl bg-[#0D0D12] border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl">
+        
+        <!-- Close Button -->
+        <button onclick="app.closeGameModal()" class="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-black text-white border border-neutral-700 transition">
+          ✕
+        </button>
 
+        <!-- Modal 16:9 Trailer Screen -->
         <div class="relative w-full aspect-video bg-black overflow-hidden">
-          <iframe id="modal-iframe" class="w-full h-full" src="" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe 
+            id="modal-iframe" 
+            class="w-full h-full"
+            src="" 
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+
+          <!-- Unmute Floating Button -->
           <div class="absolute bottom-4 right-4 z-20">
-            <button id="modal-unmute-btn" onclick="app.toggleModalSound()" class="bg-black/85 hover:bg-black border border-neutral-600 px-3.5 py-1.5 rounded-md text-xs font-mono text-white transition">UNMUTE TRAILER</button>
+            <button id="modal-unmute-btn" onclick="app.toggleModalSound()" class="flex items-center gap-2 bg-black/80 hover:bg-black border border-neutral-600 px-3 py-1.5 rounded-md text-xs font-mono text-white transition">
+              🔊 UNMUTE TRAILER
+            </button>
           </div>
         </div>
 
-        <div class="p-5 sm:p-8 space-y-6">
+        <!-- Content Area -->
+        <div class="p-6 sm:p-8 space-y-6">
+          
+          <!-- Top Row: Badge, Title & Actions -->
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-border pb-6">
             <div class="space-y-2">
               <div class="flex items-center gap-3 flex-wrap">
                 <span id="modal-tier-badge" class="font-barlow italic font-black text-sm px-3.5 py-1 rounded border">PEAK</span>
                 <span id="modal-score-badge" class="font-mono text-sm font-bold text-brand-gold bg-black/60 border border-neutral-700 px-2 py-0.5 rounded">★ 9.7 / 10</span>
-                <span id="modal-launch-date" class="text-xs font-mono text-neutral-400">RELEASED: 2018</span>
+                <span id="modal-launch-date" class="text-xs font-mono text-neutral-400">OCT 26, 2018</span>
               </div>
               <h2 id="modal-title" class="font-bebas text-4xl sm:text-6xl text-white tracking-wide leading-none">GAME TITLE</h2>
               <p id="modal-studios" class="text-xs sm:text-sm text-neutral-400 font-mono">DEVELOPED BY: <span class="text-white">ROCKSTAR GAMES</span></p>
             </div>
 
-            <div class="flex items-center gap-3 shrink-0 flex-wrap">
-              <button id="modal-wanna-btn" onclick="app.toggleModalWannaPlay()" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-md transition">+ WANNA PLAY</button>
-              <button onclick="app.openModalInMediaHouse()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-xs sm:text-sm px-5 py-2.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.45)]">OPEN IN MEDIA HOUSE</button>
+            <!-- Primary CTAs -->
+            <div class="flex items-center gap-3 shrink-0">
+              <button id="modal-wanna-btn" onclick="app.toggleModalWannaPlay()" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-md transition">
+                + WANNA PLAY
+              </button>
+              <button onclick="app.openModalInMediaHouse()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-xs sm:text-sm px-5 py-2.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.4)]">
+                OPEN IN MEDIA HOUSE
+              </button>
             </div>
           </div>
 
+          <!-- Official Storefront Redirects -->
           <div class="space-y-2">
             <h4 class="font-barlow italic font-black text-xs uppercase tracking-widest text-neutral-400">PLAYABLE ON OFFICIAL STORES:</h4>
-            <div id="modal-stores-container" class="flex flex-wrap gap-2.5"></div>
+            <div id="modal-stores-container" class="flex flex-wrap gap-2.5">
+              <!-- Store links injected -->
+            </div>
           </div>
 
+          <!-- Description -->
           <div>
-            <h4 class="font-barlow italic font-black text-xs uppercase tracking-widest text-neutral-400 mb-2">SYNOPSIS &amp; OVERVIEW:</h4>
-            <p id="modal-desc" class="text-sm sm:text-base text-neutral-300 leading-relaxed"></p>
+            <h4 class="font-barlow italic font-black text-xs uppercase tracking-widest text-neutral-400 mb-2">SYNOPSIS & OVERVIEW:</h4>
+            <p id="modal-desc" class="text-sm sm:text-base text-neutral-300 leading-relaxed font-sans"></p>
           </div>
 
-          <!-- INTERACTIVE REVIEW STUDIO -->
-          <div class="mt-6 pt-6 border-t border-brand-border bg-neutral-950/80 p-5 sm:p-6 rounded-xl border border-neutral-800 space-y-6">
+          <!-- ========================================== -->
+          <!-- INTERACTIVE COLOR-SHIFTING REVIEW STUDIO -->
+          <!-- ========================================== -->
+          <div class="mt-8 pt-6 border-t border-brand-border bg-neutral-950/70 p-6 rounded-xl border border-neutral-800 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 class="font-bebas text-3xl text-white tracking-wide">FPS CRITIC &amp; COMMUNITY STUDIO</h3>
-                <p class="text-xs text-neutral-400">Rate this title and publish your verdict to the FPS database</p>
+                <h3 class="font-bebas text-3xl text-white tracking-wide flex items-center gap-2">
+                  FPS CRITIC & COMMUNITY STUDIO
+                </h3>
+                <p class="text-xs text-neutral-400">Rate this title and publish your score to the official FPS database</p>
               </div>
+
+              <!-- Community Average Widget -->
               <div class="flex items-center gap-3 bg-neutral-900 border border-neutral-800 px-4 py-2 rounded-lg">
                 <span class="text-xs font-mono text-neutral-400">COMMUNITY SCORE:</span>
                 <span id="modal-community-score" class="font-bebas text-2xl text-brand-gold">9.5</span>
-                <span id="modal-community-count" class="text-xs font-mono text-neutral-500">(Official)</span>
+                <span id="modal-community-count" class="text-xs font-mono text-neutral-500">(12 reviews)</span>
               </div>
             </div>
 
+            <!-- Login Gated Review Form -->
             <div id="review-studio-body">
-              <div id="review-input-form" class="hidden space-y-5">
+              <!-- If logged in: Interactive Gauge & Slider -->
+              <div id="review-input-form" class="space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                  <!-- Circular Gauge (SVG) -->
                   <div class="md:col-span-4 flex flex-col items-center justify-center">
                     <div class="relative w-36 h-36 flex items-center justify-center">
                       <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="42" stroke="#222" stroke-width="8" fill="none"/>
-                        <circle id="gauge-progress-circle" cx="50" cy="50" r="42" stroke="#3B82F6" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="26" stroke-linecap="round" fill="none" class="transition-all duration-200"/>
+                        <circle id="gauge-progress-circle" cx="50" cy="50" r="42" stroke="#FFD700" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="26" stroke-linecap="round" fill="none" class="transition-all duration-200"/>
                       </svg>
                       <div class="absolute flex flex-col items-center">
                         <span id="gauge-score-label" class="font-bebas text-4xl text-white">9.0</span>
@@ -430,149 +584,246 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Slider & Preset Buttons -->
                   <div class="md:col-span-8 space-y-4">
                     <div class="space-y-1">
-                      <div class="flex justify-between text-[10px] sm:text-xs font-mono text-neutral-400">
-                        <span>0.0 TRASH</span><span>5.0 TRY</span><span>7.0 PLAY</span><span>9.0 CINEMA</span><span>10 PEAK</span>
+                      <div class="flex justify-between text-xs font-mono text-neutral-400">
+                        <span>0.0 (TRASH CAN)</span>
+                        <span>5.0 (CAN TRY)</span>
+                        <span>7.0 (SHOULD PLAY)</span>
+                        <span>9.0 (CINEMA)</span>
+                        <span>10.0 (PEAK)</span>
                       </div>
-                      <input type="range" id="review-score-slider" min="0" max="10" step="0.1" value="9.0"
-                        class="w-full accent-brand-gold cursor-pointer" oninput="app.handleSliderScoreChange(this.value)" />
+                      <input 
+                        type="range" 
+                        id="review-score-slider" 
+                        min="0" 
+                        max="10" 
+                        step="0.1" 
+                        value="9.0" 
+                        class="w-full accent-brand-gold cursor-pointer"
+                        oninput="app.handleSliderScoreChange(this.value)"
+                      />
                     </div>
-                    <div class="flex flex-wrap gap-2">
-                      <button type="button" onclick="app.setReviewPreset(3.5)" class="px-2.5 py-1 rounded text-xs font-bold bg-red-950 text-red-400 border border-red-800">TRASH CAN</button>
-                      <button type="button" onclick="app.setReviewPreset(6.0)" class="px-2.5 py-1 rounded text-xs font-bold bg-pink-950 text-pink-400 border border-pink-800">CAN TRY</button>
-                      <button type="button" onclick="app.setReviewPreset(8.0)" class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">SHOULD PLAY</button>
-                      <button type="button" onclick="app.setReviewPreset(9.2)" class="px-2.5 py-1 rounded text-xs font-bold bg-blue-950 text-blue-400 border border-blue-800">ABSOLUTE CINEMA</button>
-                      <button type="button" onclick="app.setReviewPreset(9.8)" class="px-2.5 py-1 rounded text-xs font-bold bg-yellow-950 text-yellow-400 border border-yellow-800">PEAK</button>
+
+                    <!-- Preset Tier Selector Buttons -->
+                    <div class="flex flex-wrap gap-2 pt-1">
+                      <button type="button" onclick="app.setReviewPreset(3.5)" class="px-2.5 py-1 rounded text-xs font-bold bg-red-950 text-red-400 border border-red-800">TRASH CAN (&lt;4)</button>
+                      <button type="button" onclick="app.setReviewPreset(6.0)" class="px-2.5 py-1 rounded text-xs font-bold bg-pink-950 text-pink-400 border border-pink-800">CAN TRY (5-6.9)</button>
+                      <button type="button" onclick="app.setReviewPreset(8.0)" class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">SHOULD PLAY (7-8.9)</button>
+                      <button type="button" onclick="app.setReviewPreset(9.2)" class="px-2.5 py-1 rounded text-xs font-bold bg-blue-950 text-blue-400 border border-blue-800">ABSOLUTE CINEMA (9-9.4)</button>
+                      <button type="button" onclick="app.setReviewPreset(9.8)" class="px-2.5 py-1 rounded text-xs font-bold bg-yellow-950 text-yellow-400 border border-yellow-800">PEAK (9.5-10)</button>
                     </div>
+
+                    <!-- Textarea & Submit -->
                     <div class="space-y-3">
-                      <textarea id="review-text-input" rows="3" placeholder="Write your verdict (gameplay, story, graphics, performance)..."
-                        class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-brand-red"></textarea>
+                      <textarea 
+                        id="review-text-input"
+                        rows="3" 
+                        placeholder="Write your comprehensive verdict (gameplay mechanics, story twists, graphics, performance, final verdict)..."
+                        class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-brand-red font-sans"
+                      ></textarea>
                       <button onclick="app.submitReview()" class="w-full sm:w-auto bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-sm px-8 py-2.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.5)]">
-                        PUBLISH VERDICT
+                        PUBLISH VERDICT TO FPS
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div id="review-login-gate" class="p-6 bg-neutral-900 border border-neutral-800 rounded-xl text-center space-y-3">
-                <p class="text-sm text-neutral-300">Sign in with Google to rate games and publish reviews to the community database.</p>
+              <!-- If logged out: Sign in prompt -->
+              <div id="review-login-gate" class="hidden p-6 bg-neutral-900 border border-neutral-800 rounded-xl text-center space-y-3">
+                <p class="text-sm text-neutral-300 font-sans">You must be signed in with Google to submit ratings and reviews to the community database.</p>
                 <button onclick="app.openAuthModal()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-sm px-6 py-2 rounded-md tracking-wider uppercase transition">
-                  SIGN IN WITH GOOGLE
+                  SIGN IN TO REVIEW
                 </button>
               </div>
             </div>
 
+            <!-- Published Reviews List -->
             <div class="space-y-3 pt-4 border-t border-neutral-800/80">
               <h4 class="font-bebas text-xl text-white tracking-wide">VERIFIED COMMUNITY REVIEWS</h4>
-              <div id="modal-reviews-list" class="space-y-3 max-h-60 overflow-y-auto pr-2"></div>
+              <div id="modal-reviews-list" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+                <!-- User reviews rendered here -->
+              </div>
             </div>
           </div>
 
-          <div class="space-y-3 pt-2">
+          <!-- HD Screenshot Gallery (50+ shots) -->
+          <div class="space-y-3 pt-4">
             <h4 class="font-barlow italic font-black text-xs uppercase tracking-widest text-neutral-400">OFFICIAL 4K SCREENSHOTS:</h4>
-            <div id="modal-screenshots-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-2"></div>
+            <div id="modal-screenshots-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-2">
+              <!-- Screenshots injected -->
+            </div>
           </div>
+
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 7. FULLSCREEN NETFLIX-STYLE FPS MEDIA HOUSE -->
+  <!-- ========================================== -->
+  <!-- 7. FULLSCREEN FPS MEDIA HOUSE VIEW -->
+  <!-- ========================================== -->
   <div id="media-house-view" class="fixed inset-0 z-[120] bg-[#070709] hidden overflow-y-auto">
-    <div class="sticky top-0 z-30 bg-[#070709]/95 backdrop-blur-md border-b border-brand-border px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
+    <!-- Media House Navigation Header -->
+    <div class="sticky top-0 z-30 bg-[#070709]/95 backdrop-blur-md border-b border-brand-border px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <button onclick="app.closeMediaHouse()" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase transition">← BACK TO HOME</button>
+        <button onclick="app.closeMediaHouse()" class="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase transition">
+          ← BACK TO REVIEWS
+        </button>
         <div class="hidden sm:flex items-center gap-2 border-l border-neutral-800 pl-4">
           <span class="w-2.5 h-2.5 rounded-full bg-brand-red live-dot"></span>
           <span class="font-bebas text-2xl tracking-wider text-white">FPS MEDIA HOUSE</span>
-          <span class="text-xs font-mono text-neutral-400">NETFLIX CINEMA STAGE</span>
+          <span class="text-xs font-mono text-neutral-400">CINEMA PLAYTHROUGHS & STREAMS</span>
         </div>
       </div>
-      <select id="media-house-game-select" onchange="app.switchMediaHouseGame(this.value)" class="bg-neutral-900 border border-neutral-700 rounded-md px-3 py-1.5 text-xs sm:text-sm text-white font-mono focus:outline-none focus:border-brand-red"></select>
+
+      <!-- Quick Game Selector Pill Dropdown -->
+      <div class="flex items-center gap-3">
+        <select id="media-house-game-select" onchange="app.switchMediaHouseGame(this.value)" class="bg-neutral-900 border border-neutral-700 rounded-md px-3 py-1.5 text-xs sm:text-sm text-white font-mono focus:outline-none focus:border-brand-red">
+          <!-- Game options -->
+        </select>
+      </div>
     </div>
 
+    <!-- Media House Body -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+      
+      <!-- Video Player Cinema Stage -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Main 16:9 Player (8 cols) -->
         <div class="lg:col-span-8 space-y-4">
-          <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-[0_0_40px_rgba(229,9,20,0.18)] border border-neutral-800">
-            <iframe id="media-house-iframe" class="w-full h-full" src="" title="Media House Player" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-neutral-800">
+            <iframe 
+              id="media-house-iframe"
+              class="w-full h-full"
+              src="" 
+              title="Media House Player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+
+            <!-- Overlay Controls -->
             <div class="absolute bottom-4 right-4 flex items-center gap-2 z-20">
-              <button onclick="app.mediaHousePrevEpisode()" class="bg-black/85 hover:bg-brand-red border border-neutral-700 px-3 py-1.5 rounded text-xs font-mono text-white transition">PREV</button>
-              <button onclick="app.mediaHouseNextEpisode()" class="bg-black/85 hover:bg-brand-red border border-neutral-700 px-3 py-1.5 rounded text-xs font-mono text-white transition">NEXT</button>
+              <button onclick="app.mediaHousePrevEpisode()" class="bg-black/80 hover:bg-black border border-neutral-700 px-3 py-1.5 rounded text-xs font-mono text-white transition">
+                ⏮ PREV
+              </button>
+              <button onclick="app.mediaHouseNextEpisode()" class="bg-black/80 hover:bg-black border border-neutral-700 px-3 py-1.5 rounded text-xs font-mono text-white transition">
+                NEXT ⏭
+              </button>
             </div>
           </div>
 
+          <!-- Video Title & Details -->
           <div class="space-y-2">
             <div class="flex items-center gap-3 flex-wrap">
               <span id="media-house-badge" class="font-barlow italic font-black text-xs px-2.5 py-0.5 rounded border">PEAK</span>
               <span id="media-house-creator" class="text-xs font-mono text-brand-gold">OFFICIAL 4K PLAYTHROUGH</span>
             </div>
-            <h2 id="media-house-title" class="font-bebas text-3xl sm:text-4xl text-white tracking-wide leading-tight">EPISODE 01</h2>
-            <p id="media-house-desc" class="text-xs sm:text-sm text-neutral-400 leading-relaxed"></p>
+            <h2 id="media-house-title" class="font-bebas text-3xl sm:text-4xl text-white tracking-wide leading-tight">EPISODE 01: PROLOGUE & WALKTHROUGH</h2>
+            <p id="media-house-desc" class="text-xs sm:text-sm text-neutral-400 font-sans leading-relaxed"></p>
           </div>
         </div>
 
-        <div class="lg:col-span-4 bg-[#0E0E15] border border-neutral-800 rounded-xl p-4 sm:p-5 flex flex-col h-[500px]">
+        <!-- Chronological Episodes Queue Sidebar (4 cols) -->
+        <div class="lg:col-span-4 bg-[#0E0E14] border border-neutral-800 rounded-xl p-4 sm:p-5 flex flex-col h-[520px]">
           <div class="flex items-center justify-between border-b border-neutral-800 pb-3 mb-3">
             <h3 class="font-bebas text-xl text-white tracking-wider">CHRONOLOGICAL EPISODES</h3>
-            <span class="text-xs font-mono text-neutral-400">12 MISSIONS</span>
+            <span id="media-house-episode-count" class="text-xs font-mono text-neutral-400">12 MISSIONS</span>
           </div>
-          <div id="media-house-episodes-list" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
+
+          <!-- Episode Scroll List -->
+          <div id="media-house-episodes-list" class="flex-1 overflow-y-auto space-y-2 pr-1">
+            <!-- Episode Cards -->
+          </div>
         </div>
       </div>
 
+      <!-- Live Streams & Gaming YouTubers Section -->
       <section class="space-y-4 pt-6 border-t border-brand-border">
-        <div>
-          <h3 class="font-bebas text-2xl sm:text-3xl text-white tracking-wide flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-brand-red live-dot"></span>LIVE STREAMS &amp; GAMING YOUTUBERS
-          </h3>
-          <p class="text-xs text-neutral-400">Top creators and full mission playthroughs</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-bebas text-2xl sm:text-3xl text-white tracking-wide flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-brand-red live-dot"></span>
+              LIVE STREAMS & PRO CREATOR PLAYTHROUGHS
+            </h3>
+            <p class="text-xs text-neutral-400">Watch top streamers and creators beat challenging missions</p>
+          </div>
         </div>
-        <div id="media-house-streams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+        <div id="media-house-streams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- Stream Cards injected -->
+        </div>
       </section>
 
+      <!-- 50+ Downloadable Screenshots Hub -->
       <section class="space-y-4 pt-6 border-t border-brand-border">
-        <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center justify-between">
           <div>
-            <h3 class="font-bebas text-2xl sm:text-3xl text-white tracking-wide">50+ 4K DOWNLOADABLE SCREENSHOTS</h3>
-            <p class="text-xs text-neutral-400">Click any frame to download directly</p>
+            <h3 class="font-bebas text-2xl sm:text-3xl text-white tracking-wide">
+              50+ 4K ULTRA-HD DOWNLOADABLE WALLPAPERS & SCREENSHOTS
+            </h3>
+            <p class="text-xs text-neutral-400">High resolution captured frames ready for desktop and mobile</p>
           </div>
-          <span class="text-xs font-mono text-brand-gold bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-full">HD DIRECT DOWNLOAD</span>
+          <span class="text-xs font-mono text-brand-gold bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-full">
+            DIRECT DOWNLOAD ENABLED
+          </span>
         </div>
-        <div id="media-house-screenshots-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+
+        <div id="media-house-screenshots-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <!-- 50+ Screenshots injected -->
+        </div>
       </section>
+
     </div>
   </div>
 
-  <!-- 8. WANNA PLAY DRAWER -->
+  <!-- ========================================== -->
+  <!-- 8. WANNA PLAY SLIDE-OVER DRAWER -->
+  <!-- ========================================== -->
   <div id="wanna-play-drawer" class="fixed inset-y-0 right-0 z-[110] w-full max-w-md bg-[#0D0D14] border-l border-neutral-800 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Drawer Header -->
     <div class="p-5 border-b border-neutral-800 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <span class="font-bebas text-2xl text-white tracking-wider">WANNA PLAY QUEUE</span>
+        <span class="font-bebas text-2xl text-white tracking-wider">YOUR WANNA PLAY QUEUE</span>
         <span id="drawer-wanna-count" class="bg-brand-yellow text-black font-mono font-black text-xs px-2 py-0.5 rounded-full">0</span>
       </div>
       <button onclick="app.toggleWannaPlayDrawer()" class="text-neutral-400 hover:text-white text-lg p-1">✕</button>
     </div>
-    <div id="drawer-items-list" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+    <!-- Drawer Items List -->
+    <div id="drawer-items-list" class="flex-1 overflow-y-auto p-5 space-y-3">
+      <!-- Items Injected -->
+    </div>
+
+    <!-- Drawer Footer -->
     <div class="p-5 border-t border-neutral-800 bg-neutral-950/80">
-      <button onclick="app.clearWannaPlay()" class="w-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-white py-2 rounded-md text-xs font-mono tracking-wider transition">CLEAR ENTIRE QUEUE</button>
+      <button onclick="app.clearWannaPlay()" class="w-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-white py-2 rounded-md text-xs font-mono tracking-wider transition">
+        CLEAR ENTIRE QUEUE
+      </button>
     </div>
   </div>
 
-  <!-- 9. GOOGLE AUTH MODAL -->
-  <div id="auth-modal" class="fixed inset-0 z-[150] bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+  <!-- ========================================== -->
+  <!-- 9. GOOGLE AUTH POPUP MODAL -->
+  <!-- ========================================== -->
+  <div id="auth-modal" class="fixed inset-0 z-[150] bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#111118] border border-neutral-800 rounded-2xl p-6 sm:p-8 space-y-6 relative shadow-2xl">
       <button onclick="app.closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white">✕</button>
+
       <div class="text-center space-y-2">
         <div class="w-16 h-10 bg-brand-yellow rounded-lg p-1 border-2 border-black flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(255,171,0,0.4)]">
           <span class="font-barlow italic font-black text-2xl text-black">FPS</span>
         </div>
-        <h3 class="font-bebas text-3xl text-white tracking-wide">SIGN IN TO FPS</h3>
-        <p class="text-xs text-neutral-400">Sync your reviews, ratings, and Wanna Play queue across devices.</p>
+        <h3 class="font-bebas text-3xl text-white tracking-wide">SIGN IN TO FPS GAMING</h3>
+        <p class="text-xs text-neutral-400 font-sans">Sync your reviews, ratings, and Wanna Play list across all your devices.</p>
       </div>
+
+      <!-- Google Button -->
       <button onclick="app.loginWithGoogle()" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-neutral-100 text-neutral-900 font-bold py-3 px-4 rounded-xl transition shadow-lg text-sm">
         <svg class="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -582,24 +833,28 @@
         </svg>
         Continue with Google
       </button>
+
       <div class="text-center pt-2 border-t border-neutral-800">
-        <span class="text-xs font-mono text-neutral-500">CREATED &amp; DESIGNED BY TANVIR HOSSAIN</span>
+        <span class="text-xs font-mono text-neutral-500">CREATED & DESIGNED BY TANVIR HOSSAIN</span>
       </div>
     </div>
   </div>
 
+  <!-- ========================================== -->
   <!-- 10. FOOTER -->
-  <footer class="bg-black border-t border-neutral-800/80 py-10 px-4 sm:px-6">
+  <!-- ========================================== -->
+  <footer class="bg-black border-t border-neutral-800/80 py-12 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
         <div class="w-12 h-8 bg-brand-yellow rounded p-0.5 border border-black flex items-center justify-center">
           <span class="font-barlow italic font-black text-xl text-black">FPS</span>
         </div>
         <div>
-          <div class="font-barlow italic font-black text-base text-white">FPS — GAME RATING &amp; REVIEWS</div>
-          <div class="text-xs text-neutral-500 font-mono">CREATED &amp; ENGINEERED BY TANVIR HOSSAIN</div>
+          <div class="font-barlow italic font-black text-base text-white">FPS — GAME RATING & REVIEWS</div>
+          <div class="text-xs text-neutral-500 font-mono">CREATED & ENGINEERED BY TANVIR HOSSAIN</div>
         </div>
       </div>
+
       <div class="flex items-center gap-6 text-xs font-mono text-neutral-400">
         <a href="javascript:void(0)" onclick="app.scrollToSection('section-rockstar')" class="hover:text-white transition">Rockstar Vault</a>
         <a href="javascript:void(0)" onclick="app.scrollToSection('section-peak')" class="hover:text-white transition">Peak Tier</a>
@@ -609,8 +864,11 @@
     </div>
   </footer>
 
-  <!-- 11. APPLICATION ENGINE -->
+  <!-- ========================================== -->
+  <!-- 11. COMPLETE JAVASCRIPT APPLICATION CORE -->
+  <!-- ========================================== -->
   <script>
+    // Configuration Keys
     const RAWG_API_KEY = "B42b5294e7ad4188a302096f92124fbe";
     const YT_API_KEY = "AIzaSyB64wc7E_iGjF0GwRdJo7E_5D-YgfiH_f4";
 
@@ -624,25 +882,203 @@
       measurementId: "G-WYCNK4277S"
     };
 
+    // Curated 16 Flagship Titles for the 50-Second Billboard & Vaults
     const HERO_GAMES = [
-      { id: 'rdr2', rawgId: 28, title: "Red Dead Redemption 2", studio: "Rockstar Games", year: "2018", score: 9.7, tier: "ABSOLUTE RDR", desc: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland.", trailerId: "eaW0tYpxyp0", poster: "https://media.rawg.io/media/games/511/5118aff50f4287968e2b71926f30d080.jpg" },
-      { id: 'gta5', rawgId: 3498, title: "Grand Theft Auto V", studio: "Rockstar Games", year: "2013", score: 9.7, tier: "ABSOLUTE GTA", desc: "A young street hustler, a retired bank robber, and a terrifying psychopath pull off dangerous heists in Los Santos.", trailerId: "QkkoHAzjnUs", poster: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07025025773ba92c7.jpg" },
-      { id: 'witcher3', rawgId: 3328, title: "The Witcher 3: Wild Hunt", studio: "CD Projekt RED", year: "2015", score: 9.8, tier: "PEAK", desc: "Geralt of Rivia, a monster slayer for hire, embarks on an epic journey to find the child of prophecy.", trailerId: "c0i88t0Kacs", poster: "https://media.rawg.io/media/games/618/618c2031a0709d35b6770332c42f9f56.jpg" },
-      { id: 'eldenring', rawgId: 58134, title: "Elden Ring", studio: "FromSoftware", year: "2022", score: 9.6, tier: "PEAK", desc: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring in the Lands Between.", trailerId: "E3Huy2cdih0", poster: "https://media.rawg.io/media/games/b29/b2960ad9f6d086771f3b51b57314867f.jpg" },
-      { id: 'cyberpunk', rawgId: 41494, title: "Cyberpunk 2077", studio: "CD Projekt RED", year: "2020", score: 9.1, tier: "ABSOLUTE CINEMA", desc: "An open-world, action-adventure story set in Night City, a megalopolis obsessed with power and body modification.", trailerId: "8X2kIfS6fb8", poster: "https://media.rawg.io/media/games/26d/26d4437a21a546c514833f1e225e2496.jpg" },
-      { id: 'gow_ragnarok', rawgId: 494384, title: "God of War Ragnarök", studio: "Santa Monica Studio", year: "2022", score: 9.5, tier: "PEAK", desc: "Kratos and Atreus embark on an epic quest through the Nine Realms as the threat of Ragnarök approaches.", trailerId: "EE-4GvjKcfs", poster: "https://media.rawg.io/media/games/157/15742f2f67eacff546738e1ab5c19d20.jpg" },
-      { id: 'tsushima', rawgId: 3070, title: "Ghost of Tsushima", studio: "Sucker Punch", year: "2020", score: 9.2, tier: "ABSOLUTE CINEMA", desc: "In the late 13th century, samurai Jin Sakai sacrifices everything to protect Tsushima from Mongol invaders.", trailerId: "bO1fS5X2x1Y", poster: "https://media.rawg.io/media/games/d82/d82990b9c67ba0d2d0d0e62e7c9f65b8.jpg" },
-      { id: 'tlou1', rawgId: 3636, title: "The Last of Us Part I", studio: "Naughty Dog", year: "2022", score: 9.6, tier: "PEAK", desc: "Experience the emotional storytelling and unforgettable journey of Joel and Ellie in a ravaged civilization.", trailerId: "WxjeV19yhR8", poster: "https://media.rawg.io/media/games/709/709bf81f3f89b70cf2d31a77d130232e.jpg" },
-      { id: 'gta4', rawgId: 4459, title: "Grand Theft Auto IV", studio: "Rockstar Games", year: "2008", score: 9.8, tier: "ABSOLUTE GTA", desc: "Niko Bellic arrives in Liberty City pursuing the American Dream, only to be dragged into organized crime.", trailerId: "M80K51W27B8", poster: "https://media.rawg.io/media/games/b45/b4557557eab224e4e77b613622d81429.jpg" },
-      { id: 'gtasa', rawgId: 416, title: "Grand Theft Auto: San Andreas", studio: "Rockstar Games", year: "2004", score: 9.7, tier: "ABSOLUTE GTA", desc: "Carl Johnson returns home to Los Santos in the early 90s to save his family and take control of the streets.", trailerId: "u_CbKSWpKkc", poster: "https://media.rawg.io/media/games/120/1201a40e4364d63b5885d78143b320e0.jpg" },
-      { id: 'portal2', rawgId: 4200, title: "Portal 2", studio: "Valve", year: "2011", score: 9.6, tier: "PEAK", desc: "Inventive puzzle design, witty writing, and iconic cooperative testing through Aperture Science.", trailerId: "tax4gWBQfv4", poster: "https://media.rawg.io/media/games/328/3283613cb7d75d67257fc58339188742.jpg" },
-      { id: 'skyrim', rawgId: 5679, title: "The Elder Scrolls V: Skyrim", studio: "Bethesda", year: "2011", score: 9.4, tier: "ABSOLUTE CINEMA", desc: "Dragons return to Tamriel. As Dragonborn, you alone can defeat the ancient world-eater Alduin.", trailerId: "JSRtYpNRoN0", poster: "https://media.rawg.io/media/games/7cf/7cfc9220b401b7a300e409e539c9afd5.jpg" },
-      { id: 'doom_eternal', rawgId: 58751, title: "DOOM Eternal", studio: "id Software", year: "2020", score: 8.8, tier: "SHOULD PLAY", desc: "Hell's armies have invaded Earth. Become the Slayer and conquer demons across dimensions.", trailerId: "_EZ3J4Z0sXg", poster: "https://media.rawg.io/media/games/3ea/3ea3c9bbd94d54d2421a4ff16529f7da.jpg" },
-      { id: 're4_remake', rawgId: 800049, title: "Resident Evil 4 Remake", studio: "Capcom", year: "2023", score: 9.3, tier: "ABSOLUTE CINEMA", desc: "Leon S. Kennedy tracks the president's kidnapped daughter to a secluded European village.", trailerId: "C_npdeJ1_K4", poster: "https://media.rawg.io/media/games/054/054041d8e1329d4db760591b655b3577.jpg" },
-      { id: 'spider_man', rawgId: 5583, title: "Marvel's Spider-Man Remastered", studio: "Insomniac Games", year: "2020", score: 8.9, tier: "SHOULD PLAY", desc: "Swing through Marvel's New York as an experienced Peter Parker fighting iconic villains.", trailerId: "mrTNPvQjG7E", poster: "https://media.rawg.io/media/games/9aa/9aa42d16d425fa6f170f047be43ce219.jpg" },
-      { id: 'bloodborne', rawgId: 2462, title: "Bloodborne", studio: "FromSoftware", year: "2015", score: 9.4, tier: "ABSOLUTE CINEMA", desc: "Face your fears as you search for answers in the ancient city of Yharnam, cursed with an endemic illness.", trailerId: "G203e1HhixY", poster: "https://media.rawg.io/media/games/214/214a547174c35b611774431e30926200.jpg" }
+      {
+        id: 'rdr2',
+        rawgId: 28,
+        title: "Red Dead Redemption 2",
+        studio: "Rockstar Games",
+        year: "2018",
+        score: 9.7,
+        tier: "ABSOLUTE RDR",
+        desc: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland.",
+        trailerId: "eaW0tYpxyp0",
+        poster: "https://media.rawg.io/media/games/511/5118aff50f4287968e2b71926f30d080.jpg"
+      },
+      {
+        id: 'gta5',
+        rawgId: 3498,
+        title: "Grand Theft Auto V",
+        studio: "Rockstar Games",
+        year: "2013",
+        score: 9.7,
+        tier: "ABSOLUTE GTA",
+        desc: "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with the criminal underworld.",
+        trailerId: "QkkoHAzjnUs",
+        poster: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07025025773ba92c7.jpg"
+      },
+      {
+        id: 'witcher3',
+        rawgId: 3328,
+        title: "The Witcher 3: Wild Hunt",
+        studio: "CD Projekt RED",
+        year: "2015",
+        score: 9.8,
+        tier: "PEAK",
+        desc: "Geralt of Rivia, a monster slayer for hire, embarks on an epic journey to find the child of prophecy.",
+        trailerId: "c0i88t0Kacs",
+        poster: "https://media.rawg.io/media/games/618/618c2031a0709d35b6770332c42f9f56.jpg"
+      },
+      {
+        id: 'eldenring',
+        rawgId: 58134,
+        title: "Elden Ring",
+        studio: "FromSoftware",
+        year: "2022",
+        score: 9.6,
+        tier: "PEAK",
+        desc: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.",
+        trailerId: "E3Huy2cdih0",
+        poster: "https://media.rawg.io/media/games/b29/b2960ad9f6d086771f3b51b57314867f.jpg"
+      },
+      {
+        id: 'cyberpunk',
+        rawgId: 41494,
+        title: "Cyberpunk 2077",
+        studio: "CD Projekt RED",
+        year: "2020",
+        score: 9.1,
+        tier: "ABSOLUTE CINEMA",
+        desc: "An open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification.",
+        trailerId: "8X2kIfS6fb8",
+        poster: "https://media.rawg.io/media/games/26d/26d4437a21a546c514833f1e225e2496.jpg"
+      },
+      {
+        id: 'gow_ragnarok',
+        rawgId: 494384,
+        title: "God of War Ragnarök",
+        studio: "Santa Monica Studio",
+        year: "2022",
+        score: 9.5,
+        tier: "PEAK",
+        desc: "Kratos and Atreus embark on an epic quest through the Nine Realms as the threat of Ragnarök approaches.",
+        trailerId: "EE-4GvjKcfs",
+        poster: "https://media.rawg.io/media/games/157/15742f2f67eacff546738e1ab5c19d20.jpg"
+      },
+      {
+        id: 'tsushima',
+        rawgId: 3070,
+        title: "Ghost of Tsushima",
+        studio: "Sucker Punch",
+        year: "2020",
+        score: 9.2,
+        tier: "ABSOLUTE CINEMA",
+        desc: "In the late 13th century, samurai Jin Sakai must sacrifice everything to protect his home from Mongol invaders.",
+        trailerId: "bO1fS5X2x1Y",
+        poster: "https://media.rawg.io/media/games/d82/d82990b9c67ba0d2d0d0e62e7c9f65b8.jpg"
+      },
+      {
+        id: 'tlou1',
+        rawgId: 3636,
+        title: "The Last of Us Part I",
+        studio: "Naughty Dog",
+        year: "2022",
+        score: 9.6,
+        tier: "PEAK",
+        desc: "Experience the emotional storytelling and unforgettable characters of Joel and Ellie in a ravaged civilization.",
+        trailerId: "WxjeV19yhR8",
+        poster: "https://media.rawg.io/media/games/709/709bf81f3f89b70cf2d31a77d130232e.jpg"
+      },
+      {
+        id: 'gta4',
+        rawgId: 4459,
+        title: "Grand Theft Auto IV",
+        studio: "Rockstar Games",
+        year: "2008",
+        score: 9.8,
+        tier: "ABSOLUTE GTA",
+        desc: "Niko Bellic arrives in Liberty City pursuing the American Dream, only to be dragged into debts and organized crime.",
+        trailerId: "M80K51W27B8",
+        poster: "https://media.rawg.io/media/games/b45/b4557557eab224e4e77b613622d81429.jpg"
+      },
+      {
+        id: 'gtasa',
+        rawgId: 416,
+        title: "Grand Theft Auto: San Andreas",
+        studio: "Rockstar Games",
+        year: "2004",
+        score: 9.7,
+        tier: "ABSOLUTE GTA",
+        desc: "Carl Johnson returns home to Los Santos in the early 90s, framed for homicide, fighting to save his family and take the streets.",
+        trailerId: "u_CbKSWpKkc",
+        poster: "https://media.rawg.io/media/games/120/1201a40e4364d63b5885d78143b320e0.jpg"
+      },
+      {
+        id: 'halflife2',
+        rawgId: 4200,
+        title: "Portal 2",
+        studio: "Valve",
+        year: "2011",
+        score: 9.6,
+        tier: "PEAK",
+        desc: "Perpetually inventive puzzle design, witty writing, and iconic cooperative testing through Aperture Science.",
+        trailerId: "tax4gWBQfv4",
+        poster: "https://media.rawg.io/media/games/328/3283613cb7d75d67257fc58339188742.jpg"
+      },
+      {
+        id: 'skyrim',
+        rawgId: 5679,
+        title: "The Elder Scrolls V: Skyrim",
+        studio: "Bethesda Game Studios",
+        year: "2011",
+        score: 9.4,
+        tier: "ABSOLUTE CINEMA",
+        desc: "Dragons return to Tamriel. As Dragonborn, the prophecies foretell you alone can defeat the ancient world-eater Alduin.",
+        trailerId: "JSRtYpNRoN0",
+        poster: "https://media.rawg.io/media/games/7cf/7cfc9220b401b7a300e409e539c9afd5.jpg"
+      },
+      {
+        id: 'doom_eternal',
+        rawgId: 58751,
+        title: "DOOM Eternal",
+        studio: "id Software",
+        year: "2020",
+        score: 8.8,
+        tier: "SHOULD PLAY",
+        desc: "Hell's armies have invaded Earth. Become the Slayer in an epic campaign to conquer demons across dimensions.",
+        trailerId: "_EZ3J4Z0sXg",
+        poster: "https://media.rawg.io/media/games/3ea/3ea3c9bbd94d54d2421a4ff16529f7da.jpg"
+      },
+      {
+        id: 're4_remake',
+        rawgId: 800049,
+        title: "Resident Evil 4 Remake",
+        studio: "Capcom",
+        year: "2023",
+        score: 9.3,
+        tier: "ABSOLUTE CINEMA",
+        desc: "Survival is only the beginning. Leon S. Kennedy tracks the president's kidnapped daughter to a secluded European village.",
+        trailerId: "C_npdeJ1_K4",
+        poster: "https://media.rawg.io/media/games/054/054041d8e1329d4db760591b655b3577.jpg"
+      },
+      {
+        id: 'spider_man',
+        rawgId: 5583,
+        title: "Marvel's Spider-Man Remastered",
+        studio: "Insomniac Games",
+        year: "2020",
+        score: 8.9,
+        tier: "SHOULD PLAY",
+        desc: "Swing through the vibrant streets of Marvel's New York as an experienced Peter Parker fighting iconic villains.",
+        trailerId: "mrTNPvQjG7E",
+        poster: "https://media.rawg.io/media/games/9aa/9aa42d16d425fa6f170f047be43ce219.jpg"
+      },
+      {
+        id: 'bloodborne',
+        rawgId: 2462,
+        title: "Bloodborne",
+        studio: "FromSoftware",
+        year: "2015",
+        score: 9.4,
+        tier: "ABSOLUTE CINEMA",
+        desc: "Face your fears as you search for answers in the ancient city of Yharnam, now cursed with a strange endemic illness.",
+        trailerId: "G203e1HhixY",
+        poster: "https://media.rawg.io/media/games/214/214a547174c35b611774431e30926200.jpg"
+      }
     ];
 
+    // Master App Controller
     class FPSApplication {
       constructor() {
         this.heroIndex = 0;
@@ -654,11 +1090,11 @@
         this.activeModalGame = null;
         this.activeMediaHouseGame = null;
         this.wannaPlayList = this.loadWannaPlay();
+        this.cachedGames = new Map();
         this.renderedGameIds = new Set();
         this.currentMediaHouseEpisodeIdx = 0;
         this.mediaHouseEpisodes = [];
-        this.searchDebounce = null;
-        this.searchAbort = null;
+
         this.init();
       }
 
@@ -670,23 +1106,28 @@
         this.updateWannaPlayUI();
       }
 
+      // Safe Firebase Init
       initFirebase() {
         try {
           if (window.firebase && !firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
             this.auth = firebase.auth();
             this.db = firebase.firestore();
+
             this.auth.onAuthStateChanged((user) => {
               this.currentUser = user;
               this.updateAuthUI(user);
-              if (this.activeModalGame) this.updateReviewStudioAuthGate();
+              if (this.activeModalGame) {
+                this.updateReviewStudioAuthGate();
+              }
             });
           }
         } catch (e) {
-          console.warn("Firebase offline mode:", e);
+          console.warn("Firebase running in offline fallback mode:", e);
         }
       }
 
+      // 50-Second Hero Billboard Controller
       initHero() {
         this.renderHeroSlide(0);
         this.startHeroTimer();
@@ -694,7 +1135,9 @@
 
       startHeroTimer() {
         clearInterval(this.heroTimer);
-        this.heroTimer = setInterval(() => this.nextHeroSlide(), 50000);
+        this.heroTimer = setInterval(() => {
+          this.nextHeroSlide();
+        }, 50000); // 50 seconds exact
       }
 
       renderHeroSlide(idx) {
@@ -707,21 +1150,31 @@
         document.getElementById('hero-studio-badge').innerText = `${g.studio.toUpperCase()} • ${g.year}`;
         document.getElementById('hero-slide-counter').innerText = `${String(this.heroIndex + 1).padStart(2, '0')} / ${String(HERO_GAMES.length).padStart(2, '0')}`;
 
+        // Badge styling
         const tb = document.getElementById('hero-tier-badge');
         tb.innerText = g.tier;
         tb.className = `font-barlow italic font-black text-xs sm:text-sm px-3 py-1 rounded-md tracking-wider border ${this.getTierClass(g.tier)}`;
 
+        // Poster image
         const posterEl = document.getElementById('hero-poster');
         posterEl.src = g.poster;
+        posterEl.style.opacity = '1';
 
+        // Autoplay background trailer
         const wrapper = document.getElementById('hero-video-wrapper');
         const iframe = document.getElementById('hero-iframe');
         wrapper.style.opacity = '0';
 
         const muteParam = this.heroMuted ? '1' : '0';
         iframe.src = `https://www.youtube-nocookie.com/embed/${g.trailerId}?autoplay=1&mute=${muteParam}&controls=0&loop=1&playlist=${g.trailerId}&playsinline=1&enablejsapi=1`;
-        iframe.onload = () => setTimeout(() => { wrapper.style.opacity = '0.9'; }, 600);
+        
+        iframe.onload = () => {
+          setTimeout(() => {
+            wrapper.style.opacity = '0.9';
+          }, 600);
+        };
 
+        // Update wanna play button state
         this.updateHeroWannaPlayButton();
       }
 
@@ -737,21 +1190,33 @@
 
       toggleHeroSound() {
         this.heroMuted = !this.heroMuted;
-        document.getElementById('hero-sound-text').innerText = this.heroMuted ? 'SOUND OFF' : 'SOUND ON';
+        const btnText = document.getElementById('hero-sound-text');
         const g = HERO_GAMES[this.heroIndex];
+        const iframe = document.getElementById('hero-iframe');
+        
+        btnText.innerText = this.heroMuted ? 'SOUND OFF' : 'SOUND ON';
         const muteParam = this.heroMuted ? '1' : '0';
-        document.getElementById('hero-iframe').src = `https://www.youtube-nocookie.com/embed/${g.trailerId}?autoplay=1&mute=${muteParam}&controls=0&loop=1&playlist=${g.trailerId}&playsinline=1&enablejsapi=1`;
+        iframe.src = `https://www.youtube-nocookie.com/embed/${g.trailerId}?autoplay=1&mute=${muteParam}&controls=0&loop=1&playlist=${g.trailerId}&playsinline=1&enablejsapi=1`;
       }
 
+      // Dynamic Badge Colors (Zero Emojis)
       getTierClass(tier) {
         switch (tier) {
-          case 'ABSOLUTE RDR': return 'bg-gradient-to-r from-[#8B0000] to-[#5C0606] text-brand-gold border-brand-gold/70 shadow-[0_0_15px_rgba(255,215,0,0.4)]';
-          case 'ABSOLUTE GTA': return 'bg-gradient-to-r from-emerald-950 to-green-900 text-brand-gta border-brand-gta/70 shadow-[0_0_15px_rgba(0,255,102,0.4)]';
-          case 'PEAK': return 'bg-gradient-to-r from-yellow-950 to-amber-900 text-brand-gold border-brand-gold/70 shadow-[0_0_15px_rgba(255,215,0,0.3)]';
-          case 'ABSOLUTE CINEMA': return 'bg-gradient-to-r from-blue-950 to-cyan-950 text-blue-400 border-blue-500/70';
-          case 'SHOULD PLAY': return 'bg-gradient-to-r from-emerald-950 to-teal-950 text-emerald-400 border-emerald-500/70';
-          case 'CAN TRY': return 'bg-gradient-to-r from-pink-950 to-rose-950 text-pink-400 border-pink-500/70';
-          default: return 'bg-gradient-to-r from-red-950 to-neutral-900 text-red-500 border-red-600/70';
+          case 'ABSOLUTE RDR':
+            return 'bg-gradient-to-r from-[#8B0000] to-[#5C0606] text-brand-gold border-brand-gold/70 shadow-[0_0_15px_rgba(255,215,0,0.4)]';
+          case 'ABSOLUTE GTA':
+            return 'bg-gradient-to-r from-emerald-950 to-green-900 text-brand-gta border-brand-gta/70 shadow-[0_0_15px_rgba(0,255,102,0.4)]';
+          case 'PEAK':
+            return 'bg-gradient-to-r from-yellow-950 to-amber-900 text-brand-gold border-brand-gold/70 shadow-[0_0_15px_rgba(255,215,0,0.3)]';
+          case 'ABSOLUTE CINEMA':
+            return 'bg-gradient-to-r from-blue-950 to-cyan-950 text-blue-400 border-blue-500/70 shadow-[0_0_15px_rgba(59,130,246,0.3)]';
+          case 'SHOULD PLAY':
+            return 'bg-gradient-to-r from-emerald-950 to-teal-950 text-emerald-400 border-emerald-500/70';
+          case 'CAN TRY':
+            return 'bg-gradient-to-r from-pink-950 to-rose-950 text-pink-400 border-pink-500/70';
+          case 'TRASH CAN':
+          default:
+            return 'bg-gradient-to-r from-red-950 to-neutral-900 text-red-500 border-red-600/70';
         }
       }
 
@@ -766,12 +1231,19 @@
         return 'TRASH CAN';
       }
 
+      // Initial Carousel Render
       renderInitialCarousels() {
-        this.populateCarousel('carousel-rockstar', HERO_GAMES.filter(g => g.studio === 'Rockstar Games'));
-        this.populateCarousel('carousel-peak', HERO_GAMES.filter(g => g.score >= 9.5 && g.studio !== 'Rockstar Games'));
-        this.populateCarousel('carousel-cinema', HERO_GAMES.filter(g => g.score >= 9.0 && g.score < 9.5 && g.studio !== 'Rockstar Games'));
-        this.populateCarousel('carousel-shooters', HERO_GAMES.filter(g => g.score < 9.0));
+        const rockstarGames = HERO_GAMES.filter(g => g.studio === 'Rockstar Games');
+        const peakGames = HERO_GAMES.filter(g => g.score >= 9.5 && g.studio !== 'Rockstar Games');
+        const cinemaGames = HERO_GAMES.filter(g => g.score >= 9.0 && g.score < 9.5 && g.studio !== 'Rockstar Games');
+        const shooterGames = HERO_GAMES.filter(g => g.score < 9.0);
 
+        this.populateCarousel('carousel-rockstar', rockstarGames);
+        this.populateCarousel('carousel-peak', peakGames);
+        this.populateCarousel('carousel-cinema', cinemaGames);
+        this.populateCarousel('carousel-shooters', shooterGames);
+
+        // Fetch live games from RAWG for additional variety
         this.fetchRAWGRow('action', 'POPULAR ACTION & SCI-FI');
         this.fetchRAWGRow('role-playing-games-rpg', 'MASTERPIECE RPGS');
       }
@@ -779,15 +1251,18 @@
       populateCarousel(containerId, games) {
         const container = document.getElementById(containerId);
         if (!container) return;
+
         games.forEach(g => {
           this.renderedGameIds.add(String(g.rawgId || g.id));
-          container.appendChild(this.createGameCard(g));
+          const card = this.createGameCard(g);
+          container.appendChild(card);
         });
       }
 
       createGameCard(g) {
         const card = document.createElement('div');
-        card.className = 'netflix-card shrink-0 w-44 sm:w-56 bg-[#121218] rounded-xl overflow-hidden border border-neutral-800/90 cursor-pointer group flex flex-col justify-between';
+        card.className = 'netflix-card shrink-0 w-44 sm:w-56 bg-[#121217] rounded-xl overflow-hidden border border-neutral-800/80 cursor-pointer group flex flex-col justify-between';
+        
         const tier = g.tier || this.computeTier(g.score, g.title);
         const tierClass = this.getTierClass(tier);
 
@@ -795,21 +1270,28 @@
           <div class="relative w-full aspect-[16/10] bg-neutral-900 overflow-hidden">
             <img src="${g.poster}" alt="${g.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             <div class="absolute top-2 left-2">
-              <span class="text-[10px] font-barlow italic font-black px-2 py-0.5 rounded border ${tierClass}">${tier}</span>
+              <span class="text-[10px] font-barlow italic font-black px-2 py-0.5 rounded border ${tierClass}">
+                ${tier}
+              </span>
             </div>
-            <div class="absolute bottom-2 right-2 bg-black/85 font-mono text-[11px] font-bold text-brand-gold px-1.5 py-0.5 rounded border border-neutral-700">★ ${g.score.toFixed(1)}</div>
+            <div class="absolute bottom-2 right-2 bg-black/80 font-mono text-[11px] font-bold text-brand-gold px-1.5 py-0.5 rounded border border-neutral-700">
+              ★ ${g.score.toFixed(1)}
+            </div>
           </div>
           <div class="p-3 flex-1 flex flex-col justify-between">
             <div>
-              <h3 class="font-bebas text-lg sm:text-xl text-white tracking-wide truncate group-hover:text-brand-yellow transition-colors">${g.title}</h3>
-              <p class="text-[11px] text-neutral-400 font-mono truncate">${g.studio || 'Official Studio'} • ${g.year || '2024'}</p>
+              <h3 class="font-bebas text-lg sm:text-xl text-white tracking-wide truncate group-hover:text-brand-red transition-colors">
+                ${g.title}
+              </h3>
+              <p class="text-[11px] text-neutral-400 font-mono truncate">${g.studio || 'Game Studio'} • ${g.year || '2024'}</p>
             </div>
             <div class="mt-3 flex items-center justify-between pt-2 border-t border-neutral-800/60">
-              <span class="text-[10px] text-neutral-400 font-mono">REVIEW &amp; 4K</span>
+              <span class="text-[10px] text-neutral-400 font-mono">REVIEW & 4K</span>
               <span class="text-xs text-brand-yellow font-bold group-hover:translate-x-1 transition-transform">DETAILS →</span>
             </div>
           </div>
         `;
+
         card.onclick = () => this.handleCardClick(g);
         return card;
       }
@@ -819,7 +1301,8 @@
         if (el) el.scrollBy({ left: dir * 450, behavior: 'smooth' });
       }
 
-      async fetchRAWGRow(genreSlug, title) {
+      // Fetch dynamic RAWG row
+      async function fetchRAWGRow(genreSlug, title) {
         try {
           const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&genres=${genreSlug}&page_size=12&ordering=-rating`);
           const data = await res.json();
@@ -828,11 +1311,12 @@
           const rowSection = document.createElement('section');
           rowSection.className = 'space-y-3';
           const carouselId = `dynamic-${genreSlug}`;
+
           rowSection.innerHTML = `
             <div class="flex items-center justify-between border-l-4 border-brand-yellow pl-3">
               <div>
                 <h2 class="font-bebas text-2xl sm:text-3xl tracking-wide text-white">${title}</h2>
-                <p class="text-xs text-neutral-400">Live Verified Ratings from RAWG Database</p>
+                <p class="text-xs text-neutral-400 font-sans">Live Verified High Ratings from RAWG Database</p>
               </div>
               <div class="flex gap-2">
                 <button onclick="app.scrollCarousel('${carouselId}', -1)" class="p-1.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white">❮</button>
@@ -841,108 +1325,119 @@
             </div>
             <div id="${carouselId}" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2"></div>
           `;
+
           document.getElementById('dynamic-categories-container').appendChild(rowSection);
 
           const carouselEl = document.getElementById(carouselId);
           data.results.forEach(item => {
             if (this.renderedGameIds.has(String(item.id))) return;
             this.renderedGameIds.add(String(item.id));
-            const rawScore = item.metacritic ? item.metacritic / 10 : ((item.rating * 2) || 8.0);
-            carouselEl.appendChild(this.createGameCard({
+
+            const rawScore = (item.rating * 2) || 8.0;
+            const mapped = {
               id: item.id,
               rawgId: item.id,
               title: item.name,
-              studio: 'Official Publisher',
+              studio: item.developers?.[0]?.name || 'Official Publisher',
               year: item.released ? item.released.substring(0, 4) : '2024',
               score: Math.min(10, Math.max(1, rawScore)),
               desc: 'High-rated title verified across universal community reviews.',
-              poster: item.background_image || 'https://media.rawg.io/media/games/511/5118aff50f4287968e2b71926f30d080.jpg'
-            }));
+              poster: item.background_image || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800'
+            };
+            carouselEl.appendChild(this.createGameCard(mapped));
           });
         } catch (e) {
           console.warn("RAWG load fallback:", e);
         }
       }
 
+      // Endless Scroll Sentinel for vertical pagination
       initEndlessScroll() {
         const sentinel = document.getElementById('endless-scroll-sentinel');
-        if (!sentinel) return;
         const observer = new IntersectionObserver((entries) => {
           if (entries[0].isIntersecting) {
             this.fetchRAWGRow('shooter', 'TACTICAL FPS & COMBAT SHOOTERS');
             this.fetchRAWGRow('adventure', 'EXPANSIVE STORY ADVENTURES');
             observer.unobserve(sentinel);
-            sentinel.style.display = 'none';
           }
         }, { threshold: 0.2 });
+
         observer.observe(sentinel);
       }
 
+      // Card Click Handler (Triggers Special RDR2 Intro if RDR2)
       handleCardClick(g) {
         if (g.title.toLowerCase().includes('red dead redemption 2') || g.id === 'rdr2') {
-          this.triggerRDR2Intro(() => this.openGameModal(g));
+          this.triggerRDR2Intro(() => {
+            this.openGameModal(g);
+          });
         } else {
           this.openGameModal(g);
         }
       }
 
+      // RDR2 Intro Sequence
       triggerRDR2Intro(callback) {
         const intro = document.getElementById('rdr2-special-intro');
-        intro.classList.remove('hidden', 'opacity-0');
+        intro.classList.remove('hidden');
         intro.classList.add('flex');
+        
+        // Synthesize Shotgun Sound Effect via Web Audio API
         this.playShotgunBoom();
 
-        let done = false;
-        const finish = () => {
-          if (done) return;
-          done = true;
+        setTimeout(() => {
           intro.classList.add('opacity-0');
           setTimeout(() => {
             intro.classList.remove('flex', 'opacity-0');
             intro.classList.add('hidden');
             if (callback) callback();
-          }, 400);
-        };
-        intro.onclick = finish;
-        setTimeout(finish, 1850);
+          }, 500);
+        }, 1900);
       }
 
       playShotgunBoom() {
         try {
-          const AC = window.AudioContext || window.webkitAudioContext;
-          if (!AC) return;
-          const ctx = new AC();
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          const ctx = new AudioContext();
+          
+          // Clack sound (mechanisms)
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(140, ctx.currentTime);
           osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.15);
-          gain.gain.setValueAtTime(0.6, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
+          gain.gain.setValueAtTime(0.8, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start();
-          osc.stop(ctx.currentTime + 0.22);
+          osc.stop(ctx.currentTime + 0.25);
 
+          // Deep Boom
           setTimeout(() => {
-            const bOsc = ctx.createOscillator();
-            const bGain = ctx.createGain();
-            bOsc.type = 'triangle';
-            bOsc.frequency.setValueAtTime(90, ctx.currentTime);
-            bOsc.frequency.exponentialRampToValueAtTime(15, ctx.currentTime + 0.75);
-            bGain.gain.setValueAtTime(0.9, ctx.currentTime);
-            bGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-            bOsc.connect(bGain);
-            bGain.connect(ctx.destination);
-            bOsc.start();
-            bOsc.stop(ctx.currentTime + 0.8);
-          }, 320);
-        } catch (e) {}
+            const boomOsc = ctx.createOscillator();
+            const boomGain = ctx.createGain();
+            boomOsc.type = 'triangle';
+            boomOsc.frequency.setValueAtTime(90, ctx.currentTime);
+            boomOsc.frequency.exponentialRampToValueAtTime(15, ctx.currentTime + 0.8);
+            boomGain.gain.setValueAtTime(1.0, ctx.currentTime);
+            boomGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.85);
+            boomOsc.connect(boomGain);
+            boomGain.connect(ctx.destination);
+            boomOsc.start();
+            boomOsc.stop(ctx.currentTime + 0.85);
+          }, 350);
+        } catch (e) {
+          // Audio safe
+        }
       }
 
+      // Modal Details View
       async openGameModal(g) {
         this.activeModalGame = g;
-        document.getElementById('game-modal').classList.remove('hidden');
+        const modal = document.getElementById('game-modal');
+        modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
         document.getElementById('modal-title').innerText = g.title;
@@ -956,9 +1451,10 @@
         tierBadge.innerText = tier;
         tierBadge.className = `font-barlow italic font-black text-sm px-3.5 py-1 rounded border ${this.getTierClass(tier)}`;
 
+        // Autoplay modal trailer
         const trailerId = g.trailerId || await this.fetchTrailerForGame(g.title);
-        document.getElementById('modal-iframe').src = `https://www.youtube-nocookie.com/embed/${trailerId}?autoplay=1&mute=1&controls=1&playsinline=1&enablejsapi=1`;
-        document.getElementById('modal-unmute-btn').innerText = 'UNMUTE TRAILER';
+        const iframe = document.getElementById('modal-iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${trailerId}?autoplay=1&mute=1&controls=1&playsinline=1&enablejsapi=1`;
 
         this.updateModalWannaPlayButton();
         this.renderStorefronts(g);
@@ -968,7 +1464,8 @@
       }
 
       closeGameModal() {
-        document.getElementById('game-modal').classList.add('hidden');
+        const modal = document.getElementById('game-modal');
+        modal.classList.add('hidden');
         document.body.style.overflow = '';
         document.getElementById('modal-iframe').src = '';
         this.activeModalGame = null;
@@ -979,22 +1476,25 @@
         const btn = document.getElementById('modal-unmute-btn');
         if (iframe.src.includes('mute=1')) {
           iframe.src = iframe.src.replace('mute=1', 'mute=0');
-          btn.innerText = 'MUTE TRAILER';
+          btn.innerText = '🔇 MUTE TRAILER';
         } else {
           iframe.src = iframe.src.replace('mute=0', 'mute=1');
-          btn.innerText = 'UNMUTE TRAILER';
+          btn.innerText = '🔊 UNMUTE TRAILER';
         }
       }
 
+      // Storefronts Generator with Official SVG Logos
       renderStorefronts(g) {
         const container = document.getElementById('modal-stores-container');
         container.innerHTML = '';
+
         const stores = [
           { name: 'PlayStation Store', color: 'hover:border-blue-500 hover:text-blue-400', url: `https://store.playstation.com/en-us/search/${encodeURIComponent(g.title)}` },
           { name: 'Xbox Store', color: 'hover:border-green-500 hover:text-green-400', url: `https://www.xbox.com/en-us/search?q=${encodeURIComponent(g.title)}` },
           { name: 'Steam', color: 'hover:border-neutral-300 hover:text-white', url: `https://store.steampowered.com/search/?term=${encodeURIComponent(g.title)}` },
           { name: 'Epic Games Store', color: 'hover:border-yellow-500 hover:text-yellow-400', url: `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(g.title)}` }
         ];
+
         stores.forEach(s => {
           const a = document.createElement('a');
           a.href = s.url;
@@ -1006,29 +1506,38 @@
         });
       }
 
-      renderModalScreenshots(g) {
+      // Screenshots for modal
+      async renderModalScreenshots(g) {
         const container = document.getElementById('modal-screenshots-grid');
         container.innerHTML = '';
-        const base = g.poster;
+
+        const basePoster = g.poster || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800';
+        
+        // Render 8 preview slots
         for (let i = 0; i < 8; i++) {
           const img = document.createElement('img');
-          img.src = base;
+          img.src = basePoster;
           img.className = 'w-full aspect-video object-cover rounded-lg border border-neutral-800 hover:border-brand-red transition cursor-pointer';
-          img.onclick = () => window.open(base, '_blank');
+          img.onclick = () => window.open(basePoster, '_blank');
           container.appendChild(img);
         }
       }
 
+      // Review Studio Circular Gauge & Slider logic
       handleSliderScoreChange(val) {
         const score = parseFloat(val);
         document.getElementById('gauge-score-label').innerText = score.toFixed(1);
-        const tier = this.computeTier(score, this.activeModalGame ? this.activeModalGame.title : '');
+        
+        const tier = this.computeTier(score, this.activeModalGame?.title || '');
         const tierLabel = document.getElementById('gauge-tier-label');
         tierLabel.innerText = tier;
 
+        // Animate SVG gauge circle
         const circle = document.getElementById('gauge-progress-circle');
-        circle.style.strokeDashoffset = 264 - (264 * (score / 10));
+        const offset = 264 - (264 * (score / 10));
+        circle.style.strokeDashoffset = offset;
 
+        // Shift color
         if (score >= 9.5) {
           circle.style.stroke = '#FFD700';
           tierLabel.className = 'font-barlow italic font-black text-xs tracking-wider text-brand-gold';
@@ -1055,6 +1564,7 @@
       updateReviewStudioAuthGate() {
         const form = document.getElementById('review-input-form');
         const gate = document.getElementById('review-login-gate');
+
         if (this.currentUser) {
           form.classList.remove('hidden');
           gate.classList.add('hidden');
@@ -1065,89 +1575,101 @@
       }
 
       async submitReview() {
-        if (!this.currentUser) { this.openAuthModal(); return; }
+        if (!this.currentUser) {
+          this.openAuthModal();
+          return;
+        }
+
         const score = parseFloat(document.getElementById('review-score-slider').value);
         const text = document.getElementById('review-text-input').value.trim();
-        if (!text) return;
+        if (!text) {
+          alert('Please enter your verdict text before publishing.');
+          return;
+        }
 
         const reviewData = {
           gameId: String(this.activeModalGame.rawgId || this.activeModalGame.id),
           gameTitle: this.activeModalGame.title,
           userId: this.currentUser.uid,
           userName: this.currentUser.displayName || 'Verified Player',
+          userPhoto: this.currentUser.photoURL || '',
           score: score,
           tier: this.computeTier(score, this.activeModalGame.title),
           verdict: text,
           timestamp: new Date().toLocaleDateString()
         };
 
+        // Optimistic Local Storage Sync
         const stored = JSON.parse(localStorage.getItem('fps_reviews_v2') || '[]');
         stored.unshift(reviewData);
         localStorage.setItem('fps_reviews_v2', JSON.stringify(stored));
 
+        // Firestore async non-blocking push
         if (this.db) {
           try {
             this.db.collection('game_reviews').add({
               ...reviewData,
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-          } catch (e) {}
+          } catch (e) {
+            console.warn("Firestore sync deferred:", e);
+          }
         }
 
         document.getElementById('review-text-input').value = '';
         this.loadCommunityReviews(this.activeModalGame);
       }
 
-      async loadCommunityReviews(g) {
+      loadCommunityReviews(g) {
         const list = document.getElementById('modal-reviews-list');
         list.innerHTML = '';
         const gid = String(g.rawgId || g.id);
-        let merged = JSON.parse(localStorage.getItem('fps_reviews_v2') || '[]').filter(r => String(r.gameId) === gid);
 
-        if (this.db) {
-          try {
-            const snap = await this.db.collection('game_reviews').where('gameId', '==', gid).get();
-            snap.forEach(doc => {
-              const d = doc.data();
-              if (!merged.some(m => m.userId === d.userId && m.verdict === d.verdict)) merged.push(d);
-            });
-          } catch (e) {}
-        }
+        const stored = JSON.parse(localStorage.getItem('fps_reviews_v2') || '[]');
+        const gameReviews = stored.filter(r => r.gameId === gid);
 
-        if (merged.length === 0) {
-          list.innerHTML = `<p class="text-xs text-neutral-500 font-mono">No community reviews yet. Be the first to rate this game.</p>`;
+        if (gameReviews.length === 0) {
+          list.innerHTML = `<p class="text-xs text-neutral-500 font-mono italic">No user reviews yet. Be the first critic to publish a rating!</p>`;
           document.getElementById('modal-community-score').innerText = g.score.toFixed(1);
           document.getElementById('modal-community-count').innerText = '(Official Consensus)';
           return;
         }
 
         let total = 0;
-        merged.forEach(r => {
-          total += Number(r.score) || 8;
+        gameReviews.forEach(r => {
+          total += r.score;
           const item = document.createElement('div');
           item.className = 'bg-neutral-900 border border-neutral-800 p-3 rounded-lg space-y-2';
           item.innerHTML = `
-            <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs uppercase">${(r.userName || 'P').charAt(0)}</div>
-                <span class="text-xs font-bold text-white">${r.userName || 'Player'}</span>
-                <span class="text-[10px] text-neutral-500 font-mono">${r.timestamp || ''}</span>
+                <div class="w-6 h-6 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs uppercase">
+                  ${r.userName.charAt(0)}
+                </div>
+                <span class="text-xs font-bold text-white">${r.userName}</span>
+                <span class="text-[10px] text-neutral-500 font-mono">${r.timestamp}</span>
               </div>
-              <span class="font-barlow italic font-black text-xs px-2 py-0.5 rounded border ${this.getTierClass(r.tier || this.computeTier(r.score, g.title))}">
-                ★ ${Number(r.score).toFixed(1)} — ${r.tier || ''}
+              <span class="font-barlow italic font-black text-xs px-2 py-0.5 rounded border ${this.getTierClass(r.tier)}">
+                ★ ${r.score.toFixed(1)} — ${r.tier}
               </span>
             </div>
-            <p class="text-xs text-neutral-300">${r.verdict || ''}</p>
+            <p class="text-xs text-neutral-300 font-sans">${r.verdict}</p>
           `;
           list.appendChild(item);
         });
 
-        document.getElementById('modal-community-score').innerText = (total / merged.length).toFixed(1);
-        document.getElementById('modal-community-count').innerText = `(${merged.length} reviews)`;
+        const avg = total / gameReviews.length;
+        document.getElementById('modal-community-score').innerText = avg.toFixed(1);
+        document.getElementById('modal-community-count').innerText = `(${gameReviews.length} community ratings)`;
       }
 
+      // WANNA PLAY Storage & Drawer Controller
       loadWannaPlay() {
-        try { return JSON.parse(localStorage.getItem('fps_wanna_play') || '[]'); } catch { return []; }
+        try {
+          return JSON.parse(localStorage.getItem('fps_wanna_play') || '[]');
+        } catch {
+          return [];
+        }
       }
 
       saveWannaPlay() {
@@ -1164,7 +1686,13 @@
         if (this.isInWannaPlay(gid)) {
           this.wannaPlayList = this.wannaPlayList.filter(item => String(item.id) !== gid);
         } else {
-          this.wannaPlayList.push({ id: gid, title: game.title, score: game.score, poster: game.poster });
+          this.wannaPlayList.push({
+            id: gid,
+            title: game.title,
+            score: game.score,
+            poster: game.poster,
+            studio: game.studio || 'Official Studio'
+          });
         }
         this.saveWannaPlay();
         this.updateHeroWannaPlayButton();
@@ -1175,13 +1703,20 @@
         const count = this.wannaPlayList.length;
         document.getElementById('nav-wanna-count').innerText = count;
         document.getElementById('drawer-wanna-count').innerText = count;
+
         const list = document.getElementById('drawer-items-list');
         list.innerHTML = '';
 
         if (count === 0) {
-          list.innerHTML = `<div class="text-center py-12 space-y-2"><span class="text-3xl text-neutral-600 font-bebas">EMPTY QUEUE</span><p class="text-xs text-neutral-500">Tap "+ WANNA PLAY" on any game to add it here.</p></div>`;
+          list.innerHTML = `
+            <div class="text-center py-12 space-y-2">
+              <span class="text-4xl text-neutral-600 font-bebas">EMPTY QUEUE</span>
+              <p class="text-xs text-neutral-500">Tap "+ WANNA PLAY" on any game card or trailer to add it to your queue.</p>
+            </div>
+          `;
           return;
         }
+
         this.wannaPlayList.forEach(item => {
           const row = document.createElement('div');
           row.className = 'flex items-center justify-between gap-3 bg-neutral-900 border border-neutral-800 p-2.5 rounded-lg';
@@ -1190,7 +1725,7 @@
               <img src="${item.poster}" class="w-14 h-10 object-cover rounded" />
               <div class="overflow-hidden">
                 <h4 class="font-bebas text-base text-white tracking-wide truncate">${item.title}</h4>
-                <span class="text-[10px] font-mono text-brand-gold">★ ${Number(item.score).toFixed(1)} / 10</span>
+                <span class="text-[10px] font-mono text-brand-gold">★ ${item.score.toFixed(1)} / 10</span>
               </div>
             </div>
             <button onclick="app.removeWannaPlay('${item.id}')" class="text-neutral-500 hover:text-brand-red text-xs p-1">✕</button>
@@ -1209,12 +1744,11 @@
       clearWannaPlay() {
         this.wannaPlayList = [];
         this.saveWannaPlay();
-        this.updateHeroWannaPlayButton();
-        this.updateModalWannaPlayButton();
       }
 
       toggleWannaPlayDrawer() {
-        document.getElementById('wanna-play-drawer').classList.toggle('translate-x-full');
+        const drawer = document.getElementById('wanna-play-drawer');
+        drawer.classList.toggle('translate-x-full');
       }
 
       updateHeroWannaPlayButton() {
@@ -1222,19 +1756,22 @@
         const btn = document.getElementById('hero-wanna-btn');
         if (this.isInWannaPlay(g.rawgId || g.id)) {
           btn.innerText = '✓ IN WANNA PLAY';
-          btn.className = 'flex items-center gap-2 bg-brand-yellow text-black text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-md transition';
+          btn.className = 'flex items-center gap-2 bg-brand-yellow text-black text-xs sm:text-sm font-bold px-3 sm:px-4 py-2.5 rounded-md transition';
         } else {
           btn.innerText = '+ WANNA PLAY';
-          btn.className = 'flex items-center gap-2 bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-md transition';
+          btn.className = 'flex items-center gap-2 bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs sm:text-sm font-bold px-3 sm:px-4 py-2.5 rounded-md transition';
         }
       }
 
-      toggleHeroWannaPlay() { this.toggleWannaPlay(HERO_GAMES[this.heroIndex]); }
+      toggleHeroWannaPlay() {
+        this.toggleWannaPlay(HERO_GAMES[this.heroIndex]);
+      }
 
       updateModalWannaPlayButton() {
         if (!this.activeModalGame) return;
         const btn = document.getElementById('modal-wanna-btn');
-        if (this.isInWannaPlay(this.activeModalGame.rawgId || this.activeModalGame.id)) {
+        const gid = String(this.activeModalGame.rawgId || this.activeModalGame.id);
+        if (this.isInWannaPlay(gid)) {
           btn.innerText = '✓ IN WANNA PLAY';
           btn.className = 'bg-brand-yellow text-black font-bold text-xs sm:text-sm px-4 py-2.5 rounded-md transition';
         } else {
@@ -1243,14 +1780,20 @@
         }
       }
 
-      toggleModalWannaPlay() { if (this.activeModalGame) this.toggleWannaPlay(this.activeModalGame); }
+      toggleModalWannaPlay() {
+        if (this.activeModalGame) this.toggleWannaPlay(this.activeModalGame);
+      }
 
+      // FPS MEDIA HOUSE CONTROLLER
       openMediaHouse(game = null) {
         const target = game || HERO_GAMES[0];
         this.activeMediaHouseGame = target;
-        document.getElementById('media-house-view').classList.remove('hidden');
+
+        const view = document.getElementById('media-house-view');
+        view.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
+        // Populate dropdown
         const select = document.getElementById('media-house-game-select');
         select.innerHTML = '';
         HERO_GAMES.forEach(g => {
@@ -1260,11 +1803,13 @@
           if (g.id === target.id) opt.selected = true;
           select.appendChild(opt);
         });
+
         this.loadMediaHouseContent(target);
       }
 
       closeMediaHouse() {
-        document.getElementById('media-house-view').classList.add('hidden');
+        const view = document.getElementById('media-house-view');
+        view.classList.add('hidden');
         document.body.style.overflow = '';
         document.getElementById('media-house-iframe').src = '';
       }
@@ -1277,39 +1822,44 @@
         }
       }
 
-      openHeroInMediaHouse() { this.openMediaHouse(HERO_GAMES[this.heroIndex]); }
+      openHeroInMediaHouse() {
+        this.openMediaHouse(HERO_GAMES[this.heroIndex]);
+      }
+
       openModalInMediaHouse() {
         if (this.activeModalGame) {
-          const g = this.activeModalGame;
           this.closeGameModal();
-          this.openMediaHouse(g);
+          this.openMediaHouse(this.activeModalGame);
         }
       }
-      openHeroReviewModal() { this.handleCardClick(HERO_GAMES[this.heroIndex]); }
 
-      loadMediaHouseContent(g) {
-        const tier = g.tier || this.computeTier(g.score, g.title);
-        const badge = document.getElementById('media-house-badge');
-        badge.innerText = tier;
-        badge.className = `font-barlow italic font-black text-xs px-2.5 py-0.5 rounded border ${this.getTierClass(tier)}`;
-        document.getElementById('media-house-creator').innerText = `${(g.studio || 'OFFICIAL STUDIO').toUpperCase()} — 4K PLAYTHROUGH`;
+      openHeroReviewModal() {
+        this.handleCardClick(HERO_GAMES[this.heroIndex]);
+      }
 
+      async loadMediaHouseContent(g) {
+        document.getElementById('media-house-badge').innerText = g.tier || this.computeTier(g.score, g.title);
+        document.getElementById('media-house-badge').className = `font-barlow italic font-black text-xs px-2.5 py-0.5 rounded border ${this.getTierClass(g.tier || this.computeTier(g.score, g.title))}`;
+        document.getElementById('media-house-creator').innerText = `${(g.studio || 'ROCKSTAR GAMES').toUpperCase()} OFFICIAL 4K PLAYTHROUGH`;
+
+        // Generate 12 Chronological Episodes
         this.mediaHouseEpisodes = [
           { ep: 1, title: 'Episode 01: The Prologue & First Outpost', desc: 'Opening cinematic narrative, core traversal mechanics and first encounter.' },
-          { ep: 2, title: 'Episode 02: Infiltration of the Foothills', desc: 'Covert tactical infiltration and stealth takedowns across the ridge.' },
+          { ep: 2, title: 'Episode 02: Infiltration of the Foothills', desc: 'Covert tactical infiltration and stealth takedowns across the mountainous ridge.' },
           { ep: 3, title: 'Episode 03: The Armored Convoy Heist', desc: 'High-speed cinematic pursuit and precision explosive charges.' },
           { ep: 4, title: 'Episode 04: Old Debts & Betrayals', desc: 'Major story milestone confrontation with unexpected narrative branch.' },
-          { ep: 5, title: 'Episode 05: The Night Raid on the Harbor', desc: 'Navigating illuminated searchlights under torrential rain.' },
+          { ep: 5, title: 'Episode 05: The Night Raid on the Harbor', desc: 'Navigating illuminated searchlights under torrential rain conditions.' },
           { ep: 6, title: 'Episode 06: Blood in the Snow Basin', desc: 'Heavy weaponry shootout against entrenched perimeter defenders.' },
-          { ep: 7, title: 'Episode 07: Escape Across the Broken Bridge', desc: 'Timed escape sequence under relentless bombardment.' },
+          { ep: 7, title: 'Episode 07: Escape Across the Broken Bridge', desc: 'Timed platforming escape under relentless mortar bombardment.' },
           { ep: 8, title: 'Episode 08: Interrogation & Counter-Intel', desc: 'Uncovering secret faction codes to unlock the subterranean bunker.' },
-          { ep: 9, title: 'Episode 09: The Fortress Siege', desc: 'Multi-stage breach using heavy ordnance and tactical support.' },
+          { ep: 9, title: 'Episode 09: The Fortress Siege', desc: 'Multi-stage breach using heavy ordnance and air support.' },
           { ep: 10, title: 'Episode 10: Sacrifices of the Old Guard', desc: 'Emotional climax leading into the penultimate showdown.' },
           { ep: 11, title: 'Episode 11: The Final Territory Standoff', desc: 'High stakes duel with zero room for tactical mistakes.' },
           { ep: 12, title: 'Episode 12: Epilogue & Complete Legacy Ending', desc: 'Official conclusion, final narrative choices and credits.' }
         ];
 
         this.playMediaHouseEpisode(0);
+        this.renderMediaHouseEpisodesList();
         this.renderMediaHouseStreams(g);
         this.renderMediaHouseScreenshots(g);
       }
@@ -1318,23 +1868,33 @@
         this.currentMediaHouseEpisodeIdx = idx;
         const ep = this.mediaHouseEpisodes[idx];
         const g = this.activeMediaHouseGame;
+
         document.getElementById('media-house-title').innerText = ep.title;
         document.getElementById('media-house-desc').innerText = ep.desc;
-        document.getElementById('media-house-iframe').src = `https://www.youtube-nocookie.com/embed/${g.trailerId || 'eaW0tYpxyp0'}?autoplay=1&controls=1&playsinline=1&enablejsapi=1`;
+
+        const trailerId = g.trailerId || 'eaW0tYpxyp0';
+        const iframe = document.getElementById('media-house-iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${trailerId}?autoplay=1&controls=1&playsinline=1&enablejsapi=1`;
+
         this.renderMediaHouseEpisodesList();
       }
 
       mediaHouseNextEpisode() {
-        if (this.currentMediaHouseEpisodeIdx < this.mediaHouseEpisodes.length - 1) this.playMediaHouseEpisode(this.currentMediaHouseEpisodeIdx + 1);
+        if (this.currentMediaHouseEpisodeIdx < this.mediaHouseEpisodes.length - 1) {
+          this.playMediaHouseEpisode(this.currentMediaHouseEpisodeIdx + 1);
+        }
       }
 
       mediaHousePrevEpisode() {
-        if (this.currentMediaHouseEpisodeIdx > 0) this.playMediaHouseEpisode(this.currentMediaHouseEpisodeIdx - 1);
+        if (this.currentMediaHouseEpisodeIdx > 0) {
+          this.playMediaHouseEpisode(this.currentMediaHouseEpisodeIdx - 1);
+        }
       }
 
       renderMediaHouseEpisodesList() {
         const list = document.getElementById('media-house-episodes-list');
         list.innerHTML = '';
+
         this.mediaHouseEpisodes.forEach((ep, idx) => {
           const active = idx === this.currentMediaHouseEpisodeIdx;
           const item = document.createElement('div');
@@ -1342,7 +1902,7 @@
           item.innerHTML = `
             <div class="flex items-center justify-between">
               <span class="text-xs font-mono font-bold ${active ? 'text-brand-red' : 'text-neutral-400'}">EPISODE ${String(ep.ep).padStart(2, '0')}</span>
-              ${active ? '<span class="text-[10px] font-mono text-brand-red uppercase font-bold">NOW PLAYING</span>' : ''}
+              ${active ? '<span class="text-[10px] font-mono text-brand-red uppercase font-bold">PLAYING NOW</span>' : ''}
             </div>
             <h4 class="font-bebas text-base text-white tracking-wide truncate mt-0.5">${ep.title}</h4>
           `;
@@ -1354,30 +1914,34 @@
       renderMediaHouseStreams(g) {
         const grid = document.getElementById('media-house-streams-grid');
         grid.innerHTML = '';
+
         const creators = [
-          { name: 'theRadBrad', viewers: '85K LIVE', title: 'Full 4K Story Walkthrough — Part 1' },
-          { name: 'Jacksepticeye', viewers: '42K LIVE', title: '100% Blind Playthrough Marathon' },
-          { name: 'Shroud', viewers: '62K LIVE', title: 'Hardcore Combat Mechanics Test' },
-          { name: 'Hollow', viewers: '29K LIVE', title: 'No-Damage Boss Rush Challenge' }
+          { name: 'Jacksepticeye', viewers: '42K Live', title: 'Full 100% Blind Playthrough — Part 1' },
+          { name: 'RadBrad', viewers: '85K Live', title: 'Complete Walkthrough Mission Guide' },
+          { name: 'DanTDM', viewers: '28K Live', title: 'Hardcore Difficulty Master Challenge' },
+          { name: 'Shroud', viewers: '62K Live', title: 'Precision Gunplay Mechanics & PvP Test' }
         ];
+
         creators.forEach(c => {
           const card = document.createElement('div');
           card.className = 'bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-brand-red transition cursor-pointer';
           card.innerHTML = `
             <div class="relative aspect-video bg-neutral-950">
-              <img src="${g.poster}" class="w-full h-full object-cover brightness-75" />
+              <img src="${g.poster}" class="w-full h-full object-cover filter brightness-75" />
               <div class="absolute top-2 left-2 flex items-center gap-1.5 bg-brand-red text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded">
-                <span class="w-1.5 h-1.5 rounded-full bg-white live-dot"></span>${c.viewers}
+                <span class="w-1.5 h-1.5 rounded-full bg-white live-dot"></span>
+                ${c.viewers}
               </div>
             </div>
             <div class="p-3">
               <h4 class="font-bebas text-lg text-white truncate">${c.title}</h4>
-              <p class="text-xs text-brand-gold font-mono">${c.name}</p>
+              <p class="text-xs text-brand-gold font-mono">${c.name} Official Stream</p>
             </div>
           `;
           card.onclick = () => {
-            document.getElementById('media-house-iframe').src = `https://www.youtube-nocookie.com/embed/${g.trailerId || 'eaW0tYpxyp0'}?autoplay=1&controls=1`;
-            document.getElementById('media-house-view').scrollTo({ top: 0, behavior: 'smooth' });
+            const iframe = document.getElementById('media-house-iframe');
+            iframe.src = `https://www.youtube-nocookie.com/embed/${g.trailerId || 'eaW0tYpxyp0'}?autoplay=1`;
+            window.scrollTo({ top: 120, behavior: 'smooth' });
           };
           grid.appendChild(card);
         });
@@ -1386,30 +1950,40 @@
       renderMediaHouseScreenshots(g) {
         const grid = document.getElementById('media-house-screenshots-grid');
         grid.innerHTML = '';
-        const base = g.poster;
+
+        const base = g.poster || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800';
+
+        // Generate 50+ downloadable HD cards
         for (let i = 1; i <= 50; i++) {
           const card = document.createElement('div');
           card.className = 'relative group aspect-video bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800';
           card.innerHTML = `
             <img src="${base}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-            <a href="${base}" target="_blank" download="FPS-4K-${i}.jpg" class="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 text-white text-[11px] font-mono">
-              <span class="text-brand-yellow font-bold">DOWNLOAD 4K</span>
+            <a href="${base}" target="_blank" download="FPS-Wallpaper-${i}.jpg" class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 text-white text-xs font-mono">
+              <svg class="w-5 h-5 text-brand-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>DOWNLOAD 4K</span>
             </a>
           `;
           grid.appendChild(card);
         }
       }
 
+      // Live YouTube Search Fallback
       async fetchTrailerForGame(title) {
         try {
           const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(title + ' official game 4k trailer')}&key=${YT_API_KEY}&type=video&maxResults=1`);
           const data = await res.json();
-          if (data.items && data.items.length > 0) return data.items[0].id.videoId;
-        } catch (e) {}
-        return 'eaW0tYpxyp0';
+          if (data.items && data.items.length > 0) {
+            return data.items[0].id.videoId;
+          }
+        } catch (e) {
+          console.warn("YouTube API fallback:", e);
+        }
+        return 'eaW0tYpxyp0'; // RDR2 reliable fallback
       }
 
-      handleSearchInput(e) {
+      // Zero-Glitch Search Handler
+      async handleSearchInput(e) {
         const query = e.target.value.trim();
         const clearBtn = document.getElementById('search-clear-btn');
         const searchView = document.getElementById('search-view');
@@ -1425,44 +1999,46 @@
         clearBtn.classList.remove('hidden');
         searchView.classList.remove('hidden');
         homeView.classList.add('hidden');
+
         document.getElementById('search-query-label').innerText = `"${query.toUpperCase()}"`;
-        document.getElementById('search-count-label').innerText = 'Searching database...';
+        document.getElementById('search-count-label').innerText = 'Searching titles in database...';
 
-        clearTimeout(this.searchDebounce);
-        this.searchDebounce = setTimeout(async () => {
-          if (this.searchAbort) this.searchAbort.abort();
-          this.searchAbort = new AbortController();
-          try {
-            const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=15`, { signal: this.searchAbort.signal });
-            const data = await res.json();
-            const grid = document.getElementById('search-results-grid');
-            grid.innerHTML = '';
+        try {
+          const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=15`);
+          const data = await res.json();
+          
+          const grid = document.getElementById('search-results-grid');
+          grid.innerHTML = '';
 
-            if (!data.results || data.results.length === 0) {
-              grid.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 font-mono">No titles found.</div>`;
-              document.getElementById('search-count-label').innerText = '0 results';
-              return;
-            }
-            document.getElementById('search-count-label').innerText = `${data.results.length} titles found`;
-            data.results.forEach(item => {
-              const rawScore = item.metacritic ? item.metacritic / 10 : ((item.rating * 2) || 7.5);
-              grid.appendChild(this.createGameCard({
-                id: item.id,
-                rawgId: item.id,
-                title: item.name,
-                studio: 'Official Studio',
-                year: item.released ? item.released.substring(0, 4) : '2024',
-                score: Math.min(10, Math.max(1, rawScore)),
-                desc: 'Verified title from RAWG database.',
-                poster: item.background_image || 'https://media.rawg.io/media/games/511/5118aff50f4287968e2b71926f30d080.jpg'
-              }));
-            });
-          } catch (err) {}
-        }, 320);
+          if (!data.results || data.results.length === 0) {
+            grid.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 font-mono">No gaming titles found matching your search.</div>`;
+            document.getElementById('search-count-label').innerText = '0 results found';
+            return;
+          }
+
+          document.getElementById('search-count-label').innerText = `${data.results.length} titles found`;
+          data.results.forEach(item => {
+            const rawScore = (item.rating * 2) || 7.5;
+            const mapped = {
+              id: item.id,
+              rawgId: item.id,
+              title: item.name,
+              studio: item.developers?.[0]?.name || 'Official Studio',
+              year: item.released ? item.released.substring(0, 4) : '2024',
+              score: Math.min(10, Math.max(1, rawScore)),
+              desc: 'Official database title.',
+              poster: item.background_image || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800'
+            };
+            grid.appendChild(this.createGameCard(mapped));
+          });
+        } catch (err) {
+          console.warn("Search fetch error:", err);
+        }
       }
 
       clearSearch() {
-        document.getElementById('nav-search-input').value = '';
+        const input = document.getElementById('nav-search-input');
+        input.value = '';
         document.getElementById('search-clear-btn').classList.add('hidden');
         document.getElementById('search-view').classList.add('hidden');
         document.getElementById('home-view').classList.remove('hidden');
@@ -1479,25 +2055,32 @@
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
+      // Google Auth Modals
       openAuthModal() {
-        const m = document.getElementById('auth-modal');
-        m.classList.remove('hidden');
-        m.classList.add('flex');
+        document.getElementById('auth-modal').classList.remove('hidden');
       }
 
       closeAuthModal() {
-        const m = document.getElementById('auth-modal');
-        m.classList.add('hidden');
-        m.classList.remove('flex');
+        document.getElementById('auth-modal').classList.add('hidden');
       }
 
       loginWithGoogle() {
-        if (!this.auth) return;
+        if (!this.auth) {
+          alert("Firebase is initializing. Please try again in a few seconds.");
+          return;
+        }
         const provider = new firebase.auth.GoogleAuthProvider();
-        this.auth.signInWithPopup(provider).then(() => this.closeAuthModal()).catch(() => this.auth.signInWithRedirect(provider));
+        this.auth.signInWithPopup(provider).then(() => {
+          this.closeAuthModal();
+        }).catch(err => {
+          console.warn("Popup blocked, trying redirect:", err);
+          this.auth.signInWithRedirect(provider);
+        });
       }
 
-      logout() { if (this.auth) this.auth.signOut(); }
+      logout() {
+        if (this.auth) this.auth.signOut();
+      }
 
       updateAuthUI(user) {
         const container = document.getElementById('auth-container');
@@ -1510,12 +2093,15 @@
           `;
         } else {
           container.innerHTML = `
-            <button onclick="app.openAuthModal()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-xs sm:text-sm px-3.5 sm:px-5 py-1.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.5)]">SIGN IN</button>
+            <button onclick="app.openAuthModal()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-xs sm:text-sm px-3.5 sm:px-5 py-1.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.5)]">
+              SIGN IN
+            </button>
           `;
         }
       }
     }
 
+    // Launch Application
     window.addEventListener('DOMContentLoaded', () => {
       window.app = new FPSApplication();
     });
