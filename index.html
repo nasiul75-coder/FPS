@@ -8,16 +8,16 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Bebas Neue, Rajdhani, Inter -->
+  <!-- Google Fonts: Inter, Bebas Neue, Oswald, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
       --fps-red: #e50914;
       --fps-red-bright: #ff1e29;
-      --fps-bg: #07070a;
+      --fps-bg: #06070a;
       --fps-surface: #0e1017;
       --fps-card: #12151f;
       --gauge-color: #3b82f6;
@@ -47,7 +47,11 @@
     }
 
     .font-display {
-      font-family: 'Rajdhani', sans-serif;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .font-mono-num {
+      font-family: 'JetBrains Mono', monospace;
     }
 
     /* Hide Scrollbars for Carousels */
@@ -65,25 +69,25 @@
       height: 7px;
     }
     ::-webkit-scrollbar-track {
-      background: #07070a;
+      background: #06070a;
     }
     ::-webkit-scrollbar-thumb {
-      background: #232736;
+      background: #222636;
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: var(--fps-red);
     }
 
-    /* Cinematic Rockstar-Style Splash Animation */
+    /* Rockstar-Style Cinematic Studio Splash */
     @keyframes splashFadeOut {
       0% { opacity: 1; }
       78% { opacity: 1; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
     @keyframes emblemImpact {
-      0% { transform: scale(1.42); opacity: 0; filter: blur(14px); }
-      24% { transform: scale(1); opacity: 1; filter: blur(0); }
+      0% { transform: scale(1.45); opacity: 0; filter: blur(14px); }
+      26% { transform: scale(1); opacity: 1; filter: blur(0); }
       78% { transform: scale(1.03); opacity: 1; }
       100% { transform: scale(1.1); opacity: 0; }
     }
@@ -92,16 +96,16 @@
       100% { transform: translateX(180%) skewX(-18deg); }
     }
     .animate-splash-exit {
-      animation: splashFadeOut 2.0s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: splashFadeOut 1.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .animate-emblem-impact {
-      animation: emblemImpact 1.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: emblemImpact 1.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .animate-sheen {
-      animation: sheenSweep 1.25s ease-in-out infinite;
+      animation: sheenSweep 1.15s ease-in-out infinite;
     }
 
-    /* Hero Full-Bleed YouTube Background Cover */
+    /* Full-Bleed Background YouTube Hero Trailer */
     .hero-video-shell {
       position: absolute;
       inset: 0;
@@ -127,23 +131,23 @@
       opacity: 1;
     }
 
-    /* High-Contrast Hero Gradients (z-20, never covering z-30 text) */
+    /* Multi-Stop High-Contrast Hero Gradients (z-20, below z-30 typography) */
     .hero-grad-bottom {
       background: linear-gradient(
         to top,
-        #07070a 0%,
-        rgba(7, 7, 10, 0.88) 18%,
-        rgba(7, 7, 10, 0.42) 48%,
-        rgba(7, 7, 10, 0.08) 76%,
-        rgba(7, 7, 10, 0.55) 100%
+        #06070a 0%,
+        rgba(6, 7, 10, 0.92) 16%,
+        rgba(6, 7, 10, 0.45) 48%,
+        rgba(6, 7, 10, 0.1) 76%,
+        rgba(6, 7, 10, 0.58) 100%
       );
     }
     .hero-grad-left {
       background: linear-gradient(
         to right,
-        rgba(7, 7, 10, 0.92) 0%,
-        rgba(7, 7, 10, 0.62) 38%,
-        rgba(7, 7, 10, 0.14) 70%,
+        rgba(6, 7, 10, 0.94) 0%,
+        rgba(6, 7, 10, 0.65) 38%,
+        rgba(6, 7, 10, 0.16) 70%,
         transparent 100%
       );
     }
@@ -153,46 +157,46 @@
       background: linear-gradient(135deg, #991b1b 0%, #450a0a 100%);
       border: 1px solid #f59e0b;
       color: #fef08a;
-      box-shadow: 0 0 20px rgba(220, 38, 38, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      box-shadow: 0 0 22px rgba(220, 38, 38, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
     .badge-gta {
       background: linear-gradient(135deg, #065f46 0%, #022c22 100%);
       border: 1px solid #10b981;
       color: #a7f3d0;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 22px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
     .badge-peak {
       background: linear-gradient(135deg, #92400e 0%, #451a03 100%);
       border: 1px solid #f59e0b;
       color: #fef3c7;
-      box-shadow: 0 0 18px rgba(245, 158, 11, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28);
     }
     .badge-cinema {
       background: linear-gradient(135deg, #1d4ed8 0%, #172554 100%);
       border: 1px solid #3b82f6;
       color: #dbeafe;
-      box-shadow: 0 0 18px rgba(59, 130, 246, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
     .badge-shouldplay {
       background: linear-gradient(135deg, #047857 0%, #022c22 100%);
       border: 1px solid #10b981;
       color: #d1fae5;
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.45);
     }
     .badge-cantry {
       background: linear-gradient(135deg, #be185d 0%, #500724 100%);
       border: 1px solid #ec4899;
       color: #fce7f3;
-      box-shadow: 0 0 16px rgba(236, 72, 153, 0.45);
+      box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
     }
     .badge-trash {
       background: linear-gradient(135deg, #b91c1c 0%, #450a0a 100%);
       border: 1px solid #ef4444;
       color: #fee2e2;
-      box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.5);
     }
 
-    /* Netflix Card Hover */
+    /* Netflix Card Hover & Depth */
     .game-card {
       transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s ease, border-color 0.28s ease;
       cursor: pointer;
@@ -200,11 +204,25 @@
     .game-card:hover {
       transform: translateY(-6px) scale(1.045);
       z-index: 25;
-      box-shadow: 0 22px 38px -8px rgba(0, 0, 0, 0.94), 0 0 26px rgba(229, 9, 20, 0.45);
+      box-shadow: 0 24px 40px -8px rgba(0, 0, 0, 0.95), 0 0 28px rgba(229, 9, 20, 0.42);
       border-color: rgba(229, 9, 20, 0.85);
     }
 
-    /* Drag Scroll */
+    /* Official Storefront Redirect Cards with Brand Glow */
+    .store-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+    }
+    .store-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.075);
+      border-color: var(--store-accent, #ffffff);
+      box-shadow: 0 10px 26px -6px rgba(0, 0, 0, 0.8), 0 0 20px var(--store-glow, rgba(255, 255, 255, 0.22));
+    }
+
+    /* Mouse Drag Scroll */
     .drag-scroll {
       cursor: grab;
     }
@@ -213,14 +231,15 @@
       scroll-behavior: auto !important;
     }
 
-    /* Animated Progress Bar Fill */
+    /* Animated Score Bars & Circular SVG Gauge */
     .score-bar-fill {
       transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
-
-    /* Circular SVG Gauge Smooth Transition */
     .gauge-ring-progress {
       transition: stroke-dashoffset 0.2s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.25s ease;
+    }
+    .gauge-ambient-glow {
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
     /* Precision Tactile Range Slider */
@@ -242,7 +261,7 @@
       border-radius: 9999px;
       background: #ffffff;
       border: 4px solid var(--gauge-color);
-      box-shadow: 0 0 20px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 22px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
       cursor: grab;
       transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -259,24 +278,18 @@
       border-radius: 9999px;
       background: #ffffff;
       border: 4px solid var(--gauge-color);
-      box-shadow: 0 0 20px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 22px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
       cursor: grab;
-      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    /* Ambient Glow Pulse Behind Interactive Circle */
-    .gauge-ambient-glow {
-      transition: background 0.3s ease, box-shadow 0.3s ease;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#07070a] text-white selection:bg-[#e50914] selection:text-white">
+<body class="min-h-screen flex flex-col bg-[#06070a] text-white selection:bg-[#e50914] selection:text-white">
 
   <!-- ==================== 1. ROCKSTAR-STYLE CINEMATIC SPLASH SCREEN ==================== -->
   <div id="studioSplash" class="fixed inset-0 z-[120] bg-[#040407] flex flex-col items-center justify-center animate-splash-exit overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.25)_0%,rgba(4,4,7,1)_68%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.26)_0%,rgba(4,4,7,1)_68%)]"></div>
     <div class="relative z-10 flex flex-col items-center animate-emblem-impact px-6 text-center">
-      <div class="relative w-32 h-32 rounded-2xl bg-black border-2 border-[#e50914] flex items-center justify-center shadow-[0_0_80px_rgba(229,9,20,0.9)] overflow-hidden mb-6">
+      <div class="relative w-32 h-32 rounded-2xl bg-black border-2 border-[#e50914] flex items-center justify-center shadow-[0_0_85px_rgba(229,9,20,0.9)] overflow-hidden mb-6">
         <div class="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/25 to-transparent animate-sheen"></div>
         <span class="font-brand text-7xl text-[#e50914] font-black leading-none pt-1.5">FPS</span>
       </div>
@@ -289,9 +302,9 @@
     </div>
   </div>
 
-  <!-- ==================== 2. GOOGLE-ONLY LOGIN GATE MODAL ==================== -->
+  <!-- ==================== 2. NETFLIX-STYLE GOOGLE LOGIN SCREEN ==================== -->
   <div id="loginModal" class="fixed inset-0 z-[105] bg-black/88 backdrop-blur-2xl hidden flex items-center justify-center p-4">
-    <div class="relative w-full max-w-md bg-[#0d0f16] border border-white/15 rounded-2xl p-8 shadow-[0_30px_90px_rgba(0,0,0,0.96)] overflow-hidden text-center">
+    <div class="relative w-full max-w-md bg-[#0e1017] border border-white/15 rounded-2xl p-8 shadow-[0_32px_95px_rgba(0,0,0,0.96)] overflow-hidden text-center">
       <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e50914] via-amber-400 to-[#e50914]"></div>
 
       <button onclick="FPS.dismissLoginAsGuest()" aria-label="Close login" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
@@ -304,7 +317,7 @@
 
       <h2 class="text-2xl font-black tracking-wide text-white uppercase mb-2">Enter The Critique Network</h2>
       <p class="text-sm text-gray-300 mb-7 leading-relaxed">
-        Sign in with Google to publish live reviews to the FPS database, sync your watchlist, and stream official 4K trailers.
+        Sign in with Google to publish live reviews to the FPS database, sync your watchlist, and unlock verified critic tools.
       </p>
 
       <button onclick="FPS.loginWithGoogle()" class="w-full py-3.5 px-5 bg-white hover:bg-gray-100 text-gray-950 font-extrabold rounded-xl shadow-xl flex items-center justify-center gap-3 transition active:scale-[0.98]">
@@ -321,20 +334,20 @@
       <p id="loginErrorMsg" class="hidden text-xs text-red-400 mt-4 font-medium bg-red-950/50 border border-red-500/30 rounded-lg p-2.5"></p>
 
       <button onclick="FPS.dismissLoginAsGuest()" class="mt-4 w-full py-2.5 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-white transition">
-        Preview as Guest &rarr;
+        Continue as Guest &rarr;
       </button>
     </div>
   </div>
 
-  <!-- ==================== 3. SINGLE-ROW NON-WRAPPING GLASSMORPHIC NAVBAR ==================== -->
-  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-3 bg-[#07070a]/80 backdrop-blur-xl border-b border-white/10">
-    <!-- Left: Logo + Nav Links -->
-    <div class="flex items-center gap-6 min-w-0 flex-nowrap">
+  <!-- ==================== 3. SINGLE-ROW STICKY GLASSMORPHIC NAVBAR ==================== -->
+  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3 bg-[#06070a]/82 backdrop-blur-xl border-b border-white/10">
+    <!-- Left: Brand + Non-Wrapping Nav Links -->
+    <div class="flex items-center gap-5 lg:gap-7 min-w-0 flex-nowrap">
       <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center whitespace-nowrap flex-shrink-0 group">
         <span class="font-brand text-4xl text-[#e50914] font-black leading-none pt-1 group-hover:drop-shadow-[0_0_20px_rgba(229,9,20,0.95)] transition">FPS</span>
       </button>
 
-      <nav class="hidden xl:flex items-center gap-5 text-[11px] font-extrabold tracking-widest uppercase text-gray-300 whitespace-nowrap flex-nowrap">
+      <nav class="hidden lg:flex items-center gap-5 text-[11px] font-extrabold tracking-widest uppercase text-gray-300 whitespace-nowrap flex-nowrap">
         <button onclick="FPS.scrollToSection('row-rockstar')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>ROCKSTAR VAULT
         </button>
@@ -344,16 +357,13 @@
         <button onclick="FPS.scrollToSection('row-cinema')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>ABSOLUTE CINEMA
         </button>
-        <button onclick="FPS.scrollToSection('row-shooters')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>SHOOTERS
-        </button>
       </nav>
     </div>
 
-    <!-- Right: Search + Watchlist + Auth -->
-    <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 flex-nowrap">
-      <!-- Search Input -->
-      <div class="relative w-32 sm:w-52 md:w-64">
+    <!-- Right: Search + Watchlist + Auth Dropdown -->
+    <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 flex-nowrap">
+      <!-- Instant Search Input -->
+      <div class="relative w-32 sm:w-48 md:w-60">
         <svg class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
         <input
           id="searchInput"
@@ -361,7 +371,7 @@
           placeholder="Search games..."
           class="w-full h-9 bg-white/10 hover:bg-white/15 focus:bg-black/95 border border-white/15 focus:border-[#e50914] rounded-lg pl-9 pr-7 text-xs font-medium text-white placeholder-gray-400 outline-none transition"
         />
-        <button id="clearSearchBtn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+        <button id="clearSearchBtn" aria-label="Clear search" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -370,7 +380,7 @@
       <button onclick="FPS.openWatchlistModal()" class="h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-extrabold tracking-wider uppercase text-white flex items-center gap-1.5 whitespace-nowrap transition">
         <svg class="w-3.5 h-3.5 text-[#e50914] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
         <span class="hidden sm:inline">WATCHLIST</span>
-        <span id="navWatchlistCount" class="px-1.5 py-0.5 rounded bg-[#e50914] text-white text-[10px] font-black leading-none">0</span>
+        <span id="navWatchlistCount" class="font-mono-num px-1.5 py-0.5 rounded bg-[#e50914] text-white text-[10px] font-black leading-none">0</span>
       </button>
 
       <!-- Sign In Button -->
@@ -378,37 +388,52 @@
         SIGN IN
       </button>
 
-      <!-- Authenticated User Pill -->
-      <div id="navUserPill" class="hidden h-9 items-center gap-2 bg-white/10 border border-white/15 rounded-full pl-1 pr-3 whitespace-nowrap">
-        <img id="navUserAvatar" src="" alt="Profile" class="w-7 h-7 rounded-full object-cover border border-[#e50914]" />
-        <span id="navUserName" class="hidden md:inline text-xs font-bold text-white max-w-[85px] truncate">Player</span>
-        <button onclick="FPS.logout()" title="Sign Out" class="text-gray-300 hover:text-[#e50914] transition">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      <!-- Authenticated User Avatar Dropdown -->
+      <div id="navUserWrap" class="hidden relative">
+        <button onclick="FPS.toggleUserDropdown()" class="h-9 flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full pl-1 pr-2.5 whitespace-nowrap transition">
+          <img id="navUserAvatar" src="" alt="Profile" class="w-7 h-7 rounded-full object-cover border border-[#e50914]" />
+          <span id="navUserName" class="hidden md:inline text-xs font-bold text-white max-w-[85px] truncate">Player</span>
+          <svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
+
+        <div id="navUserDropdown" class="hidden absolute right-0 mt-2 w-52 bg-[#0e1017] border border-white/15 rounded-xl shadow-2xl p-2 z-50">
+          <div class="px-3 py-2 border-b border-white/10 mb-1">
+            <div id="dropdownUserName" class="text-xs font-extrabold text-white truncate">FPS Member</div>
+            <div id="dropdownUserEmail" class="text-[10px] text-gray-400 truncate">member@fps.gg</div>
+          </div>
+          <button onclick="FPS.openWatchlistModal(); FPS.toggleUserDropdown(false);" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-xs font-bold text-gray-200 flex items-center gap-2 transition">
+            <svg class="w-3.5 h-3.5 text-[#e50914]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+            <span>My Watchlist</span>
+          </button>
+          <button onclick="FPS.logout()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-500/20 text-xs font-bold text-red-300 flex items-center gap-2 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            <span>Sign Out</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- ==================== 4. HERO BILLBOARD (20+ GAMES, RAWG POSTERS, AUTOPLAY TRAILERS) ==================== -->
-  <section id="heroBillboard" class="relative w-full h-[88vh] min-h-[600px] max-h-[940px] overflow-hidden bg-[#07070a] select-none">
+  <!-- ==================== 4. HERO BILLBOARD (50s TIMER, NO PROGRESS BAR, 20+ GAMES) ==================== -->
+  <section id="heroBillboard" class="relative w-full h-[88vh] min-h-[600px] max-h-[940px] overflow-hidden bg-[#06070a] select-none">
     <!-- Layer 0: Official RAWG Poster -->
     <div id="heroPosterLayer" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-700 scale-[1.01]"></div>
 
     <!-- Layer 1: Full-Bleed Autoplaying YouTube Trailer -->
     <div id="heroVideoShell" class="hero-video-shell"></div>
 
-    <!-- Layer 2: Readability Gradients -->
+    <!-- Layer 2: Multi-Stop Readability Gradients -->
     <div class="absolute inset-0 z-20 pointer-events-none hero-grad-bottom"></div>
     <div class="absolute inset-0 z-20 pointer-events-none hero-grad-left"></div>
 
-    <!-- Layer 3: Sharp White Content & Actions -->
-    <div class="relative z-30 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pt-24 pb-24 flex flex-col justify-end">
+    <!-- Layer 3: Sharp Pure White Content & Actions -->
+    <div class="relative z-30 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pt-24 pb-20 flex flex-col justify-end">
       <div class="max-w-2xl space-y-4">
         <div class="flex flex-wrap items-center gap-2.5">
           <span id="heroBadge" class="inline-flex items-center px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase badge-rdr">
             ABSOLUTE RDR
           </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/75 border border-amber-400/50 text-amber-300 text-xs font-black tracking-wider">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/75 border border-amber-400/50 text-amber-300 font-mono-num text-xs font-extrabold tracking-wider">
             <svg class="w-3.5 h-3.5 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <span id="heroScore">9.7</span> / 10
           </span>
@@ -427,14 +452,14 @@
 
         <!-- Hero Action Buttons -->
         <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
-          <button onclick="FPS.openHeroModal('overview', true)" class="px-5 sm:px-6 py-3.5 rounded-xl bg-[#e50914] hover:bg-[#ff1e29] text-white font-black text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(229,9,20,0.65)] transition active:scale-95">
+          <button onclick="FPS.openHeroModal('reviews')" class="px-5 sm:px-6 py-3.5 rounded-xl bg-[#e50914] hover:bg-[#ff1e29] text-white font-black text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(229,9,20,0.65)] transition active:scale-95">
             <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <span>WATCH TRAILER</span>
           </button>
 
-          <button onclick="FPS.openHeroModal('reviews', false)" class="px-5 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/35 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
+          <button onclick="FPS.openHeroModal('reviews')" class="px-5 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/35 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            <span>WRITE REVIEW &amp; DETAILS</span>
+            <span>REVIEW &amp; SPECS</span>
           </button>
 
           <button id="heroWatchlistBtn" onclick="FPS.toggleHeroWatchlist()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-xs tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
@@ -451,31 +476,20 @@
       </div>
     </div>
 
-    <!-- Hero Left / Right Arrows -->
-    <button onclick="FPS.prevHeroSlide()" aria-label="Previous slide" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#e50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
+    <!-- Sleek Left / Right Glass Arrows -->
+    <button onclick="FPS.prevHeroSlide()" aria-label="Previous slide" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/55 hover:bg-[#e50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button onclick="FPS.nextHeroSlide()" aria-label="Next slide" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#e50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
+    <button onclick="FPS.nextHeroSlide()" aria-label="Next slide" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/55 hover:bg-[#e50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
     </button>
 
-    <!-- Bottom Hero Progress & Indicators -->
-    <div class="absolute bottom-5 left-5 right-5 sm:left-10 sm:right-10 lg:left-14 lg:right-14 z-30 flex items-center justify-between gap-4">
-      <div id="heroIndicators" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 max-w-[70%]"></div>
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <div class="hidden sm:flex items-center gap-2 text-[10px] font-extrabold tracking-widest uppercase text-gray-200 bg-black/70 px-3 py-1.5 rounded-full border border-white/15">
-          <span class="w-2 h-2 rounded-full bg-[#e50914] animate-pulse"></span>
-          <span>AUTOPLAY</span>
-        </div>
-        <div id="heroCounter" class="font-display text-sm sm:text-base font-bold tracking-widest text-white bg-black/75 px-3 py-1 rounded-lg border border-white/20">
-          01 / 16
-        </div>
+    <!-- Bottom Minimal Static Dots & Clean Slide Counter (No Animated Progress Bar) -->
+    <div class="absolute bottom-6 left-5 right-5 sm:left-10 sm:right-10 lg:left-14 lg:right-14 z-30 flex items-center justify-between gap-4">
+      <div id="heroIndicators" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 max-w-[72%]"></div>
+      <div id="heroCounter" class="font-mono-num text-xs sm:text-sm font-bold tracking-widest text-white bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/20 flex-shrink-0">
+        01 / 20
       </div>
-    </div>
-
-    <!-- Thin Auto-Progress Track -->
-    <div class="absolute bottom-0 left-0 right-0 h-[3px] bg-white/10 z-30">
-      <div id="heroProgressBar" class="h-full bg-[#e50914] w-0 transition-none"></div>
     </div>
   </section>
 
@@ -489,12 +503,12 @@
           <span class="w-1.5 h-5 rounded-sm bg-[#e50914]"></span>
           <span>Search Results</span>
         </h2>
-        <span id="searchCountText" class="text-xs font-bold tracking-wider uppercase text-gray-400"></span>
+        <span id="searchCountText" class="font-mono-num text-xs font-bold tracking-wider uppercase text-gray-400"></span>
       </div>
       <div id="searchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
     </section>
 
-    <!-- Dynamic Endless Rows Container -->
+    <!-- Dynamic Deduplicated Catalog Rows -->
     <div id="catalogRowsContainer" class="space-y-12"></div>
 
     <!-- Endless Vertical Scroll Sentinel -->
@@ -504,13 +518,13 @@
     </div>
   </main>
 
-  <!-- ==================== 6. ULTRA-POLISHED REVIEW & DETAILS THEATER MODAL ==================== -->
+  <!-- ==================== 6. ULTRA-POLISHED GAME REVIEW & STOREFRONT THEATER MODAL ==================== -->
   <div id="reviewModal" class="fixed inset-0 z-[80] bg-black/92 backdrop-blur-2xl hidden overflow-y-auto">
     <div class="min-h-screen w-full flex items-start justify-center p-2 sm:p-5 lg:p-8">
-      <div class="relative w-full max-w-6xl bg-[#0b0d14] border border-white/15 rounded-2xl overflow-hidden shadow-[0_35px_110px_rgba(0,0,0,0.98)] my-2">
+      <div class="relative w-full max-w-6xl bg-[#0e1017] border border-white/15 rounded-2xl overflow-hidden shadow-[0_36px_115px_rgba(0,0,0,0.98)] my-2">
 
-        <!-- Sticky Top Control Bar inside Modal -->
-        <div class="sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 py-3 bg-[#0b0d14]/90 backdrop-blur-xl border-b border-white/10">
+        <!-- Sticky Modal Header Bar -->
+        <div class="sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 py-3 bg-[#0e1017]/92 backdrop-blur-xl border-b border-white/10">
           <div class="flex items-center gap-3 min-w-0">
             <span class="font-brand text-2xl text-[#e50914] leading-none pt-0.5 flex-shrink-0">FPS</span>
             <span class="text-gray-600">/</span>
@@ -530,20 +544,20 @@
           </div>
         </div>
 
-        <!-- TOP CINEMATIC VIDEO THEATER -->
+        <!-- TOP 16:9 AUTOPLAYING VIDEO THEATER -->
         <div class="relative w-full aspect-video bg-black overflow-hidden">
-          <!-- High-Res Backdrop + Instant Play Overlay -->
-          <div id="modalVideoPosterOverlay" class="absolute inset-0 z-20 bg-cover bg-center flex flex-col items-center justify-center cursor-pointer group" onclick="FPS.playModalTrailerNow()">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0d14] via-black/45 to-black/30"></div>
-            <div class="relative z-10 w-20 h-20 rounded-full bg-[#e50914]/90 group-hover:bg-[#ff1e29] group-hover:scale-110 border-2 border-white/40 flex items-center justify-center shadow-[0_0_50px_rgba(229,9,20,0.85)] transition">
-              <svg class="w-9 h-9 fill-white ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <span class="relative z-10 mt-3 px-4 py-1.5 rounded-full bg-black/75 border border-white/20 text-[11px] font-black tracking-[0.2em] uppercase text-white">
-              PLAY OFFICIAL 4K TRAILER (SOUND ON)
-            </span>
+          <!-- Backdrop Layer shown briefly while YouTube ID resolves -->
+          <div id="modalVideoBackdrop" class="absolute inset-0 z-0 bg-cover bg-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0e1017] via-black/40 to-black/25"></div>
           </div>
 
-          <!-- YouTube Nocookie Player -->
+          <!-- Loading Spinner while resolving uncached YouTube trailer -->
+          <div id="modalVideoLoader" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/55 backdrop-blur-sm">
+            <div class="w-10 h-10 border-2 border-[#e50914] border-t-transparent rounded-full animate-spin mb-3"></div>
+            <span class="text-[11px] font-black tracking-[0.22em] uppercase text-white">LAUNCHING OFFICIAL TRAILER...</span>
+          </div>
+
+          <!-- Guaranteed Autoplaying YouTube Nocookie Embed -->
           <iframe
             id="modalIframe"
             class="w-full h-full border-0 relative z-10"
@@ -552,10 +566,33 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen>
           </iframe>
+
+          <!-- Floating UNMUTE SOUND / MUTE Pill Button -->
+          <button
+            id="modalSoundToggleBtn"
+            onclick="FPS.toggleModalSound()"
+            class="absolute top-4 right-4 z-30 px-4 py-2 rounded-full bg-black/80 hover:bg-[#e50914] backdrop-blur-md border border-white/30 text-white text-[11px] font-black tracking-widest uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(0,0,0,0.75)] transition active:scale-95"
+          >
+            <svg id="modalSoundIconMuted" class="w-4 h-4 text-[#e50914]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+            <svg id="modalSoundIconOn" class="hidden w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+            <span id="modalSoundLabel">UNMUTE SOUND</span>
+          </button>
         </div>
 
-        <!-- HD SCREENSHOTS STRIP (LIVE FROM RAWG) -->
-        <div id="modalScreenshotsStripWrap" class="hidden px-4 sm:px-8 pt-4 bg-[#0b0d14]">
+        <!-- OFFICIAL "AVAILABLE ON / STOREFRONTS" SECTION WITH AUTHENTIC SVG LOGOS -->
+        <div id="modalStorefrontsWrap" class="px-4 sm:px-8 py-5 bg-[#0a0c12] border-b border-white/10">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-4 rounded-sm bg-[#e50914]"></span>
+              <span class="text-[11px] font-black tracking-[0.22em] uppercase text-white">AVAILABLE ON / STOREFRONTS</span>
+            </div>
+            <span id="storefrontsStatusText" class="text-[10px] font-bold tracking-widest uppercase text-gray-400">VERIFIED OFFICIAL STORES</span>
+          </div>
+          <div id="modalStorefrontsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
+        </div>
+
+        <!-- HD SCREENSHOTS STRIP -->
+        <div id="modalScreenshotsStripWrap" class="hidden px-4 sm:px-8 pt-4 bg-[#0e1017]">
           <div class="flex items-center justify-between mb-2">
             <span class="text-[10px] font-extrabold tracking-[0.22em] uppercase text-gray-400">OFFICIAL IN-GAME CAPTURES</span>
             <span class="text-[10px] font-bold tracking-wider uppercase text-gray-500">CLICK TO EXPAND</span>
@@ -567,12 +604,12 @@
         <div class="px-4 sm:px-8 pt-6 pb-6 border-b border-white/10">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
 
-            <!-- Left 7 cols: Title, Studios, Publishers, Launch Date, Playable On -->
+            <!-- Left 7 Cols: Title, Studios, Publishers, Launch Date, Playable On -->
             <div class="lg:col-span-7 space-y-4">
               <div class="flex flex-wrap items-center gap-2.5">
                 <span id="modalTierBadge" class="px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase badge-peak">PEAK</span>
                 <span id="modalEsrbPill" class="px-2.5 py-1 rounded-md bg-white/10 border border-white/15 text-[10px] font-extrabold tracking-widest uppercase text-gray-200">ESRB: RP</span>
-                <span id="modalMetacriticPill" class="hidden px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-400/40 text-[10px] font-extrabold tracking-widest uppercase text-emerald-300">METACRITIC: 97</span>
+                <span id="modalMetacriticPill" class="hidden font-mono-num px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-400/40 text-[10px] font-extrabold tracking-widest uppercase text-emerald-300">METACRITIC: 97</span>
               </div>
 
               <h2 id="modalTitle" class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.05]">
@@ -606,7 +643,7 @@
               </div>
             </div>
 
-            <!-- Right 5 cols: Dual Animated SVG Circular Score Showcase -->
+            <!-- Right 5 Cols: Dual Animated SVG Circular Score Showcase -->
             <div class="lg:col-span-5 grid grid-cols-2 gap-4">
               <!-- Ring 1: FPS Critic Score -->
               <div class="relative bg-white/[0.03] border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center overflow-hidden">
@@ -618,7 +655,7 @@
                     <circle id="criticRingArc" cx="60" cy="60" r="50" fill="none" stroke="#f59e0b" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="gauge-ring-progress" />
                   </svg>
                   <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span id="criticRingScore" class="font-display text-3xl font-black text-white leading-none">9.7</span>
+                    <span id="criticRingScore" class="font-mono-num text-3xl font-black text-white leading-none">9.7</span>
                     <span class="text-[9px] font-bold tracking-widest uppercase text-gray-400 mt-0.5">/ 10</span>
                   </div>
                 </div>
@@ -635,7 +672,7 @@
                     <circle id="communityRingArc" cx="60" cy="60" r="50" fill="none" stroke="#3b82f6" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="gauge-ring-progress" />
                   </svg>
                   <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span id="communityRingScore" class="font-display text-3xl font-black text-white leading-none">--</span>
+                    <span id="communityRingScore" class="font-mono-num text-3xl font-black text-white leading-none">--</span>
                     <span id="communityReviewCount" class="text-[9px] font-bold tracking-wider uppercase text-gray-400 mt-0.5">0 RATINGS</span>
                   </div>
                 </div>
@@ -659,14 +696,12 @@
           </button>
         </div>
 
-        <!-- MODAL TAB CONTENT AREA -->
+        <!-- MODAL TAB CONTENT -->
         <div class="p-4 sm:p-8">
 
-          <!-- ==================== TAB 1: COMMUNITY REVIEWS & INTERACTIVE SLIDER/CIRCLE STUDIO ==================== -->
+          <!-- ==================== TAB 1: INTERACTIVE REVIEW STUDIO + COMMUNITY FEED ==================== -->
           <div id="tabPane-reviews" class="space-y-8">
-
-            <!-- THE INTERACTIVE USER REVIEW STUDIO -->
-            <div class="relative rounded-2xl bg-gradient-to-br from-[#121521] via-[#0d1018] to-[#0a0c12] border border-white/15 p-5 sm:p-7 overflow-hidden shadow-2xl">
+            <div class="relative rounded-2xl bg-gradient-to-br from-[#141825] via-[#0e111b] to-[#0a0c12] border border-white/15 p-5 sm:p-7 overflow-hidden shadow-2xl">
               <div id="studioAmbientBackdrop" class="gauge-ambient-glow absolute -top-24 -left-24 w-80 h-80 rounded-full blur-[90px] opacity-25 pointer-events-none" style="background: #3b82f6;"></div>
 
               <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 mb-6">
@@ -681,14 +716,12 @@
               </div>
 
               <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
-
-                <!-- Left 5 Cols: Live Color-Shifting Circular Rating Gauge + Precision Slider -->
+                <!-- Left 5 Cols: Color-Shifting Circular Gauge + Precision Slider -->
                 <div class="lg:col-span-5 flex flex-col items-center bg-black/45 border border-white/10 rounded-2xl p-6 space-y-5">
-                  <!-- Animated Interactive Circular Gauge -->
                   <div class="relative w-48 h-48 flex items-center justify-center">
                     <div id="interactiveCircleGlow" class="gauge-ambient-glow absolute inset-3 rounded-full blur-2xl opacity-40" style="background: #3b82f6;"></div>
                     <svg class="relative z-10 w-full h-full -rotate-90 drop-shadow-2xl" viewBox="0 0 180 180">
-                      <circle cx="90" cy="90" r="76" fill="rgba(7,7,10,0.75)" stroke="rgba(255,255,255,0.09)" stroke-width="12" />
+                      <circle cx="90" cy="90" r="76" fill="rgba(6,7,10,0.78)" stroke="rgba(255,255,255,0.09)" stroke-width="12" />
                       <circle
                         id="interactiveGaugeArc"
                         cx="90"
@@ -704,14 +737,14 @@
                       />
                     </svg>
                     <div class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center">
-                      <span id="interactiveScoreDisplay" class="font-display text-6xl font-black leading-none tracking-tight text-white">9.2</span>
-                      <span id="interactiveTierPill" class="mt-2 px-3 py-0.5 rounded text-[10px] font-black tracking-widest uppercase badge-cinema">
+                      <span id="interactiveScoreDisplay" class="font-mono-num text-5xl font-black leading-none tracking-tight text-white">9.2</span>
+                      <span id="interactiveTierPill" class="mt-2.5 px-3 py-0.5 rounded text-[10px] font-black tracking-widest uppercase badge-cinema">
                         ABSOLUTE CINEMA
                       </span>
                     </div>
                   </div>
 
-                  <!-- Precision Range Slider -->
+                  <!-- Precision 0.0 - 10.0 Slider -->
                   <div class="w-full space-y-2.5">
                     <div class="flex items-center justify-between text-[10px] font-extrabold tracking-widest uppercase text-gray-400">
                       <span>0.0 TRASH</span>
@@ -733,15 +766,15 @@
 
                   <!-- Quick Tier Presets -->
                   <div class="grid grid-cols-5 gap-1.5 w-full pt-1">
-                    <button type="button" onclick="FPS.setSliderPreset(3.0)" class="py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 border border-red-500/40 text-[9px] font-black tracking-wider uppercase text-red-300 transition">3.0</button>
-                    <button type="button" onclick="FPS.setSliderPreset(6.0)" class="py-1.5 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 border border-pink-500/40 text-[9px] font-black tracking-wider uppercase text-pink-300 transition">6.0</button>
-                    <button type="button" onclick="FPS.setSliderPreset(8.2)" class="py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/40 text-[9px] font-black tracking-wider uppercase text-emerald-300 transition">8.2</button>
-                    <button type="button" onclick="FPS.setSliderPreset(9.2)" class="py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 border border-blue-500/40 text-[9px] font-black tracking-wider uppercase text-blue-300 transition">9.2</button>
-                    <button type="button" onclick="FPS.setSliderPreset(9.8)" class="py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 text-[9px] font-black tracking-wider uppercase text-amber-300 transition">9.8</button>
+                    <button type="button" onclick="FPS.setSliderPreset(3.0)" class="font-mono-num py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 border border-red-500/40 text-[10px] font-black text-red-300 transition">3.0</button>
+                    <button type="button" onclick="FPS.setSliderPreset(6.0)" class="font-mono-num py-1.5 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 border border-pink-500/40 text-[10px] font-black text-pink-300 transition">6.0</button>
+                    <button type="button" onclick="FPS.setSliderPreset(8.2)" class="font-mono-num py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/40 text-[10px] font-black text-emerald-300 transition">8.2</button>
+                    <button type="button" onclick="FPS.setSliderPreset(9.2)" class="font-mono-num py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 border border-blue-500/40 text-[10px] font-black text-blue-300 transition">9.2</button>
+                    <button type="button" onclick="FPS.setSliderPreset(9.8)" class="font-mono-num py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 text-[10px] font-black text-amber-300 transition">9.8</button>
                   </div>
                 </div>
 
-                <!-- Right 7 Cols: Quick Verdict Tags + Headline + Review Body + Publish -->
+                <!-- Right 7 Cols: Verdict Tags + Headline + Review Body -->
                 <div class="lg:col-span-7 space-y-4">
                   <div class="space-y-2">
                     <label class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">SELECT VERDICT TAGS</label>
@@ -772,7 +805,7 @@
 
                   <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
                     <div id="reviewAuthorStatus" class="text-xs text-gray-400 font-medium">
-                      Sign in with Google to publish under your profile
+                      Sign in with Google to publish under your verified profile
                     </div>
                     <div class="flex items-center gap-2.5">
                       <button id="cancelEditBtn" type="button" onclick="FPS.resetReviewComposer()" class="hidden px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold tracking-wider uppercase text-white transition">
@@ -788,16 +821,15 @@
               </div>
             </div>
 
-            <!-- COMMUNITY REVIEWS FEED + TIER FILTER -->
+            <!-- Community Feed + Tier Filter Pills -->
             <div class="space-y-4">
               <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
                 <h4 class="text-sm font-black tracking-widest uppercase text-white flex items-center gap-2">
                   <span class="w-1.5 h-4 rounded-sm bg-[#e50914]"></span>
                   <span>COMMUNITY VERDICTS</span>
-                  <span id="feedReviewCountBadge" class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-bold text-gray-300">0</span>
+                  <span id="feedReviewCountBadge" class="font-mono-num px-2 py-0.5 rounded bg-white/10 text-[11px] font-bold text-gray-300">0</span>
                 </h4>
 
-                <!-- Filter by Tier Pills -->
                 <div id="tierFilterBar" class="flex flex-wrap items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase">
                   <button onclick="FPS.setReviewTierFilter('ALL')" data-filter="ALL" class="tier-filter-btn px-3 py-1 rounded-full bg-[#e50914] text-white transition">ALL</button>
                   <button onclick="FPS.setReviewTierFilter('PEAK')" data-filter="PEAK" class="tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition">PEAK</button>
@@ -814,7 +846,6 @@
 
           <!-- ==================== TAB 2: OVERVIEW & CRITIC BREAKDOWN ==================== -->
           <div id="tabPane-overview" class="hidden space-y-8">
-            <!-- Genres & Official Website -->
             <div class="flex flex-wrap items-center justify-between gap-4">
               <div id="modalGenres" class="flex flex-wrap gap-2"></div>
               <a id="metaWebsiteLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold tracking-wider uppercase text-white transition">
@@ -823,19 +854,16 @@
               </a>
             </div>
 
-            <!-- Full RAWG Synopsis -->
             <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-2">
               <h4 class="text-xs font-black tracking-[0.2em] uppercase text-[#e50914]">GAME SYNOPSIS</h4>
               <p id="modalSynopsis" class="text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line"></p>
             </div>
 
-            <!-- 5-Bar Animated Critic Breakdown -->
             <div class="space-y-3">
               <h4 class="text-xs font-black tracking-[0.2em] uppercase text-white">FPS EDITORIAL BREAKDOWN</h4>
               <div id="modalScoreBars" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"></div>
             </div>
 
-            <!-- Complete Accurate Metadata Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-white/[0.03] border border-white/10 rounded-2xl p-5">
               <div>
                 <span class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">DEVELOPER STUDIOS</span>
@@ -874,7 +902,7 @@
     </div>
   </div>
 
-  <!-- ==================== 7. HD SCREENSHOT LIGHTBOX VIEWER ==================== -->
+  <!-- ==================== 7. HD SCREENSHOT LIGHTBOX ==================== -->
   <div id="screenshotLightbox" class="fixed inset-0 z-[115] bg-black/95 backdrop-blur-xl hidden flex items-center justify-center p-4" onclick="FPS.closeLightbox()">
     <button onclick="FPS.closeLightbox()" aria-label="Close screenshot" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-[#e50914] text-white flex items-center justify-center transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -884,7 +912,7 @@
 
   <!-- ==================== 8. WATCHLIST MODAL ==================== -->
   <div id="watchlistModal" class="fixed inset-0 z-[95] bg-black/88 backdrop-blur-xl hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-2xl bg-[#0d1018] border border-white/15 rounded-2xl p-6 max-h-[82vh] flex flex-col shadow-2xl">
+    <div class="w-full max-w-2xl bg-[#0e1017] border border-white/15 rounded-2xl p-6 max-h-[82vh] flex flex-col shadow-2xl">
       <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
         <h3 class="text-base sm:text-lg font-black tracking-wider uppercase text-white flex items-center gap-2.5">
           <svg class="w-5 h-5 text-[#e50914]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
@@ -902,15 +930,15 @@
   <div id="toastBox" class="fixed bottom-6 right-6 z-[130] hidden px-4 py-3 rounded-xl bg-[#131724] border border-white/20 text-xs font-extrabold tracking-wider uppercase text-white shadow-[0_12px_40px_rgba(0,0,0,0.85)]"></div>
 
   <!-- ==================== FOOTER ==================== -->
-  <footer class="border-t border-white/10 bg-[#050508] py-10 px-6 text-center">
+  <footer class="border-t border-white/10 bg-[#040508] py-10 px-6 text-center">
     <div class="max-w-4xl mx-auto space-y-2">
       <div class="font-brand text-3xl text-[#e50914] font-black">FPS</div>
-      <p class="text-xs text-gray-400">Live Game Metadata via RAWG API &bull; Official Trailers via YouTube Data API v3 &bull; Community Reviews via Firebase Firestore</p>
+      <p class="text-xs text-gray-400">Live Game Metadata &amp; Storefronts via RAWG API &bull; Official Trailers via YouTube Data API v3 &bull; Community Verdicts via Firebase Firestore</p>
       <p class="text-[10px] text-gray-500 uppercase tracking-[0.25em]">&copy; 2026 FPS Interactive — Official Game Critique Network</p>
     </div>
   </footer>
 
-  <!-- ==================== CORE APPLICATION MODULE (FIREBASE v10 + RAWG + YOUTUBE) ==================== -->
+  <!-- ==================== CORE APPLICATION MODULE ==================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
@@ -959,28 +987,28 @@
     const FLAGSHIP_HERO_SEEDS = [
       { slug: "red-dead-redemption-2", title: "Red Dead Redemption 2", yt: "gmA6MrX81z4", score: 9.7, studio: "Rockstar Games", year: "2018", description: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and bounty hunters massing on their heels, the gang must rob, steal and fight across the rugged heartland." },
       { slug: "grand-theft-auto-v", title: "Grand Theft Auto V", yt: "QkkoHAzjnUs", score: 9.7, studio: "Rockstar Games", year: "2013", description: "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with the criminal underworld, they must pull off a series of dangerous heists in Los Santos." },
-      { slug: "elden-ring", title: "Elden Ring", yt: "E3Huy2cdih0", score: 9.6, studio: "FromSoftware", year: "2022", description: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between." },
       { slug: "cyberpunk-2077", title: "Cyberpunk 2077", yt: "8X2kIfS6fb8", score: 9.1, studio: "CD PROJEKT RED", year: "2020", description: "An open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival." },
+      { slug: "elden-ring", title: "Elden Ring", yt: "E3Huy2cdih0", score: 9.6, studio: "FromSoftware", year: "2022", description: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between." },
       { slug: "the-witcher-3-wild-hunt", title: "The Witcher 3: Wild Hunt", yt: "c0i88t0Kacs", score: 9.5, studio: "CD PROJEKT RED", year: "2015", description: "You are Geralt of Rivia, mercenary monster slayer. Explore a war-torn, monster-infested continent as you track down Ciri, the Child of Prophecy." },
-      { slug: "god-of-war-ragnarok", title: "God of War Ragnarök", yt: "EE-4GvjKcfs", score: 9.4, studio: "Santa Monica Studio", year: "2022", description: "Embark on an epic and heartfelt journey as Kratos and Atreus struggle with holding on and letting go across all Nine Realms as Fimbulwinter rages." },
       { slug: "ghost-of-tsushima", title: "Ghost of Tsushima", yt: "iqysmS4lxwQ", score: 9.2, studio: "Sucker Punch Productions", year: "2020", description: "In the late 13th century, samurai warrior Jin Sakai must forge a new path as the Ghost to wage an unconventional war for the freedom of Tsushima." },
-      { slug: "the-last-of-us-part-i", title: "The Last of Us Part I", yt: "R2Ebc_OFeug", score: 9.5, studio: "Naughty Dog", year: "2022", description: "Experience the emotional storytelling and unforgettable characters of Joel and Ellie across a ravaged civilization rebuilt from the ground up." },
+      { slug: "god-of-war-ragnarok", title: "God of War Ragnarök", yt: "EE-4GvjKcfs", score: 9.4, studio: "Santa Monica Studio", year: "2022", description: "Embark on an epic and heartfelt journey as Kratos and Atreus struggle with holding on and letting go across all Nine Realms as Fimbulwinter rages." },
+      { slug: "the-last-of-us-part-2", title: "The Last of Us Part II", yt: "vhII1qlcZ4E", score: 9.3, studio: "Naughty Dog", year: "2020", description: "Five years after their dangerous journey across the post-pandemic United States, Ellie embarks on a relentless journey to carry out justice and find closure." },
       { slug: "baldurs-gate-3", title: "Baldur's Gate 3", yt: "1T22wNvoNiU", score: 9.6, studio: "Larian Studios", year: "2023", description: "Gather your party and return to the Forgotten Realms in a tale of fellowship and betrayal, sacrifice and survival, and the lure of absolute power." },
+      { slug: "marvels-spider-man-2", title: "Marvel's Spider-Man 2", yt: "nq1M_Wc4FIc", score: 9.0, studio: "Insomniac Games", year: "2023", description: "Spider-Men Peter Parker and Miles Morales face the ultimate test of strength inside and outside the mask as they fight to save New York from Venom." },
+      { slug: "alan-wake-2", title: "Alan Wake 2", yt: "dlQ3FeNu5Iw", score: 9.1, studio: "Remedy Entertainment", year: "2023", description: "A string of ritualistic murders threatens Bright Falls. FBI agent Saga Anderson investigates as Alan Wake fights to escape a dark nightmare reality." },
       { slug: "sekiro-shadows-die-twice", title: "Sekiro: Shadows Die Twice", yt: "rXMX4YJ7Lks", score: 9.2, studio: "FromSoftware", year: "2019", description: "Carve your own clever path to vengeance in late 1500s Sengoku Japan as the one-armed wolf, a disgraced shinobi bound to protect a young lord." },
-      { slug: "grand-theft-auto-iv", title: "Grand Theft Auto IV", yt: "M80K51DosFo", score: 9.6, studio: "Rockstar North", year: "2008", description: "Niko Bellic arrives in Liberty City chasing the American Dream, only to be dragged into a brutal web of crime, debt, and betrayal." },
-      { slug: "grand-theft-auto-san-andreas", title: "Grand Theft Auto: San Andreas", yt: "u_CbHrBbHNQ", score: 9.5, studio: "Rockstar North", year: "2004", description: "Five years ago Carl Johnson escaped from the pressures of life in Los Santos. Now he must return home to save his family and take control of the streets." },
+      { slug: "resident-evil-4-remake", title: "Resident Evil 4", yt: "E69tKrfEQag", score: 9.3, studio: "Capcom", year: "2023", description: "Survival is just the beginning. Six years after the biological disaster in Raccoon City, agent Leon S. Kennedy is sent to rescue the president's daughter." },
+      { slug: "horizon-forbidden-west", title: "Horizon Forbidden West", yt: "Lq594XmpPBg", score: 8.8, studio: "Guerrilla Games", year: "2022", description: "Join Aloy as she braves the Forbidden West—a majestic but dangerous frontier that conceals mysterious new threats and awe-inspiring machines." },
       { slug: "doom-eternal", title: "DOOM Eternal", yt: "_UuktemkCFI", score: 9.0, studio: "id Software", year: "2020", description: "Hell's armies have invaded Earth. Become the Slayer in an epic single-player campaign to conquer demons across dimensions." },
-      { slug: "marvels-spider-man-remastered", title: "Marvel's Spider-Man Remastered", yt: "1E051wtGylo", score: 9.1, studio: "Insomniac Games", year: "2022", description: "Swing through Marvel's New York as an experienced Peter Parker fighting big crime and iconic villains in stunning remastered fidelity." },
-      { slug: "hollow-knight", title: "Hollow Knight", yt: "UAO2urG23S4", score: 9.1, studio: "Team Cherry", year: "2017", description: "Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes." },
-      { slug: "black-myth-wukong", title: "Black Myth: Wukong", yt: "pnSsgRJmsCc", score: 8.6, studio: "Game Science", year: "2024", description: "An action RPG rooted in Chinese mythology. Set out as the Destined One to venture into the challenges and marvels ahead." }
+      { slug: "starfield", title: "Starfield", yt: "kfYEiTdsyas", score: 8.3, studio: "Bethesda Game Studios", year: "2023", description: "In the year 2330, humanity has ventured beyond our solar system. Join Constellation and explore over 1,000 planets across the settled systems." }
     ];
 
     const VERIFIED_SCORES = {
       "red dead redemption 2": 9.7,
       "grand theft auto v": 9.7,
       "grand theft auto vi": 9.9,
-      "grand theft auto iv": 9.6,
-      "grand theft auto: san andreas": 9.5,
+      "grand theft auto iv": 9.7,
+      "grand theft auto: san andreas": 9.7,
       "elden ring": 9.6,
       "the witcher 3: wild hunt": 9.5,
       "baldur's gate 3": 9.6,
@@ -993,13 +1021,15 @@
       "the last of us part ii": 9.3,
       "the last of us": 9.5,
       "sekiro: shadows die twice": 9.2,
+      "marvel's spider-man 2": 9.0,
       "marvel's spider-man remastered": 9.1,
-      "marvel's spider-man": 9.0,
+      "alan wake 2": 9.1,
+      "resident evil 4": 9.3,
+      "horizon forbidden west": 8.8,
       "doom eternal": 9.0,
+      "starfield": 8.3,
       "hollow knight": 9.1,
       "black myth: wukong": 8.6,
-      "resident evil 4": 9.3,
-      "alan wake 2": 9.1,
       "half-life 2": 9.6,
       "portal 2": 9.5,
       "bloodborne": 9.2,
@@ -1024,7 +1054,106 @@
     });
 
     // =========================================================================
-    // 3. GLOBAL APPLICATION STATE
+    // 3. OFFICIAL STOREFRONT METADATA + CRISP AUTHENTIC SVG BRAND LOGOS
+    // =========================================================================
+    const STORE_CATALOG = {
+      "playstation-store": {
+        key: "playstation-store",
+        name: "PlayStation Store",
+        sub: "PS5 / PS4",
+        accent: "#0070D1",
+        glow: "rgba(0, 112, 209, 0.45)",
+        searchUrl: (q) => `https://store.playstation.com/search/${encodeURIComponent(q)}`,
+        svg: `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="#0070D1"><path d="M8.985 2.596v17.548l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.181.76.814.76 1.505v5.876c2.441 1.193 4.362-.002 4.362-3.153 0-3.237-1.126-4.675-4.438-5.827-1.307-.448-3.728-1.186-5.393-1.502zM4.01 16.055c-2.61.908-3.047 2.26-1.454 3.091 1.38.72 3.474.918 5.568.426v-2.075l-1.926.647c-.662.227-1.264.176-1.34-.114-.077-.29.365-.662 1.028-.89l2.238-.752V14.23l-4.114 1.825zm16.258-.752c-1.454-.453-3.27-.443-4.962.088l-1.472.495v2.118l3.527-1.213c.658-.225 1.26-.176 1.337.114.076.29-.366.663-1.029.888l-3.835 1.318v2.104l5.303-1.82c2.596-.892 3.166-2.429 1.131-4.092z"/></svg>`
+      },
+      "xbox-store": {
+        key: "xbox-store",
+        name: "Xbox Store",
+        sub: "Series X|S / PC",
+        accent: "#107C10",
+        glow: "rgba(16, 124, 16, 0.48)",
+        searchUrl: (q) => `https://www.xbox.com/en-US/search?q=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#107C10"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.82 3.55c.72.58 1.35 1.28 1.84 2.08-1.49-.33-3.17.34-4.73 1.44 1.31-1.43 2.34-2.66 2.89-3.52zm-9.64 0c.55.86 1.58 2.09 2.89 3.52-1.56-1.1-3.24-1.77-4.73-1.44.49-.8 1.12-1.5 1.84-2.08zM12 10.6c2.58 2.13 5.29 5.39 5.51 7.64A8.03 8.03 0 0 1 12 20c-2.16 0-4.12-.86-5.51-1.76.22-2.25 2.93-5.51 5.51-7.64zm-7.82 2.24c.16-1.45.7-2.79 1.52-3.9 1.41.48 3.23 1.72 4.74 3.12-2.18 2.06-4.18 4.46-4.71 6.32a7.95 7.95 0 0 1-1.55-5.54zm15.64 0a7.95 7.95 0 0 1-1.55 5.54c-.53-1.86-2.53-4.26-4.71-6.32 1.51-1.4 3.33-2.64 4.74-3.12.82 1.11 1.36 2.45 1.52 3.9z"/></svg>`
+      },
+      "steam": {
+        key: "steam",
+        name: "Steam",
+        sub: "PC Digital",
+        accent: "#66C0F4",
+        glow: "rgba(102, 192, 244, 0.45)",
+        searchUrl: (q) => `https://store.steampowered.com/search/?term=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#66C0F4"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>`
+      },
+      "epic-games": {
+        key: "epic-games",
+        name: "Epic Games Store",
+        sub: "PC Digital",
+        accent: "#FFFFFF",
+        glow: "rgba(255, 255, 255, 0.35)",
+        searchUrl: (q) => `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M4.5 2h15A1.5 1.5 0 0 1 21 3.5v13.9c0 .7-.4 1.35-1.02 1.68l-7.24 3.74a1.6 1.6 0 0 1-1.48 0l-7.24-3.74A1.88 1.88 0 0 1 3 17.4V3.5A1.5 1.5 0 0 1 4.5 2zm3.2 4.3v9.2h6.8v-1.85H9.85v-1.9h4.1V9.9h-4.1V8.15h4.55V6.3H7.7z"/></svg>`
+      },
+      "nintendo": {
+        key: "nintendo",
+        name: "Nintendo eShop",
+        sub: "Nintendo Switch",
+        accent: "#E60012",
+        glow: "rgba(230, 0, 18, 0.48)",
+        searchUrl: (q) => `https://www.nintendo.com/us/search/#q=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#E60012"><path d="M10.04 20.4H7.12C4.3 20.4 2 18.1 2 15.28V8.72C2 5.9 4.3 3.6 7.12 3.6h2.92c.46 0 .84.38.84.84v15.12c0 .46-.38.84-.84.84zm-1.12-14.8H7.12C5.4 5.6 4 7 4 8.72v6.56C4 17 5.4 18.4 7.12 18.4h1.8V5.6zM7.1 10.6a1.45 1.45 0 1 1 0-2.9 1.45 1.45 0 0 1 0 2.9zm9.78 9.8h-2.92a.84.84 0 0 1-.84-.84V4.44c0-.46.38-.84.84-.84h2.92C19.7 3.6 22 5.9 22 8.72v6.56c0 2.82-2.3 5.12-5.12 5.12zm.12-5.2a1.65 1.65 0 1 0 0-3.3 1.65 1.65 0 0 0 0 3.3z"/></svg>`
+      },
+      "gog": {
+        key: "gog",
+        name: "GOG.com",
+        sub: "DRM-Free PC",
+        accent: "#A855F7",
+        glow: "rgba(168, 85, 247, 0.45)",
+        searchUrl: (q) => `https://www.gog.com/en/games?query=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#A855F7"><rect x="2" y="2" width="20" height="20" rx="5" fill="#A855F7" fill-opacity="0.18" stroke="#A855F7" stroke-width="1.8"/><text x="12" y="15.2" text-anchor="middle" fill="#D8B4FE" font-family="Inter, sans-serif" font-weight="900" font-size="8.2">GOG</text></svg>`
+      },
+      "rockstar": {
+        key: "rockstar",
+        name: "Rockstar Launcher",
+        sub: "Official PC",
+        accent: "#F59E0B",
+        glow: "rgba(245, 158, 11, 0.48)",
+        searchUrl: (q) => `https://store.rockstargames.com/search?q=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#F59E0B"><rect x="2" y="2" width="20" height="20" rx="4" fill="#F59E0B"/><path d="M7 16.5L8.6 7.5h4.3c2.1 0 3.2 1 2.9 2.7-.2 1.2-1 2-2.2 2.3l1.3 2.1h-2.4l-1.1-1.9h-1.3l-.7 3.8H7zm3.4-5.4h1.6c.8 0 1.3-.3 1.4-1 .1-.6-.3-.9-1.1-.9h-1.6l-.3 1.9zm5.9 2.2l.7 1.4 1.5.2-1.1 1.1.3 1.5-1.4-.7-1.4.7.3-1.5-1.1-1.1 1.5-.2.7-1.4z" fill="#06070a"/></svg>`
+      },
+      "apple-appstore": {
+        key: "apple-appstore",
+        name: "App Store",
+        sub: "iOS / macOS",
+        accent: "#0D96F6",
+        glow: "rgba(13, 150, 246, 0.45)",
+        searchUrl: (q) => `https://apps.apple.com/us/search?term=${encodeURIComponent(q)}`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#0D96F6"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.96 6.32c.68-.83 1.14-1.98 1.01-3.12-.98.04-2.17.65-2.87 1.48-.63.73-1.18 1.9-1.03 3.02 1.1.08 2.22-.56 2.89-1.38z"/></svg>`
+      },
+      "google-play": {
+        key: "google-play",
+        name: "Google Play",
+        sub: "Android",
+        accent: "#34A853",
+        glow: "rgba(52, 168, 83, 0.45)",
+        searchUrl: (q) => `https://play.google.com/store/search?q=${encodeURIComponent(q)}&c=apps`,
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#34A853"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.65 1.65 0 0 1-.61-1.29V3.104c0-.51.23-.967.609-1.29zm11.297 11.298l2.53 2.53-11.27 6.453 8.74-8.983zm3.66-2.094l2.248 1.287c.78.447.78 1.573 0 2.02l-2.248 1.287-2.753-2.297 2.753-2.297zM6.166 1.905l11.27 6.453-2.53 2.53-8.74-8.983z"/></svg>`
+      }
+    };
+
+    const RAWG_STORE_ID_TO_KEY = {
+      1: "steam",
+      2: "xbox-store",
+      3: "playstation-store",
+      4: "apple-appstore",
+      5: "gog",
+      6: "nintendo",
+      7: "xbox-store",
+      8: "google-play",
+      11: "epic-games"
+    };
+
+    // =========================================================================
+    // 4. GLOBAL APPLICATION STATE
     // =========================================================================
     let currentUser = null;
     let heroSlides = [];
@@ -1032,6 +1161,7 @@
     let heroAutoTimer = null;
     let heroVideoFadeTimer = null;
     let heroMuted = true;
+    let modalMuted = true;
     let currentModalGame = null;
     let currentModalGameKey = "";
     let currentModalReviews = [];
@@ -1042,13 +1172,14 @@
     const globalRenderedIds = new Set();
     const rawgDetailCache = new Map();
     const rawgScreenshotsCache = new Map();
+    const rawgStoresCache = new Map();
 
-    let myWatchlist = JSON.parse(localStorage.getItem("fps_watchlist_v3") || "[]");
-    let ytCache = JSON.parse(localStorage.getItem("fps_yt_cache_v3") || "{}");
-    let localReviewsStore = JSON.parse(localStorage.getItem("fps_local_reviews_v3") || "{}");
+    let myWatchlist = JSON.parse(localStorage.getItem("fps_watchlist_v4") || "[]");
+    let ytCache = JSON.parse(localStorage.getItem("fps_yt_cache_v4") || "{}");
+    let localReviewsStore = JSON.parse(localStorage.getItem("fps_local_reviews_v4") || "{}");
 
     // =========================================================================
-    // 4. EXACT TIERED RATING & COLOR RESOLVER (ZERO EMOJIS)
+    // 5. CUSTOM TIERED RATING SYSTEM & ROCKSTAR OVERRIDES (ZERO EMOJIS)
     // =========================================================================
     function getScoreTierMeta(scoreNum) {
       const s = Math.min(10, Math.max(0, Number(scoreNum)));
@@ -1087,7 +1218,7 @@
 
       // Rockstar Special Overrides
       if (name.includes("red dead redemption 2")) {
-        return { score: scoreStr, scoreNum: score, label: "ABSOLUTE RDR", color: "#f59e0b", badgeClass: "badge-rdr" };
+        return { score: "9.7", scoreNum: 9.7, label: "ABSOLUTE RDR", color: "#f59e0b", badgeClass: "badge-rdr" };
       }
       if (
         name.includes("grand theft auto v") ||
@@ -1096,14 +1227,13 @@
         name.includes("grand theft auto iv") ||
         name.includes("san andreas")
       ) {
-        return { score: scoreStr, scoreNum: score, label: "ABSOLUTE GTA", color: "#10b981", badgeClass: "badge-gta" };
+        return { score: "9.7", scoreNum: 9.7, label: "ABSOLUTE GTA", color: "#10b981", badgeClass: "badge-gta" };
       }
 
       const tier = getScoreTierMeta(score);
       return { score: scoreStr, scoreNum: score, ...tier };
     }
 
-    // Format ISO Date -> "October 26, 2018"
     function formatExactDate(dateStr) {
       if (!dateStr) return "TBA";
       const d = new Date(dateStr + (dateStr.length === 4 ? "-01-01" : "T00:00:00"));
@@ -1112,7 +1242,6 @@
       return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
     }
 
-    // Escape HTML cleanly
     function escapeHtml(str = "") {
       return String(str)
         .replace(/&/g, "&amp;")
@@ -1122,9 +1251,6 @@
         .replace(/'/g, "&#039;");
     }
 
-    // =========================================================================
-    // 5. TOAST NOTIFICATION
-    // =========================================================================
     let toastTimer = null;
     function showToast(msg) {
       const box = document.getElementById("toastBox");
@@ -1136,7 +1262,7 @@
     }
 
     // =========================================================================
-    // 6. FIREBASE AUTHENTICATION (GOOGLE ONLY + GUEST PREVIEW)
+    // 6. FIREBASE GOOGLE AUTHENTICATION + DROPDOWN
     // =========================================================================
     async function loginWithGoogle() {
       const errEl = document.getElementById("loginErrorMsg");
@@ -1153,8 +1279,8 @@
         console.error("Google Sign-In Error:", err);
         if (errEl) {
           errEl.textContent = err.code === "auth/unauthorized-domain"
-            ? "Add this domain to Firebase Authorized Domains, or click Preview as Guest."
-            : (err.message || "Sign-in popup blocked. Click Preview as Guest.");
+            ? "Add this domain to Firebase Authorized Domains, or click Continue as Guest."
+            : (err.message || "Sign-in popup blocked. Click Continue as Guest.");
           errEl.classList.remove("hidden");
         }
       } finally {
@@ -1165,6 +1291,7 @@
 
     async function logout() {
       try {
+        toggleUserDropdown(false);
         await signOut(auth);
         showToast("Signed out of FPS");
       } catch (err) {
@@ -1181,32 +1308,36 @@
       document.getElementById("loginModal").classList.add("hidden");
     }
 
+    function toggleUserDropdown(forceState) {
+      const dd = document.getElementById("navUserDropdown");
+      if (!dd) return;
+      if (typeof forceState === "boolean") {
+        dd.classList.toggle("hidden", !forceState);
+      } else {
+        dd.classList.toggle("hidden");
+      }
+    }
+
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
       const loginModal = document.getElementById("loginModal");
       const navLoginBtn = document.getElementById("navLoginBtn");
-      const navUserPill = document.getElementById("navUserPill");
+      const navUserWrap = document.getElementById("navUserWrap");
       const navUserAvatar = document.getElementById("navUserAvatar");
       const navUserName = document.getElementById("navUserName");
 
       if (user) {
         if (loginModal) loginModal.classList.add("hidden");
         if (navLoginBtn) navLoginBtn.classList.add("hidden");
-        if (navUserPill) {
-          navUserPill.classList.remove("hidden");
-          navUserPill.classList.add("flex");
-        }
+        if (navUserWrap) navUserWrap.classList.remove("hidden");
         if (navUserAvatar) {
           navUserAvatar.src = user.photoURL || `https://placehold.co/80x80/e50914/ffffff?text=${encodeURIComponent((user.displayName || "P")[0])}`;
         }
-        if (navUserName) {
-          navUserName.textContent = (user.displayName || "Player").split(" ")[0];
-        }
+        if (navUserName) navUserName.textContent = (user.displayName || "Player").split(" ")[0];
+        document.getElementById("dropdownUserName").textContent = user.displayName || "FPS Member";
+        document.getElementById("dropdownUserEmail").textContent = user.email || "";
       } else {
-        if (navUserPill) {
-          navUserPill.classList.add("hidden");
-          navUserPill.classList.remove("flex");
-        }
+        if (navUserWrap) navUserWrap.classList.add("hidden");
         if (navLoginBtn) navLoginBtn.classList.remove("hidden");
       }
 
@@ -1225,7 +1356,7 @@
     }
 
     // =========================================================================
-    // 7. HERO BILLBOARD (20+ GAMES, REAL RAWG POSTERS, AUTOPLAY TRAILERS)
+    // 7. HERO BILLBOARD (50-SECOND TIMER, NO PROGRESS BAR, 20+ GAMES)
     // =========================================================================
     async function hydrateHeroSlideFromRAWG(seed) {
       const slide = {
@@ -1240,7 +1371,8 @@
         description: seed.description,
         background_image: `https://i.ytimg.com/vi/${seed.yt}/maxresdefault.jpg`,
         platforms: [],
-        genres: []
+        genres: [],
+        stores: []
       };
 
       try {
@@ -1259,6 +1391,7 @@
           if (data.developers?.[0]) slide.studio = data.developers[0].name;
           if (data.platforms) slide.platforms = data.platforms;
           if (data.genres) slide.genres = data.genres;
+          if (data.stores) slide.stores = data.stores;
           if (data.metacritic) slide.metacritic = data.metacritic;
         }
       } catch (err) {
@@ -1280,7 +1413,8 @@
         description: seed.description,
         background_image: `https://i.ytimg.com/vi/${seed.yt}/maxresdefault.jpg`,
         platforms: [],
-        genres: []
+        genres: [],
+        stores: []
       }));
 
       renderHeroIndicators();
@@ -1293,9 +1427,9 @@
         document.getElementById("heroPosterLayer").style.backgroundImage = `url('${heroSlides[currentHeroIdx].background_image}')`;
       }
 
-      // Append 6+ additional top-rated RAWG titles for 22+ hero slides
+      // Append 6 additional top-rated RAWG titles so billboard always has 22 flagship games
       try {
-        const extraRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&ordering=-metacritic&metacritic=88,100&page_size=20`);
+        const extraRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&ordering=-metacritic&metacritic=88,100&page_size=22`);
         const extraData = await extraRes.json();
         const existingNames = new Set(heroSlides.map((s) => s.name.toLowerCase()));
         let added = 0;
@@ -1313,10 +1447,11 @@
             rating: g.rating,
             studio: "Critically Acclaimed",
             released: g.released || "2024",
-            description: "Critically acclaimed title ranked among the highest-rated releases. Open Write Review & Details for full studios, launch date, screenshots, and trailer.",
+            description: "Critically acclaimed release ranked among the highest-rated titles. Open Review & Specs for verified studios, storefronts, screenshots, and trailer.",
             background_image: g.background_image,
             platforms: g.platforms || [],
-            genres: g.genres || []
+            genres: g.genres || [],
+            stores: g.stores || []
           });
           added++;
         }
@@ -1343,8 +1478,8 @@
         btn.title = slide.name;
         btn.onclick = () => showHeroSlide(idx);
         btn.className = idx === currentHeroIdx
-          ? "h-1.5 w-8 rounded-full bg-[#e50914] shadow-[0_0_12px_rgba(229,9,20,0.9)] transition-all flex-shrink-0"
-          : "h-1.5 w-3 rounded-full bg-white/35 hover:bg-white/75 transition-all flex-shrink-0";
+          ? "h-2 w-6 rounded-full bg-[#e50914] shadow-[0_0_12px_rgba(229,9,20,0.9)] transition-all flex-shrink-0"
+          : "h-2 w-2 rounded-full bg-white/35 hover:bg-white/75 transition-all flex-shrink-0";
         container.appendChild(btn);
       });
     }
@@ -1379,7 +1514,6 @@
       renderHeroIndicators();
       syncHeroWatchlistButton();
 
-      // Fade in muted background YouTube trailer after 800ms
       const videoShell = document.getElementById("heroVideoShell");
       videoShell.innerHTML = "";
       clearTimeout(heroVideoFadeTimer);
@@ -1387,6 +1521,8 @@
       const snapshotIdx = currentHeroIdx;
       heroVideoFadeTimer = setTimeout(async () => {
         if (currentHeroIdx !== snapshotIdx) return;
+        if (!document.getElementById("reviewModal").classList.contains("hidden")) return;
+
         let ytId = slide.yt;
         if (!ytId) {
           ytId = await fetchYouTubeTrailerId(slide.name);
@@ -1399,38 +1535,26 @@
         iframe.id = "activeHeroIframe";
         iframe.className = "hero-video-frame";
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-        iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=${muteParam}&controls=0&loop=1&playlist=${ytId}&playsinline=1&enablejsapi=1&rel=0&modestbranding=1`;
+        iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=${muteParam}&playsinline=1&loop=1&playlist=${ytId}&controls=0&enablejsapi=1&rel=0&modestbranding=1`;
         iframe.onload = () => {
           setTimeout(() => iframe.classList.add("is-playing"), 220);
         };
         videoShell.innerHTML = "";
         videoShell.appendChild(iframe);
-      }, 800);
+      }, 750);
 
       restartHeroAutoAdvance();
     }
 
+    // Strict 50-Second (50000ms) Auto-Slide Interval — No Progress Bar
     function restartHeroAutoAdvance() {
       clearInterval(heroAutoTimer);
-      const bar = document.getElementById("heroProgressBar");
-      if (bar) {
-        bar.style.transition = "none";
-        bar.style.width = "0%";
-      }
       if (!heroMuted) return;
-
-      requestAnimationFrame(() => {
-        if (bar) {
-          bar.style.transition = "width 14s linear";
-          bar.style.width = "100%";
-        }
-      });
-
       heroAutoTimer = setInterval(() => {
         if (document.getElementById("reviewModal").classList.contains("hidden")) {
           nextHeroSlide();
         }
-      }, 14000);
+      }, 50000);
     }
 
     function nextHeroSlide() { showHeroSlide(currentHeroIdx + 1); }
@@ -1461,11 +1585,10 @@
           "*"
         );
         if (!heroMuted) {
-          const slide = heroSlides[currentHeroIdx];
-          if (slide?.yt) {
-            iframe.src = `https://www.youtube-nocookie.com/embed/${slide.yt}?autoplay=1&mute=0&controls=0&loop=1&playlist=${slide.yt}&playsinline=1&enablejsapi=1&rel=0&modestbranding=1`;
-            iframe.classList.add("is-playing");
-          }
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: "command", func: "setVolume", args: [100] }),
+            "*"
+          );
         }
       }
     }
@@ -1492,10 +1615,10 @@
       });
     }
 
-    function openHeroModal(tab = "reviews", autoPlayTrailer = false) {
+    function openHeroModal(tab = "reviews") {
       const slide = heroSlides[currentHeroIdx];
       if (!slide) return;
-      openReviewModal(slide, tab, autoPlayTrailer);
+      openReviewModal(slide, tab);
     }
 
     function toggleHeroWatchlist() {
@@ -1506,7 +1629,7 @@
     }
 
     // =========================================================================
-    // 8. YOUTUBE DATA API v3 FETCH + CACHE
+    // 8. YOUTUBE DATA API v3 FETCH + LOCALSTORAGE CACHE
     // =========================================================================
     async function fetchYouTubeTrailerId(gameName) {
       const key = (gameName || "").toLowerCase().trim();
@@ -1519,17 +1642,17 @@
         const vid = data?.items?.[0]?.id?.videoId;
         if (vid) {
           ytCache[key] = vid;
-          localStorage.setItem("fps_yt_cache_v3", JSON.stringify(ytCache));
+          localStorage.setItem("fps_yt_cache_v4", JSON.stringify(ytCache));
           return vid;
         }
       } catch (err) {
-        console.warn("YouTube fetch fallback:", err);
+        console.warn("YouTube API fallback:", err);
       }
       return null;
     }
 
     // =========================================================================
-    // 9. ENDLESS HORIZONTAL & VERTICAL CATALOG ROWS (DEDUPLICATED)
+    // 9. ENDLESS DEDUPLICATED HORIZONTAL & VERTICAL CAROUSELS
     // =========================================================================
     const ALL_CATALOG_ROWS = [
       { id: "row-rockstar", title: "Rockstar Vault", tag: "EXCLUSIVE EDITIONS", accent: "bg-amber-400", query: "developers=rockstar-games&ordering=-rating" },
@@ -1569,7 +1692,7 @@
           </div>
           <div class="absolute bottom-3 left-3 right-3 space-y-1">
             <h3 class="text-white text-xs sm:text-sm font-extrabold line-clamp-1 drop-shadow">${escapeHtml(game.name)}</h3>
-            <div class="flex items-center justify-between text-[11px] font-bold">
+            <div class="flex items-center justify-between font-mono-num text-[11px] font-bold">
               <span class="inline-flex items-center gap-1 text-amber-400">
                 <svg class="w-3 h-3 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 ${rating.score}
@@ -1582,7 +1705,7 @@
 
       card.addEventListener("click", () => {
         if (card.closest(".drag-scroll")?.dataset.wasDragged === "1") return;
-        openReviewModal(game, "reviews", false);
+        openReviewModal(game, "reviews");
       });
 
       return card;
@@ -1718,8 +1841,184 @@
     }
 
     // =========================================================================
-    // 10. CRAZY REVIEW & DETAILS THEATER MODAL + LIVE RAWG ENRICHMENT
+    // 10. GAME REVIEW MODAL — INSTANT AUTOPLAY TRAILER + OFFICIAL STOREFRONTS
     // =========================================================================
+    function syncModalSoundUI() {
+      const iconMuted = document.getElementById("modalSoundIconMuted");
+      const iconOn = document.getElementById("modalSoundIconOn");
+      const label = document.getElementById("modalSoundLabel");
+      if (modalMuted) {
+        iconMuted.classList.remove("hidden");
+        iconOn.classList.add("hidden");
+        label.textContent = "UNMUTE SOUND";
+      } else {
+        iconMuted.classList.add("hidden");
+        iconOn.classList.remove("hidden");
+        label.textContent = "MUTE";
+      }
+    }
+
+    function toggleModalSound() {
+      modalMuted = !modalMuted;
+      syncModalSoundUI();
+      const iframe = document.getElementById("modalIframe");
+      if (iframe && iframe.contentWindow) {
+        if (modalMuted) {
+          iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "mute", args: [] }), "*");
+        } else {
+          iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "unMute", args: [] }), "*");
+          iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "setVolume", args: [100] }), "*");
+        }
+      }
+    }
+
+    async function launchModalAutoplayTrailer(game) {
+      const iframe = document.getElementById("modalIframe");
+      const loader = document.getElementById("modalVideoLoader");
+      const backdrop = document.getElementById("modalVideoBackdrop");
+      const targetName = game.name;
+
+      modalMuted = true;
+      syncModalSoundUI();
+      iframe.src = "";
+      backdrop.style.backgroundImage = `url('${game.background_image || ""}')`;
+
+      let ytId = game.yt || KNOWN_YT_MAP[(game.name || "").toLowerCase()] || ytCache[(game.name || "").toLowerCase()];
+      if (!ytId) {
+        loader.classList.remove("hidden");
+        ytId = await fetchYouTubeTrailerId(game.name);
+        if (ytId) game.yt = ytId;
+        loader.classList.add("hidden");
+      }
+
+      // Guard if user already switched or closed modal while fetching
+      if (!currentModalGame || currentModalGame.name !== targetName) return;
+
+      if (ytId) {
+        iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&controls=1`;
+      } else {
+        iframe.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(game.name + " official trailer")}&autoplay=1&mute=1&playsinline=1&enablejsapi=1`;
+      }
+    }
+
+    function resolveStoreKey(storeId, storeSlug = "") {
+      if (RAWG_STORE_ID_TO_KEY[storeId]) return RAWG_STORE_ID_TO_KEY[storeId];
+      const slug = (storeSlug || "").toLowerCase();
+      if (slug.includes("playstation")) return "playstation-store";
+      if (slug.includes("xbox")) return "xbox-store";
+      if (slug.includes("steam")) return "steam";
+      if (slug.includes("epic")) return "epic-games";
+      if (slug.includes("nintendo")) return "nintendo";
+      if (slug.includes("gog")) return "gog";
+      if (slug.includes("apple") || slug.includes("appstore")) return "apple-appstore";
+      if (slug.includes("google")) return "google-play";
+      return null;
+    }
+
+    function renderStorefrontsUI(storeEntries, gameName) {
+      const grid = document.getElementById("modalStorefrontsGrid");
+      const wrap = document.getElementById("modalStorefrontsWrap");
+      const statusText = document.getElementById("storefrontsStatusText");
+
+      if (!storeEntries.length) {
+        wrap.classList.add("hidden");
+        return;
+      }
+
+      wrap.classList.remove("hidden");
+      statusText.textContent = `${storeEntries.length} OFFICIAL ${storeEntries.length === 1 ? "STOREFRONT" : "STOREFRONTS"}`;
+
+      grid.innerHTML = storeEntries.map((entry) => {
+        const meta = STORE_CATALOG[entry.key];
+        const href = entry.url && entry.url.startsWith("http") ? entry.url : meta.searchUrl(gameName);
+        return `
+          <a
+            href="${escapeHtml(href)}"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="--store-accent: ${meta.accent}; --store-glow: ${meta.glow};"
+            class="store-card group rounded-xl px-3.5 py-3 flex items-center justify-between gap-2.5 text-left"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-lg bg-black/55 border border-white/10 flex items-center justify-center flex-shrink-0">
+                ${meta.svg}
+              </div>
+              <div class="min-w-0">
+                <div class="text-xs font-extrabold text-white truncate">${meta.name}</div>
+                <div class="text-[10px] font-semibold tracking-wider uppercase text-gray-400 truncate">${meta.sub}</div>
+              </div>
+            </div>
+            <svg class="w-4 h-4 text-gray-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H9M17 7v8"/>
+            </svg>
+          </a>
+        `;
+      }).join("");
+    }
+
+    async function hydrateStorefronts(game, details) {
+      const grid = document.getElementById("modalStorefrontsGrid");
+      const wrap = document.getElementById("modalStorefrontsWrap");
+      wrap.classList.remove("hidden");
+      grid.innerHTML = `<div class="col-span-full py-2 text-[11px] font-bold tracking-widest uppercase text-gray-400">Verifying official storefronts...</div>`;
+
+      const storeMap = new Map();
+      const gameId = details?.id || game.rawgId || (typeof game.id === "number" ? game.id : null);
+
+      // Step 1: Cross-reference game.stores from /api/games/{id} or initial card payload
+      const baseStores = details?.stores || game.stores || [];
+      for (const s of baseStores) {
+        const key = resolveStoreKey(s.store?.id, s.store?.slug);
+        if (key && STORE_CATALOG[key] && !storeMap.has(key)) {
+          storeMap.set(key, { key, url: s.url || "" });
+        }
+      }
+
+      // Step 2: Fetch direct store URLs from /api/games/{id}/stores
+      if (gameId) {
+        try {
+          let liveStores = rawgStoresCache.get(String(gameId));
+          if (!liveStores) {
+            const res = await fetch(`https://api.rawg.io/api/games/${gameId}/stores?key=${RAWG_API_KEY}`);
+            if (res.ok) {
+              const data = await res.json();
+              liveStores = data.results || [];
+              rawgStoresCache.set(String(gameId), liveStores);
+            }
+          }
+          for (const item of (liveStores || [])) {
+            const key = resolveStoreKey(item.store_id, "");
+            if (key && STORE_CATALOG[key]) {
+              const existing = storeMap.get(key);
+              if (!existing || (!existing.url && item.url)) {
+                storeMap.set(key, { key, url: item.url || "" });
+              }
+            }
+          }
+        } catch (err) {
+          console.warn("RAWG stores endpoint fallback:", err);
+        }
+      }
+
+      // Add official Rockstar Games Launcher for Rockstar titles
+      const devStr = (details?.developers || []).map((d) => d.name.toLowerCase()).join(" ");
+      const pubStr = (details?.publishers || []).map((p) => p.name.toLowerCase()).join(" ");
+      const studioStr = (game.studio || "").toLowerCase();
+      if (devStr.includes("rockstar") || pubStr.includes("rockstar") || studioStr.includes("rockstar")) {
+        if (!storeMap.has("rockstar")) {
+          storeMap.set("rockstar", { key: "rockstar", url: STORE_CATALOG.rockstar.searchUrl(game.name) });
+        }
+      }
+
+      // Order storefronts cleanly: PS, Xbox, Steam, Epic, Rockstar, Nintendo, GOG, App Store, Google Play
+      const priority = ["playstation-store", "xbox-store", "steam", "epic-games", "rockstar", "nintendo", "gog", "apple-appstore", "google-play"];
+      const ordered = priority.filter((k) => storeMap.has(k)).map((k) => storeMap.get(k));
+
+      if (currentModalGame && currentModalGame.name === game.name) {
+        renderStorefrontsUI(ordered, game.name);
+      }
+    }
+
     function renderVerdictTagButtons() {
       const wrap = document.getElementById("verdictTagsContainer");
       if (!wrap) return;
@@ -1750,17 +2049,14 @@
       const tier = getScoreTierMeta(score);
       const pct = score * 10;
 
-      // Update CSS variable for slider thumb glow
       document.documentElement.style.setProperty("--gauge-color", tier.color);
 
-      // Update slider track fill
       const slider = document.getElementById("reviewScoreSlider");
       if (slider) {
         slider.value = score.toFixed(1);
         slider.style.background = `linear-gradient(to right, ${tier.color} 0%, ${tier.color} ${pct}%, rgba(255,255,255,0.12) ${pct}%, rgba(255,255,255,0.12) 100%)`;
       }
 
-      // Update SVG Circular Arc (circumference = 2 * PI * 76 = 477.52)
       const arc = document.getElementById("interactiveGaugeArc");
       if (arc) {
         const circ = 477.52;
@@ -1768,22 +2064,18 @@
         arc.style.stroke = tier.color;
       }
 
-      // Update ambient glow & numeric display & badge
       const circleGlow = document.getElementById("interactiveCircleGlow");
       const studioGlow = document.getElementById("studioAmbientBackdrop");
       if (circleGlow) circleGlow.style.background = tier.color;
       if (studioGlow) studioGlow.style.background = tier.color;
 
       const scoreEl = document.getElementById("interactiveScoreDisplay");
-      if (scoreEl) {
-        scoreEl.textContent = score.toFixed(1);
-        scoreEl.style.color = "#ffffff";
-      }
+      if (scoreEl) scoreEl.textContent = score.toFixed(1);
 
       const pill = document.getElementById("interactiveTierPill");
       if (pill) {
         pill.textContent = tier.label;
-        pill.className = `mt-2 px-3 py-0.5 rounded text-[10px] font-black tracking-widest uppercase ${tier.badgeClass}`;
+        pill.className = `mt-2.5 px-3 py-0.5 rounded text-[10px] font-black tracking-widest uppercase ${tier.badgeClass}`;
       }
     }
 
@@ -1806,7 +2098,7 @@
     function setCircularRing(arcId, glowId, scoreNum, color) {
       const arc = document.getElementById(arcId);
       const glow = document.getElementById(glowId);
-      const circ = 314.16; // 2 * PI * 50
+      const circ = 314.16;
       if (arc) {
         arc.style.stroke = color;
         arc.style.strokeDashoffset = scoreNum === null ? String(circ) : String(circ - (circ * scoreNum) / 10);
@@ -1816,7 +2108,7 @@
       }
     }
 
-    async function openReviewModal(game, defaultTab = "reviews", autoPlayTrailer = false) {
+    async function openReviewModal(game, defaultTab = "reviews") {
       currentModalGame = { ...game };
       currentModalGameKey = String(game.rawgId || game.id || game.slug || game.name.toLowerCase());
       activeTierFilter = "ALL";
@@ -1824,14 +2116,14 @@
       resetReviewComposer();
       updateReviewAuthorStatus();
 
-      // Pause hero background video while modal is open
+      // Immediately pause hero background trailer
+      clearTimeout(heroVideoFadeTimer);
       const heroShell = document.getElementById("heroVideoShell");
       if (heroShell) heroShell.innerHTML = "";
 
       const modal = document.getElementById("reviewModal");
       const rating = getOfficialRatingInfo(game);
 
-      // Top Breadcrumb & Title
       document.getElementById("modalTopBreadcrumb").textContent = game.name;
       document.getElementById("modalTitle").textContent = game.name;
 
@@ -1846,7 +2138,7 @@
       criticLabel.style.color = rating.color;
       setCircularRing("criticRingArc", "criticRingGlow", rating.scoreNum, rating.color);
 
-      // Initial Metadata placeholders while live RAWG details load
+      // Initial Metadata
       document.getElementById("metaDeveloper").textContent = game.studio || "Loading...";
       document.getElementById("metaPublisher").textContent = game.studio || "Loading...";
       document.getElementById("metaLaunchDate").textContent = formatExactDate(game.released);
@@ -1880,7 +2172,7 @@
         <div class="bg-white/[0.04] border border-white/10 rounded-xl p-3.5">
           <div class="flex items-center justify-between text-[10px] font-extrabold tracking-wider uppercase text-gray-300 mb-2">
             <span>${m.label}</span>
-            <span class="text-white font-black">${m.val.toFixed(1)}</span>
+            <span class="font-mono-num text-white font-black">${m.val.toFixed(1)}</span>
           </div>
           <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
             <div class="score-bar-fill h-full ${m.color} rounded-full" style="width: 0%" data-target="${Math.round(m.val * 10)}%"></div>
@@ -1888,14 +2180,6 @@
         </div>
       `).join("");
 
-      // Video Player Poster Setup
-      const overlay = document.getElementById("modalVideoPosterOverlay");
-      const iframe = document.getElementById("modalIframe");
-      iframe.src = "";
-      overlay.style.backgroundImage = `url('${game.background_image || ""}')`;
-      overlay.classList.remove("hidden");
-
-      // Hide screenshots strip until hydrated
       document.getElementById("modalScreenshotsStripWrap").classList.add("hidden");
       document.getElementById("modalScreenshotsStrip").innerHTML = "";
       document.getElementById("modalFullScreenshotsGrid").innerHTML = `<div class="col-span-full py-6 text-xs font-bold uppercase tracking-widest text-gray-400">Loading official HD screenshots...</div>`;
@@ -1907,21 +2191,22 @@
       modal.scrollTop = 0;
       document.body.style.overflow = "hidden";
 
-      // Load Live Community Reviews from Firestore
+      // 1. GUARANTEED INSTANT AUTOPLAY TRAILER INSIDE MODAL
+      launchModalAutoplayTrailer(game);
+
+      // 2. Load Live Community Reviews from Firestore
       loadGameReviews(currentModalGameKey);
 
-      // Auto-play trailer if user clicked "WATCH TRAILER"
-      if (autoPlayTrailer) {
-        playModalTrailerNow();
-      }
-
-      // Live RAWG Detail + Screenshots Enrichment
+      // 3. Live RAWG Enrichment (Details, Storefronts, Screenshots)
       enrichModalWithLiveRAWG(game);
     }
 
     async function enrichModalWithLiveRAWG(game) {
       const lookupId = game.rawgId || (typeof game.id === "number" ? game.id : game.slug);
-      if (!lookupId) return;
+      if (!lookupId) {
+        hydrateStorefronts(game, null);
+        return;
+      }
 
       try {
         let details = rawgDetailCache.get(String(lookupId));
@@ -1932,6 +2217,9 @@
             rawgDetailCache.set(String(lookupId), details);
           }
         }
+
+        // Hydrate Official Storefronts immediately using details + /stores endpoint
+        hydrateStorefronts(game, details);
 
         if (details && currentModalGame && currentModalGame.name === game.name) {
           const devs = (details.developers || []).map((d) => d.name).join(", ") || game.studio || "Independent Studio";
@@ -1996,6 +2284,7 @@
         }
       } catch (err) {
         console.warn("RAWG live detail enrichment failed:", err);
+        hydrateStorefronts(game, null);
       }
     }
 
@@ -2059,25 +2348,6 @@
       `;
     }
 
-    async function playModalTrailerNow() {
-      if (!currentModalGame) return;
-      const overlay = document.getElementById("modalVideoPosterOverlay");
-      const iframe = document.getElementById("modalIframe");
-      overlay.classList.add("hidden");
-
-      let ytId = currentModalGame.yt || KNOWN_YT_MAP[(currentModalGame.name || "").toLowerCase()];
-      if (!ytId) {
-        ytId = await fetchYouTubeTrailerId(currentModalGame.name);
-        if (ytId) currentModalGame.yt = ytId;
-      }
-
-      if (ytId) {
-        iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1&modestbranding=1&enablejsapi=1`;
-      } else {
-        iframe.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(currentModalGame.name + " official trailer")}&autoplay=1`;
-      }
-    }
-
     function openLightbox(url) {
       document.getElementById("lightboxImage").src = url;
       document.getElementById("screenshotLightbox").classList.remove("hidden");
@@ -2118,7 +2388,7 @@
     }
 
     // =========================================================================
-    // 11. FIRESTORE COMMUNITY REVIEWS ENGINE (WITH GRACEFUL LOCAL FALLBACK)
+    // 11. FIRESTORE COMMUNITY REVIEWS ENGINE + LOCALSTORAGE FALLBACK
     // =========================================================================
     function getActiveUserIdentity() {
       if (currentUser) {
@@ -2145,23 +2415,16 @@
       feed.innerHTML = `<div class="py-8 text-center text-xs font-bold tracking-widest uppercase text-gray-400">Syncing reviews from Firestore...</div>`;
 
       const mergedMap = new Map();
-
-      // 1. Load local fallback reviews first
       const localList = localReviewsStore[gameKey] || [];
       localList.forEach((r) => mergedMap.set(r.docId, r));
 
-      // 2. Query Firestore collection "game_reviews"
       try {
         const q = query(collection(db, "game_reviews"), where("gameId", "==", gameKey));
         const snap = await getDocs(q);
         snap.forEach((docSnap) => {
           const d = docSnap.data();
           const ts = d.updatedAt?.toMillis ? d.updatedAt.toMillis() : (d.clientTimestamp || Date.now());
-          mergedMap.set(docSnap.id, {
-            docId: docSnap.id,
-            ...d,
-            timestampMs: ts
-          });
+          mergedMap.set(docSnap.id, { docId: docSnap.id, ...d, timestampMs: ts });
         });
         document.getElementById("dbSyncBadge").innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>FIRESTORE LIVE SYNC</span>`;
       } catch (err) {
@@ -2207,11 +2470,9 @@
 
     function updateTierFilterButtons() {
       document.querySelectorAll(".tier-filter-btn").forEach((btn) => {
-        if (btn.dataset.filter === activeTierFilter) {
-          btn.className = "tier-filter-btn px-3 py-1 rounded-full bg-[#e50914] text-white transition";
-        } else {
-          btn.className = "tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition";
-        }
+        btn.className = btn.dataset.filter === activeTierFilter
+          ? "tier-filter-btn px-3 py-1 rounded-full bg-[#e50914] text-white transition"
+          : "tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition";
       });
     }
 
@@ -2258,7 +2519,7 @@
 
               <div class="flex items-center gap-2.5">
                 <span class="px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase ${tier.badgeClass}">${tier.label}</span>
-                <div class="px-3 py-1 rounded-lg bg-black/60 border border-white/15 font-display text-lg font-black leading-none" style="color: ${tier.color};">
+                <div class="px-3 py-1 rounded-lg bg-black/60 border border-white/15 font-mono-num text-base font-black leading-none" style="color: ${tier.color};">
                   ${Number(r.score).toFixed(1)}
                 </div>
               </div>
@@ -2287,7 +2548,7 @@
       const comment = document.getElementById("reviewCommentInput").value.trim();
 
       if (!comment && !headline) {
-        showToast("Please write a headline or critique before publishing");
+        showToast("Write a headline or critique before publishing");
         return;
       }
 
@@ -2316,7 +2577,6 @@
         clientTimestamp: nowMs
       };
 
-      // Save to Firestore
       let syncedToCloud = false;
       try {
         await setDoc(doc(db, "game_reviews", docId), {
@@ -2328,14 +2588,13 @@
         console.warn("Firestore write fallback to localStorage:", err);
       }
 
-      // Always mirror in localStorage for instant resilience
       const list = localReviewsStore[currentModalGameKey] || [];
       const existingIdx = list.findIndex((r) => r.docId === docId);
       const record = { docId, ...payload, timestampMs: nowMs };
       if (existingIdx >= 0) list[existingIdx] = record;
       else list.unshift(record);
       localReviewsStore[currentModalGameKey] = list;
-      localStorage.setItem("fps_local_reviews_v3", JSON.stringify(localReviewsStore));
+      localStorage.setItem("fps_local_reviews_v4", JSON.stringify(localReviewsStore));
 
       btn.disabled = false;
       resetReviewComposer();
@@ -2355,7 +2614,7 @@
       document.getElementById("composerHeading").textContent = "Edit Your Official Rating";
       document.getElementById("publishReviewBtnText").textContent = "UPDATE REVIEW";
       document.getElementById("cancelEditBtn").classList.remove("hidden");
-      document.getElementById("reviewModal").scrollTo({ top: 420, behavior: "smooth" });
+      document.getElementById("reviewModal").scrollTo({ top: 520, behavior: "smooth" });
     }
 
     async function deleteUserReview(docId) {
@@ -2366,7 +2625,7 @@
       }
       const list = localReviewsStore[currentModalGameKey] || [];
       localReviewsStore[currentModalGameKey] = list.filter((r) => r.docId !== docId);
-      localStorage.setItem("fps_local_reviews_v3", JSON.stringify(localReviewsStore));
+      localStorage.setItem("fps_local_reviews_v4", JSON.stringify(localReviewsStore));
       if (editingReviewId === docId) resetReviewComposer();
       await loadGameReviews(currentModalGameKey);
       showToast("Review deleted");
@@ -2398,11 +2657,12 @@
           yt: game.yt,
           studio: game.studio,
           genres: game.genres,
-          platforms: game.platforms
+          platforms: game.platforms,
+          stores: game.stores
         });
         showToast("Added to Watchlist");
       }
-      localStorage.setItem("fps_watchlist_v3", JSON.stringify(myWatchlist));
+      localStorage.setItem("fps_watchlist_v4", JSON.stringify(myWatchlist));
       updateWatchlistBadgeCount();
     }
 
@@ -2448,7 +2708,7 @@
               <div class="min-w-0">
                 <h4 class="text-sm font-bold text-white truncate">${escapeHtml(game.name)}</h4>
                 <div class="flex items-center gap-2 mt-1">
-                  <span class="text-xs font-black text-amber-400">${rating.score}</span>
+                  <span class="font-mono-num text-xs font-black text-amber-400">${rating.score}</span>
                   <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">${rating.label}</span>
                 </div>
               </div>
@@ -2471,12 +2731,12 @@
       const g = myWatchlist[idx];
       if (!g) return;
       closeWatchlistModal();
-      openReviewModal(g, "reviews", false);
+      openReviewModal(g, "reviews");
     }
 
     function removeWatchlistItem(idx) {
       myWatchlist.splice(idx, 1);
-      localStorage.setItem("fps_watchlist_v3", JSON.stringify(myWatchlist));
+      localStorage.setItem("fps_watchlist_v4", JSON.stringify(myWatchlist));
       updateWatchlistBadgeCount();
       syncHeroWatchlistButton();
       openWatchlistModal();
@@ -2494,7 +2754,7 @@
     }
 
     // =========================================================================
-    // 13. LIVE DEBOUNCED SEARCH
+    // 13. LIVE DEBOUNCED SEARCH + GLOBAL DISMISS LISTENERS
     // =========================================================================
     const searchInput = document.getElementById("searchInput");
     const clearSearchBtn = document.getElementById("clearSearchBtn");
@@ -2539,12 +2799,14 @@
       searchSection.classList.add("hidden");
     });
 
-    // Backdrop & Escape Key Handling
     document.getElementById("reviewModal").addEventListener("click", (e) => {
       if (e.target.id === "reviewModal") closeReviewModal();
     });
     document.getElementById("watchlistModal").addEventListener("click", (e) => {
       if (e.target.id === "watchlistModal") closeWatchlistModal();
+    });
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#navUserWrap")) toggleUserDropdown(false);
     });
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
@@ -2555,13 +2817,14 @@
     });
 
     // =========================================================================
-    // 14. EXPOSE PUBLIC API ON WINDOW FOR INLINE HANDLERS
+    // 14. EXPOSE PUBLIC API ON WINDOW
     // =========================================================================
     window.FPS = {
       loginWithGoogle,
       logout,
       openLoginModal,
       dismissLoginAsGuest,
+      toggleUserDropdown,
       scrollToSection,
       scrollSlider,
       nextHeroSlide,
@@ -2572,7 +2835,7 @@
       openReviewModal,
       closeReviewModal,
       switchModalTab,
-      playModalTrailerNow,
+      toggleModalSound,
       openLightbox,
       closeLightbox,
       updateInteractiveGauge,
@@ -2599,19 +2862,19 @@
       renderVerdictTagButtons();
       updateInteractiveGauge(9.2);
 
-      // Remove 2s studio splash & present Google Sign-In Gate on first visit
+      // Remove 1.85s studio splash & present Google Sign-In Gate on first visit
       setTimeout(() => {
         const splash = document.getElementById("studioSplash");
         if (splash) splash.remove();
         if (!localStorage.getItem("fps_guest_dismissed") && !currentUser) {
           openLoginModal();
         }
-      }, 2050);
+      }, 1900);
 
-      // Launch 20+ Game Hero Billboard
+      // Launch 22-Game Hero Billboard (50s interval, no progress bar)
       initHeroBillboard();
 
-      // Mount Initial 4 Core Rows Immediately
+      // Mount Initial 4 Core Deduplicated Rows
       for (let i = 0; i < 4; i++) {
         await mountCatalogRow(ALL_CATALOG_ROWS[nextVerticalRowIndex++]);
       }
