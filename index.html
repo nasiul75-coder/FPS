@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>FPS — Game Rating, Reviews &amp; Comparison Hub</title>
 
-  <!-- Google Fonts -->
+  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,600;0,700;0,900;1,700;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -19,13 +19,12 @@
           colors: {
             brand: {
               yellow: '#FFAB00',
-              yellowHover: '#E09600',
               red: '#E50914',
               crimson: '#8B0000',
               gold: '#FFD700',
               gta: '#00FF66',
               cyan: '#00E5FF',
-              purple: '#9D4EDD',
+              purple: '#A855F7',
               bg: '#070709',
               card: '#111117',
               border: '#22222E'
@@ -51,18 +50,12 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Glow & Animations */
+    /* Glows */
     @keyframes pulseGlow {
       0%, 100% { box-shadow: 0 0 16px rgba(255, 171, 0, 0.4); }
       50% { box-shadow: 0 0 38px rgba(255, 171, 0, 0.85); }
     }
     .animate-fps-glow { animation: pulseGlow 2.2s infinite; }
-
-    @keyframes discoGlow {
-      0%, 100% { box-shadow: 0 0 14px rgba(0, 229, 255, 0.35); }
-      50% { box-shadow: 0 0 28px rgba(0, 229, 255, 0.75); }
-    }
-    .animate-disco-glow { animation: discoGlow 2s infinite; }
 
     @keyframes livePulse {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -71,34 +64,33 @@
     .live-dot { animation: livePulse 1.2s infinite; }
 
     .netflix-card {
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+      transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.26s ease, border-color 0.26s ease;
       will-change: transform;
     }
     .netflix-card:hover {
-      transform: scale(1.05) translateY(-5px);
-      box-shadow: 0 20px 32px -10px rgba(0, 0, 0, 0.95), 0 0 22px rgba(229, 9, 20, 0.35);
+      transform: scale(1.05) translateY(-4px);
+      box-shadow: 0 20px 32px -10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(229, 9, 20, 0.35);
       border-color: rgba(255, 171, 0, 0.6);
       z-index: 20;
     }
 
-    /* RDR2 Shell Drop */
     @keyframes dropShellLeft {
-      0% { transform: translateY(-280px) rotate(-45deg); opacity: 0; }
+      0% { transform: translateY(-260px) rotate(-45deg); opacity: 0; }
       70% { transform: translateY(0) rotate(12deg); opacity: 1; }
-      85% { transform: translateY(-24px) rotate(8deg); }
+      85% { transform: translateY(-20px) rotate(8deg); }
       100% { transform: translateY(0) rotate(14deg); opacity: 1; }
     }
     @keyframes dropShellRight {
-      0% { transform: translateY(-320px) rotate(45deg); opacity: 0; }
+      0% { transform: translateY(-300px) rotate(45deg); opacity: 0; }
       65% { transform: translateY(0) rotate(-18deg); opacity: 1; }
-      80% { transform: translateY(-20px) rotate(-10deg); }
+      80% { transform: translateY(-18px) rotate(-10deg); }
       100% { transform: translateY(0) rotate(-12deg); opacity: 1; }
     }
     .shell-left { animation: dropShellLeft 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     .shell-right { animation: dropShellRight 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.14s; }
   </style>
 
-  <!-- Firebase Compat SDKs (Deferred & Safe) -->
+  <!-- Firebase SDKs -->
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -113,7 +105,7 @@
       <div class="relative w-64 sm:w-80 h-36 sm:h-44 bg-brand-yellow rounded-3xl p-2.5 border-4 border-[#070709] ring-4 ring-brand-yellow flex flex-col justify-between items-center overflow-hidden animate-fps-glow">
         <div class="w-full flex justify-between items-center pt-1 px-4">
           <span class="text-black font-barlow italic font-black text-xs sm:text-sm tracking-wider">OFFICIAL SYSTEM</span>
-          <span class="text-black font-mono font-bold text-xs">2026 EDITION</span>
+          <span class="text-black font-mono font-bold text-xs">2026</span>
         </div>
         <div class="relative w-full flex items-center justify-center my-auto">
           <span class="font-barlow italic font-black text-7xl sm:text-8xl tracking-tighter text-black leading-none pr-3">FPS</span>
@@ -141,7 +133,7 @@
         s.dataset.done = '1';
         s.style.opacity = '0';
         s.style.pointerEvents = 'none';
-        setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 500);
+        setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 450);
       }
       setTimeout(hide, 1600);
       if (s) {
@@ -182,7 +174,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 3. TOP NAVIGATION BAR (HIGH VISIBILITY)   -->
+  <!-- 3. TOP NAVIGATION (HIGH VISIBILITY HUBS)  -->
   <!-- ========================================== -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-[#070709]/95 backdrop-blur-md border-b border-brand-border/80 shadow-2xl">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
@@ -201,10 +193,10 @@
         </div>
       </a>
 
-      <!-- High-Visibility Main Feature Nav -->
+      <!-- Primary Feature Navigation -->
       <nav class="hidden md:flex items-center gap-2 sm:gap-3">
-        <!-- FPS DISCO BUTTON (PROMINENT CYAN GLOW) -->
-        <button onclick="app.openDiscoverView()" class="relative group flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-brand-cyan/60 hover:border-brand-cyan text-brand-cyan font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-[0_0_15px_rgba(0,229,255,0.25)] hover:shadow-[0_0_22px_rgba(0,229,255,0.5)]">
+        <!-- 1. FPS DISCO BUTTON -->
+        <button onclick="app.openDiscoverView()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-brand-cyan/60 hover:border-brand-cyan text-brand-cyan font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-[0_0_15px_rgba(0,229,255,0.25)] hover:shadow-[0_0_24px_rgba(0,229,255,0.55)]">
           <svg class="w-4 h-4 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
@@ -212,24 +204,24 @@
           <span class="text-[9px] bg-brand-cyan text-black px-1.5 py-0.2 rounded font-mono font-black">NEW</span>
         </button>
 
-        <!-- VS COMPARE BUTTON (PROMINENT PURPLE GLOW) -->
-        <button onclick="app.openCompareView()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-brand-purple/60 hover:border-brand-purple text-purple-300 font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-[0_0_15px_rgba(157,78,221,0.25)] hover:shadow-[0_0_22px_rgba(157,78,221,0.5)]">
+        <!-- 2. GAME COMPARISON (VS) -->
+        <button onclick="app.openCompareView()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-brand-purple/60 hover:border-brand-purple text-purple-300 font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-[0_0_15px_rgba(168,85,247,0.25)] hover:shadow-[0_0_24px_rgba(168,85,247,0.55)]">
           <span class="font-bebas text-base text-purple-400">VS</span>
           <span class="font-barlow italic font-black text-sm">COMPARE</span>
         </button>
 
-        <!-- FPS MEDIA HOUSE BUTTON (PROMINENT RED GLOW) -->
+        <!-- 3. FPS MEDIA HOUSE -->
         <button onclick="app.openMediaHouse()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-brand-red/70 hover:border-brand-red text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.3)] hover:shadow-[0_0_25px_rgba(229,9,20,0.6)]">
           <span class="w-2.5 h-2.5 rounded-full bg-brand-red live-dot"></span>
           <span class="font-barlow italic font-black text-sm text-brand-red group-hover:text-white">MEDIA HOUSE</span>
         </button>
 
-        <!-- Quick Vault Links -->
+        <!-- Vault Jump Links -->
         <a href="javascript:void(0)" onclick="app.scrollToSection('section-rockstar')" class="text-xs font-mono font-bold text-neutral-400 hover:text-white transition px-2">ROCKSTAR</a>
         <a href="javascript:void(0)" onclick="app.scrollToSection('section-peak')" class="text-xs font-mono font-bold text-neutral-400 hover:text-white transition px-2">PEAK 9.5+</a>
       </nav>
 
-      <!-- Right Controls: Search, Wanna Play, Profile -->
+      <!-- Right Controls: Search, Wanna Play, Auth -->
       <div class="flex items-center gap-2 sm:gap-3 ml-auto shrink-0">
         <!-- Debounced Search -->
         <div class="relative flex items-center">
@@ -257,19 +249,19 @@
       </div>
     </div>
 
-    <!-- Mobile Sub-Navigation Bar for High Visibility of Disco & Media House -->
-    <div class="md:hidden flex items-center justify-around bg-[#0c0c12] border-t border-brand-border/60 px-2 py-2">
-      <button onclick="app.openDiscoverView()" class="flex items-center gap-1.5 text-brand-cyan text-xs font-bold font-barlow tracking-wider">
+    <!-- Mobile Action Bar (Always Visible on Mobile/iPad) -->
+    <div class="md:hidden flex items-center justify-around bg-[#0a0a10] border-t border-brand-border/60 px-2 py-2">
+      <button onclick="app.openDiscoverView()" class="flex items-center gap-1 text-brand-cyan text-xs font-bold font-barlow tracking-wider">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         FPS DISCO
       </button>
       <span class="text-neutral-700">|</span>
-      <button onclick="app.openCompareView()" class="flex items-center gap-1.5 text-purple-300 text-xs font-bold font-barlow tracking-wider">
+      <button onclick="app.openCompareView()" class="flex items-center gap-1 text-purple-300 text-xs font-bold font-barlow tracking-wider">
         <span class="font-bebas text-sm text-purple-400">VS</span>
         COMPARE
       </button>
       <span class="text-neutral-700">|</span>
-      <button onclick="app.openMediaHouse()" class="flex items-center gap-1.5 text-brand-red text-xs font-bold font-barlow tracking-wider">
+      <button onclick="app.openMediaHouse()" class="flex items-center gap-1 text-brand-red text-xs font-bold font-barlow tracking-wider">
         <span class="w-2 h-2 rounded-full bg-brand-red live-dot"></span>
         MEDIA HOUSE
       </button>
@@ -295,10 +287,9 @@
   </section>
 
   <!-- ========================================== -->
-  <!-- 5. NEW: FPS DISCO (DISCOVER & ANALYTICS)   -->
+  <!-- 5. FPS DISCO (DISCOVERY & PILLAR ANALYSIS) -->
   <!-- ========================================== -->
   <section id="discover-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-16 min-h-screen space-y-8">
-    <!-- Header Banner -->
     <div class="relative bg-gradient-to-r from-[#0C1929] via-[#09101C] to-[#070709] border border-brand-cyan/40 rounded-2xl p-6 sm:p-10 overflow-hidden shadow-[0_0_40px_rgba(0,229,255,0.15)]">
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="space-y-2">
@@ -306,13 +297,13 @@
             <span class="px-3 py-1 rounded bg-brand-cyan/20 border border-brand-cyan text-brand-cyan font-mono font-bold text-xs uppercase tracking-widest">
               OFFICIAL DISCOVERY SUITE
             </span>
-            <span class="text-xs font-mono text-neutral-400">UPDATED DAILY</span>
+            <span class="text-xs font-mono text-neutral-400">UPDATED REGULARLY</span>
           </div>
           <h1 class="font-bebas text-4xl sm:text-6xl text-white tracking-wide leading-none">
             FPS DISCO: HIGHEST-RATED GAMES &amp; DEEP ANALYSIS
           </h1>
           <p class="text-sm text-neutral-300 max-w-2xl leading-relaxed">
-            Discover verified gaming masterpieces scored across 5 essential pillars: Narrative, World Design, Mechanics, Visuals, and Soundtrack.
+            Discover verified gaming masterpieces scored across 5 essential pillars: Narrative, World Design, Mechanics, Visual Fidelity, and Soundtrack.
           </p>
         </div>
         <div class="flex items-center gap-3 shrink-0">
@@ -335,18 +326,15 @@
       <button onclick="app.filterDiscover('ABSOLUTE CINEMA')" class="disco-filter-btn px-4 py-1.5 rounded-full text-xs font-bold font-mono transition bg-neutral-900 text-neutral-300 hover:text-white" data-filter="ABSOLUTE CINEMA">CINEMA (9.0–9.4)</button>
     </div>
 
-    <!-- Discover Cards Grid (Detailed Breakdown) -->
-    <div id="discover-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Injected dynamically with pillar sub-scores -->
-    </div>
+    <!-- Discover Cards Grid -->
+    <div id="discover-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
   </section>
 
   <!-- ========================================== -->
-  <!-- 6. NEW: GAME COMPARISON ("VS" VIEW)       -->
+  <!-- 6. GAME COMPARISON ("VS" ARENA)           -->
   <!-- ========================================== -->
   <section id="compare-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-16 min-h-screen space-y-8">
-    <!-- Header -->
-    <div class="relative bg-gradient-to-r from-[#180B2B] via-[#0E061A] to-[#070709] border border-purple-500/40 rounded-2xl p-6 sm:p-10 overflow-hidden shadow-[0_0_40px_rgba(157,78,221,0.15)]">
+    <div class="relative bg-gradient-to-r from-[#180B2B] via-[#0E061A] to-[#070709] border border-purple-500/40 rounded-2xl p-6 sm:p-10 overflow-hidden shadow-[0_0_40px_rgba(168,85,247,0.15)]">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2 text-purple-400 font-mono text-xs font-bold uppercase tracking-widest">
@@ -356,7 +344,7 @@
             GAME COMPARISON ARENA
           </h1>
           <p class="text-sm text-neutral-300 mt-2 max-w-xl">
-            Compare graphics, story depth, performance requirements, and platform availability side-by-side.
+            Compare narrative depth, world design, performance requirements, and verified platforms side-by-side.
           </p>
         </div>
         <button onclick="app.navigateHome()" class="bg-neutral-800 hover:bg-neutral-700 text-white font-mono text-xs px-4 py-2.5 rounded-lg transition self-start md:self-auto">
@@ -364,22 +352,17 @@
         </button>
       </div>
 
-      <!-- Quick Selector Bar -->
+      <!-- Quick Selector -->
       <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center mt-6 pt-6 border-t border-purple-900/40">
-        <!-- Game 1 Select -->
         <div class="md:col-span-5 space-y-1">
           <label class="text-[11px] font-mono text-purple-300 font-bold uppercase">SELECT CONTENDER A:</label>
           <select id="compare-select-1" onchange="app.renderComparison()" class="w-full bg-neutral-900 border border-purple-500/50 rounded-lg p-2.5 text-sm font-semibold text-white focus:outline-none focus:border-purple-400"></select>
         </div>
-
-        <!-- VS Badge -->
         <div class="md:col-span-1 flex justify-center">
-          <div class="w-12 h-12 rounded-full bg-purple-950 border-2 border-purple-400 flex items-center justify-center font-bebas text-2xl text-purple-300 shadow-[0_0_15px_rgba(157,78,221,0.5)]">
+          <div class="w-12 h-12 rounded-full bg-purple-950 border-2 border-purple-400 flex items-center justify-center font-bebas text-2xl text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.5)]">
             VS
           </div>
         </div>
-
-        <!-- Game 2 Select -->
         <div class="md:col-span-5 space-y-1">
           <label class="text-[11px] font-mono text-purple-300 font-bold uppercase">SELECT CONTENDER B:</label>
           <select id="compare-select-2" onchange="app.renderComparison()" class="w-full bg-neutral-900 border border-purple-500/50 rounded-lg p-2.5 text-sm font-semibold text-white focus:outline-none focus:border-purple-400"></select>
@@ -388,9 +371,7 @@
     </div>
 
     <!-- Comparison Matrix Display -->
-    <div id="comparison-matrix-container" class="space-y-6">
-      <!-- Dynamic Comparison Render -->
-    </div>
+    <div id="comparison-matrix-container" class="space-y-6"></div>
   </section>
 
   <!-- ========================================== -->
@@ -511,8 +492,6 @@
         </div>
         <div id="carousel-shooters" class="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar py-2"></div>
       </section>
-
-      <div id="dynamic-categories-container" class="space-y-12"></div>
     </div>
   </main>
 
@@ -551,7 +530,7 @@
             </div>
           </div>
 
-          <!-- VERIFIED PLATFORMS & DEVICES -->
+          <!-- VERIFIED PLATFORMS -->
           <div class="space-y-2">
             <h4 class="font-barlow italic font-black text-xs uppercase tracking-widest text-neutral-400">VERIFIED AVAILABLE PLATFORMS:</h4>
             <div id="modal-platforms-container" class="flex flex-wrap gap-2"></div>
@@ -576,12 +555,10 @@
               AUTHENTIC PC SYSTEM REQUIREMENTS
             </h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-              <!-- Minimum -->
               <div class="bg-neutral-900/90 border border-neutral-800 p-4 rounded-lg space-y-2">
                 <div class="text-brand-yellow font-bold uppercase border-b border-neutral-800 pb-1">MINIMUM CONFIGURATION:</div>
                 <div id="modal-pc-min" class="space-y-1 text-neutral-300"></div>
               </div>
-              <!-- Recommended -->
               <div class="bg-neutral-900/90 border border-neutral-800 p-4 rounded-lg space-y-2">
                 <div class="text-emerald-400 font-bold uppercase border-b border-neutral-800 pb-1">RECOMMENDED CONFIGURATION:</div>
                 <div id="modal-pc-rec" class="space-y-1 text-neutral-300"></div>
@@ -589,7 +566,7 @@
             </div>
           </div>
 
-          <!-- INTERACTIVE COLOR-SHIFTING REVIEW STUDIO -->
+          <!-- REVIEW STUDIO -->
           <div class="mt-6 pt-6 border-t border-brand-border bg-neutral-950/80 p-5 sm:p-6 rounded-xl border border-neutral-800 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -603,7 +580,6 @@
               </div>
             </div>
 
-            <!-- Login Gated Review Form -->
             <div id="review-studio-body">
               <div id="review-input-form" class="hidden space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
@@ -635,7 +611,7 @@
                       <button type="button" onclick="app.setReviewPreset(9.8)" class="px-2.5 py-1 rounded text-xs font-bold bg-yellow-950 text-yellow-400 border border-yellow-800">PEAK</button>
                     </div>
                     <div class="space-y-3">
-                      <textarea id="review-text-input" rows="3" placeholder="Write your verified breakdown (mechanics, story twists, graphics, performance, final verdict)..."
+                      <textarea id="review-text-input" rows="3" placeholder="Write your verified breakdown (mechanics, story twists, graphics, performance)..."
                         class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-brand-red"></textarea>
                       <button id="review-submit-btn" onclick="app.submitReview()" class="w-full sm:w-auto bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-sm px-8 py-2.5 rounded-md tracking-wider uppercase transition shadow-[0_0_15px_rgba(229,9,20,0.5)]">
                         PUBLISH VERDICT
@@ -645,7 +621,6 @@
                 </div>
               </div>
 
-              <!-- Logged out prompt -->
               <div id="review-login-gate" class="p-6 bg-neutral-900 border border-neutral-800 rounded-xl text-center space-y-3">
                 <p class="text-sm text-neutral-300">Sign in with Google to rate games and publish reviews to the verified database.</p>
                 <button onclick="app.openAuthModal()" class="bg-brand-red hover:bg-red-700 text-white font-barlow italic font-black text-sm px-6 py-2 rounded-md tracking-wider uppercase transition">
@@ -654,7 +629,6 @@
               </div>
             </div>
 
-            <!-- Published Reviews List -->
             <div class="space-y-3 pt-4 border-t border-neutral-800/80">
               <h4 class="font-bebas text-xl text-white tracking-wide">VERIFIED CRITIC &amp; COMMUNITY REVIEWS</h4>
               <div id="modal-reviews-list" class="space-y-3 max-h-64 overflow-y-auto pr-2"></div>
@@ -817,7 +791,6 @@
   <!-- ========================================== -->
   <script>
     const RAWG_API_KEY = "B42b5294e7ad4188a302096f92124fbe";
-    const YT_API_KEY = "AIzaSyB64wc7E_iGjF0GwRdJo7E_5D-YgfiH_f4";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAlVVF9RIiKdn3Assg_tjt57Qge4X9yJ9s",
@@ -829,7 +802,7 @@
       measurementId: "G-WYCNK4277S"
     };
 
-    // Flagship Games with Authentic Specs, Verified Platforms & Deep Analytical Sub-Scores
+    // Flagship Games with Authentic Specs, Verified Platforms & 5-Pillar Scores
     const HERO_GAMES = [
       {
         id: 'rdr2',
@@ -841,14 +814,14 @@
         tier: "ABSOLUTE RDR",
         desc: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland, facing federal agents and the decline of the Wild West.",
         trailerId: "eaW0tYpxyp0",
-        poster: "https://media.rawg.io/media/games/511/5118aff50f4287968e2b71926f30d080.jpg",
-        platforms: ["PC", "PS4", "Xbox One", "PlayStation 5 (BC)", "Xbox Series X/S (BC)"],
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800",
+        platforms: ["PC", "PlayStation 4", "Xbox One", "PlayStation 5 (BC)", "Xbox Series X/S (BC)"],
         specs: {
-          min: { os: "Windows 10 (64-bit)", cpu: "Intel Core i5-2500K / AMD FX-6300", gpu: "NVIDIA GeForce GTX 770 2GB / AMD Radeon R9 280 3GB", ram: "8 GB RAM", storage: "150 GB HDD/SSD" },
-          rec: { os: "Windows 10/11 (64-bit)", cpu: "Intel Core i7-4770K / AMD Ryzen 5 1500X", gpu: "NVIDIA GeForce GTX 1060 6GB / AMD Radeon RX 480 4GB", ram: "12 GB RAM", storage: "150 GB SSD" }
+          min: { os: "Windows 10 (64-bit)", cpu: "Intel Core i5-2500K / AMD FX-6300", gpu: "NVIDIA GeForce GTX 770 2GB / AMD Radeon R9 280", ram: "8 GB RAM", storage: "150 GB HDD/SSD" },
+          rec: { os: "Windows 10/11 (64-bit)", cpu: "Intel Core i7-4770K / AMD Ryzen 5 1500X", gpu: "NVIDIA GeForce GTX 1060 6GB / AMD Radeon RX 480", ram: "12 GB RAM", storage: "150 GB SSD" }
         },
         pillars: { narrative: 9.9, world: 10.0, mechanics: 9.4, visuals: 9.8, sound: 9.9 },
-        criticConsensus: "A towering technical and emotional triumph. Arthur Morgan's journey through a living, breathing frontier stands as the undisputed benchmark of open-world storytelling."
+        criticConsensus: "A towering technical and emotional triumph. Arthur Morgan's journey through a living, breathing frontier stands as the benchmark of interactive open-world cinema."
       },
       {
         id: 'gta5',
@@ -860,7 +833,7 @@
         tier: "ABSOLUTE GTA",
         desc: "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with the criminal underworld and corrupt US government.",
         trailerId: "QkkoHAzjnUs",
-        poster: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07025025773ba92c7.jpg",
+        poster: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800",
         platforms: ["PC", "PlayStation 5", "PlayStation 4", "PlayStation 3", "Xbox Series X/S", "Xbox One", "Xbox 360"],
         specs: {
           min: { os: "Windows 10 64-bit", cpu: "Intel Core 2 Quad Q6600 / AMD Phenom 9850", gpu: "NVIDIA 9800 GT 1GB / AMD HD 4870 1GB", ram: "4 GB RAM", storage: "72 GB Space" },
@@ -879,7 +852,7 @@
         tier: "PEAK",
         desc: "Geralt of Rivia, a mutated monster slayer for hire, journeys across war-ravaged Velen, Novigrad, and the Skellige Isles to find Ciri, the Child of Prophecy.",
         trailerId: "c0i88t0Kacs",
-        poster: "https://media.rawg.io/media/games/618/618c2031a0709d35b6770332c42f9f56.jpg",
+        poster: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800",
         platforms: ["PC", "PlayStation 5", "PlayStation 4", "Xbox Series X/S", "Xbox One", "Nintendo Switch"],
         specs: {
           min: { os: "Windows 10 (64-bit)", cpu: "Intel Core i5-2500K / AMD Phenom II X4 940", gpu: "NVIDIA GeForce GTX 660 / AMD Radeon HD 7870", ram: "6 GB RAM", storage: "50 GB Space" },
@@ -898,7 +871,7 @@
         tier: "PEAK",
         desc: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.",
         trailerId: "E3Huy2cdih0",
-        poster: "https://media.rawg.io/media/games/b29/b2960ad9f6d086771f3b51b57314867f.jpg",
+        poster: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800",
         platforms: ["PC", "PlayStation 5", "PlayStation 4", "Xbox Series X/S", "Xbox One"],
         specs: {
           min: { os: "Windows 10 (64-bit)", cpu: "Intel Core i5-8400 / AMD Ryzen 3 3300X", gpu: "NVIDIA GeForce GTX 1060 3GB / AMD Radeon RX 580 4GB", ram: "12 GB RAM", storage: "60 GB SSD" },
@@ -917,14 +890,14 @@
         tier: "ABSOLUTE CINEMA",
         desc: "An open-world action-adventure story set in Night City, a megalopolis obsessed with power, glamour and relentless cybernetic body modification.",
         trailerId: "8X2kIfS6fb8",
-        poster: "https://media.rawg.io/media/games/26d/26d4437a21a546c514833f1e225e2496.jpg",
+        poster: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800",
         platforms: ["PC", "PlayStation 5", "Xbox Series X/S", "PlayStation 4", "Xbox One"],
         specs: {
           min: { os: "Windows 10 (64-bit)", cpu: "Core i7-6700 / Ryzen 5 1600", gpu: "NVIDIA GeForce GTX 1060 6GB / AMD Radeon RX 580", ram: "12 GB RAM", storage: "70 GB SSD" },
           rec: { os: "Windows 10/11 (64-bit)", cpu: "Core i7-12700 / Ryzen 7 7800X3D", gpu: "NVIDIA GeForce RTX 2060 Super / AMD Radeon RX 5700 XT", ram: "16 GB RAM", storage: "70 GB SSD" }
         },
         pillars: { narrative: 9.3, world: 9.8, mechanics: 9.0, visuals: 9.9, sound: 9.7 },
-        criticConsensus: "With Update 2.0 and Phantom Liberty, Cyberpunk 2077 realized its vision as the most visually staggering, dense cyberpunk metropolis in modern media."
+        criticConsensus: "With Update 2.0 and Phantom Liberty, Cyberpunk 2077 realized its vision as the most visually staggering, dense cyberpunk metropolis in modern gaming."
       },
       {
         id: 'gow_ragnarok',
@@ -936,7 +909,7 @@
         tier: "PEAK",
         desc: "Kratos and Atreus embark on a mythic quest through all Nine Realms in search of answers as Asgardian forces prepare for a prophesied war.",
         trailerId: "EE-4GvjKcfs",
-        poster: "https://media.rawg.io/media/games/157/15742f2f67eacff546738e1ab5c19d20.jpg",
+        poster: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800",
         platforms: ["PlayStation 5", "PlayStation 4", "PC"],
         specs: {
           min: { os: "Windows 10 (64-bit)", cpu: "Intel Core i5-4670K / AMD FX-8350", gpu: "NVIDIA GTX 1060 6GB / AMD RX 5500 XT", ram: "8 GB RAM", storage: "190 GB SSD" },
@@ -955,7 +928,7 @@
         tier: "ABSOLUTE CINEMA",
         desc: "In the late 13th century, samurai Jin Sakai must forge a new path—the way of the Ghost—to wage an unconventional war for the freedom of Tsushima.",
         trailerId: "bO1fS5X2x1Y",
-        poster: "https://media.rawg.io/media/games/d82/d82990b9c67ba0d2d0d0e62e7c9f65b8.jpg",
+        poster: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800",
         platforms: ["PlayStation 5", "PlayStation 4", "PC"],
         specs: {
           min: { os: "Windows 10 (64-bit)", cpu: "Intel Core i3-7100 / AMD Ryzen 3 1200", gpu: "NVIDIA GTX 960 4GB / AMD RX 5500 XT", ram: "16 GB RAM", storage: "75 GB Space" },
@@ -974,7 +947,7 @@
         tier: "PEAK",
         desc: "In a ravaged civilization where infected and hardened survivors run rampant, Joel is hired to smuggle 14-year-old Ellie out of a military quarantine zone.",
         trailerId: "WxjeV19yhR8",
-        poster: "https://media.rawg.io/media/games/709/709bf81f3f89b70cf2d31a77d130232e.jpg",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800",
         platforms: ["PlayStation 5", "PC"],
         specs: {
           min: { os: "Windows 10 (64-bit)", cpu: "AMD Ryzen 5 1500X / Intel Core i7-4770K", gpu: "AMD Radeon RX 470 / NVIDIA GeForce GTX 970", ram: "16 GB RAM", storage: "100 GB SSD" },
@@ -1028,7 +1001,6 @@
         }
       }
 
-      // Billboard
       initHero() {
         this.renderHeroSlide(0);
         this.startHeroTimer();
@@ -1053,7 +1025,8 @@
         tb.innerText = g.tier;
         tb.className = `font-barlow italic font-black text-xs sm:text-sm px-3 py-1 rounded-md tracking-wider border ${this.getTierClass(g.tier)}`;
 
-        document.getElementById('hero-poster').src = g.poster;
+        const posterEl = document.getElementById('hero-poster');
+        posterEl.src = `https://img.youtube.com/vi/${g.trailerId}/hqdefault.jpg`;
 
         const wrapper = document.getElementById('hero-video-wrapper');
         const iframe = document.getElementById('hero-iframe');
@@ -1122,13 +1095,18 @@
         const tier = g.tier || this.computeTier(g.score, g.title);
         const tierClass = this.getTierClass(tier);
 
+        // Fail-safe image source (Guaranteed high-res poster without 403 or broken box)
+        const imgSrc = g.trailerId ? `https://img.youtube.com/vi/${g.trailerId}/hqdefault.jpg` : g.poster;
+
         card.innerHTML = `
           <div class="relative w-full aspect-[16/10] bg-neutral-900 overflow-hidden">
-            <img src="${g.poster}" alt="${g.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-            <div class="absolute top-2 left-2">
+            <img src="${imgSrc}" alt="${g.title}" loading="lazy" 
+              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800';"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute top-2 left-2 z-10">
               <span class="text-[10px] font-barlow italic font-black px-2 py-0.5 rounded border ${tierClass}">${tier}</span>
             </div>
-            <div class="absolute bottom-2 right-2 bg-black/85 font-mono text-[11px] font-bold text-brand-gold px-1.5 py-0.5 rounded border border-neutral-700">★ ${g.score.toFixed(1)}</div>
+            <div class="absolute bottom-2 right-2 z-10 bg-black/85 font-mono text-[11px] font-bold text-brand-gold px-1.5 py-0.5 rounded border border-neutral-700">★ ${g.score.toFixed(1)}</div>
           </div>
           <div class="p-3 flex-1 flex flex-col justify-between">
             <div>
@@ -1179,7 +1157,7 @@
       }
 
       // ==========================================
-      // NEW: FPS DISCO (DISCOVER PAGE LOGIC)
+      // FPS DISCO (DISCOVER PAGE)
       // ==========================================
       openDiscoverView() {
         this.hideAllViews();
@@ -1213,9 +1191,11 @@
           const card = document.createElement('div');
           card.className = 'bg-[#111118] border border-neutral-800 hover:border-brand-cyan/60 rounded-2xl p-5 sm:p-6 space-y-5 transition shadow-lg';
           
+          const imgSrc = g.trailerId ? `https://img.youtube.com/vi/${g.trailerId}/hqdefault.jpg` : g.poster;
+
           card.innerHTML = `
             <div class="flex flex-col sm:flex-row gap-4 items-start">
-              <img src="${g.poster}" alt="${g.title}" class="w-full sm:w-36 aspect-video sm:aspect-[3/4] object-cover rounded-xl border border-neutral-800 shrink-0" />
+              <img src="${imgSrc}" alt="${g.title}" class="w-full sm:w-36 aspect-video sm:aspect-[3/4] object-cover rounded-xl border border-neutral-800 shrink-0" />
               <div class="space-y-1.5 flex-1">
                 <div class="flex items-center gap-2 flex-wrap">
                   <span class="font-barlow italic font-black text-xs px-2.5 py-0.5 rounded border ${this.getTierClass(g.tier)}">${g.tier}</span>
@@ -1231,34 +1211,28 @@
             <!-- Deep Analysis Pillars -->
             <div class="bg-neutral-950/80 border border-neutral-800/80 rounded-xl p-4 space-y-2.5 text-xs font-mono">
               <div class="text-[11px] text-brand-cyan font-bold uppercase tracking-wider mb-1">SCORE PILLAR BREAKDOWN:</div>
-              
               <div>
                 <div class="flex justify-between text-neutral-300 mb-1"><span>Narrative &amp; Storytelling</span><span class="text-brand-gold font-bold">${p.narrative.toFixed(1)}/10</span></div>
                 <div class="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden"><div class="h-full bg-brand-gold" style="width: ${p.narrative * 10}%"></div></div>
               </div>
-
               <div>
                 <div class="flex justify-between text-neutral-300 mb-1"><span>World Design &amp; Atmosphere</span><span class="text-brand-cyan font-bold">${p.world.toFixed(1)}/10</span></div>
                 <div class="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden"><div class="h-full bg-brand-cyan" style="width: ${p.world * 10}%"></div></div>
               </div>
-
               <div>
                 <div class="flex justify-between text-neutral-300 mb-1"><span>Combat &amp; Core Mechanics</span><span class="text-emerald-400 font-bold">${p.mechanics.toFixed(1)}/10</span></div>
                 <div class="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden"><div class="h-full bg-emerald-400" style="width: ${p.mechanics * 10}%"></div></div>
               </div>
-
               <div>
                 <div class="flex justify-between text-neutral-300 mb-1"><span>Visual Fidelity &amp; Tech</span><span class="text-purple-400 font-bold">${p.visuals.toFixed(1)}/10</span></div>
                 <div class="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden"><div class="h-full bg-purple-400" style="width: ${p.visuals * 10}%"></div></div>
               </div>
             </div>
 
-            <!-- Critic Consensus Quote -->
             <div class="border-l-2 border-brand-yellow/80 pl-3 py-1 text-xs text-neutral-300 italic font-sans">
               "${g.criticConsensus || 'Masterpiece title verified across industry consensus.'}"
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex items-center justify-between pt-2 border-t border-neutral-800">
               <button onclick="app.compareWithGame('${g.id}')" class="text-xs font-mono text-purple-400 hover:text-white font-bold transition">
                 ⚡ COMPARE VS ANOTHER GAME
@@ -1273,7 +1247,7 @@
       }
 
       // ==========================================
-      // NEW: HEAD-TO-HEAD GAME COMPARISON ("VS")
+      // GAME COMPARISON ("VS")
       // ==========================================
       openCompareView() {
         this.hideAllViews();
@@ -1300,7 +1274,7 @@
           const opt2 = document.createElement('option');
           opt2.value = g.id;
           opt2.innerText = `${g.title} (${g.score.toFixed(1)})`;
-          if (idx === 2) opt2.selected = true; // Default compare RDR2 vs Witcher 3
+          if (idx === 2) opt2.selected = true;
           s2.appendChild(opt2);
         });
       }
@@ -1324,14 +1298,15 @@
         const p1 = g1.pillars || { narrative: 9.5, world: 9.5, mechanics: 9.2, visuals: 9.6, sound: 9.5 };
         const p2 = g2.pillars || { narrative: 9.5, world: 9.5, mechanics: 9.2, visuals: 9.6, sound: 9.5 };
 
+        const imgSrc1 = g1.trailerId ? `https://img.youtube.com/vi/${g1.trailerId}/hqdefault.jpg` : g1.poster;
+        const imgSrc2 = g2.trailerId ? `https://img.youtube.com/vi/${g2.trailerId}/hqdefault.jpg` : g2.poster;
+
         const container = document.getElementById('comparison-matrix-container');
         container.innerHTML = `
-          <!-- Side-by-side Showcase -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Game 1 -->
             <div class="bg-[#111118] border border-neutral-800 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl">
               <div class="relative aspect-video rounded-xl overflow-hidden border border-neutral-800">
-                <img src="${g1.poster}" class="w-full h-full object-cover" />
+                <img src="${imgSrc1}" class="w-full h-full object-cover" />
                 <div class="absolute top-2 left-2">
                   <span class="font-barlow italic font-black text-xs px-2.5 py-1 rounded border ${this.getTierClass(g1.tier)}">${g1.tier}</span>
                 </div>
@@ -1344,10 +1319,9 @@
               </div>
             </div>
 
-            <!-- Game 2 -->
             <div class="bg-[#111118] border border-neutral-800 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl">
               <div class="relative aspect-video rounded-xl overflow-hidden border border-neutral-800">
-                <img src="${g2.poster}" class="w-full h-full object-cover" />
+                <img src="${imgSrc2}" class="w-full h-full object-cover" />
                 <div class="absolute top-2 left-2">
                   <span class="font-barlow italic font-black text-xs px-2.5 py-1 rounded border ${this.getTierClass(g2.tier)}">${g2.tier}</span>
                 </div>
@@ -1361,46 +1335,40 @@
             </div>
           </div>
 
-          <!-- Direct Metric Score Comparison Table -->
           <div class="bg-neutral-950/90 border border-neutral-800 rounded-2xl p-5 sm:p-6 space-y-4">
             <h3 class="font-bebas text-2xl text-white tracking-wide border-b border-neutral-800 pb-2">
               HEAD-TO-HEAD PILLAR EVALUATION
             </h3>
-            
             <div class="space-y-4 text-xs font-mono">
               ${this.createComparisonMetricRow('Overall Consensus Score', g1.score, g2.score)}
               ${this.createComparisonMetricRow('Story & Narrative Depth', p1.narrative, p2.narrative)}
               ${this.createComparisonMetricRow('World Design & Immersion', p1.world, p2.world)}
               ${this.createComparisonMetricRow('Combat & Mechanical Precision', p1.mechanics, p2.mechanics)}
-              ${this.createComparisonMetricRow('Visual Fidelity & Engine Quality', p1.visuals, p2.visuals)}
-              ${this.createComparisonMetricRow('Sound Design & Orchestration', p1.sound, p2.sound)}
+              ${this.createComparisonMetricRow('Visual Fidelity & Engine Tech', p1.visuals, p2.visuals)}
+              ${this.createComparisonMetricRow('Soundtrack & Audio Design', p1.sound, p2.sound)}
             </div>
           </div>
 
-          <!-- PC Hardware Spec Requirements Comparison -->
           <div class="bg-neutral-950/90 border border-neutral-800 rounded-2xl p-5 sm:p-6 space-y-4">
             <h3 class="font-bebas text-2xl text-brand-gold tracking-wide border-b border-neutral-800 pb-2">
               VERIFIED PC SYSTEM REQUIREMENTS COMPARISON
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-mono">
-              <!-- G1 Specs -->
               <div class="space-y-3 bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                 <div class="font-bold text-white uppercase border-b border-neutral-800 pb-1.5">${g1.title}</div>
-                <div><span class="text-neutral-500">MIN CPU:</span> <span class="text-neutral-300">${g1.specs?.min.cpu || 'Multi-core Processor'}</span></div>
-                <div><span class="text-neutral-500">MIN GPU:</span> <span class="text-neutral-300">${g1.specs?.min.gpu || 'DirectX 11 Graphics'}</span></div>
-                <div><span class="text-neutral-500">REC CPU:</span> <span class="text-brand-gold">${g1.specs?.rec.cpu || 'High-end 6-core'}</span></div>
-                <div><span class="text-neutral-500">REC GPU:</span> <span class="text-brand-gold">${g1.specs?.rec.gpu || 'Modern dedicated GPU'}</span></div>
-                <div><span class="text-neutral-500">STORAGE:</span> <span class="text-neutral-300">${g1.specs?.rec.storage || 'SSD Required'}</span></div>
+                <div><span class="text-neutral-500">MIN CPU:</span> <span class="text-neutral-300">${g1.specs?.min.cpu}</span></div>
+                <div><span class="text-neutral-500">MIN GPU:</span> <span class="text-neutral-300">${g1.specs?.min.gpu}</span></div>
+                <div><span class="text-neutral-500">REC CPU:</span> <span class="text-brand-gold">${g1.specs?.rec.cpu}</span></div>
+                <div><span class="text-neutral-500">REC GPU:</span> <span class="text-brand-gold">${g1.specs?.rec.gpu}</span></div>
+                <div><span class="text-neutral-500">STORAGE:</span> <span class="text-neutral-300">${g1.specs?.rec.storage}</span></div>
               </div>
-
-              <!-- G2 Specs -->
               <div class="space-y-3 bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                 <div class="font-bold text-white uppercase border-b border-neutral-800 pb-1.5">${g2.title}</div>
-                <div><span class="text-neutral-500">MIN CPU:</span> <span class="text-neutral-300">${g2.specs?.min.cpu || 'Multi-core Processor'}</span></div>
-                <div><span class="text-neutral-500">MIN GPU:</span> <span class="text-neutral-300">${g2.specs?.min.gpu || 'DirectX 11 Graphics'}</span></div>
-                <div><span class="text-neutral-500">REC CPU:</span> <span class="text-brand-gold">${g2.specs?.rec.cpu || 'High-end 6-core'}</span></div>
-                <div><span class="text-neutral-500">REC GPU:</span> <span class="text-brand-gold">${g2.specs?.rec.gpu || 'Modern dedicated GPU'}</span></div>
-                <div><span class="text-neutral-500">STORAGE:</span> <span class="text-neutral-300">${g2.specs?.rec.storage || 'SSD Required'}</span></div>
+                <div><span class="text-neutral-500">MIN CPU:</span> <span class="text-neutral-300">${g2.specs?.min.cpu}</span></div>
+                <div><span class="text-neutral-500">MIN GPU:</span> <span class="text-neutral-300">${g2.specs?.min.gpu}</span></div>
+                <div><span class="text-neutral-500">REC CPU:</span> <span class="text-brand-gold">${g2.specs?.rec.cpu}</span></div>
+                <div><span class="text-neutral-500">REC GPU:</span> <span class="text-brand-gold">${g2.specs?.rec.gpu}</span></div>
+                <div><span class="text-neutral-500">STORAGE:</span> <span class="text-neutral-300">${g2.specs?.rec.storage}</span></div>
               </div>
             </div>
           </div>
@@ -1446,7 +1414,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      // Modal Details
       async openGameModal(g) {
         this.activeModalGame = g;
         document.getElementById('game-modal').classList.remove('hidden');
@@ -1462,7 +1429,7 @@
         tierBadge.innerText = g.tier;
         tierBadge.className = `font-barlow italic font-black text-sm px-3.5 py-1 rounded border ${this.getTierClass(g.tier)}`;
 
-        // Authentic Platforms
+        // Verified Platforms
         const platCont = document.getElementById('modal-platforms-container');
         platCont.innerHTML = '';
         (g.platforms || ["PC", "PlayStation", "Xbox"]).forEach(pl => {
@@ -1472,7 +1439,7 @@
           platCont.appendChild(pill);
         });
 
-        // Authentic PC Specs
+        // Verified PC Specs
         const minCont = document.getElementById('modal-pc-min');
         const recCont = document.getElementById('modal-pc-rec');
         const specs = g.specs || {
@@ -1547,7 +1514,7 @@
       renderModalScreenshots(g) {
         const container = document.getElementById('modal-screenshots-grid');
         container.innerHTML = '';
-        const base = g.poster;
+        const base = g.trailerId ? `https://img.youtube.com/vi/${g.trailerId}/hqdefault.jpg` : g.poster;
         for (let i = 0; i < 8; i++) {
           const img = document.createElement('img');
           img.src = base;
@@ -1557,7 +1524,6 @@
         }
       }
 
-      // Review Studio Logic
       handleSliderScoreChange(val) {
         const score = parseFloat(val);
         document.getElementById('gauge-score-label').innerText = score.toFixed(1);
@@ -1651,7 +1617,6 @@
         const gid = String(g.rawgId || g.id);
 
         let merged = [];
-        // Add authentic verified critic quote
         merged.push({
           userName: "FPS Critic Consensus",
           score: g.score,
@@ -1688,7 +1653,6 @@
         document.getElementById('modal-community-count').innerText = `(${merged.length} reviews)`;
       }
 
-      // WANNA PLAY
       loadWannaPlay() {
         try { return JSON.parse(localStorage.getItem('fps_wanna_play') || '[]'); } catch { return []; }
       }
@@ -1707,7 +1671,7 @@
         if (this.isInWannaPlay(gid)) {
           this.wannaPlayList = this.wannaPlayList.filter(item => String(item.id) !== gid);
         } else {
-          this.wannaPlayList.push({ id: gid, title: game.title, score: game.score, poster: game.poster });
+          this.wannaPlayList.push({ id: gid, title: game.title, score: game.score, poster: game.poster, trailerId: game.trailerId });
         }
         this.saveWannaPlay();
         this.updateHeroWannaPlayButton();
@@ -1728,9 +1692,10 @@
         this.wannaPlayList.forEach(item => {
           const row = document.createElement('div');
           row.className = 'flex items-center justify-between gap-3 bg-neutral-900 border border-neutral-800 p-2.5 rounded-lg';
+          const thumb = item.trailerId ? `https://img.youtube.com/vi/${item.trailerId}/hqdefault.jpg` : item.poster;
           row.innerHTML = `
             <div class="flex items-center gap-3 overflow-hidden">
-              <img src="${item.poster}" class="w-14 h-10 object-cover rounded" />
+              <img src="${thumb}" class="w-14 h-10 object-cover rounded" />
               <div class="overflow-hidden">
                 <h4 class="font-bebas text-base text-white tracking-wide truncate">${item.title}</h4>
                 <span class="text-[10px] font-mono text-brand-gold">★ ${Number(item.score).toFixed(1)} / 10</span>
@@ -1786,7 +1751,6 @@
 
       toggleModalWannaPlay() { if (this.activeModalGame) this.toggleWannaPlay(this.activeModalGame); }
 
-      // Media House
       openMediaHouse(game = null) {
         const target = game || HERO_GAMES[0];
         this.activeMediaHouseGame = target;
@@ -1902,12 +1866,13 @@
           { name: 'Shroud', viewers: '62K LIVE', title: 'Hardcore Combat Mechanics Test' },
           { name: 'Hollow', viewers: '29K LIVE', title: 'No-Damage Boss Rush Challenge' }
         ];
+        const thumb = g.trailerId ? `https://img.youtube.com/vi/${g.trailerId}/hqdefault.jpg` : g.poster;
         creators.forEach(c => {
           const card = document.createElement('div');
           card.className = 'bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-brand-red transition cursor-pointer';
           card.innerHTML = `
             <div class="relative aspect-video bg-neutral-950">
-              <img src="${g.poster}" class="w-full h-full object-cover brightness-75" />
+              <img src="${thumb}" class="w-full h-full object-cover brightness-75" />
               <div class="absolute top-2 left-2 flex items-center gap-1.5 bg-brand-red text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded">
                 <span class="w-1.5 h-1.5 rounded-full bg-white live-dot"></span>${c.viewers}
               </div>
@@ -1928,7 +1893,7 @@
       renderMediaHouseScreenshots(g) {
         const grid = document.getElementById('media-house-screenshots-grid');
         grid.innerHTML = '';
-        const base = g.poster;
+        const base = g.trailerId ? `https://img.youtube.com/vi/${g.trailerId}/hqdefault.jpg` : g.poster;
         for (let i = 1; i <= 50; i++) {
           const card = document.createElement('div');
           card.className = 'relative group aspect-video bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800';
@@ -1942,7 +1907,6 @@
         }
       }
 
-      // Search
       handleSearchInput(e) {
         const query = e.target.value.trim();
         const clearBtn = document.getElementById('search-clear-btn');
@@ -1982,8 +1946,8 @@
                 studio: 'Official Studio',
                 year: item.released ? item.released.substring(0, 4) : '2024',
                 score: Math.min(10, Math.max(1, rawScore)),
-                desc: 'Verified title from RAWG database.',
-                poster: item.background_image || 'https://media.rawg.io/media/games/511/5118aff50f4287968e2b71926f30d080.jpg'
+                desc: 'Verified title from database.',
+                poster: item.background_image || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800'
               }));
             });
           } catch (err) {}
