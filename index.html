@@ -350,6 +350,40 @@
     .wanna-play-drawer-closed { transform: translateX(100%); }
     .wanna-play-drawer-open { transform: translateX(0); }
 
+    /* Media House Netflix-Style Cards & Live Pulse */
+    @keyframes livePulseRing {
+      0% { transform: scale(0.85); opacity: 0.9; }
+      70% { transform: scale(1.65); opacity: 0; }
+      100% { transform: scale(1.65); opacity: 0; }
+    }
+    .live-pulse-dot {
+      position: relative;
+    }
+    .live-pulse-dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      background: #E50914;
+      animation: livePulseRing 1.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+    .mh-episode-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .mh-episode-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.065);
+      border-color: rgba(255, 171, 0, 0.7);
+      box-shadow: 0 14px 28px -8px rgba(0, 0, 0, 0.85);
+    }
+    .mh-episode-card.is-active {
+      background: linear-gradient(135deg, rgba(229, 9, 20, 0.16) 0%, rgba(255, 171, 0, 0.12) 100%);
+      border-color: #FFAB00;
+      box-shadow: 0 0 22px rgba(255, 171, 0, 0.25);
+    }
+
     .score-bar-fill { transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
     .gauge-ring-progress { transition: stroke-dashoffset 0.18s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.22s ease; }
     .gauge-ambient-glow { transition: background 0.25s ease; }
@@ -579,15 +613,15 @@
       </nav>
     </div>
 
-    <!-- Right: Search + WANNA PLAY Pill + Sign In / Avatar -->
+    <!-- Right: Media House + Search + WANNA PLAY Pill + Sign In / Avatar -->
     <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
-      <div class="relative w-32 sm:w-48 md:w-56">
-        <svg class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-        <input
-          id="searchInput"
-          type="text"
-          autocomplete="off"
-          placeholder="Search games..."
+      <!-- Prominent MEDIA HOUSE Button with Red/Gold Pulse -->
+      <button id="navMediaHouseBtn" onclick="FPS.openMediaHouse()" class="h-9 px-3 sm:px-3.5 rounded-full bg-gradient-to-r from-[#E50914]/25 via-[#FFAB00]/15 to-[#E50914]/25 hover:from-[#E50914]/45 hover:to-[#FFAB00]/35 border border-[#FFAB00]/70 text-white text-[10px] sm:text-[11px] font-black tracking-wider uppercase flex items-center gap-2 whitespace-nowrap shadow-[0_0_18px_rgba(229,9,20,0.3)] transition active:scale-95">
+        <span class="live-pulse-dot w-2 h-2 rounded-full bg-[#E50914] flex-shrink-0"></span>
+        <span>MEDIA HOUSE</span>
+      </button>
+
+      <div class="relative w-28 sm:w-44 md:w-52">
           class="w-full h-9 bg-white/10 hover:bg-white/15 focus:bg-black/95 border border-white/15 focus:border-[#FFAB00] rounded-lg pl-9 pr-8 text-xs font-medium text-white placeholder-gray-400 outline-none transition"
         />
         <button id="clearSearchBtn" onclick="FPS.exitSearchToHome()" aria-label="Clear search" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white/15 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
@@ -653,6 +687,215 @@
     </div>
 
     <div id="searchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
+  </section>
+
+  <!-- ==================== 4B. DEDICATED FPS MEDIA HOUSE VIEW (NETFLIX-STYLE HUB) ==================== -->
+  <section id="media-house-view" class="hidden flex-grow pt-20 pb-24 max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-12 space-y-7">
+    <!-- Top Bar: Back to Home + Media House Branding + Instant Game Switcher Search -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div class="flex flex-wrap items-center gap-3">
+        <button onclick="FPS.exitMediaHouseToHome()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/20 text-white text-xs font-black tracking-widest uppercase flex items-center gap-2 transition active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span>BACK TO HOME</span>
+        </button>
+        <div class="flex items-center gap-2.5">
+          <span class="live-pulse-dot w-2.5 h-2.5 rounded-full bg-[#E50914]"></span>
+          <div>
+            <span class="block text-[10px] font-black tracking-[0.28em] uppercase text-[#FFAB00]">NETFLIX-STYLE GAMEPLAY &amp; ARCHIVE</span>
+            <h2 class="font-rockstar italic text-2xl sm:text-3xl font-black tracking-wider uppercase text-white leading-none">FPS MEDIA HOUSE</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inline Media House Game Switcher Search -->
+      <div class="relative w-full lg:w-96">
+        <svg class="w-4 h-4 text-[#FFAB00] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+        <input
+          id="mhGameSearchInput"
+          type="text"
+          autocomplete="off"
+          placeholder="Switch game in Media House (e.g., GTA V, Elden Ring)..."
+          class="w-full h-11 bg-[#0D0F16] hover:bg-[#121622] focus:bg-black border border-white/15 focus:border-[#FFAB00] rounded-xl pl-10 pr-9 text-xs font-semibold text-white placeholder-gray-400 outline-none transition"
+        />
+        <button id="mhClearGameSearchBtn" onclick="FPS.clearMediaHouseSearch()" aria-label="Clear switcher search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <div id="mhGameSearchDropdown" class="hidden absolute left-0 right-0 mt-2 max-h-80 overflow-y-auto bg-[#0D0F16]/98 backdrop-blur-2xl border border-[#FFAB00]/45 rounded-xl shadow-[0_24px_60px_rgba(0,0,0,0.95)] p-2 z-50 space-y-1"></div>
+      </div>
+    </div>
+
+    <!-- Quick Flagship Game Switcher Carousel -->
+    <div class="space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-black tracking-[0.24em] uppercase text-gray-400">INSTANT GAME SWITCHER</span>
+        <span class="text-[10px] font-bold tracking-widest uppercase text-gray-500">SWIPE OR TAP ANY TITLE</span>
+      </div>
+      <div id="mhQuickSwitcher" class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1"></div>
+    </div>
+
+    <!-- NETFLIX-STYLE VIDEO THEATER + UP NEXT EPISODES QUEUE -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <!-- Main 16:9 Theater Player + Now Playing Controls + Game Info Bar -->
+      <div class="lg:col-span-8 space-y-4">
+        <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/15 shadow-[0_24px_75px_rgba(0,0,0,0.95)]">
+          <img id="mhPlayerBackdrop" src="" alt="" class="absolute inset-0 w-full h-full object-cover opacity-45 z-0" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent z-0"></div>
+
+          <div id="mhPlayerLoader" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm">
+            <div class="w-10 h-10 border-2 border-[#FFAB00] border-t-transparent rounded-full animate-spin mb-3"></div>
+            <span class="text-[11px] font-black tracking-[0.24em] uppercase text-white">LOADING CHRONOLOGICAL STREAM...</span>
+          </div>
+
+          <iframe
+            id="mhPlayerIframe"
+            class="relative z-10 w-full h-full border-0"
+            src=""
+            title="FPS Media House Player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- Now Playing Episode Bar + Prev/Next Episode Controls -->
+        <div class="rounded-2xl bg-[#0D0F16] border border-white/10 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="min-w-0 space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="mhNowPlayingEpBadge" class="px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono-num text-[10px] font-black tracking-widest uppercase">EPISODE 01</span>
+              <span id="mhNowPlayingLiveBadge" class="hidden px-2.5 py-0.5 rounded bg-red-600/25 border border-red-500 text-red-300 text-[10px] font-black tracking-widest uppercase items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>LIVE NOW
+              </span>
+              <span id="mhNowPlayingChannel" class="text-xs font-extrabold text-[#FFAB00] truncate">Official Creator</span>
+              <span class="text-gray-600">&bull;</span>
+              <span id="mhNowPlayingDate" class="text-[11px] font-semibold text-gray-400">--</span>
+            </div>
+            <h3 id="mhNowPlayingTitle" class="text-base sm:text-lg font-black text-white leading-snug line-clamp-2">
+              Select a game or episode to begin playback
+            </h3>
+          </div>
+
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <button id="mhPrevEpBtn" onclick="FPS.playPrevMediaEpisode()" class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-35 disabled:pointer-events-none border border-white/15 text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              <span>PREV EP</span>
+            </button>
+            <button id="mhNextEpBtn" onclick="FPS.playNextMediaEpisode()" class="px-4 py-2.5 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] disabled:opacity-35 disabled:pointer-events-none text-black text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-[0_6px_20px_rgba(255,171,0,0.35)] transition active:scale-95">
+              <span>NEXT EP</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Netflix-Style Game Info Bar -->
+        <div class="rounded-2xl bg-gradient-to-r from-[#111420] via-[#0D0F16] to-[#0B0D14] border border-white/10 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <img id="mhGamePosterThumb" src="" alt="" class="w-16 h-20 sm:w-20 sm:h-24 rounded-xl object-cover border border-white/15 flex-shrink-0 bg-[#12151f]" />
+            <div class="min-w-0 space-y-1.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span id="mhGameTierBadge" class="px-2.5 py-0.5 rounded text-[10px] font-black tracking-widest uppercase badge-rdr">ABSOLUTE RDR</span>
+                <span class="font-mono-num px-2 py-0.5 rounded bg-black/75 border border-[#FFAB00]/50 text-[#FFAB00] text-xs font-black">
+                  <span id="mhGameScore">9.7</span> / 10
+                </span>
+                <span id="mhGameStudioYear" class="text-[11px] font-bold tracking-wider uppercase text-gray-300 truncate">ROCKSTAR GAMES &bull; 2018</span>
+              </div>
+              <h3 id="mhGameTitle" class="text-xl sm:text-2xl font-black text-white tracking-tight truncate">Red Dead Redemption 2</h3>
+              <div id="mhGameGenres" class="flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+            <button id="mhWannaPlayBtn" onclick="FPS.toggleMediaHouseWannaPlay()" class="px-4 py-2.5 rounded-xl bg-black/60 hover:bg-[#FFAB00]/20 border border-[#FFAB00]/65 text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
+              <svg id="mhWannaPlayIcon" class="w-3.5 h-3.5 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              <span id="mhWannaPlayLabel">+ WANNA PLAY</span>
+            </button>
+            <button onclick="FPS.openFullReviewFromMediaHouse()" class="px-4 py-2.5 rounded-xl bg-[#E50914] hover:bg-[#ff1e29] text-white text-[11px] font-black tracking-wider uppercase shadow-[0_6px_20px_rgba(229,9,20,0.4)] transition active:scale-95">
+              OPEN FULL REVIEW
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Netflix "UP NEXT — EPISODES" Queue Panel -->
+      <aside class="lg:col-span-4 rounded-2xl bg-[#0D0F16] border border-white/10 overflow-hidden flex flex-col max-h-[680px]">
+        <div class="px-4 py-3.5 border-b border-white/10 bg-white/[0.025] flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-4 rounded-sm bg-[#E50914]"></span>
+            <h4 class="text-xs font-black tracking-[0.2em] uppercase text-white">UP NEXT &mdash; EPISODES</h4>
+          </div>
+          <span id="mhQueueCountBadge" class="font-mono-num px-2 py-0.5 rounded bg-white/10 text-[10px] font-black text-[#FFAB00]">0 EPISODES</span>
+        </div>
+        <div id="mhUpNextQueue" class="flex-grow overflow-y-auto p-3 space-y-2.5"></div>
+      </aside>
+    </div>
+
+    <!-- 3-TAB MEDIA HOUSE HUB -->
+    <div class="space-y-6 pt-2">
+      <div class="flex items-center gap-3 sm:gap-6 border-b border-white/10 overflow-x-auto no-scrollbar text-xs font-black tracking-widest uppercase">
+        <button id="mhTabBtn-episodes" onclick="FPS.switchMediaHouseTab('episodes')" class="pb-3.5 text-white border-b-2 border-[#FFAB00] whitespace-nowrap transition flex items-center gap-2">
+          <span>EPISODES &amp; MISSIONS (CHRONOLOGICAL)</span>
+        </button>
+        <button id="mhTabBtn-live" onclick="FPS.switchMediaHouseTab('live')" class="pb-3.5 text-gray-400 hover:text-white border-b-2 border-transparent whitespace-nowrap transition flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#E50914]"></span>
+          <span>LIVE &amp; YOUTUBERS</span>
+        </button>
+        <button id="mhTabBtn-screenshots" onclick="FPS.switchMediaHouseTab('screenshots')" class="pb-3.5 text-gray-400 hover:text-white border-b-2 border-transparent whitespace-nowrap transition flex items-center gap-2">
+          <span>HD SCREENSHOTS</span>
+          <span id="mhScreenshotsTabCount" class="font-mono-num px-2 py-0.5 rounded bg-[#FFAB00]/20 text-[#FFAB00] text-[10px] font-black">50+</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: CHRONOLOGICAL EPISODES & MISSIONS + CREATOR PLAYLIST SELECTOR -->
+      <div id="mhPane-episodes" class="space-y-5">
+        <div class="space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[10px] font-black tracking-[0.22em] uppercase text-[#FFAB00]">SELECT GAMING YOUTUBER SERIES (PLAYLISTS)</span>
+            <span id="mhChronoStatus" class="text-[10px] font-bold tracking-widest uppercase text-gray-400">STRICT CHRONOLOGICAL ORDER</span>
+          </div>
+          <div id="mhCreatorPlaylistPills" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="mhEpisodesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+      </div>
+
+      <!-- TAB 2: LIVE STREAMS & DIFFERENT GAMING YOUTUBERS -->
+      <div id="mhPane-live" class="hidden space-y-8">
+        <!-- Active Live Broadcasts -->
+        <div class="space-y-3.5">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span class="live-pulse-dot w-2.5 h-2.5 rounded-full bg-[#E50914]"></span>
+              <h4 class="text-sm font-black tracking-[0.2em] uppercase text-white">LIVE BROADCASTS RIGHT NOW</h4>
+            </div>
+            <span id="mhLiveCountBadge" class="font-mono-num text-[10px] font-black tracking-widest uppercase text-red-300 bg-red-500/15 border border-red-500/35 px-2.5 py-1 rounded-full">CHECKING...</span>
+          </div>
+          <div id="mhLiveGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- Multi-Creator Gameplay Highlights & Streams -->
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6">
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-4 rounded-sm bg-[#FFAB00]"></span>
+              <h4 class="text-sm font-black tracking-[0.2em] uppercase text-white">GAMING YOUTUBERS &amp; STREAMS</h4>
+            </div>
+            <div id="mhLiveCreatorFilterPills" class="flex flex-wrap gap-1.5"></div>
+          </div>
+          <div id="mhCreatorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: MINIMUM 50 DOWNLOADABLE HD SCREENSHOTS -->
+      <div id="mhPane-screenshots" class="hidden space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white/[0.03] border border-white/10 rounded-2xl p-4">
+          <div class="flex items-center gap-3">
+            <span id="mhScreenshotsCountBadge" class="font-mono-num px-3 py-1 rounded-lg bg-[#FFAB00] text-black text-xs font-black tracking-wider uppercase">50+ HD FRAMES READY</span>
+            <p class="text-xs font-semibold text-gray-300">Official RAWG captures &amp; 4K gameplay frames &mdash; click any frame to inspect or download in HD.</p>
+          </div>
+          <span class="text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">DIRECT HD DOWNLOAD ENABLED</span>
+        </div>
+
+        <div id="mhScreenshotsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5"></div>
+      </div>
+    </div>
   </section>
 
   <!-- ==================== 5. DEDICATED HOME VIEW ==================== -->
@@ -771,6 +1014,11 @@
             <span id="modalTopBreadcrumb" class="text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white truncate">GAME REVIEW THEATER</span>
           </div>
           <div class="flex items-center gap-2">
+            <button onclick="FPS.openMediaHouseFromModal()" class="h-9 px-3 sm:px-3.5 rounded-full bg-gradient-to-r from-[#E50914] to-[#b80710] hover:from-[#ff1e29] hover:to-[#E50914] text-white text-[10px] sm:text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-[0_0_16px_rgba(229,9,20,0.45)] transition active:scale-95">
+              <svg class="w-3.5 h-3.5 fill-white flex-shrink-0" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span class="hidden md:inline">OPEN IN MEDIA HOUSE (EPISODES &amp; 50+ SHOTS)</span>
+              <span class="md:hidden">MEDIA HOUSE</span>
+            </button>
             <button id="modalWannaPlayBtn" onclick="FPS.toggleCurrentWannaPlay()" class="h-9 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
               <svg id="modalWannaPlayIcon" class="w-3.5 h-3.5 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
               <span id="modalWannaPlayLabel" class="hidden sm:inline">+ WANNA PLAY</span>
@@ -1090,37 +1338,37 @@
               <div>
                 <span class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">EXACT LAUNCH DATE</span>
                 <span id="fullMetaLaunchDate" class="block text-sm font-bold text-white mt-1">--</span>
-              </div>
-              <div>
-                <span class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">RATINGS &amp; ESRB</span>
-                <span id="fullMetaRatings" class="block text-sm font-bold text-white mt-1">--</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB 3: HD SCREENSHOTS & PC SPECS -->
-          <div id="tabPane-specs" class="hidden space-y-8">
-            <div class="space-y-3">
-              <h4 class="text-xs font-black tracking-[0.2em] uppercase text-[#FFAB00]">OFFICIAL HD SCREENSHOTS</h4>
-              <div id="modalFullScreenshotsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
-            </div>
-
-            <div class="space-y-3">
-              <h4 class="text-xs font-black tracking-[0.2em] uppercase text-white">PC SYSTEM REQUIREMENTS</h4>
-              <div id="modalPcSpecsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
-          </div>
-        </div>
+  <!-- ==================== 7. FULLSCREEN HD SCREENSHOT LIGHTBOX (PREV/NEXT + DOWNLOAD) ==================== -->
+  <div id="screenshotLightbox" onclick="if(event.target.id==='screenshotLightbox') FPS.closeLightbox()" class="fixed inset-0 z-[110] bg-black/96 backdrop-blur-2xl hidden flex flex-col items-center justify-center p-4 sm:p-6">
+    <!-- Top Controls Bar -->
+    <div class="w-full max-w-6xl flex items-center justify-between gap-3 mb-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <span id="lightboxCounter" class="font-mono-num px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-xs font-black text-[#FFAB00] flex-shrink-0">01 / 01</span>
+        <span id="lightboxCaption" class="text-xs sm:text-sm font-bold text-gray-200 truncate">Official HD Frame</span>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button id="lightboxDownloadBtn" onclick="FPS.downloadActiveLightboxImage()" class="px-4 py-2 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-[11px] font-black tracking-widest uppercase flex items-center gap-1.5 shadow-[0_6px_20px_rgba(255,171,0,0.4)] transition active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          <span>DOWNLOAD HD</span>
+        </button>
+        <button onclick="FPS.closeLightbox()" aria-label="Close lightbox" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-[#E50914] text-white flex items-center justify-center transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
       </div>
     </div>
-  </div>
 
-  <!-- ==================== 7. FULLSCREEN SCREENSHOT LIGHTBOX ==================== -->
-  <div id="screenshotLightbox" onclick="FPS.closeLightbox()" class="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl hidden flex items-center justify-center p-4 cursor-zoom-out">
-    <button onclick="FPS.closeLightbox()" aria-label="Close lightbox" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-    <img id="lightboxImage" src="" alt="Expanded Screenshot" class="max-w-full max-h-[88vh] rounded-xl shadow-2xl border border-white/15 object-contain" />
+    <!-- Image Stage with Prev/Next Arrows -->
+    <div class="relative w-full max-w-6xl flex-grow flex items-center justify-center">
+      <button id="lightboxPrevBtn" onclick="FPS.stepLightbox(-1)" aria-label="Previous screenshot" class="hidden absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full bg-black/70 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <img id="lightboxImage" src="" alt="Expanded Screenshot" class="max-w-full max-h-[80vh] rounded-xl shadow-2xl border border-white/15 object-contain bg-black" />
+
+      <button id="lightboxNextBtn" onclick="FPS.stepLightbox(1)" aria-label="Next screenshot" class="hidden absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full bg-black/70 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
   </div>
 
   <!-- ==================== 8. UPGRADED WANNA PLAY SLIDE-OVER DRAWER ==================== -->
@@ -1173,6 +1421,8 @@
         <button onclick="FPS.jumpToHomeSection('row-rockstar')" class="hover:text-[#FFAB00] transition">ROCKSTAR VAULT</button>
         <span class="text-white/20">&bull;</span>
         <button onclick="FPS.jumpToHomeSection('row-peak')" class="hover:text-[#FFAB00] transition">PEAK TIER</button>
+        <span class="text-white/20">&bull;</span>
+        <button onclick="FPS.openMediaHouse()" class="hover:text-[#FFAB00] transition">MEDIA HOUSE</button>
         <span class="text-white/20">&bull;</span>
         <button onclick="FPS.openWannaPlayModal()" class="hover:text-[#FFAB00] transition">WANNA PLAY</button>
       </div>
@@ -1430,9 +1680,28 @@
       let rdr2PendingOpen = null;
 
       let isSearchActive = false;
+      let isMediaHouseActive = false;
       let lastHomeScrollY = 0;
       let searchAbortController = null;
       let searchDebounceTimer = null;
+
+      // Media House State
+      let mhCurrentGame = null;
+      let mhActiveTab = "episodes";
+      let mhPlaylists = [];
+      let mhActivePlaylistId = null;
+      let mhEpisodes = [];
+      let mhActiveEpisodeIdx = -1;
+      let mhLiveStreams = [];
+      let mhCreatorVideos = [];
+      let mhActiveCreatorFilter = "ALL";
+      let mhScreenshots = [];
+      let mhSearchAbort = null;
+      let mhSearchTimer = null;
+
+      // Lightbox Gallery State
+      let lightboxItems = [];
+      let lightboxIndex = 0;
 
       let nextExtraRowIdx = 0;
       let isLoadingExtraRow = false;
@@ -2111,6 +2380,11 @@
       const searchCountText = document.getElementById("searchCountText");
 
       function enterSearchView(queryText) {
+        if (isMediaHouseActive) {
+          isMediaHouseActive = false;
+          document.getElementById("mhPlayerIframe").src = "";
+          document.getElementById("media-house-view").classList.add("hidden");
+        }
         if (!isSearchActive) {
           lastHomeScrollY = window.scrollY || 0;
           isSearchActive = true;
@@ -2150,10 +2424,15 @@
         if (!document.getElementById("reviewModal").classList.contains("hidden")) {
           closeReviewModal();
         }
+        if (isMediaHouseActive) {
+          exitMediaHouseToHome(scrollTop !== false);
+          return;
+        }
         exitSearchToHome(scrollTop !== false);
       }
 
       function jumpToHomeSection(id) {
+        if (isMediaHouseActive) exitMediaHouseToHome(false);
         if (isSearchActive) exitSearchToHome(false);
         setTimeout(() => {
           const el = document.getElementById(id);
@@ -2162,15 +2441,90 @@
           window.scrollTo({ top: y, behavior: "smooth" });
         }, 40);
       }
-
-      searchInput.addEventListener("input", (e) => {
-        const q = e.target.value.trim();
-        clearTimeout(searchDebounceTimer);
-
-        if (!q) {
-          exitSearchToHome(false);
-          return;
+      function openLightbox(url, galleryList, startIdx) {
+        if (Array.isArray(galleryList) && galleryList.length) {
+          lightboxItems = galleryList;
+          lightboxIndex = Math.max(0, Math.min(galleryList.length - 1, startIdx || 0));
+        } else {
+          lightboxItems = [{ url: url, fallback: url, title: (currentModalGame && currentModalGame.name) || "Official HD Capture" }];
+          lightboxIndex = 0;
         }
+        renderLightboxFrame();
+        document.getElementById("screenshotLightbox").classList.remove("hidden");
+      }
+
+      function renderLightboxFrame() {
+        const item = lightboxItems[lightboxIndex];
+        if (!item) return;
+        const img = document.getElementById("lightboxImage");
+        img.onerror = function () {
+          if (item.fallback && this.src !== item.fallback) this.src = item.fallback;
+          else this.onerror = null;
+        };
+        img.src = item.url;
+        document.getElementById("lightboxCounter").textContent =
+          `${String(lightboxIndex + 1).padStart(2, "0")} / ${String(lightboxItems.length).padStart(2, "0")}`;
+        document.getElementById("lightboxCaption").textContent = item.title || "Official HD Frame";
+
+        const multi = lightboxItems.length > 1;
+        document.getElementById("lightboxPrevBtn").classList.toggle("hidden", !multi);
+        document.getElementById("lightboxNextBtn").classList.toggle("hidden", !multi);
+      }
+
+      function stepLightbox(dir) {
+        if (lightboxItems.length <= 1) return;
+        lightboxIndex = (lightboxIndex + dir + lightboxItems.length) % lightboxItems.length;
+        renderLightboxFrame();
+      }
+
+      function downloadActiveLightboxImage() {
+        const item = lightboxItems[lightboxIndex];
+        if (!item) return;
+        const slug = ((mhCurrentGame && mhCurrentGame.slug) || (currentModalGame && currentModalGame.slug) || "fps-game").replace(/[^a-z0-9-_]/gi, "-");
+        downloadScreenshotFile(item.url, `${slug}-fps-shot-${lightboxIndex + 1}.jpg`, item.fallback);
+      }
+
+      async function downloadScreenshotFile(url, filename, fallbackUrl) {
+        showToast("Preparing HD download...");
+        try {
+          const res = await fetch(url, { mode: "cors" });
+          if (!res.ok) throw new Error("CORS/HTTP");
+          const blob = await res.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 4000);
+          showToast("HD Screenshot downloaded");
+        } catch (_) {
+          // Graceful fallback if external CDN blocks CORS blob fetch
+          const target = url || fallbackUrl;
+          const a = document.createElement("a");
+          a.href = target;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          showToast("Opened HD image for direct save");
+        }
+      }
+
+      function closeLightbox() {
+        document.getElementById("screenshotLightbox").classList.add("hidden");
+        document.getElementById("lightboxImage").src = "";
+      }
+
+      function closeReviewModal() {
+        document.getElementById("modalIframe").src = "";
+        document.getElementById("reviewModal").classList.add("hidden");
+        document.body.style.overflow = "";
+        if (!isSearchActive && !isMediaHouseActive) showHeroSlide(currentHeroIdx);
+      }
 
         enterSearchView(q);
         searchCountText.textContent = "SEARCHING...";
@@ -3313,6 +3667,800 @@
       }
 
       // =========================================================================
+      // 16B. FPS MEDIA HOUSE — DEEP CHRONOLOGICAL YT, LIVE YOUTUBERS & 50+ SHOTS
+      // =========================================================================
+      function extractChronologicalOrderNum(title) {
+        const t = String(title || "");
+        const patterns = [
+          /\b(?:part|pt\.?)\s*#?\s*(\d{1,3})\b/i,
+          /\b(?:episode|ep\.?)\s*#?\s*(\d{1,3})\b/i,
+          /\b(?:mission|chapter|act)\s*#?\s*(\d{1,3})\b/i,
+          /#\s*(\d{1,3})\b/,
+          /\b(\d{1,3})\s*(?:of|\/)\s*\d{1,3}\b/i
+        ];
+        for (const rx of patterns) {
+          const m = t.match(rx);
+          if (m && m[1]) return parseInt(m[1], 10);
+        }
+        return null;
+      }
+
+      function sortEpisodesChronologically(items) {
+        return [...items].sort((a, b) => {
+          const numA = extractChronologicalOrderNum(a.title);
+          const numB = extractChronologicalOrderNum(b.title);
+          if (numA !== null && numB !== null && numA !== numB) return numA - numB;
+          if (numA !== null && numB === null) return -1;
+          if (numA === null && numB !== null) return 1;
+          if (typeof a.position === "number" && typeof b.position === "number" && a.position !== b.position) {
+            return a.position - b.position;
+          }
+          const timeA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+          const timeB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+          return timeA - timeB;
+        });
+      }
+
+      function renderMediaHouseQuickSwitcher() {
+        const container = document.getElementById("mhQuickSwitcher");
+        if (!container) return;
+        const activeName = (mhCurrentGame && mhCurrentGame.name || "").toLowerCase();
+        container.innerHTML = heroSlides.map((slide, idx) => {
+          const isCurrent = slide.name.toLowerCase() === activeName;
+          return `
+            <button
+              type="button"
+              onclick="FPS.selectMediaHouseSeed(${idx})"
+              class="flex-shrink-0 flex items-center gap-2.5 pl-1.5 pr-3.5 py-1.5 rounded-xl border transition ${
+                isCurrent
+                  ? "bg-[#FFAB00] border-[#FFAB00] text-black shadow-[0_0_16px_rgba(255,171,0,0.45)]"
+                  : "bg-[#0D0F16] hover:bg-white/10 border-white/10 text-gray-200"
+              }"
+            >
+              <img src="${escapeHtml(slide.background_image)}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/${escapeHtml(slide.yt)}/hqdefault.jpg';" alt="" class="w-9 h-9 rounded-lg object-cover flex-shrink-0 bg-black" />
+              <span class="text-xs font-black tracking-wide whitespace-nowrap">${escapeHtml(slide.name)}</span>
+            </button>
+          `;
+        }).join("");
+      }
+
+      function selectMediaHouseSeed(idx) {
+        const slide = heroSlides[idx];
+        if (slide) loadMediaHouseForGame(slide);
+      }
+
+      function openMediaHouse(game) {
+        if (!document.getElementById("reviewModal").classList.contains("hidden")) {
+          document.getElementById("modalIframe").src = "";
+          document.getElementById("reviewModal").classList.add("hidden");
+          document.body.style.overflow = "";
+        }
+
+        if (isSearchActive) {
+          isSearchActive = false;
+          searchView.classList.add("hidden");
+          searchInput.value = "";
+          clearSearchBtn.classList.add("hidden");
+        }
+
+        if (!isMediaHouseActive) {
+          lastHomeScrollY = window.scrollY || 0;
+          isMediaHouseActive = true;
+          clearTimeout(heroVideoTimer);
+          clearInterval(heroAutoTimer);
+          const heroShell = document.getElementById("heroVideoShell");
+          if (heroShell) heroShell.innerHTML = "";
+          homeView.classList.add("hidden");
+          document.getElementById("media-house-view").classList.remove("hidden");
+        }
+
+        window.scrollTo({ top: 0, behavior: "auto" });
+        const targetGame = game || mhCurrentGame || heroSlides[0];
+        if (targetGame) loadMediaHouseForGame(targetGame);
+      }
+
+      function openMediaHouseFromModal() {
+        const target = currentModalGame || heroSlides[0];
+        openMediaHouse(target);
+      }
+
+      function exitMediaHouseToHome(scrollTop) {
+        document.getElementById("mhPlayerIframe").src = "";
+        isMediaHouseActive = false;
+        document.getElementById("media-house-view").classList.add("hidden");
+        homeView.classList.remove("hidden");
+        window.scrollTo({ top: scrollTop ? 0 : lastHomeScrollY, behavior: "auto" });
+        showHeroSlide(currentHeroIdx);
+      }
+
+      function syncMediaHouseWannaPlayBtn() {
+        if (!mhCurrentGame) return;
+        const exists = wannaPlayList.some((g) => String(g.id) === String(mhCurrentGame.id) || g.name === mhCurrentGame.name);
+        const btn = document.getElementById("mhWannaPlayBtn");
+        const label = document.getElementById("mhWannaPlayLabel");
+        const icon = document.getElementById("mhWannaPlayIcon");
+        if (btn) {
+          btn.className = exists
+            ? "px-4 py-2.5 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-[0_0_18px_rgba(255,171,0,0.45)] transition active:scale-95"
+            : "px-4 py-2.5 rounded-xl bg-black/60 hover:bg-[#FFAB00]/20 border border-[#FFAB00]/65 text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95";
+        }
+        if (label) label.textContent = exists ? "IN WANNA PLAY" : "+ WANNA PLAY";
+        if (icon) {
+          icon.setAttribute("class", exists ? "w-3.5 h-3.5 text-black" : "w-3.5 h-3.5 text-[#FFAB00]");
+          icon.innerHTML = exists
+            ? `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>`
+            : `<path stroke-linecap="round" d="M12 5v14m-7-7h14"/>`;
+        }
+      }
+
+      function toggleMediaHouseWannaPlay() {
+        if (!mhCurrentGame) return;
+        toggleGameInWannaPlay(mhCurrentGame);
+        syncMediaHouseWannaPlayBtn();
+        syncHeroWannaPlayButton();
+      }
+
+      function openFullReviewFromMediaHouse() {
+        if (!mhCurrentGame) return;
+        document.getElementById("mhPlayerIframe").src = "";
+        openReviewModal(mhCurrentGame, "reviews");
+      }
+
+      function switchMediaHouseTab(tab) {
+        mhActiveTab = tab;
+        ["episodes", "live", "screenshots"].forEach((t) => {
+          const pane = document.getElementById("mhPane-" + t);
+          const btn = document.getElementById("mhTabBtn-" + t);
+          if (t === tab) {
+            pane.classList.remove("hidden");
+            btn.className = "pb-3.5 text-white border-b-2 border-[#FFAB00] whitespace-nowrap transition flex items-center gap-2";
+          } else {
+            pane.classList.add("hidden");
+            btn.className = "pb-3.5 text-gray-400 hover:text-white border-b-2 border-transparent whitespace-nowrap transition flex items-center gap-2";
+          }
+        });
+      }
+
+      async function loadMediaHouseForGame(game) {
+        mhCurrentGame = { ...game };
+        mhPlaylists = [];
+        mhActivePlaylistId = null;
+        mhEpisodes = [];
+        mhActiveEpisodeIdx = -1;
+        mhLiveStreams = [];
+        mhCreatorVideos = [];
+        mhActiveCreatorFilter = "ALL";
+        mhScreenshots = [];
+
+        const rating = getOfficialRatingInfo(game);
+        const year = String(game.released || "2024").split("-")[0];
+
+        document.getElementById("mhGameTitle").textContent = game.name;
+        const badge = document.getElementById("mhGameTierBadge");
+        badge.className = `px-2.5 py-0.5 rounded text-[10px] font-black tracking-widest uppercase ${rating.badgeClass}`;
+        badge.textContent = rating.label;
+        document.getElementById("mhGameScore").textContent = rating.score;
+        document.getElementById("mhGameStudioYear").textContent = `${(game.studio || "FEATURED STUDIO").toUpperCase()} • ${year}`;
+
+        const thumb = document.getElementById("mhGamePosterThumb");
+        thumb.src = game.background_image || "https://placehold.co/240x320/12151f/FFAB00?text=FPS";
+        document.getElementById("mhPlayerBackdrop").src = game.background_image || "";
+
+        const genresEl = document.getElementById("mhGameGenres");
+        const genresList = (game.genres && game.genres.length) ? game.genres : [{ name: "Action" }, { name: "Adventure" }];
+        genresEl.innerHTML = genresList.slice(0, 4).map((g) =>
+          `<span class="px-2 py-0.5 rounded bg-white/10 border border-white/10 text-[10px] font-bold uppercase tracking-wider text-gray-200">${escapeHtml(g.name)}</span>`
+        ).join("");
+
+        syncMediaHouseWannaPlayBtn();
+        renderMediaHouseQuickSwitcher();
+
+        // Loading Skeletons
+        document.getElementById("mhPlayerLoader").classList.remove("hidden");
+        document.getElementById("mhCreatorPlaylistPills").innerHTML = `<span class="text-xs font-bold text-gray-400">Discovering YouTuber walkthrough series...</span>`;
+        document.getElementById("mhEpisodesGrid").innerHTML = Array.from({ length: 8 }).map(() => `<div class="aspect-video rounded-xl skeleton-shimmer border border-white/10"></div>`).join("");
+        document.getElementById("mhUpNextQueue").innerHTML = Array.from({ length: 6 }).map(() => `<div class="h-16 rounded-xl skeleton-shimmer border border-white/10"></div>`).join("");
+        document.getElementById("mhLiveGrid").innerHTML = Array.from({ length: 4 }).map(() => `<div class="aspect-video rounded-xl skeleton-shimmer border border-white/10"></div>`).join("");
+        document.getElementById("mhCreatorsGrid").innerHTML = Array.from({ length: 8 }).map(() => `<div class="aspect-video rounded-xl skeleton-shimmer border border-white/10"></div>`).join("");
+        document.getElementById("mhScreenshotsGrid").innerHTML = Array.from({ length: 15 }).map(() => `<div class="aspect-video rounded-xl skeleton-shimmer border border-white/10"></div>`).join("");
+
+        // Parallel hydration: RAWG Details + Deep Chronological Playlists + Live/Creators + 50+ Screenshots
+        const snapName = game.name;
+        const detailsPromise = (async () => {
+          const lookup = game.rawgId || (typeof game.id === "number" ? game.id : game.slug);
+          if (!lookup) return null;
+          try {
+            const d = await cachedFetchJSON(`https://api.rawg.io/api/games/${lookup}?key=${RAWG_API_KEY}`);
+            if (d && mhCurrentGame && mhCurrentGame.name === snapName) {
+              if (d.id) mhCurrentGame.rawgId = d.id;
+              if (d.background_image) {
+                mhCurrentGame.background_image = d.background_image;
+                thumb.src = d.background_image;
+                document.getElementById("mhPlayerBackdrop").src = d.background_image;
+              }
+              if (d.developers && d.developers[0]) {
+                mhCurrentGame.studio = d.developers[0].name;
+                const yr = String(d.released || game.released || "2024").split("-")[0];
+                document.getElementById("mhGameStudioYear").textContent = `${d.developers[0].name.toUpperCase()} • ${yr}`;
+              }
+              if (d.genres && d.genres.length) {
+                mhCurrentGame.genres = d.genres;
+                genresEl.innerHTML = d.genres.slice(0, 4).map((g) =>
+                  `<span class="px-2 py-0.5 rounded bg-white/10 border border-white/10 text-[10px] font-bold uppercase tracking-wider text-gray-200">${escapeHtml(g.name)}</span>`
+                ).join("");
+              }
+            }
+            return d;
+          } catch (_) {
+            return null;
+          }
+        })();
+
+        const playlistsPromise = loadChronologicalPlaylistsForGame(game);
+        const livePromise = loadLiveAndCreatorsForGame(game);
+
+        const [details, , liveCreatorPack] = await Promise.all([detailsPromise, playlistsPromise, livePromise]);
+        if (!mhCurrentGame || mhCurrentGame.name !== snapName) return;
+
+        await load50PlusScreenshotsForGame(mhCurrentGame, details, liveCreatorPack);
+      }
+
+      async function loadChronologicalPlaylistsForGame(game) {
+        const snapName = game.name;
+        const plUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=playlist&maxResults=10&q=${encodeURIComponent(game.name + " full gameplay walkthrough part 1")}&key=${YT_API_KEY}`;
+
+        try {
+          const data = await cachedFetchJSON(plUrl);
+          if (!mhCurrentGame || mhCurrentGame.name !== snapName) return;
+
+          const items = (data && data.items) || [];
+          mhPlaylists = items.map((it) => ({
+            playlistId: it.id && it.id.playlistId,
+            title: (it.snippet && it.snippet.title) || "Full Walkthrough",
+            channelTitle: (it.snippet && it.snippet.channelTitle) || "Gaming Creator"
+          })).filter((p) => p.playlistId);
+
+          if (mhPlaylists.length) {
+            renderCreatorPlaylistPills();
+            await selectMediaHousePlaylist(mhPlaylists[0].playlistId);
+            return;
+          }
+        } catch (_) {}
+
+        // Fallback: Direct chronological walkthrough video search
+        await loadFallbackChronologicalVideos(game);
+      }
+
+      function renderCreatorPlaylistPills() {
+        const wrap = document.getElementById("mhCreatorPlaylistPills");
+        if (!wrap) return;
+        if (!mhPlaylists.length) {
+          wrap.innerHTML = `<span class="px-3 py-1.5 rounded-lg bg-white/10 text-[11px] font-bold text-gray-300">CHRONOLOGICAL WALKTHROUGH FEED</span>`;
+          return;
+        }
+        wrap.innerHTML = mhPlaylists.map((pl) => {
+          const active = pl.playlistId === mhActivePlaylistId;
+          return `
+            <button
+              type="button"
+              onclick="FPS.selectMediaHousePlaylist('${escapeHtml(pl.playlistId)}')"
+              class="px-3.5 py-2 rounded-xl text-[11px] font-black tracking-wider uppercase border transition flex items-center gap-2 ${
+                active
+                  ? "bg-[#FFAB00] border-[#FFAB00] text-black shadow-[0_0_16px_rgba(255,171,0,0.45)]"
+                  : "bg-white/[0.04] hover:bg-white/10 border-white/15 text-gray-200"
+              }"
+            >
+              <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4zm12 0l5 3-5 3v-6z"/></svg>
+              <span class="truncate max-w-[180px]">${escapeHtml(pl.channelTitle)}</span>
+            </button>
+          `;
+        }).join("");
+      }
+
+      async function selectMediaHousePlaylist(playlistId) {
+        mhActivePlaylistId = playlistId;
+        renderCreatorPlaylistPills();
+        document.getElementById("mhPlayerLoader").classList.remove("hidden");
+        document.getElementById("mhEpisodesGrid").innerHTML = Array.from({ length: 8 }).map(() => `<div class="aspect-video rounded-xl skeleton-shimmer border border-white/10"></div>`).join("");
+
+        const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${encodeURIComponent(playlistId)}&key=${YT_API_KEY}`;
+        try {
+          const data = await cachedFetchJSON(url);
+          if (mhActivePlaylistId !== playlistId) return;
+
+          const raw = ((data && data.items) || []).map((it, idx) => {
+            const sn = it.snippet || {};
+            const vid = sn.resourceId && sn.resourceId.videoId;
+            return {
+              videoId: vid,
+              title: sn.title || `Episode ${idx + 1}`,
+              channelTitle: sn.videoOwnerChannelTitle || sn.channelTitle || "Gaming Creator",
+              publishedAt: sn.publishedAt || "",
+              position: typeof sn.position === "number" ? sn.position : idx,
+              thumb: (sn.thumbnails && (sn.thumbnails.high || sn.thumbnails.medium || sn.thumbnails.default) || {}).url || (vid ? `https://img.youtube.com/vi/${vid}/hqdefault.jpg` : ""),
+              isLive: false
+            };
+          }).filter((ep) => ep.videoId && ep.title !== "Private video" && ep.title !== "Deleted video");
+
+          mhEpisodes = sortEpisodesChronologically(raw);
+          document.getElementById("mhChronoStatus").textContent = `${mhEpisodes.length} EPISODES • STRICT CHRONOLOGICAL ORDER`;
+          renderMediaHouseEpisodesAndQueue();
+
+          if (mhEpisodes.length) {
+            playMediaHouseEpisode(0);
+          } else if (mhCurrentGame) {
+            await loadFallbackChronologicalVideos(mhCurrentGame);
+          }
+        } catch (_) {
+          if (mhCurrentGame) await loadFallbackChronologicalVideos(mhCurrentGame);
+        }
+      }
+
+      async function loadFallbackChronologicalVideos(game) {
+        const snapName = game.name;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=25&q=${encodeURIComponent(game.name + " walkthrough part 1 gameplay")}&key=${YT_API_KEY}`;
+        try {
+          const data = await cachedFetchJSON(url);
+          if (!mhCurrentGame || mhCurrentGame.name !== snapName) return;
+
+          const raw = ((data && data.items) || []).map((it, idx) => {
+            const sn = it.snippet || {};
+            const vid = it.id && it.id.videoId;
+            return {
+              videoId: vid,
+              title: sn.title || `Mission ${idx + 1}`,
+              channelTitle: sn.channelTitle || "Gaming Creator",
+              publishedAt: sn.publishedAt || "",
+              position: idx,
+              thumb: (sn.thumbnails && (sn.thumbnails.high || sn.thumbnails.medium) || {}).url || (vid ? `https://img.youtube.com/vi/${vid}/hqdefault.jpg` : ""),
+              isLive: false
+            };
+          }).filter((ep) => ep.videoId);
+
+          mhEpisodes = sortEpisodesChronologically(raw);
+        } catch (_) {
+          const fallbackYt = game.yt || KNOWN_YT_MAP[(game.name || "").toLowerCase()];
+          mhEpisodes = fallbackYt ? [{
+            videoId: fallbackYt,
+            title: `${game.name} — Official Showcase & Gameplay`,
+            channelTitle: game.studio || "Official Channel",
+            publishedAt: game.released || "",
+            position: 0,
+            thumb: `https://img.youtube.com/vi/${fallbackYt}/hqdefault.jpg`,
+            isLive: false
+          }] : [];
+        }
+
+        renderCreatorPlaylistPills();
+        document.getElementById("mhChronoStatus").textContent = `${mhEpisodes.length} EPISODES • CHRONOLOGICAL`;
+        renderMediaHouseEpisodesAndQueue();
+        if (mhEpisodes.length) playMediaHouseEpisode(0);
+        else document.getElementById("mhPlayerLoader").classList.add("hidden");
+      }
+
+      function renderMediaHouseEpisodesAndQueue() {
+        const grid = document.getElementById("mhEpisodesGrid");
+        const queue = document.getElementById("mhUpNextQueue");
+        const badge = document.getElementById("mhQueueCountBadge");
+
+        badge.textContent = `${mhEpisodes.length} ${mhEpisodes.length === 1 ? "EPISODE" : "EPISODES"}`;
+
+        if (!mhEpisodes.length) {
+          grid.innerHTML = `<div class="col-span-full py-10 text-center text-xs font-bold uppercase tracking-widest text-gray-400 bg-white/[0.02] border border-white/10 rounded-2xl">No episodes returned for this query. Try another creator or game.</div>`;
+          queue.innerHTML = `<div class="py-8 text-center text-xs text-gray-500">Queue empty</div>`;
+          return;
+        }
+
+        // Netflix-style Vertical "UP NEXT — EPISODES" Queue
+        queue.innerHTML = mhEpisodes.map((ep, idx) => {
+          const active = idx === mhActiveEpisodeIdx;
+          const epNum = String(idx + 1).padStart(2, "0");
+          return `
+            <button
+              type="button"
+              onclick="FPS.playMediaHouseEpisode(${idx})"
+              class="mh-episode-card ${active ? "is-active" : ""} w-full text-left rounded-xl p-2 flex items-center gap-3"
+            >
+              <div class="relative w-24 aspect-video rounded-lg overflow-hidden flex-shrink-0 bg-black border border-white/10">
+                <img src="${escapeHtml(ep.thumb)}" loading="lazy" alt="" class="w-full h-full object-cover" />
+                <span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/85 font-mono-num text-[9px] font-black text-[#FFAB00]">EP ${epNum}</span>
+              </div>
+              <div class="min-w-0 flex-grow">
+                <div class="flex items-center gap-1.5">
+                  ${active ? `<span class="w-1.5 h-1.5 rounded-full bg-[#E50914] animate-pulse flex-shrink-0"></span>` : ""}
+                  <span class="text-[10px] font-black tracking-wider uppercase ${active ? "text-[#FFAB00]" : "text-gray-400"} truncate">${active ? "PLAYING NOW" : escapeHtml(ep.channelTitle)}</span>
+                </div>
+                <p class="text-xs font-bold text-white leading-snug line-clamp-2 mt-0.5">${escapeHtml(ep.title)}</p>
+              </div>
+            </button>
+          `;
+        }).join("");
+
+        // Netflix-style Chronological Episodes Grid
+        grid.innerHTML = mhEpisodes.map((ep, idx) => {
+          const active = idx === mhActiveEpisodeIdx;
+          const epNum = String(idx + 1).padStart(2, "0");
+          return `
+            <article
+              onclick="FPS.playMediaHouseEpisode(${idx})"
+              class="mh-episode-card ${active ? "is-active" : ""} rounded-2xl overflow-hidden cursor-pointer flex flex-col group"
+            >
+              <div class="relative aspect-video bg-black overflow-hidden">
+                <img src="${escapeHtml(ep.thumb)}" loading="lazy" decoding="async" alt="${escapeHtml(ep.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-transparent"></div>
+                <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-black/85 border border-[#FFAB00]/60 font-mono-num text-[10px] font-black text-[#FFAB00]">EPISODE ${epNum}</span>
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                  <div class="w-11 h-11 rounded-full bg-[#E50914] text-white flex items-center justify-center shadow-[0_0_24px_rgba(229,9,20,0.8)]">
+                    <svg class="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="p-3.5 space-y-1.5 flex-grow flex flex-col justify-between">
+                <h5 class="text-xs sm:text-sm font-black text-white leading-snug line-clamp-2">${escapeHtml(ep.title)}</h5>
+                <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400 pt-1">
+                  <span class="text-[#FFAB00] truncate max-w-[65%]">${escapeHtml(ep.channelTitle)}</span>
+                  <span>${ep.publishedAt ? new Date(ep.publishedAt).getFullYear() : "HD"}</span>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      function playMediaHouseEpisode(idx) {
+        if (idx < 0 || idx >= mhEpisodes.length) return;
+        mhActiveEpisodeIdx = idx;
+        const ep = mhEpisodes[idx];
+        playVideoInMediaHouseTheater(ep, `EPISODE ${String(idx + 1).padStart(2, "0")}`);
+        renderMediaHouseEpisodesAndQueue();
+        document.getElementById("mhPrevEpBtn").disabled = idx <= 0;
+        document.getElementById("mhNextEpBtn").disabled = idx >= mhEpisodes.length - 1;
+      }
+
+      function playPrevMediaEpisode() {
+        if (mhActiveEpisodeIdx > 0) playMediaHouseEpisode(mhActiveEpisodeIdx - 1);
+      }
+
+      function playNextMediaEpisode() {
+        if (mhActiveEpisodeIdx < mhEpisodes.length - 1) playMediaHouseEpisode(mhActiveEpisodeIdx + 1);
+      }
+
+      function playVideoInMediaHouseTheater(videoObj, badgeLabel) {
+        const iframe = document.getElementById("mhPlayerIframe");
+        const loader = document.getElementById("mhPlayerLoader");
+        loader.classList.add("hidden");
+
+        iframe.src = `https://www.youtube-nocookie.com/embed/${videoObj.videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`;
+        document.getElementById("mhNowPlayingEpBadge").textContent = badgeLabel || "STREAMING";
+        document.getElementById("mhNowPlayingTitle").textContent = videoObj.title || "";
+        document.getElementById("mhNowPlayingChannel").textContent = videoObj.channelTitle || "Gaming Creator";
+        document.getElementById("mhNowPlayingDate").textContent = videoObj.publishedAt
+          ? new Date(videoObj.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+          : "HD Stream";
+
+        const liveBadge = document.getElementById("mhNowPlayingLiveBadge");
+        if (videoObj.isLive) {
+          liveBadge.classList.remove("hidden");
+          liveBadge.classList.add("inline-flex");
+        } else {
+          liveBadge.classList.add("hidden");
+          liveBadge.classList.remove("inline-flex");
+        }
+
+        document.getElementById("media-house-view").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      async function loadLiveAndCreatorsForGame(game) {
+        const snapName = game.name;
+        const liveUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&eventType=live&videoEmbeddable=true&maxResults=16&q=${encodeURIComponent(game.name + " gameplay live")}&key=${YT_API_KEY}`;
+        const creatorsUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=24&q=${encodeURIComponent(game.name + " gameplay stream")}&key=${YT_API_KEY}`;
+
+        const [liveData, creatorsData] = await Promise.all([
+          cachedFetchJSON(liveUrl).catch(() => ({ items: [] })),
+          cachedFetchJSON(creatorsUrl).catch(() => ({ items: [] }))
+        ]);
+
+        if (!mhCurrentGame || mhCurrentGame.name !== snapName) return { live: [], creators: [] };
+
+        mhLiveStreams = ((liveData && liveData.items) || []).map((it) => {
+          const sn = it.snippet || {};
+          const vid = it.id && it.id.videoId;
+          return {
+            videoId: vid,
+            title: sn.title || "Live Stream",
+            channelTitle: sn.channelTitle || "Live Streamer",
+            publishedAt: sn.publishedAt || "",
+            thumb: (sn.thumbnails && (sn.thumbnails.high || sn.thumbnails.medium) || {}).url || `https://img.youtube.com/vi/${vid}/hqdefault.jpg`,
+            isLive: true
+          };
+        }).filter((v) => v.videoId);
+
+        mhCreatorVideos = ((creatorsData && creatorsData.items) || []).map((it) => {
+          const sn = it.snippet || {};
+          const vid = it.id && it.id.videoId;
+          return {
+            videoId: vid,
+            title: sn.title || "Gameplay",
+            channelTitle: sn.channelTitle || "Gaming YouTuber",
+            publishedAt: sn.publishedAt || "",
+            thumb: (sn.thumbnails && (sn.thumbnails.high || sn.thumbnails.medium) || {}).url || `https://img.youtube.com/vi/${vid}/hqdefault.jpg`,
+            isLive: false
+          };
+        }).filter((v) => v.videoId);
+
+        renderLiveAndCreatorsUI();
+        return { live: mhLiveStreams, creators: mhCreatorVideos };
+      }
+
+      function setLiveCreatorFilter(channelName) {
+        mhActiveCreatorFilter = channelName;
+        renderLiveAndCreatorsUI();
+      }
+
+      function renderLiveAndCreatorsUI() {
+        const liveGrid = document.getElementById("mhLiveGrid");
+        const liveBadge = document.getElementById("mhLiveCountBadge");
+        const creatorsGrid = document.getElementById("mhCreatorsGrid");
+        const pillsWrap = document.getElementById("mhLiveCreatorFilterPills");
+
+        liveBadge.textContent = `${mhLiveStreams.length} LIVE NOW`;
+        if (!mhLiveStreams.length) {
+          liveGrid.innerHTML = `<div class="col-span-full py-8 px-4 text-center bg-white/[0.02] border border-white/10 rounded-2xl text-xs font-bold uppercase tracking-wider text-gray-400">No active live broadcasts detected right now. Browse top creator streams below.</div>`;
+        } else {
+          liveGrid.innerHTML = mhLiveStreams.map((v, idx) => `
+            <article onclick="FPS.playLiveOrCreatorVideo('live', ${idx})" class="mh-episode-card rounded-2xl overflow-hidden cursor-pointer flex flex-col group">
+              <div class="relative aspect-video bg-black overflow-hidden">
+                <img src="${escapeHtml(v.thumb)}" loading="lazy" alt="${escapeHtml(v.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-[#E50914] text-white text-[10px] font-black tracking-widest uppercase inline-flex items-center gap-1.5 shadow-[0_0_16px_rgba(229,9,20,0.8)]">
+                  <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>LIVE NOW
+                </span>
+              </div>
+              <div class="p-3.5 space-y-1">
+                <h5 class="text-xs sm:text-sm font-black text-white leading-snug line-clamp-2">${escapeHtml(v.title)}</h5>
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-[#FFAB00] truncate">${escapeHtml(v.channelTitle)}</p>
+              </div>
+            </article>
+          `).join("");
+        }
+
+        // Unique Gaming YouTubers filter pills
+        const uniqueChannels = Array.from(new Set(mhCreatorVideos.map((v) => v.channelTitle))).slice(0, 8);
+        pillsWrap.innerHTML = ["ALL", ...uniqueChannels].map((ch) => {
+          const active = ch === mhActiveCreatorFilter;
+          return `
+            <button
+              type="button"
+              onclick="FPS.setLiveCreatorFilter('${escapeHtml(ch).replace(/'/g, "\\'")}')"
+              class="px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase transition ${
+                active ? "bg-[#FFAB00] text-black" : "bg-white/10 text-gray-300 hover:bg-white/20"
+              }"
+            >${ch === "ALL" ? "ALL YOUTUBERS" : escapeHtml(ch)}</button>
+          `;
+        }).join("");
+
+        const filteredCreators = mhActiveCreatorFilter === "ALL"
+          ? mhCreatorVideos
+          : mhCreatorVideos.filter((v) => v.channelTitle === mhActiveCreatorFilter);
+
+        if (!filteredCreators.length) {
+          creatorsGrid.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-gray-400">No creator streams found.</div>`;
+        } else {
+          creatorsGrid.innerHTML = filteredCreators.map((v) => {
+            const realIdx = mhCreatorVideos.indexOf(v);
+            return `
+              <article onclick="FPS.playLiveOrCreatorVideo('creator', ${realIdx})" class="mh-episode-card rounded-2xl overflow-hidden cursor-pointer flex flex-col group">
+                <div class="relative aspect-video bg-black overflow-hidden">
+                  <img src="${escapeHtml(v.thumb)}" loading="lazy" alt="${escapeHtml(v.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                  <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-black/80 border border-white/15 text-[9px] font-black tracking-wider uppercase text-white">CREATOR</span>
+                </div>
+                <div class="p-3.5 space-y-1">
+                  <h5 class="text-xs sm:text-sm font-black text-white leading-snug line-clamp-2">${escapeHtml(v.title)}</h5>
+                  <p class="text-[10px] font-extrabold uppercase tracking-wider text-[#FFAB00] truncate">${escapeHtml(v.channelTitle)}</p>
+                </div>
+              </article>
+            `;
+          }).join("");
+        }
+      }
+
+      function playLiveOrCreatorVideo(type, idx) {
+        const list = type === "live" ? mhLiveStreams : mhCreatorVideos;
+        const vid = list[idx];
+        if (!vid) return;
+        playVideoInMediaHouseTheater(vid, type === "live" ? "LIVE STREAM" : "CREATOR GAMEPLAY");
+      }
+
+      async function load50PlusScreenshotsForGame(game, details, liveCreatorPack) {
+        const snapName = game.name;
+        const seen = new Set();
+        const shots = [];
+
+        const pushShot = (url, fallback, title, source) => {
+          if (!url || seen.has(url)) return;
+          seen.add(url);
+          shots.push({ url, fallback: fallback || url, title: title || `${game.name} HD Frame`, source: source || "RAWG" });
+        };
+
+        // 1. Official RAWG hero & additional artwork
+        if (details && details.background_image) pushShot(details.background_image, details.background_image, `${game.name} — Official Key Art`, "RAWG");
+        if (details && details.background_image_additional) pushShot(details.background_image_additional, details.background_image_additional, `${game.name} — Official Backdrop`, "RAWG");
+        if (game.background_image) pushShot(game.background_image, game.background_image, `${game.name} — Cover Capture`, "RAWG");
+
+        // 2. RAWG Screenshots Page 1 & Page 2 (up to 80 official screenshots)
+        const gameId = (details && details.id) || game.rawgId || (typeof game.id === "number" ? game.id : null);
+        if (gameId) {
+          const [p1, p2] = await Promise.all([
+            cachedFetchJSON(`https://api.rawg.io/api/games/${gameId}/screenshots?key=${RAWG_API_KEY}&page=1&page_size=40`).catch(() => null),
+            cachedFetchJSON(`https://api.rawg.io/api/games/${gameId}/screenshots?key=${RAWG_API_KEY}&page=2&page_size=40`).catch(() => null)
+          ]);
+          [...((p1 && p1.results) || []), ...((p2 && p2.results) || [])].forEach((s, i) => {
+            if (s && s.image) pushShot(s.image, s.image, `${game.name} — Official Capture #${i + 1}`, "RAWG");
+          });
+        }
+
+        // 3. Supplement to MINIMUM 50 unique 16:9 HD frames from YouTube episodes, live/creators & 4K cinematics
+        const addYtVideoFrames = (videoId, title) => {
+          if (!videoId) return;
+          const primary = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+          const fallback = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+          pushShot(primary, fallback, title || `${game.name} — 4K Gameplay Frame`, "YT 4K");
+        };
+
+        mhEpisodes.forEach((ep) => addYtVideoFrames(ep.videoId, ep.title));
+        if (liveCreatorPack) {
+          (liveCreatorPack.live || []).forEach((v) => addYtVideoFrames(v.videoId, v.title));
+          (liveCreatorPack.creators || []).forEach((v) => addYtVideoFrames(v.videoId, v.title));
+        }
+
+        // If still under 50 unique frames, run a targeted 4K cinematics/photomode search
+        if (shots.length < 50) {
+          try {
+            const extraUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=50&q=${encodeURIComponent(game.name + " 4K gameplay cinematics photomode")}&key=${YT_API_KEY}`;
+            const extraData = await cachedFetchJSON(extraUrl);
+            ((extraData && extraData.items) || []).forEach((it) => {
+              const vid = it.id && it.id.videoId;
+              const title = it.snippet && it.snippet.title;
+              if (vid) addYtVideoFrames(vid, title);
+            });
+          } catch (_) {}
+        }
+
+        // Guarantee at least 50 frames using alternate YouTube keyframes (sddefault / 1.jpg / 2.jpg / 3.jpg) if API quota is tight
+        if (shots.length < 50) {
+          const allVids = Array.from(new Set([
+            ...mhEpisodes.map((e) => e.videoId),
+            ...mhCreatorVideos.map((e) => e.videoId),
+            ...mhLiveStreams.map((e) => e.videoId),
+            game.yt
+          ].filter(Boolean)));
+          const keyFrames = ["sddefault.jpg", "hqdefault.jpg", "1.jpg", "2.jpg", "3.jpg"];
+          for (const kf of keyFrames) {
+            if (shots.length >= 50) break;
+            for (const vid of allVids) {
+              if (shots.length >= 50) break;
+              pushShot(`https://img.youtube.com/vi/${vid}/${kf}`, `https://img.youtube.com/vi/${vid}/hqdefault.jpg`, `${game.name} — Gameplay Keyframe`, "YT HD");
+            }
+          }
+        }
+
+        if (!mhCurrentGame || mhCurrentGame.name !== snapName) return;
+        mhScreenshots = shots;
+        renderMediaHouseScreenshotsUI();
+      }
+
+      function renderMediaHouseScreenshotsUI() {
+        const grid = document.getElementById("mhScreenshotsGrid");
+        const countBadge = document.getElementById("mhScreenshotsCountBadge");
+        const tabCount = document.getElementById("mhScreenshotsTabCount");
+        const total = mhScreenshots.length;
+
+        countBadge.textContent = `${total} HD FRAMES READY`;
+        tabCount.textContent = `${total}`;
+
+        if (!total) {
+          grid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-gray-400">No screenshots available.</div>`;
+          return;
+        }
+
+        grid.innerHTML = mhScreenshots.map((shot, idx) => `
+          <div class="group relative aspect-video rounded-xl overflow-hidden bg-[#12151f] border border-white/10 hover:border-[#FFAB00] transition">
+            <img
+              src="${escapeHtml(shot.url)}"
+              onerror="if(this.src!=='${escapeHtml(shot.fallback)}'){this.src='${escapeHtml(shot.fallback)}';}else{this.onerror=null;}"
+              alt="${escapeHtml(shot.title)}"
+              loading="lazy"
+              decoding="async"
+              onclick="FPS.openMediaHouseLightbox(${idx})"
+              class="w-full h-full object-cover cursor-zoom-in group-hover:scale-105 transition duration-500"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+            <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/80 font-mono-num text-[9px] font-black text-gray-200 pointer-events-none">#${String(idx + 1).padStart(2, "0")}</span>
+            <button
+              type="button"
+              onclick="event.stopPropagation(); FPS.downloadMediaHouseShot(${idx});"
+              title="Download HD Screenshot"
+              class="absolute bottom-2 right-2 w-8 h-8 rounded-lg bg-black/80 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+            </button>
+          </div>
+        `).join("");
+      }
+
+      function openMediaHouseLightbox(idx) {
+        openLightbox(mhScreenshots[idx] && mhScreenshots[idx].url, mhScreenshots, idx);
+      }
+
+      function downloadMediaHouseShot(idx) {
+        const shot = mhScreenshots[idx];
+        if (!shot) return;
+        const slug = ((mhCurrentGame && mhCurrentGame.slug) || "fps-game").replace(/[^a-z0-9-_]/gi, "-");
+        downloadScreenshotFile(shot.url, `${slug}-fps-shot-${idx + 1}.jpg`, shot.fallback);
+      }
+
+      // Media House Inline Game Switcher Search
+      const mhGameSearchInput = document.getElementById("mhGameSearchInput");
+      const mhGameSearchDropdown = document.getElementById("mhGameSearchDropdown");
+      const mhClearGameSearchBtn = document.getElementById("mhClearGameSearchBtn");
+
+      function clearMediaHouseSearch() {
+        mhGameSearchInput.value = "";
+        mhClearGameSearchBtn.classList.add("hidden");
+        mhGameSearchDropdown.classList.add("hidden");
+        mhGameSearchDropdown.innerHTML = "";
+      }
+
+      mhGameSearchInput.addEventListener("input", (e) => {
+        const q = e.target.value.trim();
+        clearTimeout(mhSearchTimer);
+        if (!q) {
+          clearMediaHouseSearch();
+          return;
+        }
+        mhClearGameSearchBtn.classList.remove("hidden");
+        mhGameSearchDropdown.classList.remove("hidden");
+        mhGameSearchDropdown.innerHTML = `<div class="p-3 text-xs font-bold text-gray-400">Searching games...</div>`;
+
+        mhSearchTimer = setTimeout(async () => {
+          if (mhSearchAbort) mhSearchAbort.abort();
+          mhSearchAbort = new AbortController();
+          try {
+            const url = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(q)}&page_size=8`;
+            const data = await cachedFetchJSON(url, mhSearchAbort.signal);
+            const results = ((data && data.results) || []).filter((g) => g.background_image);
+            if (!results.length) {
+              mhGameSearchDropdown.innerHTML = `<div class="p-3 text-xs text-gray-400">No games found for "${escapeHtml(q)}"</div>`;
+              return;
+            }
+            mhGameSearchDropdown.innerHTML = "";
+            results.forEach((g) => {
+              const rating = getOfficialRatingInfo(g);
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "w-full flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 text-left transition";
+              btn.innerHTML = `
+                <img src="${escapeHtml(g.background_image)}" alt="" class="w-12 h-9 rounded object-cover flex-shrink-0" />
+                <div class="min-w-0 flex-grow">
+                  <div class="text-xs font-black text-white truncate">${escapeHtml(g.name)}</div>
+                  <div class="text-[10px] font-bold text-gray-400">${escapeHtml(String(g.released || "TBA").split("-")[0])} &bull; <span class="text-[#FFAB00]">${rating.score}</span></div>
+                </div>
+              `;
+              btn.onclick = () => {
+                clearMediaHouseSearch();
+                loadMediaHouseForGame(g);
+              };
+              mhGameSearchDropdown.appendChild(btn);
+            });
+          } catch (err) {
+            if (err.name === "AbortError") return;
+            mhGameSearchDropdown.innerHTML = `<div class="p-3 text-xs text-red-400">Search unavailable right now.</div>`;
+          }
+        }, 300);
+      });
+
+      // =========================================================================
       // 17. GLOBAL DISMISS LISTENERS & PUBLIC API
       // =========================================================================
       document.getElementById("reviewModal").addEventListener("click", (e) => {
@@ -3323,12 +4471,22 @@
       });
       document.addEventListener("click", (e) => {
         if (!e.target.closest("#navUserWrap")) toggleUserDropdown(false);
+        if (!e.target.closest("#mhGameSearchInput") && !e.target.closest("#mhGameSearchDropdown")) {
+          mhGameSearchDropdown.classList.add("hidden");
+        }
       });
       window.addEventListener("keydown", (e) => {
+        const lightboxOpen = !document.getElementById("screenshotLightbox").classList.contains("hidden");
+        if (lightboxOpen) {
+          if (e.key === "ArrowRight") stepLightbox(1);
+          else if (e.key === "ArrowLeft") stepLightbox(-1);
+          else if (e.key === "Escape") closeLightbox();
+          return;
+        }
         if (e.key === "Escape") {
-          if (!document.getElementById("screenshotLightbox").classList.contains("hidden")) closeLightbox();
-          else if (!document.getElementById("reviewModal").classList.contains("hidden")) closeReviewModal();
+          if (!document.getElementById("reviewModal").classList.contains("hidden")) closeReviewModal();
           else if (!document.getElementById("wannaPlayModal").classList.contains("hidden")) closeWannaPlayModal();
+          else if (isMediaHouseActive) exitMediaHouseToHome(false);
           else if (isSearchActive) exitSearchToHome(false);
         }
       });
@@ -3355,6 +4513,8 @@
         switchModalTab,
         toggleModalSound,
         openLightbox,
+        stepLightbox,
+        downloadActiveLightboxImage,
         closeLightbox,
         updateInteractiveGauge,
         setSliderPreset,
@@ -3370,7 +4530,23 @@
         clearAllWannaPlay,
         openFromWannaPlay,
         removeWannaPlayItem,
-        copyShareLink
+        copyShareLink,
+        openMediaHouse,
+        openMediaHouseFromModal,
+        exitMediaHouseToHome,
+        selectMediaHouseSeed,
+        clearMediaHouseSearch,
+        switchMediaHouseTab,
+        selectMediaHousePlaylist,
+        playMediaHouseEpisode,
+        playPrevMediaEpisode,
+        playNextMediaEpisode,
+        setLiveCreatorFilter,
+        playLiveOrCreatorVideo,
+        toggleMediaHouseWannaPlay,
+        openFullReviewFromMediaHouse,
+        openMediaHouseLightbox,
+        downloadMediaHouseShot
       };
 
       // =========================================================================
@@ -3381,8 +4557,8 @@
         renderVerdictTagButtons();
         updateInteractiveGauge(9.2);
 
-        // Auto-dismiss 1.6s cinematic splash
-        setTimeout(skipSplash, 1650);
+        // Auto-dismiss 1.85s cinematic splash
+        setTimeout(skipSplash, 1850);
 
         // Immediate Hero Paint + Parallel Carousels + Endless Vertical Observer
         initHeroBillboard();
