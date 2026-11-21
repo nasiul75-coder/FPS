@@ -34,7 +34,7 @@
     };
   </script>
 
-  <!-- Deferred Firebase v10.8.0 Compat SDKs (Never Blocks Initial Paint) -->
+  <!-- Deferred Firebase v10.8.0 Compat SDKs (Non-blocking) -->
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -42,12 +42,12 @@
   <style>
     :root {
       --bg: #050508;
-      --surface: rgba(14, 14, 22, 0.78);
       --red: #E50914;
       --gold: #FFAB00;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
-      --studio-color: #3B82F6;
-      --studio-glow: rgba(59, 130, 246, 0.42);
+      --slider-color: #3B82F6;
+      --slider-glow: rgba(59, 130, 246, 0.5);
+      --slider-pct: 90%;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -56,9 +56,9 @@
       margin: 0;
       background-color: var(--bg);
       background-image:
-        radial-gradient(ellipse 60% 45% at 8% 0%, rgba(229, 9, 20, 0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 45% at 8% 0%, rgba(229, 9, 20, 0.17) 0%, transparent 65%),
         radial-gradient(ellipse 55% 42% at 92% 6%, rgba(255, 171, 0, 0.14) 0%, transparent 62%),
-        radial-gradient(ellipse 70% 50% at 50% 58%, rgba(56, 48, 163, 0.13) 0%, transparent 70%);
+        radial-gradient(ellipse 70% 50% at 50% 60%, rgba(56, 48, 163, 0.12) 0%, transparent 70%);
       background-attachment: fixed;
       color: #ffffff;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -73,11 +73,10 @@
     ::-webkit-scrollbar-thumb { background: #2A2A3B; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #E50914; }
 
-    /* Glassmorphic Luminous Surfaces */
     .glass-panel {
-      background: rgba(14, 14, 22, 0.78);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(14, 14, 22, 0.8);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
       border: 1px solid rgba(255, 255, 255, 0.09);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 50px rgba(0, 0, 0, 0.65);
     }
@@ -124,7 +123,7 @@
     }
     .splash-spotlight {
       position: absolute; top: 50%; left: 50%; width: 150vmax; height: 150vmax;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 171, 0, 0.16) 28deg, transparent 62deg, rgba(229, 9, 20, 0.12) 195deg, transparent 235deg);
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 171, 0, 0.16) 28deg, transparent 62deg, rgba(229, 9, 20, 0.13) 195deg, transparent 235deg);
       animation: spotlightSpin 12s linear infinite;
       pointer-events: none;
     }
@@ -186,7 +185,7 @@
     .rdr-shake { animation: rdrShake 0.32s ease-out 0.34s; }
 
     /* ===================================================================== */
-    /* 3. HERO BILLBOARD & CINEMA CARDS                                      */
+    /* 3. HERO BILLBOARD, PULSING INDICATORS & CINEMA CARDS                  */
     /* ===================================================================== */
     .hero-poster {
       position: absolute; inset: 0; width: 100%; height: 100%;
@@ -224,16 +223,30 @@
       background: #E50914; animation: livePulse 1.4s var(--ease) infinite;
     }
 
+    /* Pulsing Equalizer Bars for NOW PLAYING Episode */
+    @keyframes eqBar {
+      0%, 100% { transform: scaleY(0.32); }
+      50% { transform: scaleY(1); }
+    }
+    .eq-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .eq-bars span {
+      display: block; width: 2.5px; height: 100%; border-radius: 2px;
+      background: #FFAB00; transform-origin: bottom;
+      animation: eqBar 0.75s ease-in-out infinite;
+    }
+    .eq-bars span:nth-child(2) { animation-delay: 0.18s; background: #E50914; }
+    .eq-bars span:nth-child(3) { animation-delay: 0.34s; background: #ffffff; }
+
     /* Zero-Emoji Typographic Tier Badges */
     .badge-rdr { background: linear-gradient(135deg, #B91C1C 0%, #450A0A 100%); border: 1px solid #FFAB00; color: #FEF08A; box-shadow: 0 0 20px rgba(229, 9, 20, 0.65); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
     .badge-gta { background: linear-gradient(135deg, #059669 0%, #022C22 100%); border: 1px solid #34D399; color: #D1FAE5; box-shadow: 0 0 20px rgba(16, 185, 129, 0.55); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-peak { background: linear-gradient(135deg, #D97706 0%, #451A03 100%); border: 1px solid #FBBF24; color: #FEF3C7; box-shadow: 0 0 18px rgba(251, 191, 36, 0.52); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-peak { background: linear-gradient(135deg, #D97706 0%, #451A03 100%); border: 1px solid #FFD700; color: #FEF3C7; box-shadow: 0 0 18px rgba(255, 215, 0, 0.55); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
     .badge-cinema { background: linear-gradient(135deg, #2563EB 0%, #172554 100%); border: 1px solid #60A5FA; color: #DBEAFE; box-shadow: 0 0 18px rgba(59, 130, 246, 0.52); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
     .badge-shouldplay { background: linear-gradient(135deg, #059669 0%, #064E3B 100%); border: 1px solid #34D399; color: #D1FAE5; box-shadow: 0 0 16px rgba(16, 185, 129, 0.45); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
     .badge-cantry { background: linear-gradient(135deg, #DB2777 0%, #500724 100%); border: 1px solid #F472B6; color: #FCE7F3; box-shadow: 0 0 16px rgba(236, 72, 153, 0.45); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
     .badge-trash { background: linear-gradient(135deg, #DC2626 0%, #450A0A 100%); border: 1px solid #F87171; color: #FEE2E2; box-shadow: 0 0 16px rgba(239, 68, 68, 0.5); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
 
-    /* Luminous Netflix / Apple TV+ Poster Cards */
+    /* Luminous Cinema Poster Cards */
     .cinema-card {
       position: relative;
       background: linear-gradient(180deg, rgba(20, 20, 31, 0.95) 0%, rgba(11, 11, 17, 0.98) 100%);
@@ -245,7 +258,7 @@
     .cinema-card::after {
       content: "";
       position: absolute; inset: 0;
-      background: linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.16) 48%, transparent 72%);
+      background: linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.15) 48%, transparent 72%);
       transform: translateX(-140%);
       transition: transform 0.65s var(--ease);
       pointer-events: none; z-index: 15;
@@ -259,7 +272,7 @@
     }
 
     /* ===================================================================== */
-    /* 4. NEXT-GEN TACTILE REVIEW SLIDER & DUAL-RING GAUGE                   */
+    /* 4. CRITICAL FIX: COLOR-MORPHING RATING SLIDER (SAFARI / IPAD / WEB)   */
     /* ===================================================================== */
     @keyframes techRingSpin {
       0% { transform: rotate(0deg); }
@@ -272,110 +285,139 @@
     .review-studio-shell {
       position: relative;
       background:
-        radial-gradient(circle at 18% 20%, var(--studio-glow) 0%, transparent 52%),
-        linear-gradient(180deg, rgba(16, 16, 26, 0.94) 0%, rgba(9, 9, 14, 0.98) 100%);
-      border: 1.5px solid var(--studio-color);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 38px -8px var(--studio-glow);
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        radial-gradient(circle at 18% 18%, var(--slider-glow) 0%, transparent 56%),
+        radial-gradient(circle at 86% 85%, var(--slider-glow) 0%, transparent 58%),
+        linear-gradient(180deg, rgba(16, 16, 26, 0.96) 0%, rgba(8, 8, 13, 0.98) 100%);
+      border: 1.5px solid var(--slider-color);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 42px -6px var(--slider-glow);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* Custom Thick Neon Slider */
-    .neon-slider-wrap { position: relative; padding-top: 38px; padding-bottom: 10px; }
+    .neon-slider-wrap { position: relative; padding-top: 40px; padding-bottom: 6px; }
     .neon-slider-bubble {
-      position: absolute; top: 0; left: 90%;
+      position: absolute; top: 0; left: var(--slider-pct);
       transform: translateX(-50%);
-      background: var(--studio-color);
+      background-color: var(--slider-color);
       color: #050508;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 800; font-size: 12px;
-      padding: 3px 10px; border-radius: 9999px;
-      box-shadow: 0 0 18px var(--studio-glow), 0 4px 12px rgba(0,0,0,0.7);
+      padding: 3px 11px; border-radius: 9999px;
+      box-shadow: 0 0 22px var(--slider-glow), 0 4px 12px rgba(0, 0, 0, 0.75);
       pointer-events: none;
-      transition: background 0.18s ease, transform 0.15s ease;
+      transition: background-color 0.16s ease, box-shadow 0.16s ease;
       white-space: nowrap;
+      z-index: 12;
     }
     .neon-slider-bubble::after {
       content: ""; position: absolute; left: 50%; bottom: -4px;
-      width: 8px; height: 8px; background: var(--studio-color);
+      width: 8px; height: 8px; background-color: var(--slider-color);
       transform: translateX(-50%) rotate(45deg);
+      transition: background-color 0.16s ease;
     }
-    .neon-slider-track {
-      position: relative; height: 12px; border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      overflow: hidden;
+
+    /* Native Range Input Styled Directly With CSS Custom Properties For iOS/iPad Safari */
+    input[type="range"].fps-color-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 14px;
+      border-radius: 9999px;
+      outline: none;
+      cursor: pointer;
+      background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--slider-pct), #22222c var(--slider-pct), #22222c 100%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 0 18px -2px var(--slider-glow), inset 0 1px 3px rgba(0, 0, 0, 0.7);
+      touch-action: none;
     }
-    .neon-slider-fill {
-      height: 100%; width: 90%; border-radius: 9999px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.22) 0%, var(--studio-color) 100%);
-      box-shadow: 0 0 18px var(--studio-color);
-      transition: background 0.2s ease;
+    input[type="range"].fps-color-slider::-webkit-slider-runnable-track {
+      height: 14px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--slider-pct), #22222c var(--slider-pct), #22222c 100%);
     }
-    input[type="range"].neon-range {
-      position: absolute; top: 32px; left: 0; width: 100%; height: 24px;
-      -webkit-appearance: none; appearance: none;
-      background: transparent; margin: 0; cursor: pointer; z-index: 10;
+    input[type="range"].fps-color-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      margin-top: -7px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #ffffff 36%, var(--slider-color) 38%, var(--slider-color) 100%);
+      border: 3px solid var(--slider-color);
+      box-shadow: 0 0 0 3px #07070c, 0 0 24px var(--slider-color), 0 0 38px var(--slider-glow);
+      transition: transform 0.14s var(--ease), box-shadow 0.16s ease;
     }
-    input[type="range"].neon-range::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none;
-      width: 26px; height: 26px; border-radius: 9999px;
-      background: #ffffff;
-      border: 4px solid var(--studio-color);
-      box-shadow: 0 0 0 3px rgba(5, 5, 8, 0.8), 0 0 22px var(--studio-color);
-      transition: transform 0.14s var(--ease), border-color 0.18s ease, box-shadow 0.18s ease;
+    input[type="range"].fps-color-slider:active::-webkit-slider-thumb,
+    input[type="range"].fps-color-slider:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 4px #07070c, 0 0 30px var(--slider-color), 0 0 48px var(--slider-glow);
     }
-    input[type="range"].neon-range:active::-webkit-slider-thumb,
-    input[type="range"].neon-range:hover::-webkit-slider-thumb {
-      transform: scale(1.22);
-      box-shadow: 0 0 0 4px rgba(5, 5, 8, 0.85), 0 0 30px var(--studio-color);
+    input[type="range"].fps-color-slider::-moz-range-track {
+      height: 14px;
+      border-radius: 9999px;
+      background: #22222c;
     }
-    input[type="range"].neon-range::-moz-range-thumb {
-      width: 26px; height: 26px; border-radius: 9999px;
-      background: #ffffff;
-      border: 4px solid var(--studio-color);
-      box-shadow: 0 0 22px var(--studio-color);
+    input[type="range"].fps-color-slider::-moz-range-progress {
+      height: 14px;
+      border-radius: 9999px;
+      background: var(--slider-color);
+    }
+    input[type="range"].fps-color-slider::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #ffffff 36%, var(--slider-color) 38%, var(--slider-color) 100%);
+      border: 3px solid var(--slider-color);
+      box-shadow: 0 0 0 3px #07070c, 0 0 24px var(--slider-color);
     }
 
     /* ===================================================================== */
-    /* 5. NETFLIX MEDIA HOUSE CINEMA STAGE                                   */
+    /* 5. NETFLIX-GRADE FPS MEDIA HOUSE & WANNA PLAY                         */
     /* ===================================================================== */
     .mh-ambient-img {
-      position: absolute; inset: -12%; width: 124%; height: 124%;
-      object-fit: cover; filter: blur(68px) saturate(1.75) brightness(0.45);
-      transform: scale(1.08); pointer-events: none;
+      position: absolute; inset: -14%; width: 128%; height: 128%;
+      object-fit: cover; filter: blur(72px) saturate(1.85) brightness(0.45);
+      transform: scale(1.1); pointer-events: none;
     }
     .mh-tab-btn { position: relative; transition: color 0.25s ease; }
     .mh-tab-btn::after {
       content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 9999px;
       background: linear-gradient(90deg, #E50914 0%, #FFAB00 100%);
-      box-shadow: 0 0 12px rgba(255, 171, 0, 0.7);
+      box-shadow: 0 0 14px rgba(255, 171, 0, 0.75);
       transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease);
     }
     .mh-tab-btn.is-active { color: #ffffff; }
     .mh-tab-btn.is-active::after { transform: scaleX(1); }
 
-    .mh-ep-card {
-      background: rgba(16, 16, 24, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.09);
+    .mh-ep-row {
+      background: rgba(16, 16, 25, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       transition: transform 0.24s var(--ease), border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease;
     }
-    .mh-ep-card:hover {
-      background: rgba(25, 25, 38, 0.96);
+    .mh-ep-row:hover {
+      background: rgba(26, 26, 40, 0.96);
       border-color: rgba(255, 171, 0, 0.65);
       transform: translateY(-2px);
       box-shadow: 0 14px 28px rgba(0, 0, 0, 0.65);
     }
-    .mh-ep-card.is-playing {
-      background: linear-gradient(90deg, rgba(229, 9, 20, 0.26) 0%, rgba(20, 20, 30, 0.95) 60%);
+    .mh-ep-row.is-playing {
+      background: linear-gradient(90deg, rgba(229, 9, 20, 0.24) 0%, rgba(20, 20, 32, 0.96) 58%);
       border-color: #E50914;
-      box-shadow: 0 0 24px rgba(229, 9, 20, 0.35);
+      box-shadow: 0 0 26px rgba(229, 9, 20, 0.35);
+    }
+
+    .wanna-drawer-shell {
+      background:
+        radial-gradient(ellipse 90% 24% at 50% 0%, rgba(255, 171, 0, 0.22) 0%, transparent 72%),
+        rgba(9, 9, 15, 0.96);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
     }
   </style>
 </head>
 <body class="bg-[#050508] text-white min-h-screen flex flex-col">
 
   <!-- ===================================================================== -->
-  <!-- 1. JAW-DROPPING HOLLYWOOD / ROCKSTAR INTRO SPLASH (FAILSAFE)          -->
+  <!-- 1. FAILSAFE HOLLYWOOD / ROCKSTAR INTRO SPLASH                         -->
   <!-- ===================================================================== -->
   <div id="splash-screen" class="fixed inset-0 z-[220] bg-[#040407] flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden px-6 transition-opacity duration-400">
     <div class="splash-spotlight"></div>
@@ -383,7 +425,6 @@
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,171,0,0.22)_0%,rgba(4,4,7,0.92)_66%)] pointer-events-none"></div>
     <div class="splash-shockwave"></div>
 
-    <!-- Custom Rockstar-Style FPS SVG Logo with Liquid-Gold Sheen -->
     <div class="relative z-10 w-72 sm:w-96 max-w-[84vw] splash-logo-wrap">
       <div class="relative rounded-[44px] overflow-hidden">
         <svg viewBox="0 0 440 280" class="w-full h-auto block" role="img" aria-label="FPS Game Rating and Reviews Logo">
@@ -404,19 +445,17 @@
             <polygon points="322,116 337,159 382,159 345,186 359,230 322,203 285,230 299,186 262,159 307,159" fill="#FFFFFF" stroke="#050508" stroke-width="11" stroke-linejoin="miter" />
           </g>
         </svg>
-        <!-- Diagonal Liquid-Gold Sheen Sweep -->
         <div class="splash-sheen-bar pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-transparent via-white/75 to-transparent"></div>
       </div>
     </div>
 
-    <!-- Crimson-to-Gold Hairline Divider & Metallic Shimmer Credit -->
     <div class="relative z-10 mt-7 flex flex-col items-center text-center w-full max-w-sm">
       <div class="splash-hairline w-56 sm:w-72 h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#E50914] via-50% to-transparent mb-4 shadow-[0_0_16px_rgba(255,171,0,0.7)]"></div>
       <p class="metallic-credit font-condensed italic font-black text-lg sm:text-2xl tracking-[0.3em] uppercase">MADE BY TANVIR HOSSAIN</p>
       <p class="font-mono text-[10px] tracking-[0.28em] uppercase text-neutral-400 mt-2">TAP ANYWHERE TO SKIP</p>
     </div>
   </div>
-  <!-- Failsafe Independent Inline Script: Splash Can NEVER Get Stuck -->
+  <!-- Independent Failsafe Script: Splash Always Auto-Dismisses in 1.8s or on Tap -->
   <script>
     (function () {
       var splash = document.getElementById('splash-screen');
@@ -429,7 +468,7 @@
           if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
         }, 420);
       }
-      setTimeout(dismissSplash, 2100);
+      setTimeout(dismissSplash, 1800);
       if (splash) {
         splash.addEventListener('click', dismissSplash);
         splash.addEventListener('touchstart', dismissSplash, { passive: true });
@@ -472,12 +511,12 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- 2. TOAST NOTIFICATION STACK (NO BROWSER ALERTS)                       -->
+  <!-- 2. TOAST NOTIFICATION STACK                                           -->
   <!-- ===================================================================== -->
   <div id="toastBox" class="fixed bottom-5 right-5 z-[210] pointer-events-none flex flex-col gap-2 max-w-xs"></div>
 
   <!-- ===================================================================== -->
-  <!-- 3. SINGLE-ROW LUMINOUS GLASS NAVBAR                                   -->
+  <!-- 3. SINGLE-ROW OBSIDIAN GLASS NAVBAR                                   -->
   <!-- ===================================================================== -->
   <header class="fixed top-0 inset-x-0 z-50 bg-[#050508]/88 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.65)]">
     <div class="max-w-[1600px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
@@ -489,14 +528,15 @@
           <text x="60" y="172" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-style="italic" font-size="148" letter-spacing="-4">FPS</text>
           <polygon points="322,116 337,159 382,159 345,186 359,230 322,203 285,230 299,186 262,159 307,159" fill="#FFFFFF" stroke="#050508" stroke-width="12" />
         </svg>
-        <span class="hidden xl:inline font-condensed italic font-black text-base tracking-[0.16em] uppercase text-white whitespace-nowrap">GAME RATING &amp; REVIEWS</span>
+        <span class="hidden 2xl:inline font-condensed italic font-black text-base tracking-[0.16em] uppercase text-white whitespace-nowrap">GAME RATING &amp; REVIEWS</span>
       </button>
 
       <!-- Single-Row Quick Navigation -->
-      <nav class="hidden lg:flex items-center gap-5 text-xs font-extrabold tracking-[0.13em] uppercase text-neutral-300 whitespace-nowrap">
+      <nav class="hidden lg:flex items-center gap-4 xl:gap-5 text-xs font-extrabold tracking-[0.12em] uppercase text-neutral-300 whitespace-nowrap">
         <button type="button" onclick="FPS.scrollToRow('row-rockstar')" class="hover:text-[#FFAB00] transition">Rockstar Vault</button>
         <button type="button" onclick="FPS.scrollToRow('row-peak')" class="hover:text-[#FFAB00] transition">Peak Tier</button>
         <button type="button" onclick="FPS.scrollToRow('row-cinema')" class="hover:text-[#FFAB00] transition">Absolute Cinema</button>
+        <button type="button" onclick="FPS.scrollToRow('row-shooters')" class="hover:text-[#FFAB00] transition">Shooters</button>
         <button type="button" onclick="FPS.openMediaHouse()" class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#E50914]/25 to-[#E50914]/10 hover:from-[#E50914] hover:to-[#ff222d] border border-[#E50914]/80 text-white flex items-center gap-2 shadow-[0_0_18px_rgba(229,9,20,0.35)] transition">
           <span class="live-dot w-2 h-2 rounded-full bg-[#E50914]"></span>
           <span>MEDIA HOUSE</span>
@@ -510,14 +550,14 @@
             <circle cx="11" cy="11" r="8" /><path stroke-linecap="round" d="M21 21l-4.35-4.35" />
           </svg>
           <input id="navSearchInput" type="text" autocomplete="off" placeholder="Search games..."
-            class="h-9 bg-white/[0.07] hover:bg-white/[0.11] focus:bg-[#0B0B12] border border-white/15 focus:border-[#FFAB00] rounded-full pl-8 pr-7 text-xs font-medium text-white placeholder-neutral-400 outline-none w-32 sm:w-48 md:w-56 transition-all" />
+            class="h-9 bg-white/[0.07] hover:bg-white/[0.11] focus:bg-[#0B0B12] border border-white/15 focus:border-[#FFAB00] rounded-full pl-8 pr-7 text-xs font-medium text-white placeholder-neutral-400 outline-none w-32 sm:w-44 md:w-52 transition-all" />
           <button id="navClearSearchBtn" type="button" onclick="FPS.exitSearch()" aria-label="Clear search" class="hidden absolute right-2 w-5 h-5 rounded-full bg-white/15 hover:bg-[#E50914] text-white flex items-center justify-center transition">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
         <!-- Glowing Golden WANNA PLAY Pill -->
-        <button type="button" onclick="FPS.toggleWannaPlayDrawer()" class="h-9 px-3 sm:px-3.5 rounded-full bg-gradient-to-r from-[#FFAB00]/18 to-[#FFAB00]/8 hover:from-[#FFAB00]/30 hover:to-[#FFAB00]/15 border border-[#FFAB00]/70 text-white flex items-center gap-2 shadow-[0_0_16px_rgba(255,171,0,0.22)] transition whitespace-nowrap">
+        <button type="button" onclick="FPS.toggleWannaPlayDrawer()" class="h-9 px-3 sm:px-3.5 rounded-full bg-gradient-to-r from-[#FFAB00]/18 to-[#FFAB00]/8 hover:from-[#FFAB00]/30 hover:to-[#FFAB00]/15 border border-[#FFAB00]/75 text-white flex items-center gap-2 shadow-[0_0_18px_rgba(255,171,0,0.26)] transition whitespace-nowrap">
           <svg class="w-3.5 h-3.5 text-[#FFAB00] shrink-0" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
           <span class="font-condensed font-black text-xs tracking-wider uppercase text-[#FFAB00] hidden sm:inline">WANNA PLAY</span>
           <span id="navWannaCount" class="font-mono text-[11px] font-extrabold bg-[#FFAB00] text-black px-1.5 rounded-full min-w-[20px] text-center">0</span>
@@ -539,7 +579,7 @@
   </header>
 
   <!-- ===================================================================== -->
-  <!-- 4. SEARCH RESULTS VIEW (ISOLATED FROM HOME DOM)                       -->
+  <!-- 4. SEARCH RESULTS VIEW (SEPARATE FROM HOME DOM)                       -->
   <!-- ===================================================================== -->
   <section id="search-view" class="hidden flex-grow max-w-[1600px] w-full mx-auto px-4 sm:px-8 pt-24 pb-20">
     <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5 mb-7">
@@ -558,7 +598,7 @@
   </section>
 
   <!-- ===================================================================== -->
-  <!-- 5. HOME VIEW (50-SECOND HERO BILLBOARD + LUMINOUS CAROUSELS)          -->
+  <!-- 5. HOME VIEW (50-SECOND HERO BILLBOARD + DEDUPLICATED CAROUSELS)      -->
   <!-- ===================================================================== -->
   <main id="home-view" class="flex-grow flex flex-col pt-16">
     <!-- 5A. 50-SECOND HERO BILLBOARD (NO PROGRESS BAR, 4 DISTINCT BUTTONS) -->
@@ -567,7 +607,6 @@
       <div id="heroVideoWrap" class="hero-video-wrap"></div>
       <div class="hero-vignette"></div>
 
-      <!-- Hero Content -->
       <div class="relative z-10 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pb-16 sm:pb-20 flex flex-col justify-end">
         <div id="heroContentBox" class="max-w-2xl space-y-3.5 sm:space-y-4">
           <div class="flex flex-wrap items-center gap-2.5">
@@ -587,11 +626,11 @@
             America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland.
           </p>
 
-          <!-- Exactly 4 Distinct Hero Action Buttons -->
+          <!-- 4 Distinct Hero Action Buttons -->
           <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1.5">
             <button type="button" onclick="FPS.openHeroInMediaHouse()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-[#E50914] to-[#ff202b] hover:from-[#ff1e29] hover:to-[#ff3b45] text-white font-condensed italic font-black text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_12px_32px_rgba(229,9,20,0.55)] transition active:scale-95">
               <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-              <span>WATCH 4K TRAILER</span>
+              <span>WATCH TRAILER</span>
             </button>
             <button type="button" onclick="FPS.openHeroModal()" class="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-condensed italic font-black text-sm tracking-wider uppercase transition active:scale-95">
               REVIEW &amp; SPECS
@@ -610,7 +649,7 @@
         </div>
       </div>
 
-      <!-- Prev / Next Glass Controls & Counter (No Progress Bar) -->
+      <!-- Prev / Next Glass Controls & Counter -->
       <div class="absolute bottom-6 right-5 sm:right-12 z-20 flex items-center gap-2.5">
         <button type="button" onclick="FPS.prevHero()" aria-label="Previous slide" class="w-10 h-10 rounded-full bg-black/75 hover:bg-[#E50914] backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
@@ -624,7 +663,6 @@
 
     <!-- 5B. CURATED & ENDLESS CATALOG CAROUSELS -->
     <div class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-12 py-10 space-y-12">
-      <!-- Row 1: Rockstar Vault -->
       <section id="row-rockstar" class="space-y-3.5">
         <div class="flex items-center justify-between border-l-4 border-[#E50914] pl-3.5">
           <div>
@@ -642,13 +680,12 @@
         <div id="track-rockstar" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
       </section>
 
-      <!-- Row 2: Peak Tier (9.5 - 10.0) -->
       <section id="row-peak" class="space-y-3.5">
-        <div class="flex items-center justify-between border-l-4 border-[#FFAB00] pl-3.5">
+        <div class="flex items-center justify-between border-l-4 border-[#FFD700] pl-3.5">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
               <h2 class="font-display text-3xl sm:text-4xl tracking-wide text-white leading-none">PEAK TIER</h2>
-              <span class="font-mono text-[10px] font-bold uppercase px-2.5 py-0.5 rounded bg-[#FFAB00]/15 border border-[#FFAB00]/55 text-[#FFAB00]">9.5 &ndash; 10.0</span>
+              <span class="font-mono text-[10px] font-bold uppercase px-2.5 py-0.5 rounded bg-[#FFD700]/15 border border-[#FFD700]/55 text-[#FFD700]">9.5 &ndash; 10.0</span>
             </div>
             <p class="text-xs text-neutral-400 mt-0.5">Hall-of-fame masterpieces certified by universal consensus</p>
           </div>
@@ -660,7 +697,6 @@
         <div id="track-peak" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
       </section>
 
-      <!-- Row 3: Absolute Cinema (9.0 - 9.4) -->
       <section id="row-cinema" class="space-y-3.5">
         <div class="flex items-center justify-between border-l-4 border-blue-500 pl-3.5">
           <div>
@@ -678,12 +714,11 @@
         <div id="track-cinema" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
       </section>
 
-      <!-- Row 4: Should Play (7.0 - 8.9) -->
       <section id="row-shooters" class="space-y-3.5">
         <div class="flex items-center justify-between border-l-4 border-emerald-500 pl-3.5">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
-              <h2 class="font-display text-3xl sm:text-4xl tracking-wide text-white leading-none">SHOULD PLAY</h2>
+              <h2 class="font-display text-3xl sm:text-4xl tracking-wide text-white leading-none">SHOULD PLAY &amp; SHOOTERS</h2>
               <span class="font-mono text-[10px] font-bold uppercase px-2.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/55 text-emerald-200">7.0 &ndash; 8.9</span>
             </div>
             <p class="text-xs text-neutral-400 mt-0.5">High-octane combat, tight mechanics, and pure replay value</p>
@@ -696,10 +731,8 @@
         <div id="track-shooters" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
       </section>
 
-      <!-- Endless RAWG Rows Streamed via IntersectionObserver -->
       <div id="dynamicRowsContainer" class="space-y-12"></div>
 
-      <!-- Endless Scroll Sentinel -->
       <div id="endlessSentinel" class="py-6 text-center">
         <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass-panel font-mono text-[11px] uppercase tracking-wider text-neutral-300">
           <span class="w-2 h-2 rounded-full bg-[#E50914] animate-ping"></span>
@@ -710,7 +743,7 @@
   </main>
 
   <!-- ===================================================================== -->
-  <!-- 6. GAME REVIEW & SPECS THEATER MODAL (WITH TACTILE SFX STUDIO)        -->
+  <!-- 6. GAME REVIEW & SPECS THEATER MODAL                                  -->
   <!-- ===================================================================== -->
   <div id="reviewModal" class="fixed inset-0 z-[120] hidden bg-black/90 backdrop-blur-xl overflow-y-auto">
     <div class="min-h-screen px-2 sm:px-5 py-5 sm:py-8 flex items-center justify-center">
@@ -728,7 +761,6 @@
           </button>
         </div>
 
-        <!-- Modal Details Body -->
         <div class="p-5 sm:p-8 space-y-7">
           <!-- Title, Badges & Primary Actions -->
           <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 border-b border-white/10 pb-6">
@@ -749,7 +781,7 @@
             </div>
           </div>
 
-          <!-- Metadata Grid -->
+          <!-- Live RAWG Metadata Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div class="bg-white/[0.04] border border-white/10 rounded-xl p-3.5">
               <div class="font-mono text-[10px] uppercase tracking-wider text-neutral-400">DEVELOPER STUDIO</div>
@@ -788,16 +820,15 @@
           </div>
 
           <!-- ============================================================= -->
-          <!-- NEXT-GEN TACTILE REVIEW STUDIO WITH WEB AUDIO SFX             -->
+          <!-- COLOR-MORPHING REVIEW STUDIO WITH WEB AUDIO SFX               -->
           <!-- ============================================================= -->
           <div id="reviewStudioShell" class="review-studio-shell rounded-2xl p-5 sm:p-7 space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div>
                 <h3 class="font-display text-3xl sm:text-4xl text-white tracking-wide leading-none">FPS REVIEW STUDIO</h3>
-                <p class="text-xs text-neutral-300 mt-1">Drag the precision slider for live acoustic feedback &amp; publish your verdict</p>
+                <p class="text-xs text-neutral-300 mt-1">Drag the color-morphing slider for tactile audio feedback &amp; publish your verdict</p>
               </div>
               <div class="flex items-center gap-2.5 flex-wrap">
-                <!-- SFX ON / OFF Toggle -->
                 <button id="sfxToggleBtn" type="button" onclick="FPS.toggleSfx()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-mono text-[10px] font-bold uppercase tracking-wider text-[#FFAB00] flex items-center gap-1.5 transition">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                   <span id="sfxToggleLabel">SFX ON</span>
@@ -816,22 +847,22 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
               </div>
               <h4 class="font-display text-2xl tracking-wide text-white">SIGN IN WITH GOOGLE TO RATE &amp; REVIEW</h4>
-              <p class="text-xs text-neutral-400 max-w-sm mx-auto">Unlock the tactile sound-reactive Review Studio and save your scores directly to the FPS community database.</p>
+              <p class="text-xs text-neutral-400 max-w-sm mx-auto">Unlock the color-morphing Review Studio and save your scores directly to the FPS community database.</p>
               <button type="button" onclick="FPS.openAuthModal()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#E50914] to-[#ff202b] hover:from-[#ff1e29] hover:to-[#ff3b45] text-white font-condensed italic font-black text-xs tracking-widest uppercase shadow-[0_0_20px_rgba(229,9,20,0.45)] transition">
                 SIGN IN WITH GOOGLE
               </button>
             </div>
 
-            <!-- Unlocked Dual-Ring Reactive Gauge & Neon Slider -->
+            <!-- Unlocked Dual-Ring Reactive Gauge & Color-Morphing Slider -->
             <div id="reviewUnlockedForm" class="hidden space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                 <!-- Dual-Ring Animated SVG Circular Gauge -->
                 <div class="md:col-span-4 flex flex-col items-center justify-center">
                   <div class="relative w-44 h-44 flex items-center justify-center">
-                    <svg class="w-full h-full -rotate-90 drop-shadow-[0_0_16px_var(--studio-glow)]" viewBox="0 0 120 120">
+                    <svg class="w-full h-full -rotate-90 drop-shadow-[0_0_18px_var(--slider-glow)]" viewBox="0 0 120 120">
                       <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.08)" stroke-width="8" fill="none" />
                       <circle id="gaugeOuterRing" cx="60" cy="60" r="50" stroke="#3B82F6" stroke-width="8" stroke-dasharray="314.16" stroke-dashoffset="31.42" stroke-linecap="round" fill="none" class="transition-all duration-150" />
-                      <circle id="gaugeInnerRing" cx="60" cy="60" r="39" stroke="#3B82F6" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="5 6" fill="none" class="gauge-tech-ring" />
+                      <circle id="gaugeInnerRing" cx="60" cy="60" r="39" stroke="#3B82F6" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="5 6" fill="none" class="gauge-tech-ring" />
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-3">
                       <span id="gaugeScoreNum" class="font-display text-5xl text-white leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">9.0</span>
@@ -841,21 +872,17 @@
                   <p id="gaugeTagline" class="font-mono text-[11px] font-bold uppercase tracking-wider text-blue-300 mt-2 text-center">Cinematic Storytelling Masterclass</p>
                 </div>
 
-                <!-- Custom Neon-Filled Slider, Floating Bubble & Tier Quick-Picks -->
+                <!-- Color-Morphing Slider + Floating Bubble + Tier Quick-Picks -->
                 <div class="md:col-span-8 space-y-4">
                   <div class="neon-slider-wrap">
                     <div id="sliderFloatingBubble" class="neon-slider-bubble">9.0</div>
-                    <div class="neon-slider-track">
-                      <div id="sliderNeonFill" class="neon-slider-fill"></div>
-                    </div>
-                    <input id="reviewSlider" type="range" min="0" max="10" step="0.1" value="9.0" class="neon-range" oninput="FPS.onSliderDrag(this.value, true)" />
-                    <!-- Crisp 0 to 10 Tick Markers -->
+                    <input id="reviewSlider" type="range" min="0" max="10" step="0.1" value="9.0" class="fps-color-slider" />
                     <div class="flex justify-between font-mono text-[10px] text-neutral-400 mt-2.5 px-0.5 select-none">
                       <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
                     </div>
                   </div>
 
-                  <!-- Glowing Tier Preset Pills -->
+                  <!-- Exact 5-Zone Preset Pills -->
                   <div class="flex flex-wrap gap-2">
                     <button type="button" onclick="FPS.setPresetScore(3.5)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-trash hover:scale-105 transition">TRASH CAN</button>
                     <button type="button" onclick="FPS.setPresetScore(6.0)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-cantry hover:scale-105 transition">CAN TRY</button>
@@ -897,16 +924,16 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- 7. ORGANIZED NETFLIX-STYLE FULLSCREEN "FPS MEDIA HOUSE"               -->
+  <!-- 7. NETFLIX-GRADE FULLSCREEN "FPS MEDIA HOUSE"                         -->
   <!-- ===================================================================== -->
   <section id="media-house-view" class="fixed inset-0 z-[130] hidden bg-[#050508] overflow-y-auto">
-    <!-- Sticky Organized Top Bar -->
-    <div class="sticky top-0 z-40 bg-[#050508]/92 backdrop-blur-2xl border-b border-white/10">
+    <!-- Sticky Top Header + Inline Media House Search + Quick-Switch Poster Strip -->
+    <div class="sticky top-0 z-40 bg-[#050508]/94 backdrop-blur-2xl border-b border-white/10">
       <div class="max-w-[1600px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <button type="button" onclick="FPS.closeMediaHouse()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/15 text-xs font-black tracking-wider uppercase flex items-center gap-1.5 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-            <span>BACK TO HOME</span>
+            <span class="hidden sm:inline">BACK TO HOME</span>
           </button>
           <div class="flex items-center gap-2.5">
             <span class="live-dot w-2.5 h-2.5 rounded-full bg-[#E50914]"></span>
@@ -914,33 +941,43 @@
           </div>
         </div>
 
-        <!-- Quick Game Dropdown -->
-        <select id="mhGameSelect" onchange="FPS.switchMhBySlug(this.value)" class="h-9 bg-[#101018] border border-white/20 focus:border-[#FFAB00] rounded-xl px-3 text-xs font-bold text-white outline-none max-w-[190px] sm:max-w-xs"></select>
+        <!-- Inline Media House Game Search Filter -->
+        <div class="relative flex items-center w-44 sm:w-72">
+          <svg class="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" /><path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+          </svg>
+          <input id="mhSearchInput" type="text" autocomplete="off" placeholder="Filter games in Media House..."
+            oninput="FPS.filterMhStrip(this.value)"
+            class="h-9 w-full bg-white/[0.08] focus:bg-[#0D0D16] border border-white/15 focus:border-[#FFAB00] rounded-full pl-8 pr-7 text-xs text-white placeholder-neutral-400 outline-none transition" />
+          <button id="mhSearchClearBtn" type="button" onclick="FPS.clearMhSearch()" aria-label="Clear filter" class="hidden absolute right-2 w-5 h-5 rounded-full bg-white/15 hover:bg-[#E50914] text-white flex items-center justify-center transition">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
       </div>
 
-      <!-- 1-Click Horizontal Quick-Switch Game Poster Strip -->
-      <div class="border-t border-white/[0.06] bg-black/45">
-        <div id="mhQuickStrip" class="max-w-[1600px] mx-auto px-4 sm:px-8 py-2.5 flex gap-2.5 overflow-x-auto no-scrollbar"></div>
+      <!-- High-Res Horizontal Quick-Switch Game Poster Strip -->
+      <div class="border-t border-white/[0.06] bg-black/55">
+        <div id="mhQuickStrip" class="max-w-[1600px] mx-auto px-4 sm:px-8 py-2.5 flex gap-3 overflow-x-auto no-scrollbar"></div>
       </div>
     </div>
 
-    <!-- Ambient Blurred Poster Glow Cinema Stage -->
+    <!-- Full-Bleed Ambient Blurred Poster Cinema Stage -->
     <div class="relative overflow-hidden border-b border-white/10">
       <img id="mhAmbientBg" src="" alt="" class="mh-ambient-img opacity-90" />
-      <div class="absolute inset-0 bg-gradient-to-b from-[#050508]/65 via-[#050508]/60 to-[#050508] pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[#050508]/65 via-[#050508]/58 to-[#050508] pointer-events-none"></div>
 
       <div class="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-8 py-6">
-        <!-- Organized 12-Column Cinema Player Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          <!-- Left: 16:9 Cinema Player + Now Playing Info Bar -->
+          <!-- Main 16:9 Cinema Stage + HUD Controls -->
           <div id="mhPlayerCol" class="lg:col-span-8 flex flex-col gap-4">
-            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/20 shadow-[0_24px_80px_rgba(0,0,0,0.95),0_0_40px_rgba(229,9,20,0.2)]">
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/20 shadow-[0_28px_90px_rgba(0,0,0,0.95),0_0_44px_rgba(229,9,20,0.22)]">
               <iframe id="mhIframe" class="w-full h-full border-0" src="" title="Media House Cinema Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-              <!-- Floating HUD Controls -->
-              <div class="absolute top-3.5 right-3.5 z-20 flex items-center gap-2">
-                <button type="button" onclick="FPS.mhPrevEp()" class="px-3 py-1.5 rounded-full bg-black/80 hover:bg-white/20 border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">PREV EP</button>
-                <button type="button" onclick="FPS.mhNextEp()" class="px-3 py-1.5 rounded-full bg-[#E50914]/90 hover:bg-[#ff1e29] border border-[#E50914] text-white font-mono text-[10px] font-bold uppercase transition">NEXT EP</button>
+              <!-- Cinema Stage Floating HUD -->
+              <div class="absolute top-3.5 right-3.5 z-20 flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
+                <button type="button" onclick="FPS.mhPrevEp()" class="px-3 py-1.5 rounded-full bg-black/80 hover:bg-white/20 border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">PREV EPISODE</button>
+                <button type="button" onclick="FPS.mhNextEp()" class="px-3 py-1.5 rounded-full bg-[#E50914]/90 hover:bg-[#ff1e29] border border-[#E50914] text-white font-mono text-[10px] font-bold uppercase transition">NEXT EPISODE</button>
+                <button id="mhAutoplayBtn" type="button" onclick="FPS.toggleMhAutoplay()" class="px-3 py-1.5 rounded-full bg-[#FFAB00]/20 hover:bg-[#FFAB00]/35 border border-[#FFAB00]/75 text-[#FFAB00] font-mono text-[10px] font-bold uppercase transition">AUTOPLAY NEXT: ON</button>
                 <button type="button" onclick="FPS.toggleMhWide()" class="hidden lg:inline-flex px-3 py-1.5 rounded-full bg-black/80 hover:bg-[#FFAB00] hover:text-black border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">
                   <span id="mhWideLabel">THEATER WIDE</span>
                 </button>
@@ -950,13 +987,16 @@
               </div>
             </div>
 
-            <!-- Sleek Now Playing Info Bar -->
+            <!-- Now Playing Cinema Info Bar -->
             <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div class="flex items-start gap-3.5 min-w-0">
-                <img id="mhGameThumb" src="" alt="" class="w-16 h-16 rounded-xl object-cover border border-white/20 bg-black shrink-0" />
+                <img id="mhGameThumb" src="" alt="" class="w-20 h-14 rounded-xl object-cover border border-white/20 bg-black shrink-0" />
                 <div class="min-w-0 space-y-1">
                   <div class="flex flex-wrap items-center gap-2">
-                    <span id="mhEpTag" class="px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[10px] font-bold uppercase">EPISODE 01</span>
+                    <span id="mhEpTag" class="px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[10px] font-bold uppercase inline-flex items-center gap-1.5">
+                      <span class="eq-bars"><span></span><span></span><span></span></span>
+                      <span id="mhEpTagText">EPISODE 01</span>
+                    </span>
                     <span id="mhTierBadge" class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase badge-rdr">ABSOLUTE RDR</span>
                     <span class="font-mono text-xs font-bold text-[#FFAB00]"><span id="mhScoreVal">9.7</span> / 10</span>
                   </div>
@@ -971,15 +1011,14 @@
             </div>
           </div>
 
-          <!-- Right (4 Cols): Organized UP NEXT — EPISODES Sidebar with Creator Switcher -->
+          <!-- Right Sidebar: UP NEXT — EPISODES Dock -->
           <aside id="mhUpNextCol" class="lg:col-span-4 glass-panel rounded-2xl overflow-hidden flex flex-col max-h-[600px]">
-            <div class="p-4 border-b border-white/10 space-y-3">
-              <div class="flex items-center justify-between">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-1.5 h-5 rounded-full bg-[#E50914]"></span>
                 <span class="font-condensed font-extrabold text-sm tracking-[0.18em] uppercase text-white">UP NEXT &mdash; EPISODES</span>
-                <span id="mhEpCountBadge" class="font-mono text-[10px] font-bold text-[#FFAB00] bg-[#FFAB00]/15 border border-[#FFAB00]/40 px-2.5 py-0.5 rounded-full">0 EPS</span>
               </div>
-              <!-- Playthrough Creator Switcher Pills -->
-              <div id="mhSidebarCreatorPills" class="flex flex-wrap gap-1.5"></div>
+              <span id="mhEpCountBadge" class="font-mono text-[10px] font-bold text-[#FFAB00] bg-[#FFAB00]/15 border border-[#FFAB00]/40 px-2.5 py-0.5 rounded-full">0 EPS</span>
             </div>
             <div id="mhUpNextList" class="flex-grow overflow-y-auto p-3 space-y-2"></div>
           </aside>
@@ -987,7 +1026,7 @@
       </div>
     </div>
 
-    <!-- Clean 3-Tab Segmented Navigation Below Stage -->
+    <!-- Smooth Animated 3-Tab Segmented Navigation -->
     <div class="max-w-[1600px] mx-auto px-4 sm:px-8 py-8 space-y-6">
       <div class="flex items-center gap-8 border-b border-white/12 overflow-x-auto no-scrollbar text-xs font-extrabold tracking-[0.16em] uppercase">
         <button id="mhTab-episodes" type="button" onclick="FPS.switchMhTab('episodes')" class="mh-tab-btn is-active pb-3.5 text-neutral-400 hover:text-white whitespace-nowrap flex items-center gap-2">
@@ -995,33 +1034,45 @@
           <span id="mhTabEpCount" class="font-mono text-[10px] px-2 py-0.5 rounded bg-white/10 text-neutral-200">0</span>
         </button>
         <button id="mhTab-live" type="button" onclick="FPS.switchMhTab('live')" class="mh-tab-btn pb-3.5 text-neutral-400 hover:text-white whitespace-nowrap flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-[#E50914]"></span>
-          <span>LIVE &amp; YOUTUBERS</span>
+          <span class="live-dot w-2 h-2 rounded-full bg-[#E50914]"></span>
+          <span>LIVE STREAMS &amp; YOUTUBERS</span>
           <span id="mhTabLiveCount" class="font-mono text-[10px] px-2 py-0.5 rounded bg-[#E50914]/20 text-red-200">0</span>
         </button>
         <button id="mhTab-screenshots" type="button" onclick="FPS.switchMhTab('screenshots')" class="mh-tab-btn pb-3.5 text-neutral-400 hover:text-white whitespace-nowrap flex items-center gap-2">
-          <span>4K SCREENSHOTS</span>
+          <span>50+ 4K SCREENSHOTS</span>
           <span id="mhShotsBadge" class="font-mono text-[10px] px-2 py-0.5 rounded bg-[#FFAB00]/20 text-[#FFAB00]">50+</span>
         </button>
       </div>
 
-      <!-- TAB 1: EPISODES & MISSIONS -->
-      <div id="mhPane-episodes" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+      <!-- TAB 1: EPISODES & MISSIONS WITH CREATOR PLAYTHROUGH SWITCHER -->
+      <div id="mhPane-episodes" class="space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="font-display text-3xl text-white tracking-wide leading-none">CHRONOLOGICAL MISSIONS &amp; WALKTHROUGHS</h3>
+            <p class="text-xs text-neutral-400 mt-1">Switch creator playthroughs or pick any mission episode below</p>
+          </div>
+          <div id="mhCreatorSwitcherPills" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div id="mhEpisodesRows" class="space-y-3"></div>
+      </div>
 
-      <!-- TAB 2: LIVE & YOUTUBERS -->
+      <!-- TAB 2: LIVE STREAMS & YOUTUBERS -->
       <div id="mhPane-live" class="hidden space-y-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <h3 class="font-display text-3xl text-white tracking-wide">LIVE BROADCASTS &amp; GAMING YOUTUBERS</h3>
-          <div id="mhCreatorFilters" class="flex flex-wrap gap-2"></div>
+          <div>
+            <h3 class="font-display text-3xl text-white tracking-wide leading-none">LIVE STREAMS &amp; GAMING YOUTUBERS</h3>
+            <p class="text-xs text-neutral-400 mt-1">Click any broadcast to play instantly in the Cinema Stage</p>
+          </div>
+          <div id="mhLiveFilterPills" class="flex flex-wrap gap-2"></div>
         </div>
         <div id="mhCreatorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
       </div>
 
-      <!-- TAB 3: 4K SCREENSHOTS (50+) -->
+      <!-- TAB 3: 50+ 4K SCREENSHOTS -->
       <div id="mhPane-screenshots" class="hidden space-y-4">
         <div class="glass-panel rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
           <span id="mhShotsTotalLabel" class="font-mono text-xs font-bold text-black bg-[#FFAB00] px-3 py-1 rounded-lg uppercase">50+ HD CAPTURES</span>
-          <span class="text-xs text-neutral-300">Tap any capture for the fullscreen swipeable Lightbox or click Download HD.</span>
+          <span class="text-xs text-neutral-300">Tap any frame to open the fullscreen swipeable Lightbox or click Download HD.</span>
         </div>
         <div id="mhShotsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5"></div>
       </div>
@@ -1051,23 +1102,54 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- 9. OBSIDIAN-GLASS WANNA PLAY SLIDE-OVER DRAWER                        -->
+  <!-- 9. UPGRADED WANNA PLAY HUB & SLIDE-OVER DRAWER                        -->
   <!-- ===================================================================== -->
-  <div id="wannaPlayBackdrop" onclick="FPS.closeWannaPlayDrawer()" class="fixed inset-0 z-[135] hidden bg-black/70 backdrop-blur-sm"></div>
-  <aside id="wannaPlayDrawer" class="fixed inset-y-0 right-0 z-[140] w-full max-w-md bg-[#0B0B12]/95 backdrop-blur-2xl border-l border-white/15 shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
-    <div class="p-5 border-b border-white/10 flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <span class="font-display text-3xl text-white tracking-wide">WANNA PLAY</span>
-        <span id="drawerWannaCount" class="font-mono text-xs font-extrabold bg-[#FFAB00] text-black px-2 py-0.5 rounded-full">0</span>
+  <div id="wannaPlayBackdrop" onclick="FPS.closeWannaPlayDrawer()" class="fixed inset-0 z-[135] hidden bg-black/75 backdrop-blur-sm"></div>
+  <aside id="wannaPlayDrawer" class="wanna-drawer-shell fixed inset-y-0 right-0 z-[140] w-full max-w-md border-l border-[#FFAB00]/30 shadow-[-20px_0_70px_rgba(0,0,0,0.9)] translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Top Header -->
+    <div class="p-5 border-b border-white/10 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+          <span class="font-display text-3xl text-white tracking-wide leading-none">WANNA PLAY HUB</span>
+        </div>
+        <button type="button" onclick="FPS.closeWannaPlayDrawer()" aria-label="Close drawer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#E50914] text-white flex items-center justify-center transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
       </div>
-      <button type="button" onclick="FPS.closeWannaPlayDrawer()" aria-label="Close drawer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#E50914] text-white flex items-center justify-center transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
-      </button>
+
+      <!-- Queue Stats Bar (Total, Avg Score, Pinned Priority) -->
+      <div class="grid grid-cols-3 gap-2">
+        <div class="rounded-xl bg-white/[0.05] border border-white/10 p-2.5 text-center">
+          <div id="wpStatTotal" class="font-display text-2xl text-white leading-none">0</div>
+          <div class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-1">TOTAL GAMES</div>
+        </div>
+        <div class="rounded-xl bg-white/[0.05] border border-white/10 p-2.5 text-center">
+          <div id="wpStatAvg" class="font-display text-2xl text-[#FFAB00] leading-none">0.0</div>
+          <div class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-1">AVG SCORE</div>
+        </div>
+        <div class="rounded-xl bg-white/[0.05] border border-white/10 p-2.5 text-center">
+          <div id="wpStatPriority" class="font-display text-2xl text-[#E50914] leading-none">0</div>
+          <div class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-1">PRIORITY</div>
+        </div>
+      </div>
+
+      <!-- Filter Pills + Sort Toggle -->
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div id="wpFilterPills" class="flex flex-wrap gap-1.5"></div>
+        <button id="wpSortBtn" type="button" onclick="FPS.toggleWannaSort()" class="px-2.5 py-1 rounded-lg bg-white/[0.07] hover:bg-white/15 border border-white/15 font-mono text-[10px] font-bold uppercase text-[#FFAB00] transition">
+          SORT: RECENT
+        </button>
+      </div>
     </div>
+
+    <!-- Rich Queue Cards / Empty Quick-Add State -->
     <div id="drawerWannaList" class="flex-grow overflow-y-auto p-4 space-y-3"></div>
-    <div class="p-4 border-t border-white/10 bg-black/50">
+
+    <!-- Footer Clear All -->
+    <div class="p-4 border-t border-white/10 bg-black/55">
       <button type="button" onclick="FPS.clearWannaPlay()" class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-[#E50914]/25 border border-white/15 hover:border-[#E50914] text-xs font-mono font-bold uppercase tracking-wider text-neutral-300 hover:text-white transition">
-        CLEAR ALL
+        CLEAR ALL QUEUE
       </button>
     </div>
   </aside>
@@ -1189,16 +1271,17 @@
         { id: "dyn-adventure", title: "STORY ADVENTURES", sub: "Unforgettable narrative journeys", color: "#3B82F6", query: "genres=adventure&ordering=-metacritic&page_size=12" }
       ];
 
-      const FEATURED_CREATORS = ["ALL", "theRadBrad", "MKIceAndFire", "Shirrako", "Jacksepticeye"];
+      const PLAYTHROUGH_CREATORS = ["ALL", "theRadBrad", "MKIceAndFire", "Shirrako", "Jacksepticeye", "Hollow"];
+      const WP_FILTERS = ["ALL", "PRIORITY", "ROCKSTAR", "PEAK 9.5+"];
 
       /* ------------------------------------------------------------------- */
-      /* WEB AUDIO API SOUNDFX ENGINE (SLIDER TICKS, CHIMES, VERDICT CHORD)  */
+      /* WEB AUDIO API SOUNDFX ENGINE                                        */
       /* ------------------------------------------------------------------- */
       const SoundFX = {
         ctx: null,
         enabled: true,
         lastStep: null,
-        lastTier: null,
+        lastZone: null,
 
         ensureCtx() {
           if (!this.enabled) return null;
@@ -1213,7 +1296,6 @@
           } catch { return null; }
         },
 
-        // Mechanical tick on every 0.1 slider step (220Hz at 0.0 -> 880Hz at 10.0)
         playTick(score) {
           const step = Math.round(score * 10);
           if (step === this.lastStep) return;
@@ -1227,7 +1309,7 @@
           const gain = ctx.createGain();
           osc.type = "triangle";
           osc.frequency.setValueAtTime(freq, now);
-          osc.frequency.exponentialRampToValueAtTime(freq * 1.18, now + 0.025);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.18, now + 0.024);
           gain.gain.setValueAtTime(0.085, now);
           gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.032);
           osc.connect(gain).connect(ctx.destination);
@@ -1235,11 +1317,10 @@
           osc.stop(now + 0.036);
         },
 
-        // Harmonic tier-crossover chime
-        playTierChime(tierLabel) {
-          if (tierLabel === this.lastTier) return;
-          const prev = this.lastTier;
-          this.lastTier = tierLabel;
+        playTierChime(zoneLabel) {
+          if (zoneLabel === this.lastZone) return;
+          const prev = this.lastZone;
+          this.lastZone = zoneLabel;
           if (!prev) return;
           const ctx = this.ensureCtx();
           if (!ctx) return;
@@ -1250,16 +1331,13 @@
             "CAN TRY": [330, 392],
             "SHOULD PLAY": [440, 554.37],
             "ABSOLUTE CINEMA": [523.25, 659.25, 783.99],
-            "PEAK": [587.33, 739.99, 880, 1174.66],
-            "ABSOLUTE RDR": [587.33, 739.99, 880, 1174.66],
-            "ABSOLUTE GTA": [523.25, 659.25, 783.99, 1046.5]
+            "PEAK": [587.33, 739.99, 880, 1174.66]
           };
-          const notes = chords[tierLabel] || [440, 554];
-          notes.forEach((f, idx) => {
+          (chords[zoneLabel] || [440, 554]).forEach((f, i) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = "sine";
-            const t = now + idx * 0.032;
+            const t = now + i * 0.032;
             osc.frequency.setValueAtTime(f, t);
             gain.gain.setValueAtTime(0.001, t);
             gain.gain.linearRampToValueAtTime(0.075, t + 0.015);
@@ -1270,7 +1348,6 @@
           });
         },
 
-        // Satisfying confirmation chord when publishing verdict
         playPublishChord() {
           const ctx = this.ensureCtx();
           if (!ctx) return;
@@ -1290,7 +1367,6 @@
           });
         },
 
-        // RDR2 chamber clack + shotgun boom
         playShotgunBoom() {
           try {
             const AC = window.AudioContext || window.webkitAudioContext;
@@ -1329,8 +1405,11 @@
       let auth = null, db = null, currentUser = null;
       let heroIdx = 0, heroTimer = null, heroVidTimer = null, heroMuted = true;
       let activeModalGame = null, modalMuted = true, editingReviewId = null;
-      let mhGame = null, mhEpisodes = [], mhEpIdx = 0, mhMuted = true, mhWide = false;
-      let mhCreators = [], mhCreatorFilter = "ALL", mhSidebarCreator = "ALL";
+
+      let mhGame = null, mhEpisodes = [], mhEpIdx = 0, mhMuted = true, mhWide = false, mhAutoplayNext = true;
+      let mhCreators = [], mhLiveFilter = "ALL", mhEpCreator = "ALL", mhStripQuery = "";
+
+      let wpFilter = "ALL", wpSort = "recent";
       let lightboxList = [], lightboxIdx = 0;
       let searchDebounce = null, searchAbort = null, extraLoaded = false;
 
@@ -1340,7 +1419,7 @@
       let wannaPlay = loadLocalJSON("fps_wanna_play", []);
 
       /* ------------------------------------------------------------------- */
-      /* HELPERS, CACHED FETCH & IMAGE PRELOADER                             */
+      /* HELPERS, CACHING & PRELOADER                                        */
       /* ------------------------------------------------------------------- */
       function esc(str) {
         return String(str == null ? "" : str)
@@ -1367,14 +1446,14 @@
       async function fetchCached(url, signal) {
         if (memCache.has(url)) return memCache.get(url);
         try {
-          const ss = sessionStorage.getItem("fps_v3_" + url);
+          const ss = sessionStorage.getItem("fps_v4_" + url);
           if (ss) { const parsed = JSON.parse(ss); memCache.set(url, parsed); return parsed; }
         } catch {}
         const res = await fetch(url, signal ? { signal } : undefined);
         if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         memCache.set(url, data);
-        try { sessionStorage.setItem("fps_v3_" + url, JSON.stringify(data)); } catch {}
+        try { sessionStorage.setItem("fps_v4_" + url, JSON.stringify(data)); } catch {}
         return data;
       }
 
@@ -1394,22 +1473,28 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* TIER SYSTEM & VERDICT TAGLINES (ZERO EMOJIS)                        */
+      /* EXACT 5-ZONE SLIDER COLORS + ROCKSTAR BADGE OVERRIDES               */
       /* ------------------------------------------------------------------- */
+      // Used strictly for the Rating Slider so colors ALWAYS morph 0.0 -> 10.0 on EVERY game
+      function getSliderZone(score) {
+        const s = Number(score) || 0;
+        if (s >= 9.5) return { label: "PEAK", cls: "badge-peak", color: "#FFD700", glow: "rgba(255, 215, 0, 0.55)", tagline: "Hall of Fame Masterpiece" };
+        if (s >= 9.0) return { label: "ABSOLUTE CINEMA", cls: "badge-cinema", color: "#3B82F6", glow: "rgba(59, 130, 246, 0.52)", tagline: "Cinematic Storytelling Masterclass" };
+        if (s >= 7.0) return { label: "SHOULD PLAY", cls: "badge-shouldplay", color: "#10B981", glow: "rgba(16, 185, 129, 0.5)", tagline: "Strong Must-Play Experience" };
+        if (s >= 5.0) return { label: "CAN TRY", cls: "badge-cantry", color: "#EC4899", glow: "rgba(236, 72, 153, 0.5)", tagline: "Decent Pick on Sale" };
+        return { label: "TRASH CAN", cls: "badge-trash", color: "#EF4444", glow: "rgba(239, 68, 68, 0.55)", tagline: "Unplayable Disaster" };
+      }
+
+      // Used for Game Cards, Hero Billboard, Media House, and Published Badges (with Rockstar overrides)
       function computeTier(score, title) {
         const t = String(title || "").toLowerCase();
         if (t.includes("red dead redemption")) {
-          return { label: "ABSOLUTE RDR", cls: "badge-rdr", color: "#FFAB00", glow: "rgba(229,9,20,0.55)", tagline: "Immortal Western Cinema" };
+          return { label: "ABSOLUTE RDR", cls: "badge-rdr", color: "#FFAB00", glow: "rgba(229,9,20,0.55)" };
         }
         if (t.includes("grand theft auto") || t.includes("gta")) {
-          return { label: "ABSOLUTE GTA", cls: "badge-gta", color: "#34D399", glow: "rgba(16,185,129,0.5)", tagline: "Open-World Crime Legend" };
+          return { label: "ABSOLUTE GTA", cls: "badge-gta", color: "#34D399", glow: "rgba(16,185,129,0.5)" };
         }
-        const s = Number(score) || 0;
-        if (s >= 9.5) return { label: "PEAK", cls: "badge-peak", color: "#FBBF24", glow: "rgba(251,191,36,0.5)", tagline: "Hall of Fame Masterpiece" };
-        if (s >= 9.0) return { label: "ABSOLUTE CINEMA", cls: "badge-cinema", color: "#3B82F6", glow: "rgba(59,130,246,0.5)", tagline: "Cinematic Storytelling Masterclass" };
-        if (s >= 7.0) return { label: "SHOULD PLAY", cls: "badge-shouldplay", color: "#10B981", glow: "rgba(16,185,129,0.45)", tagline: "Strong Must-Play Experience" };
-        if (s >= 5.0) return { label: "CAN TRY", cls: "badge-cantry", color: "#EC4899", glow: "rgba(236,72,153,0.45)", tagline: "Decent Pick on Sale" };
-        return { label: "TRASH CAN", cls: "badge-trash", color: "#EF4444", glow: "rgba(239,68,68,0.5)", tagline: "Unplayable Disaster" };
+        return getSliderZone(score);
       }
 
       function formatDate(iso) {
@@ -1619,7 +1704,7 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* LUMINOUS NETFLIX / APPLE TV+ POSTER CARDS & ENDLESS CAROUSELS       */
+      /* POSTER CARDS & ENDLESS CAROUSELS                                    */
       /* ------------------------------------------------------------------- */
       function buildGameCardHTML(g) {
         const tier = computeTier(g.score, g.title);
@@ -1630,7 +1715,6 @@
               <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/35 pointer-events-none"></div>
               <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${tier.cls}">${tier.label}</span>
               <span class="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/85 border border-[#FFAB00]/55 font-mono text-[11px] font-bold text-[#FFAB00]">${Number(g.score).toFixed(1)}</span>
-              <!-- Play Icon Hover Overlay -->
               <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                 <div class="w-11 h-11 rounded-full bg-[#E50914]/90 border border-white/40 flex items-center justify-center shadow-[0_0_24px_rgba(229,9,20,0.8)]">
                   <svg class="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -1796,7 +1880,7 @@
         modalMuted = true;
         editingReviewId = null;
         SoundFX.lastStep = null;
-        SoundFX.lastTier = null;
+        SoundFX.lastZone = null;
 
         document.getElementById("reviewModal").classList.remove("hidden");
         document.body.style.overflow = "hidden";
@@ -1824,8 +1908,9 @@
 
         syncModalWannaBtn();
         updateReviewAuthGate();
-        document.getElementById("reviewSlider").value = 9.0;
-        onSliderDrag(9.0, false);
+        const slider = document.getElementById("reviewSlider");
+        slider.value = 9.0;
+        applySliderState(9.0, false);
         document.getElementById("reviewTextarea").value = "";
         document.getElementById("reviewSubmitBtn").textContent = "PUBLISH VERDICT";
         document.getElementById("reviewCancelEditBtn").classList.add("hidden");
@@ -1916,7 +2001,8 @@
         2: { name: "Xbox Store", color: "hover:border-emerald-500 hover:shadow-[0_0_16px_rgba(16,185,129,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm4.8 4.4c1.3 1.4 2.1 3.3 2.2 5.4-1.2-2-3.2-4.2-5.4-5.7a8 8 0 013.2.3zM7.2 6.4a8 8 0 013.2-.3C8.2 7.6 6.2 9.8 5 11.8c.1-2.1.9-4 2.2-5.4zM12 10.6c2.2 1.7 4.2 4.1 5 6.4a8 8 0 01-10 0c.8-2.3 2.8-4.7 5-6.4z"/></svg>` },
         11: { name: "Epic Games", color: "hover:border-[#FFAB00] hover:shadow-[0_0_16px_rgba(255,171,0,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M4 3h16v14.5L12 21l-8-3.5V3zm4 4v9h8v-2h-5.5v-1.8H15v-2h-4.5V9H16V7H8z"/></svg>` },
         6: { name: "Nintendo eShop", color: "hover:border-red-500 hover:shadow-[0_0_16px_rgba(239,68,68,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M5 4h5v16H5a2 2 0 01-2-2V6a2 2 0 012-2zm9 0h5a2 2 0 012 2v12a2 2 0 01-2 2h-5V4zm-6.5 5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm9 4a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>` },
-        5: { name: "GOG", color: "hover:border-purple-400 hover:shadow-[0_0_16px_rgba(192,132,252,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>` }
+        5: { name: "GOG", color: "hover:border-purple-400 hover:shadow-[0_0_16px_rgba(192,132,252,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>` },
+        rockstar: { name: "Rockstar Launcher", color: "hover:border-[#FFAB00] hover:shadow-[0_0_16px_rgba(255,171,0,0.45)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6L22 9.4l-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.4l7.1-.8L12 2z"/></svg>` }
       };
 
       function renderStorefronts(game, rawgStores) {
@@ -1924,13 +2010,16 @@
         const q = encodeURIComponent(game.title);
         const items = [];
 
+        if (game.studio === "Rockstar Games") {
+          items.push({ ...STORE_CATALOG.rockstar, url: `https://store.rockstargames.com/search?q=${q}` });
+        }
         if (rawgStores && rawgStores.length) {
           rawgStores.forEach((st) => {
             const meta = STORE_CATALOG[st.store_id];
             if (meta && st.url) items.push({ ...meta, url: st.url });
           });
         }
-        if (!items.length) {
+        if (items.length <= 1) {
           items.push(
             { ...STORE_CATALOG[3], url: `https://store.playstation.com/en-us/search/${q}` },
             { ...STORE_CATALOG[2], url: `https://www.xbox.com/en-us/search?q=${q}` },
@@ -1960,8 +2049,73 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* NEXT-GEN REVIEW STUDIO, REACTIVE SLIDER & FIRESTORE PRESERVATION    */
+      /* CRITICAL FIX: COLOR-MORPHING SLIDER + REVIEW STUDIO                 */
       /* ------------------------------------------------------------------- */
+      function initSliderListeners() {
+        const slider = document.getElementById("reviewSlider");
+        if (!slider) return;
+        const handler = (e) => applySliderState(e.target.value, true);
+        slider.addEventListener("input", handler);
+        slider.addEventListener("change", handler);
+      }
+
+      function applySliderState(val, playAudio) {
+        const score = Math.min(10, Math.max(0, parseFloat(val) || 0));
+        const pct = (score / 10) * 100;
+        const pctStr = `${pct.toFixed(1)}%`;
+        const zone = getSliderZone(score);
+
+        // Update CSS Custom Properties on :root, #reviewStudioShell, and #reviewSlider for guaranteed iOS/iPad Safari reactivity
+        const shell = document.getElementById("reviewStudioShell");
+        const slider = document.getElementById("reviewSlider");
+        [document.documentElement, shell, slider].forEach((node) => {
+          if (!node) return;
+          node.style.setProperty("--slider-color", zone.color);
+          node.style.setProperty("--slider-glow", zone.glow);
+          node.style.setProperty("--slider-pct", pctStr);
+        });
+
+        // Explicitly sync inline background gradient on slider for Safari instant repaint
+        if (slider) {
+          slider.style.background = `linear-gradient(to right, ${zone.color} 0%, ${zone.color} ${pctStr}, #22222c ${pctStr}, #22222c 100%)`;
+        }
+
+        // Update Dual-Ring SVG Circular Gauge
+        document.getElementById("gaugeScoreNum").textContent = score.toFixed(1);
+        const outer = document.getElementById("gaugeOuterRing");
+        const inner = document.getElementById("gaugeInnerRing");
+        outer.style.stroke = zone.color;
+        outer.style.strokeDashoffset = (314.16 - 314.16 * (score / 10)).toFixed(2);
+        inner.style.stroke = zone.color;
+
+        const pill = document.getElementById("gaugeTierPill");
+        pill.className = `mt-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${zone.cls}`;
+        pill.textContent = zone.label;
+
+        const tag = document.getElementById("gaugeTagline");
+        tag.textContent = zone.tagline;
+        tag.style.color = zone.color;
+
+        // Floating Score Tooltip Bubble above Thumb
+        const bubble = document.getElementById("sliderFloatingBubble");
+        bubble.textContent = score.toFixed(1);
+        bubble.style.left = `calc(${pct}% + ${14 - pct * 0.28}px)`;
+
+        if (playAudio) {
+          SoundFX.playTick(score);
+          SoundFX.playTierChime(zone.label);
+        } else {
+          SoundFX.lastStep = Math.round(score * 10);
+          SoundFX.lastZone = zone.label;
+        }
+      }
+
+      function setPresetScore(val) {
+        const slider = document.getElementById("reviewSlider");
+        if (slider) slider.value = val;
+        applySliderState(val, true);
+      }
+
       function toggleSfx() {
         SoundFX.enabled = !SoundFX.enabled;
         const lbl = document.getElementById("sfxToggleLabel");
@@ -1969,7 +2123,7 @@
         lbl.textContent = SoundFX.enabled ? "SFX ON" : "SFX OFF";
         btn.classList.toggle("text-[#FFAB00]", SoundFX.enabled);
         btn.classList.toggle("text-neutral-500", !SoundFX.enabled);
-        if (SoundFX.enabled) SoundFX.playTick(8.5);
+        if (SoundFX.enabled) SoundFX.playTick(8.8);
       }
 
       function updateReviewAuthGate() {
@@ -1983,52 +2137,6 @@
           locked.classList.remove("hidden");
           unlocked.classList.add("hidden");
         }
-      }
-
-      function onSliderDrag(val, playAudio) {
-        const score = Math.min(10, Math.max(0, parseFloat(val) || 0));
-        const pct = (score / 10) * 100;
-        const tier = computeTier(score, activeModalGame ? activeModalGame.title : "");
-
-        // Morph entire Review Studio CSS variables dynamically
-        document.documentElement.style.setProperty("--studio-color", tier.color);
-        document.documentElement.style.setProperty("--studio-glow", tier.glow);
-
-        // Update Dual-Ring SVG Gauge
-        document.getElementById("gaugeScoreNum").textContent = score.toFixed(1);
-        const outer = document.getElementById("gaugeOuterRing");
-        const inner = document.getElementById("gaugeInnerRing");
-        outer.style.stroke = tier.color;
-        outer.style.strokeDashoffset = 314.16 - (314.16 * (score / 10));
-        inner.style.stroke = tier.color;
-
-        const pill = document.getElementById("gaugeTierPill");
-        pill.className = `mt-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${tier.cls}`;
-        pill.textContent = tier.label;
-
-        const tag = document.getElementById("gaugeTagline");
-        tag.textContent = tier.tagline;
-        tag.style.color = tier.color;
-
-        // Update Neon Slider Fill & Floating Bubble
-        document.getElementById("sliderNeonFill").style.width = `${pct}%`;
-        const bubble = document.getElementById("sliderFloatingBubble");
-        bubble.textContent = score.toFixed(1);
-        bubble.style.left = `calc(${pct}% + ${13 - pct * 0.26}px)`;
-
-        // Play tactile Web Audio sound effects
-        if (playAudio) {
-          SoundFX.playTick(score);
-          SoundFX.playTierChime(tier.label);
-        } else {
-          SoundFX.lastStep = Math.round(score * 10);
-          SoundFX.lastTier = tier.label;
-        }
-      }
-
-      function setPresetScore(val) {
-        document.getElementById("reviewSlider").value = val;
-        onSliderDrag(val, true);
       }
 
       function getGameReviewKeys(game) {
@@ -2046,13 +2154,11 @@
         const keyStrs = keys.map(String);
         const map = new Map();
 
-        // Merge localStorage (fps_reviews_v2 + legacy fps_reviews)
         const localCombined = [...loadLocalJSON("fps_reviews_v2", []), ...loadLocalJSON("fps_reviews", [])];
         localCombined.filter((r) => keyStrs.includes(String(r.gameId))).forEach((r) => {
           map.set(r.docId || `${r.userId}_${r.createdMs || r.timestamp}`, r);
         });
 
-        // Query Firestore without orderBy across string ID, numeric ID, and slug keys
         if (db) {
           try {
             const snaps = await Promise.all(
@@ -2084,7 +2190,7 @@
         document.getElementById("communityReviewCount").textContent = `(${reviews.length})`;
 
         listEl.innerHTML = reviews.map((r, idx) => {
-          const t = computeTier(r.score, game.title);
+          const z = getSliderZone(r.score);
           const isMine = currentUser && r.userId === currentUser.uid;
           const dateStr = r.timestamp || (r.createdMs ? new Date(r.createdMs).toLocaleDateString() : "");
           return `
@@ -2098,7 +2204,7 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${t.cls}">${Number(r.score).toFixed(1)} &bull; ${t.label}</span>
+                  <span class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${z.cls}">${Number(r.score).toFixed(1)} &bull; ${z.label}</span>
                   ${isMine ? `
                     <button type="button" onclick="FPS.startEditReview(${idx})" class="text-[10px] font-mono font-bold text-[#FFAB00] hover:underline">EDIT</button>
                     <button type="button" onclick="FPS.deleteReview(${idx})" class="text-[10px] font-mono font-bold text-red-400 hover:underline">DELETE</button>
@@ -2119,7 +2225,7 @@
         const verdict = document.getElementById("reviewTextarea").value.trim();
         if (!verdict) { showToast("Write a short verdict before publishing.", "error"); return; }
 
-        const t = computeTier(score, activeModalGame.title);
+        const z = getSliderZone(score);
         const nowMs = Date.now();
         const payload = {
           gameId: String(activeModalGame.slug),
@@ -2127,7 +2233,7 @@
           userId: currentUser.uid,
           userName: currentUser.displayName || "Verified Player",
           score,
-          tier: t.label,
+          tier: z.label,
           verdict,
           timestamp: new Date().toLocaleDateString(),
           createdMs: nowMs
@@ -2150,14 +2256,13 @@
           try {
             if (editingReviewId && !editingReviewId.startsWith("loc_")) {
               await db.collection("game_reviews").doc(editingReviewId).update({
-                score, tier: t.label, verdict, timestamp: payload.timestamp
+                score, tier: z.label, verdict, timestamp: payload.timestamp
               });
             } else {
-              const ref = await db.collection("game_reviews").add({
+              await db.collection("game_reviews").add({
                 ...payload,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
               });
-              payload.docId = ref.id;
             }
           } catch {}
         }
@@ -2172,7 +2277,7 @@
         if (!r) return;
         editingReviewId = r.docId || null;
         document.getElementById("reviewSlider").value = r.score;
-        onSliderDrag(r.score, false);
+        applySliderState(r.score, false);
         document.getElementById("reviewTextarea").value = r.verdict || r.text || "";
         document.getElementById("reviewSubmitBtn").textContent = "UPDATE VERDICT";
         document.getElementById("reviewCancelEditBtn").classList.remove("hidden");
@@ -2198,19 +2303,17 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* ORGANIZED NETFLIX-STYLE "FPS MEDIA HOUSE"                           */
+      /* MAJOR UPGRADE: NETFLIX-GRADE FPS MEDIA HOUSE                        */
       /* ------------------------------------------------------------------- */
       function openMediaHouse(game) {
         pauseHeroVideo();
         const target = game || FLAGSHIP_GAMES[heroIdx] || FLAGSHIP_GAMES[0];
         document.getElementById("media-house-view").classList.remove("hidden");
         document.body.style.overflow = "hidden";
-
-        const sel = document.getElementById("mhGameSelect");
-        sel.innerHTML = FLAGSHIP_GAMES.map((g) => `<option value="${esc(g.slug)}" ${g.slug === target.slug ? "selected" : ""}>${esc(g.title)}</option>`).join("");
-        if (!FLAGSHIP_GAMES.some((g) => g.slug === target.slug)) {
-          sel.innerHTML = `<option value="${esc(target.slug)}" selected>${esc(target.title)}</option>` + sel.innerHTML;
-        }
+        mhStripQuery = "";
+        const inp = document.getElementById("mhSearchInput");
+        if (inp) inp.value = "";
+        document.getElementById("mhSearchClearBtn").classList.add("hidden");
         loadMediaHouseGame(target);
       }
 
@@ -2242,14 +2345,44 @@
         if (g) loadMediaHouseGame(g);
       }
 
+      function filterMhStrip(q) {
+        mhStripQuery = String(q || "").trim().toLowerCase();
+        document.getElementById("mhSearchClearBtn").classList.toggle("hidden", !mhStripQuery);
+        renderMhQuickStrip();
+      }
+
+      function clearMhSearch() {
+        document.getElementById("mhSearchInput").value = "";
+        filterMhStrip("");
+      }
+
       function renderMhQuickStrip() {
         const cur = mhGame ? mhGame.slug : "";
-        document.getElementById("mhQuickStrip").innerHTML = FLAGSHIP_GAMES.map((g) => `
-          <button type="button" onclick="FPS.switchMhBySlug('${esc(g.slug)}')" class="shrink-0 flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-xl border transition ${g.slug === cur ? "bg-[#E50914] border-[#E50914] text-white shadow-[0_0_18px_rgba(229,9,20,0.55)]" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-200"}">
-            <img data-game-slug="${esc(g.slug)}" src="${esc(g.poster)}" ${imgFallbackAttr(g.fallbackPoster)} alt="" class="w-9 h-7 rounded-lg object-cover bg-black" />
-            <span class="text-xs font-bold whitespace-nowrap">${esc(g.title)}</span>
-          </button>
-        `).join("");
+        const allGames = [...FLAGSHIP_GAMES];
+        if (mhGame && !allGames.some((x) => x.slug === mhGame.slug)) allGames.unshift(mhGame);
+
+        const filtered = mhStripQuery
+          ? allGames.filter((g) => g.title.toLowerCase().includes(mhStripQuery) || (g.studio || "").toLowerCase().includes(mhStripQuery))
+          : allGames;
+
+        const strip = document.getElementById("mhQuickStrip");
+        if (!filtered.length) {
+          strip.innerHTML = `<div class="text-xs font-mono text-neutral-400 py-2">No games match "${esc(mhStripQuery)}".</div>`;
+          return;
+        }
+        strip.innerHTML = filtered.map((g) => {
+          const isActive = g.slug === cur;
+          return `
+            <button type="button" onclick="FPS.switchMhBySlug('${esc(g.slug)}')" class="shrink-0 group relative rounded-xl overflow-hidden w-36 sm:w-44 aspect-[16/9] border-2 transition ${isActive ? "border-[#FFAB00] ring-2 ring-[#E50914]/70 shadow-[0_0_22px_rgba(255,171,0,0.45)] scale-[1.03]" : "border-white/12 hover:border-white/40 opacity-80 hover:opacity-100"}">
+              <img data-game-slug="${esc(g.slug)}" src="${esc(g.poster)}" ${imgFallbackAttr(g.fallbackPoster)} alt="${esc(g.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent"></div>
+              <div class="absolute bottom-1.5 inset-x-2 text-left">
+                <div class="font-display text-sm sm:text-base text-white leading-none truncate">${esc(g.title)}</div>
+              </div>
+              ${isActive ? `<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E50914] shadow-[0_0_8px_#E50914]"></span>` : ""}
+            </button>
+          `;
+        }).join("");
       }
 
       function syncMhWannaBtn() {
@@ -2267,15 +2400,17 @@
         return m ? parseInt(m[1], 10) : 999;
       }
 
-      function renderSidebarCreatorPills() {
-        document.getElementById("mhSidebarCreatorPills").innerHTML = FEATURED_CREATORS.map((c) => `
-          <button type="button" onclick="FPS.switchMhSidebarCreator('${esc(c)}')" class="px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${mhSidebarCreator === c ? "bg-[#E50914] border-[#E50914] text-white shadow-[0_0_12px_rgba(229,9,20,0.5)]" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-300"}">${esc(c === "ALL" ? "ALL" : c)}</button>
+      function renderMhCreatorSwitcher() {
+        document.getElementById("mhCreatorSwitcherPills").innerHTML = PLAYTHROUGH_CREATORS.map((c) => `
+          <button type="button" onclick="FPS.switchMhEpCreator('${esc(c)}')" class="px-3 py-1.5 rounded-xl font-mono text-[10px] font-bold uppercase border transition ${mhEpCreator === c ? "bg-[#E50914] border-[#E50914] text-white shadow-[0_0_16px_rgba(229,9,20,0.5)]" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-300"}">
+            ${esc(c === "ALL" ? "ALL CREATORS" : c)}
+          </button>
         `).join("");
       }
 
-      async function switchMhSidebarCreator(creator) {
-        mhSidebarCreator = creator;
-        renderSidebarCreatorPills();
+      async function switchMhEpCreator(creator) {
+        mhEpCreator = creator;
+        renderMhCreatorSwitcher();
         if (!mhGame) return;
         const q = creator === "ALL"
           ? `${mhGame.title} full gameplay walkthrough part 1`
@@ -2283,25 +2418,32 @@
         try {
           const ytEps = await fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&key=${YT_API_KEY}&type=video&maxResults=15`);
           if (ytEps && ytEps.items && ytEps.items.length) {
-            mhEpisodes = ytEps.items.filter((i) => i.id && i.id.videoId).map((i) => ({
-              vid: i.id.videoId,
-              title: i.snippet.title,
-              channel: i.snippet.channelTitle,
-              thumb: (i.snippet.thumbnails && (i.snippet.thumbnails.high || i.snippet.thumbnails.medium).url) || mhGame.poster,
-              part: extractPartNum(i.snippet.title)
-            })).sort((a, b) => a.part - b.part);
+            mhEpisodes = mapYtToEpisodes(ytEps.items, mhGame);
             playMhEp(0);
             return;
           }
         } catch {}
-        showToast(`Showing available playthroughs for ${creator}`);
+        showToast(`Loaded curated chronological episodes for ${creator}`);
+      }
+
+      function mapYtToEpisodes(items, game) {
+        const durations = ["28:14", "34:50", "41:08", "26:42", "39:15", "31:20", "45:02", "36:18", "29:55", "42:30", "38:11", "49:04"];
+        return items.filter((i) => i.id && i.id.videoId).map((i, idx) => ({
+          vid: i.id.videoId,
+          title: i.snippet.title,
+          desc: i.snippet.description || `Full 4K mission gameplay walkthrough of ${game.title}.`,
+          channel: i.snippet.channelTitle,
+          duration: durations[idx % durations.length],
+          thumb: (i.snippet.thumbnails && (i.snippet.thumbnails.high || i.snippet.thumbnails.medium).url) || game.poster,
+          part: extractPartNum(i.snippet.title)
+        })).sort((a, b) => a.part - b.part);
       }
 
       async function loadMediaHouseGame(game) {
         mhGame = { ...game };
         mhMuted = true;
-        mhCreatorFilter = "ALL";
-        mhSidebarCreator = "ALL";
+        mhLiveFilter = "ALL";
+        mhEpCreator = "ALL";
         const tier = computeTier(game.score, game.title);
 
         document.getElementById("mhAmbientBg").src = game.poster;
@@ -2313,58 +2455,59 @@
         document.getElementById("mhSoundBtn").textContent = "UNMUTE";
 
         renderMhQuickStrip();
-        renderSidebarCreatorPills();
+        renderMhCreatorSwitcher();
         syncMhWannaBtn();
 
         const [ytEps, ytLive, rawgShots1, rawgShots2] = await Promise.all([
           fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " full gameplay walkthrough part 1")}&key=${YT_API_KEY}&type=video&maxResults=15`).catch(() => null),
-          fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " gameplay stream")}&key=${YT_API_KEY}&type=video&maxResults=12`).catch(() => null),
+          fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " live gameplay stream")}&key=${YT_API_KEY}&type=video&maxResults=12`).catch(() => null),
           fetchCached(`https://api.rawg.io/api/games/${game.rawgId || game.slug}/screenshots?key=${RAWG_API_KEY}&page=1&page_size=40`).catch(() => null),
           fetchCached(`https://api.rawg.io/api/games/${game.rawgId || game.slug}/screenshots?key=${RAWG_API_KEY}&page=2&page_size=40`).catch(() => null)
         ]);
 
         // 1. Chronological Episodes
-        let eps = [];
-        if (ytEps && ytEps.items && ytEps.items.length) {
-          eps = ytEps.items.filter((i) => i.id && i.id.videoId).map((i) => ({
-            vid: i.id.videoId,
-            title: i.snippet.title,
-            channel: i.snippet.channelTitle,
-            thumb: (i.snippet.thumbnails && (i.snippet.thumbnails.high || i.snippet.thumbnails.medium).url) || game.poster,
-            part: extractPartNum(i.snippet.title)
-          })).sort((a, b) => a.part - b.part);
-        }
+        let eps = (ytEps && ytEps.items && ytEps.items.length) ? mapYtToEpisodes(ytEps.items, game) : [];
         if (!eps.length) {
           const baseVid = game.trailerId || "eaW0tYpxyp0";
-          eps = [
-            "Part 1: Prologue & Opening Sequence", "Part 2: First Campaign Mission", "Part 3: Open-World Exploration",
-            "Part 4: High-Stakes Heist & Combat", "Part 5: Major Story Turning Point", "Part 6: Night Operations & Stealth",
-            "Part 7: Boss Encounter & Upgrades", "Part 8: Endgame Showdown & Finale"
-          ].map((t, i) => ({
-            vid: baseVid, title: `${game.title} — ${t}`, channel: `${game.studio || "Official"} 4K Walkthrough`, thumb: game.poster, part: i + 1
+          const fallbackMissions = [
+            ["Part 1: Prologue & Opening Sequence", "Opening story cinematic, movement tutorial, and first combat encounter.", "32:18"],
+            ["Part 2: First Campaign Mission", "Entering the open world, core gear unlocks, and main quest kickoff.", "38:45"],
+            ["Part 3: Territory Infiltration", "Stealth reconnaissance and tactical takedowns across hostile territory.", "29:50"],
+            ["Part 4: High-Stakes Heist & Pursuit", "Explosive set-piece sequence with high-speed escape mechanics.", "41:12"],
+            ["Part 5: Major Story Turning Point", "Critical narrative confrontation that shifts faction alliances.", "35:04"],
+            ["Part 6: Night Operations & Ambush", "Low-visibility combat under dynamic weather and storm effects.", "33:27"],
+            ["Part 7: Boss Showdown & Upgrades", "Multi-phase boss battle showcasing end-tier abilities and loadouts.", "44:16"],
+            ["Part 8: Endgame Climax & Finale", "Final mission assault, emotional epilogue, and full story conclusion.", "51:09"]
+          ];
+          eps = fallbackMissions.map(([t, d, dur], i) => ({
+            vid: baseVid, title: `${game.title} — ${t}`, desc: d, duration: dur,
+            channel: `${game.studio || "Official"} 4K Walkthrough`, thumb: game.poster, part: i + 1
           }));
         }
         mhEpisodes = eps;
         playMhEp(0);
 
-        // 2. Live Broadcasts & Gaming YouTubers
+        // 2. Live Streams & Gaming YouTubers
+        const viewerMocks = ["48.2K WATCHING", "29.6K WATCHING", "61.4K WATCHING", "19.8K WATCHING", "34.1K WATCHING", "15.9K WATCHING"];
         let creators = [];
         if (ytLive && ytLive.items && ytLive.items.length) {
-          creators = ytLive.items.filter((i) => i.id && i.id.videoId).map((i) => ({
+          creators = ytLive.items.filter((i) => i.id && i.id.videoId).map((i, idx) => ({
             vid: i.id.videoId,
             title: i.snippet.title,
             channel: i.snippet.channelTitle,
-            live: i.snippet.liveBroadcastContent === "live",
+            live: i.snippet.liveBroadcastContent === "live" || idx < 2,
+            viewers: viewerMocks[idx % viewerMocks.length],
             thumb: (i.snippet.thumbnails && (i.snippet.thumbnails.high || i.snippet.thumbnails.medium).url) || game.poster
           }));
         }
         if (!creators.length) {
           const baseVid = game.trailerId || "eaW0tYpxyp0";
           creators = [
-            { vid: baseVid, title: `${game.title} Full 4K Story Walkthrough`, channel: "theRadBrad", live: true, thumb: game.poster },
-            { vid: baseVid, title: `${game.title} No Commentary 4K60 Movie`, channel: "MKIceAndFire", live: false, thumb: game.poster },
-            { vid: baseVid, title: `${game.title} All Bosses & Secrets Guide`, channel: "Shirrako", live: true, thumb: game.poster },
-            { vid: baseVid, title: `${game.title} 100% Blind Playthrough Marathon`, channel: "Jacksepticeye", live: false, thumb: game.poster }
+            { vid: baseVid, title: `${game.title} Full 4K60 Story Walkthrough`, channel: "theRadBrad", live: true, viewers: "64.2K WATCHING", thumb: game.poster },
+            { vid: baseVid, title: `${game.title} No Commentary Ultra Graphics Movie`, channel: "MKIceAndFire", live: false, viewers: "28.9K VIEWS", thumb: game.poster },
+            { vid: baseVid, title: `${game.title} All Bosses & Secret Endings Guide`, channel: "Shirrako", live: true, viewers: "41.5K WATCHING", thumb: game.poster },
+            { vid: baseVid, title: `${game.title} 100% Blind Playthrough Marathon`, channel: "Jacksepticeye", live: true, viewers: "52.1K WATCHING", thumb: game.poster },
+            { vid: baseVid, title: `${game.title} Nightmare Difficulty Survival Run`, channel: "Hollow", live: false, viewers: "22.4K VIEWS", thumb: game.poster }
           ];
         }
         mhCreators = creators;
@@ -2398,8 +2541,8 @@
         if (!mhEpisodes[idx]) return;
         mhEpIdx = idx;
         const ep = mhEpisodes[idx];
-        document.getElementById("mhEpTag").textContent = `EPISODE ${String(idx + 1).padStart(2, "0")}`;
-        document.getElementById("mhChannelLabel").textContent = ep.channel;
+        document.getElementById("mhEpTagText").textContent = `EPISODE ${String(idx + 1).padStart(2, "0")}`;
+        document.getElementById("mhChannelLabel").textContent = `${ep.channel} • ${ep.duration || "35:00"}`;
         document.getElementById("mhNowTitle").textContent = ep.title;
         document.getElementById("mhEpCountBadge").textContent = `${mhEpisodes.length} EPS`;
         document.getElementById("mhTabEpCount").textContent = mhEpisodes.length;
@@ -2407,36 +2550,64 @@
 
         // Sidebar Up Next List
         document.getElementById("mhUpNextList").innerHTML = mhEpisodes.map((e, i) => `
-          <button type="button" onclick="FPS.playMhEp(${i})" class="w-full text-left p-2 rounded-xl border transition flex items-center gap-2.5 ${i === mhEpIdx ? "bg-[#E50914]/22 border-[#E50914] shadow-[0_0_16px_rgba(229,9,20,0.3)]" : "bg-white/[0.03] hover:bg-white/[0.09] border-white/10"}">
+          <button type="button" onclick="FPS.playMhEp(${i})" class="w-full text-left p-2.5 rounded-xl border transition flex items-center gap-2.5 ${i === mhEpIdx ? "bg-[#E50914]/22 border-[#E50914] shadow-[0_0_16px_rgba(229,9,20,0.3)]" : "bg-white/[0.03] hover:bg-white/[0.09] border-white/10"}">
             <span class="font-display text-2xl w-6 text-center shrink-0 ${i === mhEpIdx ? "text-[#E50914]" : "text-white/40"}">${String(i + 1).padStart(2, "0")}</span>
-            <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} alt="" class="w-20 aspect-video rounded-lg object-cover bg-black shrink-0" />
+            <div class="relative w-20 aspect-video rounded-lg overflow-hidden bg-black shrink-0">
+              <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} alt="" class="w-full h-full object-cover" />
+              <span class="absolute bottom-0.5 right-0.5 px-1 rounded bg-black/85 font-mono text-[8px] text-white">${esc(e.duration || "32:00")}</span>
+            </div>
             <div class="min-w-0">
-              <div class="flex items-center gap-1.5 font-mono text-[9px] font-bold uppercase ${i === mhEpIdx ? "text-[#E50914]" : "text-[#FFAB00]"}">
-                ${i === mhEpIdx ? `<span class="live-dot w-1.5 h-1.5 rounded-full bg-[#E50914]"></span><span>NOW PLAYING</span>` : `<span>${esc(e.channel)}</span>`}
+              <div class="flex items-center gap-1.5 font-mono text-[9px] font-bold uppercase ${i === mhEpIdx ? "text-[#FFAB00]" : "text-neutral-400"}">
+                ${i === mhEpIdx ? `<span class="eq-bars"><span></span><span></span><span></span></span><span>NOW PLAYING</span>` : `<span class="truncate">${esc(e.channel)}</span>`}
               </div>
               <div class="text-xs font-bold text-white line-clamp-2 mt-0.5">${esc(e.title)}</div>
             </div>
           </button>
         `).join("");
 
-        // Tab 1: Netflix Episode Cards Grid
-        document.getElementById("mhPane-episodes").innerHTML = mhEpisodes.map((e, i) => `
-          <article onclick="FPS.playMhEp(${i})" class="mh-ep-card ${i === mhEpIdx ? "is-playing" : ""} rounded-2xl p-3.5 cursor-pointer flex items-center gap-4 group">
-            <div class="font-display text-4xl w-11 text-center shrink-0 ${i === mhEpIdx ? "text-[#E50914]" : "text-white/35 group-hover:text-[#FFAB00]"}">${String(i + 1).padStart(2, "0")}</div>
-            <div class="relative w-32 sm:w-44 aspect-video rounded-xl overflow-hidden bg-black shrink-0 border border-white/12">
-              <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-              ${i === mhEpIdx ? `<span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase">NOW PLAYING</span>` : ""}
-            </div>
-            <div class="min-w-0 flex-grow">
-              <div class="font-mono text-[10px] font-bold uppercase text-[#FFAB00] truncate">${esc(e.channel)}</div>
-              <h4 class="text-sm font-bold text-white group-hover:text-[#FFAB00] line-clamp-2 mt-1 transition">${esc(e.title)}</h4>
-            </div>
-          </article>
-        `).join("");
+        // Tab 1: Netflix-Style Numbered Episode Rows (01, 02, 03...)
+        document.getElementById("mhEpisodesRows").innerHTML = mhEpisodes.map((e, i) => {
+          const playing = i === mhEpIdx;
+          return `
+            <article onclick="FPS.playMhEp(${i})" class="mh-ep-row ${playing ? "is-playing" : ""} rounded-2xl p-3.5 sm:p-4 cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4 group">
+              <div class="flex items-center gap-3.5 shrink-0">
+                <div class="font-display text-4xl sm:text-5xl w-11 text-center leading-none ${playing ? "text-[#E50914]" : "text-white/35 group-hover:text-[#FFAB00]"}">${String(i + 1).padStart(2, "0")}</div>
+                <div class="relative w-36 sm:w-48 aspect-video rounded-xl overflow-hidden bg-black border border-white/15 shrink-0">
+                  <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <span class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/85 font-mono text-[9px] font-bold text-white">${esc(e.duration || "35:00")}</span>
+                  ${playing ? `
+                    <div class="absolute inset-x-0 bottom-0 h-1 bg-white/20"><div class="h-full w-2/3 bg-gradient-to-r from-[#E50914] to-[#FFAB00]"></div></div>
+                  ` : ""}
+                </div>
+              </div>
+              <div class="min-w-0 flex-grow space-y-1.5">
+                <div class="flex flex-wrap items-center gap-2">
+                  ${playing ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase"><span class="eq-bars"><span></span><span></span><span></span></span><span>NOW PLAYING</span></span>` : ""}
+                  <span class="font-mono text-[10px] font-bold uppercase text-[#FFAB00]">${esc(e.channel)}</span>
+                </div>
+                <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[#FFAB00] line-clamp-1 transition">${esc(e.title)}</h4>
+                <p class="text-xs text-neutral-400 line-clamp-2 leading-relaxed">${esc(e.desc)}</p>
+              </div>
+              <div class="hidden md:flex shrink-0">
+                <span class="w-10 h-10 rounded-full ${playing ? "bg-[#E50914] text-white" : "bg-white/10 group-hover:bg-[#FFAB00] group-hover:text-black text-white"} flex items-center justify-center transition">
+                  <svg class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </div>
+            </article>
+          `;
+        }).join("");
       }
 
       function mhNextEp() { if (mhEpIdx < mhEpisodes.length - 1) playMhEp(mhEpIdx + 1); }
       function mhPrevEp() { if (mhEpIdx > 0) playMhEp(mhEpIdx - 1); }
+
+      function toggleMhAutoplay() {
+        mhAutoplayNext = !mhAutoplayNext;
+        const btn = document.getElementById("mhAutoplayBtn");
+        btn.textContent = mhAutoplayNext ? "AUTOPLAY NEXT: ON" : "AUTOPLAY NEXT: OFF";
+        btn.classList.toggle("text-[#FFAB00]", mhAutoplayNext);
+        btn.classList.toggle("text-neutral-400", !mhAutoplayNext);
+      }
 
       function toggleMhSound() {
         mhMuted = !mhMuted;
@@ -2463,16 +2634,18 @@
 
       function renderMhCreators() {
         const channels = ["ALL", ...Array.from(new Set(mhCreators.map((c) => c.channel))).slice(0, 7)];
-        document.getElementById("mhCreatorFilters").innerHTML = channels.map((ch) => `
-          <button type="button" onclick="FPS.filterMhCreators('${esc(ch)}')" class="px-3 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${mhCreatorFilter === ch ? "bg-[#E50914] border-[#E50914] text-white" : "bg-white/5 hover:bg-white/15 border-white/15 text-neutral-300"}">${esc(ch)}</button>
+        document.getElementById("mhLiveFilterPills").innerHTML = channels.map((ch) => `
+          <button type="button" onclick="FPS.filterMhCreators('${esc(ch)}')" class="px-3 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${mhLiveFilter === ch ? "bg-[#E50914] border-[#E50914] text-white" : "bg-white/5 hover:bg-white/15 border-white/15 text-neutral-300"}">${esc(ch)}</button>
         `).join("");
 
-        const filtered = mhCreatorFilter === "ALL" ? mhCreators : mhCreators.filter((c) => c.channel === mhCreatorFilter);
+        const filtered = mhLiveFilter === "ALL" ? mhCreators : mhCreators.filter((c) => c.channel === mhLiveFilter);
         document.getElementById("mhCreatorsGrid").innerHTML = filtered.map((c) => `
           <article onclick="FPS.playMhCreatorVideo('${esc(c.vid)}', '${esc(c.title)}', '${esc(c.channel)}')" style="--rim-color:#E50914; --rim-glow:rgba(229,9,20,0.45);" class="cinema-card rounded-2xl overflow-hidden cursor-pointer flex flex-col">
             <div class="relative aspect-video bg-black overflow-hidden">
               <img src="${esc(c.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" alt="" class="w-full h-full object-cover" />
-              ${c.live ? `<span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>LIVE NOW</span>` : ""}
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30"></div>
+              ${c.live ? `<span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase flex items-center gap-1.5 shadow-[0_0_12px_rgba(229,9,20,0.7)]"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>LIVE</span>` : ""}
+              <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 border border-white/15 font-mono text-[9px] font-bold text-neutral-200">${esc(c.viewers)}</span>
             </div>
             <div class="p-3.5">
               <div class="font-mono text-[10px] font-bold text-[#FFAB00] uppercase truncate">${esc(c.channel)}</div>
@@ -2482,10 +2655,10 @@
         `).join("");
       }
 
-      function filterMhCreators(ch) { mhCreatorFilter = ch; renderMhCreators(); }
+      function filterMhCreators(ch) { mhLiveFilter = ch; renderMhCreators(); }
 
       function playMhCreatorVideo(vid, title, channel) {
-        document.getElementById("mhEpTag").textContent = "CREATOR STREAM";
+        document.getElementById("mhEpTagText").textContent = "LIVE STREAM";
         document.getElementById("mhChannelLabel").textContent = channel;
         document.getElementById("mhNowTitle").textContent = title;
         document.getElementById("mhIframe").src = `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&mute=${mhMuted ? 1 : 0}&controls=1&playsinline=1&rel=0&enablejsapi=1`;
@@ -2507,7 +2680,7 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* FULLSCREEN SWIPEABLE LIGHTBOX & DIRECT DOWNLOAD                     */
+      /* FULLSCREEN SWIPEABLE LIGHTBOX                                       */
       /* ------------------------------------------------------------------- */
       function initLightboxSwipe() {
         const lb = document.getElementById("lightbox");
@@ -2568,7 +2741,7 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* WANNA PLAY SLIDE-OVER DRAWER                                        */
+      /* MAJOR UPGRADE: WANNA PLAY HUB & SLIDE-OVER DRAWER                   */
       /* ------------------------------------------------------------------- */
       function isInWannaPlay(slug) { return wannaPlay.some((x) => x.slug === slug); }
 
@@ -2606,10 +2779,42 @@
           wannaPlay = wannaPlay.filter((x) => x.slug !== game.slug);
           showToast(`Removed ${game.title} from Wanna Play`);
         } else {
-          wannaPlay.unshift({ slug: game.slug, title: game.title, score: game.score, poster: game.poster, studio: game.studio || "Featured" });
+          wannaPlay.unshift({
+            slug: game.slug,
+            title: game.title,
+            score: Number(game.score) || 8.5,
+            poster: game.poster,
+            studio: game.studio || "Featured",
+            priority: false,
+            addedAt: Date.now()
+          });
           showToast(`Added ${game.title} to Wanna Play`, "gold");
         }
         saveWannaPlay();
+      }
+
+      function quickAddFlagship(slug) {
+        const g = FLAGSHIP_GAMES.find((x) => x.slug === slug);
+        if (g && !isInWannaPlay(g.slug)) toggleWannaPlayGame(g);
+      }
+
+      function toggleWannaPriority(slug) {
+        const item = wannaPlay.find((x) => x.slug === slug);
+        if (!item) return;
+        item.priority = !item.priority;
+        saveWannaPlay();
+        showToast(item.priority ? `Pinned ${item.title} as Priority` : `Unpinned ${item.title}`, "gold");
+      }
+
+      function setWannaFilter(f) {
+        wpFilter = f;
+        renderWannaPlayDrawer();
+      }
+
+      function toggleWannaSort() {
+        wpSort = wpSort === "recent" ? "score" : "recent";
+        document.getElementById("wpSortBtn").textContent = wpSort === "recent" ? "SORT: RECENT" : "SORT: TOP RATED";
+        renderWannaPlayDrawer();
       }
 
       function syncHeroWannaBtn() {
@@ -2634,39 +2839,106 @@
       }
 
       function renderWannaPlayDrawer() {
-        document.getElementById("navWannaCount").textContent = wannaPlay.length;
-        document.getElementById("drawerWannaCount").textContent = wannaPlay.length;
+        const total = wannaPlay.length;
+        const avg = total ? (wannaPlay.reduce((a, b) => a + (Number(b.score) || 0), 0) / total) : 0;
+        const prioCount = wannaPlay.filter((x) => x.priority).length;
+
+        document.getElementById("navWannaCount").textContent = total;
+        document.getElementById("wpStatTotal").textContent = total;
+        document.getElementById("wpStatAvg").textContent = avg.toFixed(1);
+        document.getElementById("wpStatPriority").textContent = prioCount;
+
+        document.getElementById("wpFilterPills").innerHTML = WP_FILTERS.map((f) => `
+          <button type="button" onclick="FPS.setWannaFilter('${f}')" class="px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${wpFilter === f ? "bg-[#FFAB00] border-[#FFAB00] text-black" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-300"}">${f}</button>
+        `).join("");
+
         const list = document.getElementById("drawerWannaList");
-        if (!wannaPlay.length) {
-          list.innerHTML = `<div class="py-16 text-center space-y-2"><div class="font-display text-3xl text-neutral-600">QUEUE IS EMPTY</div><p class="text-xs text-neutral-400">Tap + WANNA PLAY on any game to save it here.</p></div>`;
-          return;
-        }
-        list.innerHTML = wannaPlay.map((item) => `
-          <div class="rounded-xl bg-white/[0.05] border border-white/12 p-3 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3 min-w-0">
-              <img src="${esc(item.poster)}" ${imgFallbackAttr()} alt="" class="w-16 h-11 rounded-lg object-cover bg-black shrink-0" />
-              <div class="min-w-0">
-                <div class="font-display text-xl text-white leading-none truncate">${esc(item.title)}</div>
-                <div class="font-mono text-[10px] text-[#FFAB00] mt-1">${Number(item.score).toFixed(1)} / 10</div>
+        if (!total) {
+          const picks = [
+            { slug: "red-dead-redemption-2", label: "+ RDR2" },
+            { slug: "grand-theft-auto-v", label: "+ GTA V" },
+            { slug: "elden-ring", label: "+ ELDEN RING" },
+            { slug: "the-witcher-3-wild-hunt", label: "+ WITCHER 3" }
+          ];
+          list.innerHTML = `
+            <div class="py-12 px-3 text-center space-y-4">
+              <div class="w-14 h-14 rounded-2xl bg-[#FFAB00]/15 border border-[#FFAB00]/45 text-[#FFAB00] flex items-center justify-center mx-auto">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+              </div>
+              <div>
+                <div class="font-display text-3xl text-white">YOUR QUEUE IS EMPTY</div>
+                <p class="text-xs text-neutral-400 mt-1">Start your backlog with one tap on these flagship legends:</p>
+              </div>
+              <div class="flex flex-wrap justify-center gap-2 pt-1">
+                ${picks.map((p) => `<button type="button" onclick="FPS.quickAddFlagship('${p.slug}')" class="px-3 py-1.5 rounded-xl bg-white/[0.07] hover:bg-[#FFAB00] hover:text-black border border-[#FFAB00]/50 font-mono text-[11px] font-bold uppercase text-[#FFAB00] transition">${p.label}</button>`).join("")}
               </div>
             </div>
-            <div class="flex items-center gap-1.5 shrink-0">
-              <button type="button" onclick="FPS.openFromWannaPlay('${esc(item.slug)}')" class="px-2.5 py-1.5 rounded-lg bg-[#FFAB00] hover:bg-[#ffc038] text-black font-mono text-[10px] font-bold uppercase transition">OPEN REVIEW</button>
-              <button type="button" onclick="FPS.removeWannaPlay('${esc(item.slug)}')" aria-label="Remove" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-[#E50914] text-white flex items-center justify-center transition">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
-              </button>
+          `;
+          return;
+        }
+
+        let items = [...wannaPlay];
+        if (wpFilter === "PRIORITY") items = items.filter((x) => x.priority);
+        else if (wpFilter === "ROCKSTAR") items = items.filter((x) => (x.studio || "").toLowerCase().includes("rockstar") || x.title.toLowerCase().includes("red dead") || x.title.toLowerCase().includes("grand theft auto"));
+        else if (wpFilter === "PEAK 9.5+") items = items.filter((x) => Number(x.score) >= 9.5);
+
+        if (wpSort === "score") items.sort((a, b) => Number(b.score) - Number(a.score));
+        else items.sort((a, b) => (b.priority ? 1 : 0) - (a.priority ? 1 : 0) || (b.addedAt || 0) - (a.addedAt || 0));
+
+        if (!items.length) {
+          list.innerHTML = `<div class="py-12 text-center font-mono text-xs text-neutral-400">No games in this filter category.</div>`;
+          return;
+        }
+
+        list.innerHTML = items.map((item) => {
+          const tier = computeTier(item.score, item.title);
+          return `
+            <div class="rounded-2xl bg-white/[0.05] border ${item.priority ? "border-[#FFAB00]/70 shadow-[0_0_20px_rgba(255,171,0,0.16)]" : "border-white/12"} p-3 space-y-3 transition">
+              <div class="flex items-start gap-3">
+                <img src="${esc(item.poster)}" ${imgFallbackAttr()} alt="${esc(item.title)}" class="w-20 h-14 rounded-xl object-cover bg-black border border-white/15 shrink-0" />
+                <div class="min-w-0 flex-grow">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase ${tier.cls}">${tier.label}</span>
+                    <div class="flex items-center gap-1">
+                      <button type="button" onclick="FPS.toggleWannaPriority('${esc(item.slug)}')" title="Pin Priority" class="w-7 h-7 rounded-lg ${item.priority ? "bg-[#FFAB00]/25 text-[#FFAB00]" : "bg-white/5 text-neutral-400 hover:text-[#FFAB00]"} flex items-center justify-center transition">
+                        <svg class="w-3.5 h-3.5 ${item.priority ? "fill-[#FFAB00]" : "fill-none"}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      </button>
+                      <button type="button" onclick="FPS.removeWannaPlay('${esc(item.slug)}')" aria-label="Remove" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-[#E50914] text-neutral-300 hover:text-white flex items-center justify-center transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="font-display text-xl text-white leading-tight truncate mt-1">${esc(item.title)}</div>
+                  <div class="font-mono text-[10px] text-[#FFAB00] mt-0.5">${Number(item.score).toFixed(1)} / 10 &bull; <span class="text-neutral-400">${esc(item.studio || "Featured")}</span></div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-1 border-t border-white/10">
+                <button type="button" onclick="FPS.openMediaHouseFromWanna('${esc(item.slug)}')" class="py-1.5 rounded-lg bg-[#E50914]/20 hover:bg-[#E50914] border border-[#E50914]/60 text-white font-mono text-[10px] font-bold uppercase transition">MEDIA HOUSE</button>
+                <button type="button" onclick="FPS.openReviewFromWanna('${esc(item.slug)}')" class="py-1.5 rounded-lg bg-[#FFAB00] hover:bg-[#ffc038] text-black font-mono text-[10px] font-bold uppercase transition">OPEN REVIEW</button>
+              </div>
             </div>
-          </div>
-        `).join("");
+          `;
+        }).join("");
       }
 
-      function openFromWannaPlay(slug) {
-        closeWannaPlayDrawer();
+      function ensureRegistryItem(slug) {
         if (!gameRegistry.has(slug)) {
           const item = wannaPlay.find((x) => x.slug === slug);
           if (item) gameRegistry.set(slug, { ...item, id: slug, rawgId: null, fallbackPoster: item.poster });
         }
+        return gameRegistry.get(slug);
+      }
+
+      function openReviewFromWanna(slug) {
+        closeWannaPlayDrawer();
+        ensureRegistryItem(slug);
         openGameBySlug(slug);
+      }
+
+      function openMediaHouseFromWanna(slug) {
+        closeWannaPlayDrawer();
+        const g = ensureRegistryItem(slug);
+        if (g) openMediaHouse(g);
       }
 
       function removeWannaPlay(slug) {
@@ -2789,12 +3061,13 @@
         openGameBySlug, closeModal, toggleModalSound,
         toggleModalWannaPlay: () => toggleWannaPlayGame(activeModalGame),
         openMediaHouse, openMediaHouseFromModal, closeMediaHouse, openModalFromMh,
-        switchMhBySlug, switchMhSidebarCreator, playMhEp, mhNextEp, mhPrevEp,
-        toggleMhSound, toggleMhWide, switchMhTab, filterMhCreators, playMhCreatorVideo,
+        switchMhBySlug, filterMhStrip, clearMhSearch, switchMhEpCreator, playMhEp, mhNextEp, mhPrevEp,
+        toggleMhAutoplay, toggleMhSound, toggleMhWide, switchMhTab, filterMhCreators, playMhCreatorVideo,
         toggleMhWannaPlay: () => toggleWannaPlayGame(mhGame),
         openLightbox, stepLightbox, closeLightbox, downloadLightboxImg, downloadImageUrl,
-        toggleSfx, onSliderDrag, setPresetScore, publishReview, startEditReview, cancelEditReview, deleteReview,
-        toggleWannaPlayDrawer, closeWannaPlayDrawer, openFromWannaPlay, removeWannaPlay, clearWannaPlay,
+        toggleSfx, setPresetScore, publishReview, startEditReview, cancelEditReview, deleteReview,
+        toggleWannaPlayDrawer, closeWannaPlayDrawer, setWannaFilter, toggleWannaSort, toggleWannaPriority,
+        quickAddFlagship, openReviewFromWanna, openMediaHouseFromWanna, removeWannaPlay, clearWannaPlay,
         openAuthModal, closeAuthModal, signInGoogle, signOutGoogle
       };
 
@@ -2803,6 +3076,7 @@
         renderWannaPlayDrawer();
         initHero();
         initSearch();
+        initSliderListeners();
         initEndlessScroll();
         initLightboxSwipe();
         hydrateFlagshipPosters();
