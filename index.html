@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>FPS — Game Rating &amp; Reviews</title>
 
-  <!-- Google Fonts: Bebas Neue, Barlow Condensed, Plus Jakarta Sans, JetBrains Mono -->
+  <!-- Fonts: Bebas Neue, Barlow Condensed, Plus Jakarta Sans, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800;1,900&family=Bebas+Neue&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -18,7 +18,7 @@
       theme: {
         extend: {
           colors: {
-            obsidian: '#050508',
+            obsidian: '#06060A',
             surface: '#0E0E16',
             fpsRed: '#E50914',
             fpsGold: '#FFAB00'
@@ -34,20 +34,22 @@
     };
   </script>
 
-  <!-- Deferred Firebase v10.8.0 Compat SDKs (Non-blocking) -->
-  <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase v10 Compat SDKs (Deferred so page paints immediately) -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <style>
     :root {
-      --bg: #050508;
+      --bg: #06060A;
       --red: #E50914;
       --gold: #FFAB00;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
       --slider-color: #3B82F6;
-      --slider-glow: rgba(59, 130, 246, 0.5);
+      --slider-glow: rgba(59, 130, 246, 0.45);
       --slider-pct: 90%;
+      --top-gauge-color: #FFD700;
+      --top-gauge-glow: rgba(255, 215, 0, 0.45);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -56,10 +58,8 @@
       margin: 0;
       background-color: var(--bg);
       background-image:
-        radial-gradient(ellipse 60% 45% at 8% 0%, rgba(229, 9, 20, 0.17) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 42% at 92% 6%, rgba(255, 171, 0, 0.14) 0%, transparent 62%),
-        radial-gradient(ellipse 70% 50% at 50% 60%, rgba(56, 48, 163, 0.12) 0%, transparent 70%);
-      background-attachment: fixed;
+        radial-gradient(ellipse 58% 42% at 8% 0%, rgba(229, 9, 20, 0.14) 0%, transparent 65%),
+        radial-gradient(ellipse 52% 40% at 92% 6%, rgba(255, 171, 0, 0.12) 0%, transparent 62%);
       color: #ffffff;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
@@ -69,166 +69,148 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #050508; }
+    ::-webkit-scrollbar-track { background: #06060A; }
     ::-webkit-scrollbar-thumb { background: #2A2A3B; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #E50914; }
 
+    /* Off-screen catalog rows cost zero GPU/CPU until scrolled near */
+    .catalog-row {
+      content-visibility: auto;
+      contain-intrinsic-size: 280px;
+    }
+
+    /* Desktop glassmorphism, replaced by fast opaque dark surfaces on mobile */
     .glass-panel {
-      background: rgba(14, 14, 22, 0.8);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 50px rgba(0, 0, 0, 0.65);
+      background: rgba(14, 14, 22, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 42px rgba(0, 0, 0, 0.6);
+    }
+    .nav-shell {
+      background: rgba(6, 6, 10, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .modal-backdrop {
+      background: rgba(4, 4, 8, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .wanna-drawer-shell {
+      background: linear-gradient(180deg, rgba(22, 18, 10, 0.97) 0%, rgba(9, 9, 14, 0.99) 24%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .mh-ambient-img {
+      position: absolute; inset: -10%; width: 120%; height: 120%;
+      object-fit: cover; filter: blur(48px) saturate(1.6) brightness(0.42);
+      transform: scale(1.06); pointer-events: none;
+    }
+
+    /* Mobile 60fps Zero-Lag Optimization: Remove expensive live blurs & heavy shadows */
+    @media (max-width: 768px) {
+      body { background-image: none; background-color: #06060A; }
+      .glass-panel,
+      .nav-shell,
+      .modal-backdrop,
+      .wanna-drawer-shell {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: #09090E !important;
+      }
+      .modal-backdrop { background: rgba(5, 5, 8, 0.96) !important; }
+      .mh-ambient-img { display: none !important; }
+      .gauge-tech-ring { animation: none !important; }
     }
 
     /* ===================================================================== */
-    /* 1. HOLLYWOOD / ROCKSTAR SPLASH ANIMATION                              */
+    /* 1. GPU-ONLY ROCKSTAR SPLASH SCREEN ANIMATIONS                         */
     /* ===================================================================== */
-    @keyframes spotlightSpin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    @keyframes logoSlam {
+      0% { transform: scale(1.38); opacity: 0; }
+      60% { transform: scale(0.97); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    @keyframes shockwaveExpand {
-      0% { transform: scale(0.3); opacity: 0; border-width: 6px; }
-      28% { opacity: 0.9; }
-      100% { transform: scale(2.6); opacity: 0; border-width: 1px; }
+    @keyframes starLock {
+      0% { transform: rotate(-180deg) scale(0.2); opacity: 0; }
+      75% { transform: rotate(10deg) scale(1.1); opacity: 1; }
+      100% { transform: rotate(0deg) scale(1); opacity: 1; }
     }
-    @keyframes logoSlam3D {
-      0% { transform: perspective(900px) rotateX(26deg) scale(1.65); opacity: 0; filter: blur(10px) brightness(1.8); }
-      52% { transform: perspective(900px) rotateX(-4deg) scale(0.96); opacity: 1; filter: blur(0) brightness(1.15) drop-shadow(0 0 48px rgba(255, 171, 0, 0.85)); }
-      72% { transform: perspective(900px) rotateX(2deg) scale(1.02); opacity: 1; }
-      100% { transform: perspective(900px) rotateX(0deg) scale(1); opacity: 1; filter: drop-shadow(0 0 32px rgba(255, 171, 0, 0.6)); }
+    @keyframes sheenSweep {
+      0% { transform: translateX(-140%) skewX(-22deg); opacity: 0; }
+      25% { opacity: 0.85; }
+      100% { transform: translateX(260%) skewX(-22deg); opacity: 0; }
     }
-    @keyframes letterPunch {
-      0% { transform: translateY(18px) scale(0.82); opacity: 0; }
-      100% { transform: translateY(0) scale(1); opacity: 1; }
-    }
-    @keyframes starLockFlare {
-      0% { transform: rotate(-220deg) scale(0.15); opacity: 0; filter: brightness(2.5); }
-      70% { transform: rotate(12deg) scale(1.14); opacity: 1; filter: drop-shadow(0 0 22px #ffffff); }
-      100% { transform: rotate(0deg) scale(1); opacity: 1; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85)); }
-    }
-    @keyframes liquidGoldSheen {
-      0% { transform: translateX(-140%) skewX(-24deg); opacity: 0; }
-      20% { opacity: 0.9; }
-      100% { transform: translateX(260%) skewX(-24deg); opacity: 0; }
-    }
-    @keyframes hairlineExpand {
-      0% { transform: scaleX(0); opacity: 0; }
-      100% { transform: scaleX(1); opacity: 1; }
-    }
-    @keyframes metallicShimmer {
-      0% { background-position: -220% center; }
-      100% { background-position: 220% center; }
-    }
-    .splash-spotlight {
-      position: absolute; top: 50%; left: 50%; width: 150vmax; height: 150vmax;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 171, 0, 0.16) 28deg, transparent 62deg, rgba(229, 9, 20, 0.13) 195deg, transparent 235deg);
-      animation: spotlightSpin 12s linear infinite;
-      pointer-events: none;
-    }
-    .splash-scanlines {
-      background-image:
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px),
-        radial-gradient(rgba(255,255,255,0.04) 1px, transparent 0);
-      background-size: 100% 3px, 4px 4px;
-    }
-    .splash-shockwave {
-      position: absolute; width: 260px; height: 260px; border-radius: 9999px;
-      border: 3px solid rgba(255, 171, 0, 0.85);
-      box-shadow: 0 0 40px rgba(255, 171, 0, 0.65), inset 0 0 30px rgba(229, 9, 20, 0.45);
-      animation: shockwaveExpand 1.15s var(--ease) 0.25s forwards;
-      opacity: 0; pointer-events: none;
-    }
-    .splash-logo-wrap { animation: logoSlam3D 0.72s var(--ease) forwards; }
-    .splash-letters { opacity: 0; animation: letterPunch 0.42s var(--ease) 0.22s forwards; transform-origin: 180px 140px; }
-    .splash-star-lock { opacity: 0; animation: starLockFlare 0.55s var(--ease) 0.34s forwards; transform-origin: 322px 178px; }
-    .splash-sheen-bar { animation: liquidGoldSheen 0.95s var(--ease) 0.65s forwards; opacity: 0; }
-    .splash-hairline { transform: scaleX(0); animation: hairlineExpand 0.65s var(--ease) 0.55s forwards; }
-    .metallic-credit {
-      background: linear-gradient(90deg, #a1a1aa 0%, #ffffff 30%, #FFAB00 50%, #ffffff 70%, #a1a1aa 100%);
-      background-size: 220% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: metallicShimmer 2.2s linear infinite;
-    }
+    .splash-logo-wrap { animation: logoSlam 0.58s var(--ease) forwards; will-change: transform, opacity; }
+    .splash-star-lock { opacity: 0; animation: starLock 0.48s var(--ease) 0.25s forwards; transform-origin: 322px 178px; }
+    .splash-sheen-bar { opacity: 0; animation: sheenSweep 0.85s var(--ease) 0.5s forwards; }
 
     /* ===================================================================== */
     /* 2. RDR2 SHOTGUN-SHELL LOADING INTRO                                   */
     /* ===================================================================== */
     @keyframes shellDropL {
-      0% { transform: translate(-44px, -280px) rotate(-175deg); opacity: 0; }
-      66% { transform: translate(-44px, 8px) rotate(14deg); opacity: 1; }
-      82% { transform: translate(-44px, -18px) rotate(5deg); }
-      100% { transform: translate(-44px, 0) rotate(12deg); opacity: 1; }
+      0% { transform: translate(-42px, -240px) rotate(-160deg); opacity: 0; }
+      70% { transform: translate(-42px, 6px) rotate(12deg); opacity: 1; }
+      100% { transform: translate(-42px, 0) rotate(10deg); opacity: 1; }
     }
     @keyframes shellDropR {
-      0% { transform: translate(44px, -320px) rotate(175deg); opacity: 0; }
-      66% { transform: translate(44px, 8px) rotate(-16deg); opacity: 1; }
-      82% { transform: translate(44px, -16px) rotate(-7deg); }
-      100% { transform: translate(44px, 0) rotate(-12deg); opacity: 1; }
-    }
-    @keyframes rdrShake {
-      0%, 100% { transform: translate(0, 0); }
-      20% { transform: translate(-5px, 3px); }
-      40% { transform: translate(5px, -3px); }
-      60% { transform: translate(-3px, -2px); }
-      80% { transform: translate(3px, 2px); }
+      0% { transform: translate(42px, -280px) rotate(160deg); opacity: 0; }
+      70% { transform: translate(42px, 6px) rotate(-14deg); opacity: 1; }
+      100% { transform: translate(42px, 0) rotate(-10deg); opacity: 1; }
     }
     @keyframes rdrStampIn {
-      0% { opacity: 0; transform: scale(1.28); filter: blur(6px); }
-      100% { opacity: 1; transform: scale(1); filter: blur(0); }
+      0% { opacity: 0; transform: scale(1.18); }
+      100% { opacity: 1; transform: scale(1); }
     }
-    .rdr-shell-1 { animation: shellDropL 0.82s var(--ease) forwards; }
-    .rdr-shell-2 { opacity: 0; animation: shellDropR 0.9s var(--ease) 0.14s forwards; }
-    .rdr-stamp { opacity: 0; animation: rdrStampIn 0.45s var(--ease) 0.68s forwards; }
-    .rdr-shake { animation: rdrShake 0.32s ease-out 0.34s; }
+    .rdr-shell-1 { animation: shellDropL 0.72s var(--ease) forwards; will-change: transform, opacity; }
+    .rdr-shell-2 { opacity: 0; animation: shellDropR 0.8s var(--ease) 0.12s forwards; will-change: transform, opacity; }
+    .rdr-stamp { opacity: 0; animation: rdrStampIn 0.4s var(--ease) 0.55s forwards; }
 
     /* ===================================================================== */
-    /* 3. HERO BILLBOARD, PULSING INDICATORS & CINEMA CARDS                  */
+    /* 3. HERO BILLBOARD, LIVE PULSES & POSTER CARDS                         */
     /* ===================================================================== */
     .hero-poster {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: center; z-index: 1;
-      transition: opacity 0.45s var(--ease), transform 6s ease;
+      transition: opacity 0.4s ease;
     }
     .hero-video-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; }
     .hero-video-iframe {
       position: absolute; top: 50%; left: 50%;
       width: 100vw; height: 56.25vw; min-height: 120%; min-width: 214vh;
       transform: translate(-50%, -50%) scale(1.06);
-      border: 0; pointer-events: none; opacity: 0; transition: opacity 0.9s ease;
+      border: 0; pointer-events: none; opacity: 0; transition: opacity 0.7s ease;
     }
     .hero-video-iframe.is-live { opacity: 1; }
     .hero-vignette {
       position: absolute; inset: 0; z-index: 5; pointer-events: none;
       background:
-        linear-gradient(to top, #050508 0%, rgba(5, 5, 8, 0.88) 18%, rgba(5, 5, 8, 0.32) 55%, rgba(5, 5, 8, 0.68) 100%),
-        linear-gradient(to right, rgba(5, 5, 8, 0.96) 0%, rgba(5, 5, 8, 0.56) 44%, transparent 78%);
+        linear-gradient(to top, #06060A 0%, rgba(6, 6, 10, 0.88) 18%, rgba(6, 6, 10, 0.32) 55%, rgba(6, 6, 10, 0.65) 100%),
+        linear-gradient(to right, rgba(6, 6, 10, 0.94) 0%, rgba(6, 6, 10, 0.55) 45%, transparent 78%);
     }
 
     @keyframes titleReveal {
-      0% { opacity: 0; transform: translateY(18px); }
+      0% { opacity: 0; transform: translateY(14px); }
       100% { opacity: 1; transform: translateY(0); }
     }
-    .anim-reveal { animation: titleReveal 0.5s var(--ease) both; }
+    .anim-reveal { animation: titleReveal 0.42s var(--ease) both; }
 
     @keyframes livePulse {
-      0% { transform: scale(0.85); opacity: 0.95; }
-      75%, 100% { transform: scale(2.1); opacity: 0; }
+      0% { transform: scale(0.85); opacity: 0.9; }
+      80%, 100% { transform: scale(2); opacity: 0; }
     }
     .live-dot { position: relative; }
     .live-dot::after {
       content: ""; position: absolute; inset: 0; border-radius: 9999px;
-      background: #E50914; animation: livePulse 1.4s var(--ease) infinite;
+      background: #E50914; animation: livePulse 1.5s var(--ease) infinite;
     }
 
-    /* Pulsing Equalizer Bars for NOW PLAYING Episode */
     @keyframes eqBar {
       0%, 100% { transform: scaleY(0.32); }
       50% { transform: scaleY(1); }
     }
-    .eq-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .eq-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 11px; }
     .eq-bars span {
       display: block; width: 2.5px; height: 100%; border-radius: 2px;
       background: #FFAB00; transform-origin: bottom;
@@ -238,62 +220,65 @@
     .eq-bars span:nth-child(3) { animation-delay: 0.34s; background: #ffffff; }
 
     /* Zero-Emoji Typographic Tier Badges */
-    .badge-rdr { background: linear-gradient(135deg, #B91C1C 0%, #450A0A 100%); border: 1px solid #FFAB00; color: #FEF08A; box-shadow: 0 0 20px rgba(229, 9, 20, 0.65); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-gta { background: linear-gradient(135deg, #059669 0%, #022C22 100%); border: 1px solid #34D399; color: #D1FAE5; box-shadow: 0 0 20px rgba(16, 185, 129, 0.55); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-peak { background: linear-gradient(135deg, #D97706 0%, #451A03 100%); border: 1px solid #FFD700; color: #FEF3C7; box-shadow: 0 0 18px rgba(255, 215, 0, 0.55); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-cinema { background: linear-gradient(135deg, #2563EB 0%, #172554 100%); border: 1px solid #60A5FA; color: #DBEAFE; box-shadow: 0 0 18px rgba(59, 130, 246, 0.52); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-shouldplay { background: linear-gradient(135deg, #059669 0%, #064E3B 100%); border: 1px solid #34D399; color: #D1FAE5; box-shadow: 0 0 16px rgba(16, 185, 129, 0.45); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-cantry { background: linear-gradient(135deg, #DB2777 0%, #500724 100%); border: 1px solid #F472B6; color: #FCE7F3; box-shadow: 0 0 16px rgba(236, 72, 153, 0.45); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
-    .badge-trash { background: linear-gradient(135deg, #DC2626 0%, #450A0A 100%); border: 1px solid #F87171; color: #FEE2E2; box-shadow: 0 0 16px rgba(239, 68, 68, 0.5); font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-rdr { background: linear-gradient(135deg, #B91C1C 0%, #450A0A 100%); border: 1px solid #FFAB00; color: #FEF08A; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-gta { background: linear-gradient(135deg, #059669 0%, #022C22 100%); border: 1px solid #00FF66; color: #D1FAE5; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-peak { background: linear-gradient(135deg, #D97706 0%, #451A03 100%); border: 1px solid #FFD700; color: #FEF3C7; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-cinema { background: linear-gradient(135deg, #2563EB 0%, #172554 100%); border: 1px solid #60A5FA; color: #DBEAFE; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-shouldplay { background: linear-gradient(135deg, #059669 0%, #064E3B 100%); border: 1px solid #34D399; color: #D1FAE5; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-cantry { background: linear-gradient(135deg, #DB2777 0%, #500724 100%); border: 1px solid #F472B6; color: #FCE7F3; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
+    .badge-trash { background: linear-gradient(135deg, #DC2626 0%, #450A0A 100%); border: 1px solid #F87171; color: #FEE2E2; font-family: 'Barlow Condensed', sans-serif; font-style: italic; letter-spacing: 0.12em; }
 
-    /* Luminous Cinema Poster Cards */
+    /* Cinema Poster Cards (GPU transform only) */
     .cinema-card {
       position: relative;
-      background: linear-gradient(180deg, rgba(20, 20, 31, 0.95) 0%, rgba(11, 11, 17, 0.98) 100%);
+      background: #111119;
       border: 1px solid rgba(255, 255, 255, 0.09);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 10px 24px rgba(0, 0, 0, 0.55);
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.28s ease;
+      transition: transform 0.25s var(--ease), border-color 0.22s ease;
       will-change: transform;
     }
-    .cinema-card::after {
-      content: "";
-      position: absolute; inset: 0;
-      background: linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.15) 48%, transparent 72%);
-      transform: translateX(-140%);
-      transition: transform 0.65s var(--ease);
-      pointer-events: none; z-index: 15;
-    }
-    .cinema-card:hover::after { transform: translateX(140%); }
-    .cinema-card:hover {
-      transform: translateY(-7px) scale(1.06);
-      z-index: 30;
-      border-color: var(--rim-color, #FFAB00);
-      box-shadow: 0 24px 46px -10px rgba(0, 0, 0, 0.95), 0 0 28px var(--rim-glow, rgba(255, 171, 0, 0.4));
+    @media (hover: hover) {
+      .cinema-card:hover {
+        transform: translateY(-6px) scale(1.04);
+        z-index: 25;
+        border-color: var(--rim-color, #FFAB00);
+      }
     }
 
     /* ===================================================================== */
-    /* 4. CRITICAL FIX: COLOR-MORPHING RATING SLIDER (SAFARI / IPAD / WEB)   */
+    /* 4. TOP RATING GAUGE & COLOR-MORPHING REVIEW SLIDER                    */
     /* ===================================================================== */
+    @keyframes gaugePulse {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .gauge-pulse { animation: gaugePulse 0.42s var(--ease); }
+
     @keyframes techRingSpin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
     .gauge-tech-ring {
       transform-origin: 50% 50%;
-      animation: techRingSpin 18s linear infinite;
+      animation: techRingSpin 20s linear infinite;
     }
-    .review-studio-shell {
-      position: relative;
-      background:
-        radial-gradient(circle at 18% 18%, var(--slider-glow) 0%, transparent 56%),
-        radial-gradient(circle at 86% 85%, var(--slider-glow) 0%, transparent 58%),
-        linear-gradient(180deg, rgba(16, 16, 26, 0.96) 0%, rgba(8, 8, 13, 0.98) 100%);
-      border: 1.5px solid var(--slider-color);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 42px -6px var(--slider-glow);
+
+    .top-rating-card {
+      background: radial-gradient(circle at center, var(--top-gauge-glow) 0%, rgba(12, 12, 20, 0.95) 72%);
+      border: 1.5px solid var(--top-gauge-color);
+      box-shadow: 0 0 26px -6px var(--top-gauge-glow);
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .neon-slider-wrap { position: relative; padding-top: 40px; padding-bottom: 6px; }
+    .review-studio-shell {
+      position: relative;
+      background: linear-gradient(180deg, rgba(16, 16, 26, 0.96) 0%, rgba(8, 8, 13, 0.98) 100%);
+      border: 1.5px solid var(--slider-color);
+      box-shadow: 0 0 32px -8px var(--slider-glow);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .neon-slider-wrap { position: relative; padding-top: 38px; padding-bottom: 6px; }
     .neon-slider-bubble {
       position: absolute; top: 0; left: var(--slider-pct);
       transform: translateX(-50%);
@@ -301,10 +286,8 @@
       color: #050508;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 800; font-size: 12px;
-      padding: 3px 11px; border-radius: 9999px;
-      box-shadow: 0 0 22px var(--slider-glow), 0 4px 12px rgba(0, 0, 0, 0.75);
+      padding: 3px 10px; border-radius: 9999px;
       pointer-events: none;
-      transition: background-color 0.16s ease, box-shadow 0.16s ease;
       white-space: nowrap;
       z-index: 12;
     }
@@ -312,10 +295,8 @@
       content: ""; position: absolute; left: 50%; bottom: -4px;
       width: 8px; height: 8px; background-color: var(--slider-color);
       transform: translateX(-50%) rotate(45deg);
-      transition: background-color 0.16s ease;
     }
 
-    /* Native Range Input Styled Directly With CSS Custom Properties For iOS/iPad Safari */
     input[type="range"].fps-color-slider {
       -webkit-appearance: none;
       appearance: none;
@@ -324,15 +305,14 @@
       border-radius: 9999px;
       outline: none;
       cursor: pointer;
-      background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--slider-pct), #22222c var(--slider-pct), #22222c 100%);
+      background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--slider-pct), #22222E var(--slider-pct), #22222E 100%);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 0 18px -2px var(--slider-glow), inset 0 1px 3px rgba(0, 0, 0, 0.7);
       touch-action: none;
     }
     input[type="range"].fps-color-slider::-webkit-slider-runnable-track {
       height: 14px;
       border-radius: 9999px;
-      background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--slider-pct), #22222c var(--slider-pct), #22222c 100%);
+      background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) var(--slider-pct), #22222E var(--slider-pct), #22222E 100%);
     }
     input[type="range"].fps-color-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -343,104 +323,63 @@
       border-radius: 9999px;
       background: radial-gradient(circle at 35% 35%, #ffffff 0%, #ffffff 36%, var(--slider-color) 38%, var(--slider-color) 100%);
       border: 3px solid var(--slider-color);
-      box-shadow: 0 0 0 3px #07070c, 0 0 24px var(--slider-color), 0 0 38px var(--slider-glow);
-      transition: transform 0.14s var(--ease), box-shadow 0.16s ease;
+      box-shadow: 0 0 0 3px #07070c, 0 0 18px var(--slider-color);
+      transition: transform 0.12s ease;
     }
-    input[type="range"].fps-color-slider:active::-webkit-slider-thumb,
-    input[type="range"].fps-color-slider:hover::-webkit-slider-thumb {
-      transform: scale(1.2);
-      box-shadow: 0 0 0 4px #07070c, 0 0 30px var(--slider-color), 0 0 48px var(--slider-glow);
-    }
-    input[type="range"].fps-color-slider::-moz-range-track {
-      height: 14px;
-      border-radius: 9999px;
-      background: #22222c;
-    }
-    input[type="range"].fps-color-slider::-moz-range-progress {
-      height: 14px;
-      border-radius: 9999px;
-      background: var(--slider-color);
-    }
+    input[type="range"].fps-color-slider:active::-webkit-slider-thumb { transform: scale(1.18); }
+    input[type="range"].fps-color-slider::-moz-range-track { height: 14px; border-radius: 9999px; background: #22222E; }
+    input[type="range"].fps-color-slider::-moz-range-progress { height: 14px; border-radius: 9999px; background: var(--slider-color); }
     input[type="range"].fps-color-slider::-moz-range-thumb {
-      width: 28px;
-      height: 28px;
-      border-radius: 9999px;
+      width: 28px; height: 28px; border-radius: 9999px;
       background: radial-gradient(circle at 35% 35%, #ffffff 0%, #ffffff 36%, var(--slider-color) 38%, var(--slider-color) 100%);
       border: 3px solid var(--slider-color);
-      box-shadow: 0 0 0 3px #07070c, 0 0 24px var(--slider-color);
+      box-shadow: 0 0 0 3px #07070c, 0 0 18px var(--slider-color);
     }
 
     /* ===================================================================== */
-    /* 5. NETFLIX-GRADE FPS MEDIA HOUSE & WANNA PLAY                         */
+    /* 5. MEDIA HOUSE TABS & EPISODE ROWS                                    */
     /* ===================================================================== */
-    .mh-ambient-img {
-      position: absolute; inset: -14%; width: 128%; height: 128%;
-      object-fit: cover; filter: blur(72px) saturate(1.85) brightness(0.45);
-      transform: scale(1.1); pointer-events: none;
-    }
-    .mh-tab-btn { position: relative; transition: color 0.25s ease; }
+    .mh-tab-btn { position: relative; transition: color 0.2s ease; }
     .mh-tab-btn::after {
       content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 9999px;
       background: linear-gradient(90deg, #E50914 0%, #FFAB00 100%);
-      box-shadow: 0 0 14px rgba(255, 171, 0, 0.75);
-      transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.25s var(--ease);
     }
     .mh-tab-btn.is-active { color: #ffffff; }
     .mh-tab-btn.is-active::after { transform: scaleX(1); }
 
     .mh-ep-row {
-      background: rgba(16, 16, 25, 0.88);
+      background: #101018;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: transform 0.24s var(--ease), border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease;
+      transition: transform 0.2s var(--ease), border-color 0.2s ease, background 0.2s ease;
     }
-    .mh-ep-row:hover {
-      background: rgba(26, 26, 40, 0.96);
-      border-color: rgba(255, 171, 0, 0.65);
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.65);
-    }
+    .mh-ep-row:hover { background: #181826; border-color: rgba(255, 171, 0, 0.6); }
     .mh-ep-row.is-playing {
-      background: linear-gradient(90deg, rgba(229, 9, 20, 0.24) 0%, rgba(20, 20, 32, 0.96) 58%);
+      background: linear-gradient(90deg, rgba(229, 9, 20, 0.22) 0%, #13131E 60%);
       border-color: #E50914;
-      box-shadow: 0 0 26px rgba(229, 9, 20, 0.35);
-    }
-
-    .wanna-drawer-shell {
-      background:
-        radial-gradient(ellipse 90% 24% at 50% 0%, rgba(255, 171, 0, 0.22) 0%, transparent 72%),
-        rgba(9, 9, 15, 0.96);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
     }
   </style>
 </head>
-<body class="bg-[#050508] text-white min-h-screen flex flex-col">
+<body class="bg-[#06060A] text-white min-h-screen flex flex-col">
 
   <!-- ===================================================================== -->
-  <!-- 1. FAILSAFE HOLLYWOOD / ROCKSTAR INTRO SPLASH                         -->
+  <!-- 1. FAILSAFE ROCKSTAR-STYLE FPS SPLASH SCREEN (1.6s + TAP TO SKIP)     -->
   <!-- ===================================================================== -->
-  <div id="splash-screen" class="fixed inset-0 z-[220] bg-[#040407] flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden px-6 transition-opacity duration-400">
-    <div class="splash-spotlight"></div>
-    <div class="absolute inset-0 splash-scanlines pointer-events-none"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,171,0,0.22)_0%,rgba(4,4,7,0.92)_66%)] pointer-events-none"></div>
-    <div class="splash-shockwave"></div>
-
-    <div class="relative z-10 w-72 sm:w-96 max-w-[84vw] splash-logo-wrap">
-      <div class="relative rounded-[44px] overflow-hidden">
-        <svg viewBox="0 0 440 280" class="w-full h-auto block" role="img" aria-label="FPS Game Rating and Reviews Logo">
+  <div id="splash-screen" class="fixed inset-0 z-[220] bg-[#050508] flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden px-6 transition-opacity duration-300">
+    <div class="relative z-10 w-68 sm:w-88 max-w-[82vw] splash-logo-wrap">
+      <div class="relative rounded-[42px] overflow-hidden shadow-[0_0_45px_rgba(255,171,0,0.45)]">
+        <svg viewBox="0 0 440 280" class="w-full h-auto block" role="img" aria-label="FPS Game Rating and Reviews">
           <defs>
             <linearGradient id="fpsGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#FFD147" />
-              <stop offset="48%" stop-color="#FFAB00" />
+              <stop offset="50%" stop-color="#FFAB00" />
               <stop offset="100%" stop-color="#E68A00" />
             </linearGradient>
           </defs>
           <rect x="8" y="8" width="424" height="264" rx="44" fill="url(#fpsGoldGrad)" stroke="#FFAB00" stroke-width="6" />
           <rect x="22" y="22" width="396" height="236" rx="34" fill="url(#fpsGoldGrad)" stroke="#050508" stroke-width="11" />
-          <g class="splash-letters">
-            <text x="60" y="168" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-style="italic" font-size="148" letter-spacing="-4">FPS</text>
-            <text x="56" y="218" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="800" font-style="italic" font-size="25" letter-spacing="3.8">GAME RATING &amp; REVIEWS</text>
-          </g>
+          <text x="60" y="168" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-style="italic" font-size="148" letter-spacing="-4">FPS</text>
+          <text x="56" y="218" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="800" font-style="italic" font-size="25" letter-spacing="3.8">GAME RATING &amp; REVIEWS</text>
           <g class="splash-star-lock">
             <polygon points="322,116 337,159 382,159 345,186 359,230 322,203 285,230 299,186 262,159 307,159" fill="#FFFFFF" stroke="#050508" stroke-width="11" stroke-linejoin="miter" />
           </g>
@@ -449,13 +388,13 @@
       </div>
     </div>
 
-    <div class="relative z-10 mt-7 flex flex-col items-center text-center w-full max-w-sm">
-      <div class="splash-hairline w-56 sm:w-72 h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#E50914] via-50% to-transparent mb-4 shadow-[0_0_16px_rgba(255,171,0,0.7)]"></div>
-      <p class="metallic-credit font-condensed italic font-black text-lg sm:text-2xl tracking-[0.3em] uppercase">MADE BY TANVIR HOSSAIN</p>
-      <p class="font-mono text-[10px] tracking-[0.28em] uppercase text-neutral-400 mt-2">TAP ANYWHERE TO SKIP</p>
+    <div class="relative z-10 mt-6 flex flex-col items-center text-center">
+      <div class="w-48 h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#FFAB00] to-transparent mb-3"></div>
+      <p class="font-condensed italic font-black text-lg sm:text-2xl tracking-[0.28em] uppercase text-[#FFAB00]">MADE BY TANVIR HOSSAIN</p>
+      <p class="font-mono text-[10px] tracking-[0.26em] uppercase text-neutral-400 mt-1.5">TAP ANYWHERE TO SKIP</p>
     </div>
   </div>
-  <!-- Independent Failsafe Script: Splash Always Auto-Dismisses in 1.8s or on Tap -->
+  <!-- Independent Failsafe Script: Guarantees splash can NEVER get stuck -->
   <script>
     (function () {
       var splash = document.getElementById('splash-screen');
@@ -466,9 +405,9 @@
         splash.style.pointerEvents = 'none';
         setTimeout(function () {
           if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-        }, 420);
+        }, 320);
       }
-      setTimeout(dismissSplash, 1800);
+      setTimeout(dismissSplash, 1600);
       if (splash) {
         splash.addEventListener('click', dismissSplash);
         splash.addEventListener('touchstart', dismissSplash, { passive: true });
@@ -479,12 +418,11 @@
   <!-- ===================================================================== -->
   <!-- 1B. SPECIAL RDR2 SHOTGUN-SHELL LOADING INTRO                          -->
   <!-- ===================================================================== -->
-  <div id="rdr2Overlay" class="fixed inset-0 z-[195] hidden bg-[radial-gradient(circle_at_center,#5c0505_0%,#080202_74%)] flex-col items-center justify-center overflow-hidden select-none cursor-pointer transition-opacity duration-300">
-    <div class="absolute inset-0 splash-scanlines opacity-65 pointer-events-none"></div>
-    <div id="rdr2Stage" class="relative z-10 flex flex-col items-center text-center px-6">
-      <div class="relative w-72 h-44 flex items-center justify-center">
+  <div id="rdr2Overlay" class="fixed inset-0 z-[195] hidden bg-[#1A0404] flex-col items-center justify-center overflow-hidden select-none cursor-pointer transition-opacity duration-250">
+    <div class="relative z-10 flex flex-col items-center text-center px-6">
+      <div class="relative w-72 h-40 flex items-center justify-center">
         <div class="absolute rdr-shell-1">
-          <svg class="w-24 h-24 drop-shadow-[0_16px_24px_rgba(0,0,0,0.95)]" viewBox="0 0 64 64">
+          <svg class="w-24 h-24" viewBox="0 0 64 64">
             <rect x="21" y="8" width="22" height="36" rx="2.5" fill="#991B1B" stroke="#FFAB00" stroke-width="1.6" />
             <rect x="21" y="44" width="22" height="12" rx="1.5" fill="#D4AF37" stroke="#FEF08A" stroke-width="1.5" />
             <circle cx="32" cy="50" r="3" fill="#5C4406" />
@@ -492,7 +430,7 @@
           </svg>
         </div>
         <div class="absolute rdr-shell-2">
-          <svg class="w-24 h-24 drop-shadow-[0_16px_24px_rgba(0,0,0,0.95)]" viewBox="0 0 64 64">
+          <svg class="w-24 h-24" viewBox="0 0 64 64">
             <rect x="21" y="8" width="22" height="36" rx="2.5" fill="#7F1D1D" stroke="#FFAB00" stroke-width="1.6" />
             <rect x="21" y="44" width="22" height="12" rx="1.5" fill="#D4AF37" stroke="#FEF08A" stroke-width="1.5" />
             <circle cx="32" cy="50" r="3" fill="#5C4406" />
@@ -501,7 +439,7 @@
         </div>
       </div>
       <div class="rdr-stamp space-y-2 mt-2">
-        <div class="font-display text-5xl sm:text-7xl tracking-wider text-white drop-shadow-[0_0_28px_rgba(229,9,20,0.95)]">RED DEAD REDEMPTION II</div>
+        <div class="font-display text-5xl sm:text-7xl tracking-wider text-white">RED DEAD REDEMPTION II</div>
         <div class="inline-flex items-center gap-2 px-4 py-1 rounded badge-rdr text-sm sm:text-base font-black uppercase">
           <span>R★</span><span>&bull;</span><span>ABSOLUTE RDR</span><span>&bull;</span><span>9.7 / 10</span>
         </div>
@@ -516,13 +454,12 @@
   <div id="toastBox" class="fixed bottom-5 right-5 z-[210] pointer-events-none flex flex-col gap-2 max-w-xs"></div>
 
   <!-- ===================================================================== -->
-  <!-- 3. SINGLE-ROW OBSIDIAN GLASS NAVBAR                                   -->
+  <!-- 3. SINGLE-ROW NAVBAR                                                  -->
   <!-- ===================================================================== -->
-  <header class="fixed top-0 inset-x-0 z-50 bg-[#050508]/88 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.65)]">
+  <header class="nav-shell fixed top-0 inset-x-0 z-50 border-b border-white/10">
     <div class="max-w-[1600px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
-      <!-- Rockstar-Style FPS SVG Logo -->
       <button type="button" onclick="FPS.goHome()" class="flex items-center gap-2.5 shrink-0 group focus:outline-none">
-        <svg viewBox="0 0 440 280" class="w-12 sm:w-14 h-auto drop-shadow-[0_0_14px_rgba(255,171,0,0.55)] group-hover:scale-105 transition-transform" aria-label="FPS">
+        <svg viewBox="0 0 440 280" class="w-12 sm:w-14 h-auto group-hover:scale-105 transition-transform" aria-label="FPS">
           <rect x="8" y="8" width="424" height="264" rx="44" fill="#FFAB00" stroke="#FFAB00" stroke-width="6" />
           <rect x="22" y="22" width="396" height="236" rx="34" fill="#FFAB00" stroke="#050508" stroke-width="12" />
           <text x="60" y="172" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-style="italic" font-size="148" letter-spacing="-4">FPS</text>
@@ -531,46 +468,40 @@
         <span class="hidden 2xl:inline font-condensed italic font-black text-base tracking-[0.16em] uppercase text-white whitespace-nowrap">GAME RATING &amp; REVIEWS</span>
       </button>
 
-      <!-- Single-Row Quick Navigation -->
       <nav class="hidden lg:flex items-center gap-4 xl:gap-5 text-xs font-extrabold tracking-[0.12em] uppercase text-neutral-300 whitespace-nowrap">
         <button type="button" onclick="FPS.scrollToRow('row-rockstar')" class="hover:text-[#FFAB00] transition">Rockstar Vault</button>
         <button type="button" onclick="FPS.scrollToRow('row-peak')" class="hover:text-[#FFAB00] transition">Peak Tier</button>
         <button type="button" onclick="FPS.scrollToRow('row-cinema')" class="hover:text-[#FFAB00] transition">Absolute Cinema</button>
-        <button type="button" onclick="FPS.scrollToRow('row-shooters')" class="hover:text-[#FFAB00] transition">Shooters</button>
-        <button type="button" onclick="FPS.openMediaHouse()" class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#E50914]/25 to-[#E50914]/10 hover:from-[#E50914] hover:to-[#ff222d] border border-[#E50914]/80 text-white flex items-center gap-2 shadow-[0_0_18px_rgba(229,9,20,0.35)] transition">
+        <button type="button" onclick="FPS.openMediaHouse()" class="px-3.5 py-1.5 rounded-full bg-[#E50914]/20 hover:bg-[#E50914] border border-[#E50914]/80 text-white flex items-center gap-2 transition">
           <span class="live-dot w-2 h-2 rounded-full bg-[#E50914]"></span>
           <span>MEDIA HOUSE</span>
         </button>
       </nav>
 
-      <!-- Right Controls: Debounced Search, Wanna Play, Mobile Media House, Auth -->
       <div class="flex items-center gap-2 sm:gap-3 ml-auto shrink-0">
         <div class="relative flex items-center">
           <svg class="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" /><path stroke-linecap="round" d="M21 21l-4.35-4.35" />
           </svg>
           <input id="navSearchInput" type="text" autocomplete="off" placeholder="Search games..."
-            class="h-9 bg-white/[0.07] hover:bg-white/[0.11] focus:bg-[#0B0B12] border border-white/15 focus:border-[#FFAB00] rounded-full pl-8 pr-7 text-xs font-medium text-white placeholder-neutral-400 outline-none w-32 sm:w-44 md:w-52 transition-all" />
+            class="h-9 bg-white/[0.08] focus:bg-[#0B0B12] border border-white/15 focus:border-[#FFAB00] rounded-full pl-8 pr-7 text-xs font-medium text-white placeholder-neutral-400 outline-none w-32 sm:w-44 md:w-52 transition-all" />
           <button id="navClearSearchBtn" type="button" onclick="FPS.exitSearch()" aria-label="Clear search" class="hidden absolute right-2 w-5 h-5 rounded-full bg-white/15 hover:bg-[#E50914] text-white flex items-center justify-center transition">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
-        <!-- Glowing Golden WANNA PLAY Pill -->
-        <button type="button" onclick="FPS.toggleWannaPlayDrawer()" class="h-9 px-3 sm:px-3.5 rounded-full bg-gradient-to-r from-[#FFAB00]/18 to-[#FFAB00]/8 hover:from-[#FFAB00]/30 hover:to-[#FFAB00]/15 border border-[#FFAB00]/75 text-white flex items-center gap-2 shadow-[0_0_18px_rgba(255,171,0,0.26)] transition whitespace-nowrap">
+        <button type="button" onclick="FPS.toggleWannaPlayDrawer()" class="h-9 px-2.5 sm:px-3.5 rounded-full bg-[#FFAB00]/15 hover:bg-[#FFAB00]/25 border border-[#FFAB00]/75 text-white flex items-center gap-1.5 transition whitespace-nowrap">
           <svg class="w-3.5 h-3.5 text-[#FFAB00] shrink-0" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
           <span class="font-condensed font-black text-xs tracking-wider uppercase text-[#FFAB00] hidden sm:inline">WANNA PLAY</span>
           <span id="navWannaCount" class="font-mono text-[11px] font-extrabold bg-[#FFAB00] text-black px-1.5 rounded-full min-w-[20px] text-center">0</span>
         </button>
 
-        <!-- Mobile Media House Button -->
-        <button type="button" onclick="FPS.openMediaHouse()" title="FPS Media House" class="lg:hidden h-9 w-9 rounded-full bg-[#E50914]/25 hover:bg-[#E50914] border border-[#E50914]/80 text-white flex items-center justify-center shadow-[0_0_14px_rgba(229,9,20,0.4)] transition">
+        <button type="button" onclick="FPS.openMediaHouse()" title="FPS Media House" class="lg:hidden h-9 w-9 rounded-full bg-[#E50914]/25 hover:bg-[#E50914] border border-[#E50914]/80 text-white flex items-center justify-center transition">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z" /></svg>
         </button>
 
-        <!-- Auth Slot -->
         <div id="navAuthSlot">
-          <button type="button" onclick="FPS.openAuthModal()" class="h-9 px-3.5 sm:px-4 rounded-lg bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-xs tracking-wider uppercase shadow-[0_0_18px_rgba(229,9,20,0.5)] transition whitespace-nowrap">
+          <button type="button" onclick="FPS.openAuthModal()" class="h-9 px-3.5 sm:px-4 rounded-lg bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-xs tracking-wider uppercase transition whitespace-nowrap">
             SIGN IN
           </button>
         </div>
@@ -579,7 +510,7 @@
   </header>
 
   <!-- ===================================================================== -->
-  <!-- 4. SEARCH RESULTS VIEW (SEPARATE FROM HOME DOM)                       -->
+  <!-- 4. SEARCH RESULTS VIEW (SEPARATE DOM CONTAINER)                       -->
   <!-- ===================================================================== -->
   <section id="search-view" class="hidden flex-grow max-w-[1600px] w-full mx-auto px-4 sm:px-8 pt-24 pb-20">
     <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5 mb-7">
@@ -601,44 +532,44 @@
   <!-- 5. HOME VIEW (50-SECOND HERO BILLBOARD + DEDUPLICATED CAROUSELS)      -->
   <!-- ===================================================================== -->
   <main id="home-view" class="flex-grow flex flex-col pt-16">
-    <!-- 5A. 50-SECOND HERO BILLBOARD (NO PROGRESS BAR, 4 DISTINCT BUTTONS) -->
-    <section id="heroSection" class="relative w-full h-[82vh] min-h-[540px] max-h-[880px] overflow-hidden bg-[#050508] select-none">
-      <img id="heroPoster" src="https://i.ytimg.com/vi/eaW0tYpxyp0/maxresdefault.jpg" alt="Featured Game Poster" class="hero-poster" />
+    <!-- 5A. 50-SECOND HERO BILLBOARD (NO PROGRESS BAR) -->
+    <section id="heroSection" class="relative w-full h-[78vh] sm:h-[82vh] min-h-[520px] max-h-[860px] overflow-hidden bg-[#06060A] select-none">
+      <img id="heroPoster" src="https://i.ytimg.com/vi/eaW0tYpxyp0/maxresdefault.jpg" alt="Featured Game Poster" decoding="async" class="hero-poster" />
       <div id="heroVideoWrap" class="hero-video-wrap"></div>
       <div class="hero-vignette"></div>
 
       <div class="relative z-10 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pb-16 sm:pb-20 flex flex-col justify-end">
-        <div id="heroContentBox" class="max-w-2xl space-y-3.5 sm:space-y-4">
+        <div id="heroContentBox" class="max-w-2xl space-y-3 sm:space-y-4">
           <div class="flex flex-wrap items-center gap-2.5">
             <span id="heroTierBadge" class="px-3.5 py-1 rounded text-xs font-black uppercase badge-rdr">ABSOLUTE RDR</span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-black/75 border border-[#FFAB00]/65 text-[#FFAB00] font-mono text-xs font-bold shadow-[0_0_16px_rgba(255,171,0,0.28)]">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-black/80 border border-[#FFAB00]/65 text-[#FFAB00] font-mono text-xs font-bold">
               <svg class="w-3.5 h-3.5 fill-[#FFAB00]" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
               <span id="heroScoreVal">9.7</span> / 10
             </span>
             <span id="heroMetaVal" class="font-condensed text-sm font-extrabold tracking-[0.16em] uppercase text-neutral-200">ROCKSTAR GAMES &bull; 2018</span>
           </div>
 
-          <h1 id="heroTitle" onclick="FPS.openHeroModal()" class="font-display text-5xl sm:text-7xl lg:text-[5.5rem] text-white leading-[0.92] cursor-pointer hover:text-[#FFAB00] transition drop-shadow-[0_8px_32px_rgba(0,0,0,0.96)]">
+          <h1 id="heroTitle" onclick="FPS.openHeroModal()" class="font-display text-5xl sm:text-7xl lg:text-[5.5rem] text-white leading-[0.92] cursor-pointer hover:text-[#FFAB00] transition">
             RED DEAD REDEMPTION 2
           </h1>
 
-          <p id="heroDesc" class="text-xs sm:text-sm md:text-base text-neutral-200 leading-relaxed line-clamp-3 max-w-xl font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <p id="heroDesc" class="text-xs sm:text-sm md:text-base text-neutral-200 leading-relaxed line-clamp-3 max-w-xl font-medium">
             America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland.
           </p>
 
           <!-- 4 Distinct Hero Action Buttons -->
-          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1.5">
-            <button type="button" onclick="FPS.openHeroInMediaHouse()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-[#E50914] to-[#ff202b] hover:from-[#ff1e29] hover:to-[#ff3b45] text-white font-condensed italic font-black text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_12px_32px_rgba(229,9,20,0.55)] transition active:scale-95">
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1">
+            <button type="button" onclick="FPS.openHeroInMediaHouse()" class="px-5 py-3 rounded-xl bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
               <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
               <span>WATCH TRAILER</span>
             </button>
-            <button type="button" onclick="FPS.openHeroModal()" class="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-condensed italic font-black text-sm tracking-wider uppercase transition active:scale-95">
+            <button type="button" onclick="FPS.openHeroModal()" class="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-condensed italic font-black text-sm tracking-wider uppercase transition active:scale-95">
               REVIEW &amp; SPECS
             </button>
-            <button id="heroWannaBtn" type="button" onclick="FPS.toggleHeroWannaPlay()" class="px-4 py-3 rounded-xl bg-black/65 hover:bg-[#FFAB00]/20 backdrop-blur-md border border-[#FFAB00]/70 text-white font-bold text-xs tracking-wider uppercase transition active:scale-95">
+            <button id="heroWannaBtn" type="button" onclick="FPS.toggleHeroWannaPlay()" class="px-4 py-3 rounded-xl bg-black/75 hover:bg-[#FFAB00]/20 border border-[#FFAB00]/70 text-white font-bold text-xs tracking-wider uppercase transition active:scale-95">
               + WANNA PLAY
             </button>
-            <button id="heroSoundBtn" type="button" onclick="FPS.toggleHeroSound()" class="px-4 py-3 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/25 text-white font-mono text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
+            <button id="heroSoundBtn" type="button" onclick="FPS.toggleHeroSound()" class="px-4 py-3 rounded-xl bg-black/75 hover:bg-white/20 border border-white/25 text-white font-mono text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
               <svg id="heroSoundIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
@@ -649,21 +580,21 @@
         </div>
       </div>
 
-      <!-- Prev / Next Glass Controls & Counter -->
-      <div class="absolute bottom-6 right-5 sm:right-12 z-20 flex items-center gap-2.5">
-        <button type="button" onclick="FPS.prevHero()" aria-label="Previous slide" class="w-10 h-10 rounded-full bg-black/75 hover:bg-[#E50914] backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition">
+      <!-- Prev / Next Controls & Slide Counter -->
+      <div class="absolute bottom-5 right-4 sm:right-12 z-20 flex items-center gap-2">
+        <button type="button" onclick="FPS.prevHero()" aria-label="Previous slide" class="w-10 h-10 rounded-full bg-black/80 hover:bg-[#E50914] border border-white/20 text-white flex items-center justify-center transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
         </button>
-        <span id="heroCounter" class="font-mono text-xs font-bold tracking-widest text-neutral-100 bg-black/75 border border-white/20 px-3.5 py-2 rounded-full">01 / 16</span>
-        <button type="button" onclick="FPS.nextHero()" aria-label="Next slide" class="w-10 h-10 rounded-full bg-black/75 hover:bg-[#E50914] backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition">
+        <span id="heroCounter" class="font-mono text-xs font-bold tracking-widest text-neutral-100 bg-black/80 border border-white/20 px-3 py-2 rounded-full">01 / 16</span>
+        <button type="button" onclick="FPS.nextHero()" aria-label="Next slide" class="w-10 h-10 rounded-full bg-black/80 hover:bg-[#E50914] border border-white/20 text-white flex items-center justify-center transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
         </button>
       </div>
     </section>
 
     <!-- 5B. CURATED & ENDLESS CATALOG CAROUSELS -->
-    <div class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-12 py-10 space-y-12">
-      <section id="row-rockstar" class="space-y-3.5">
+    <div class="max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-12 py-10 space-y-11">
+      <section id="row-rockstar" class="catalog-row space-y-3">
         <div class="flex items-center justify-between border-l-4 border-[#E50914] pl-3.5">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
@@ -677,10 +608,10 @@
             <button type="button" onclick="FPS.scrollRow('track-rockstar', 1)" aria-label="Scroll right" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#E50914] border border-white/15 flex items-center justify-center transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
           </div>
         </div>
-        <div id="track-rockstar" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
+        <div id="track-rockstar" class="flex gap-4 overflow-x-auto no-scrollbar py-2"></div>
       </section>
 
-      <section id="row-peak" class="space-y-3.5">
+      <section id="row-peak" class="catalog-row space-y-3">
         <div class="flex items-center justify-between border-l-4 border-[#FFD700] pl-3.5">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
@@ -694,10 +625,10 @@
             <button type="button" onclick="FPS.scrollRow('track-peak', 1)" aria-label="Scroll right" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#FFAB00] hover:text-black border border-white/15 flex items-center justify-center transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
           </div>
         </div>
-        <div id="track-peak" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
+        <div id="track-peak" class="flex gap-4 overflow-x-auto no-scrollbar py-2"></div>
       </section>
 
-      <section id="row-cinema" class="space-y-3.5">
+      <section id="row-cinema" class="catalog-row space-y-3">
         <div class="flex items-center justify-between border-l-4 border-blue-500 pl-3.5">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
@@ -711,10 +642,10 @@
             <button type="button" onclick="FPS.scrollRow('track-cinema', 1)" aria-label="Scroll right" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-blue-500 border border-white/15 flex items-center justify-center transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
           </div>
         </div>
-        <div id="track-cinema" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
+        <div id="track-cinema" class="flex gap-4 overflow-x-auto no-scrollbar py-2"></div>
       </section>
 
-      <section id="row-shooters" class="space-y-3.5">
+      <section id="row-shooters" class="catalog-row space-y-3">
         <div class="flex items-center justify-between border-l-4 border-emerald-500 pl-3.5">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
@@ -728,10 +659,10 @@
             <button type="button" onclick="FPS.scrollRow('track-shooters', 1)" aria-label="Scroll right" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-emerald-500 border border-white/15 flex items-center justify-center transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
           </div>
         </div>
-        <div id="track-shooters" class="flex gap-4 overflow-x-auto no-scrollbar py-3"></div>
+        <div id="track-shooters" class="flex gap-4 overflow-x-auto no-scrollbar py-2"></div>
       </section>
 
-      <div id="dynamicRowsContainer" class="space-y-12"></div>
+      <div id="dynamicRowsContainer" class="space-y-11"></div>
 
       <div id="endlessSentinel" class="py-6 text-center">
         <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass-panel font-mono text-[11px] uppercase tracking-wider text-neutral-300">
@@ -743,18 +674,18 @@
   </main>
 
   <!-- ===================================================================== -->
-  <!-- 6. GAME REVIEW & SPECS THEATER MODAL                                  -->
+  <!-- 6. GAME REVIEW & SPECS THEATER MODAL (WITH TOP-RIGHT RATING GAUGE)    -->
   <!-- ===================================================================== -->
-  <div id="reviewModal" class="fixed inset-0 z-[120] hidden bg-black/90 backdrop-blur-xl overflow-y-auto">
+  <div id="reviewModal" class="modal-backdrop fixed inset-0 z-[120] hidden overflow-y-auto">
     <div class="min-h-screen px-2 sm:px-5 py-5 sm:py-8 flex items-center justify-center">
-      <div class="relative w-full max-w-5xl glass-panel rounded-2xl overflow-hidden shadow-[0_32px_100px_rgba(0,0,0,0.95)]">
-        <button type="button" onclick="FPS.closeModal()" aria-label="Close modal" class="absolute top-3.5 right-3.5 z-30 w-9 h-9 rounded-full bg-black/80 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center transition">
+      <div class="relative w-full max-w-5xl glass-panel rounded-2xl overflow-hidden">
+        <button type="button" onclick="FPS.closeModal()" aria-label="Close modal" class="absolute top-3.5 right-3.5 z-30 w-9 h-9 rounded-full bg-black/85 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
         <!-- 16:9 Autoplaying Trailer Frame -->
         <div class="relative w-full aspect-video bg-black overflow-hidden">
-          <img id="modalPosterBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+          <img id="modalPosterBg" src="" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-40" />
           <iframe id="modalIframe" class="relative z-10 w-full h-full border-0" src="" title="Game Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           <button id="modalSoundBtn" type="button" onclick="FPS.toggleModalSound()" class="absolute bottom-3.5 right-3.5 z-20 px-4 py-2 rounded-full bg-black/85 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white font-mono text-[10px] font-bold tracking-widest uppercase transition">
             UNMUTE SOUND
@@ -762,22 +693,39 @@
         </div>
 
         <div class="p-5 sm:p-8 space-y-7">
-          <!-- Title, Badges & Primary Actions -->
-          <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 border-b border-white/10 pb-6">
-            <div class="space-y-2.5 min-w-0">
+          <!-- HEADER: Game Title & CTAs on Left + TOP-RIGHT LIVE COLOR-CODED RATING GAUGE -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-white/10 pb-6">
+            <div class="space-y-3 min-w-0 flex-1">
               <div class="flex flex-wrap items-center gap-2">
                 <span id="modalTierBadge" class="px-3 py-0.5 rounded text-xs font-black uppercase badge-peak">PEAK</span>
-                <span class="font-mono text-xs font-bold text-[#FFAB00] bg-black/70 border border-[#FFAB00]/55 px-2.5 py-0.5 rounded"><span id="modalScoreVal">9.7</span> / 10</span>
                 <span id="modalMetacritic" class="hidden font-mono text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-400/45 text-emerald-300">METACRITIC: 97</span>
                 <span id="modalEsrb" class="hidden font-condensed text-[11px] font-extrabold uppercase px-2 py-0.5 rounded bg-white/10 border border-white/15 text-neutral-200">MATURE 17+</span>
               </div>
               <h2 id="modalTitle" class="font-display text-4xl sm:text-6xl text-white leading-[0.94]">GAME TITLE</h2>
               <div id="modalGenres" class="flex flex-wrap gap-1.5"></div>
+              <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                <button id="modalWannaBtn" type="button" onclick="FPS.toggleModalWannaPlay()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-[#FFAB00]/20 border border-[#FFAB00]/70 text-white text-xs font-extrabold tracking-wider uppercase transition">+ WANNA PLAY</button>
+                <button type="button" onclick="FPS.openMediaHouseFromModal()" class="px-5 py-2.5 rounded-xl bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-xs tracking-wider uppercase transition">OPEN IN MEDIA HOUSE</button>
+              </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-              <button id="modalWannaBtn" type="button" onclick="FPS.toggleModalWannaPlay()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-[#FFAB00]/20 border border-[#FFAB00]/70 text-white text-xs font-extrabold tracking-wider uppercase transition">+ WANNA PLAY</button>
-              <button type="button" onclick="FPS.openMediaHouseFromModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#E50914] to-[#ff202b] hover:from-[#ff1e29] hover:to-[#ff3b45] text-white font-condensed italic font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(229,9,20,0.45)] transition">OPEN IN MEDIA HOUSE</button>
+            <!-- TOP-RIGHT LIVE COLOR-CODED SVG RATING RING GAUGE -->
+            <div id="topRatingGaugeCard" class="top-rating-card shrink-0 rounded-2xl px-4 py-3.5 flex md:flex-col items-center gap-4 md:gap-2 md:min-w-[164px]">
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none" />
+                  <circle id="topGaugeRing" cx="60" cy="60" r="50" stroke="#FFD700" stroke-width="8" stroke-dasharray="314.16" stroke-dashoffset="9.42" stroke-linecap="round" fill="none" class="transition-all duration-200" />
+                  <circle id="topGaugeInner" cx="60" cy="60" r="39" stroke="#FFD700" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="5 6" fill="none" class="gauge-tech-ring" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span id="topGaugeScore" class="font-display text-4xl text-white leading-none">9.7</span>
+                  <span class="font-mono text-[9px] text-neutral-400 uppercase">/ 10</span>
+                </div>
+              </div>
+              <div class="flex flex-col md:items-center text-left md:text-center gap-1">
+                <span id="topGaugeSource" class="font-mono text-[10px] font-bold tracking-[0.14em] uppercase text-neutral-300">FPS CONSENSUS</span>
+                <span id="topGaugeTier" class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase badge-peak">PEAK</span>
+              </div>
             </div>
           </div>
 
@@ -820,20 +768,20 @@
           </div>
 
           <!-- ============================================================= -->
-          <!-- COLOR-MORPHING REVIEW STUDIO WITH WEB AUDIO SFX               -->
+          <!-- COLOR-MORPHING REVIEW STUDIO WITH DEDUPED FIRESTORE SYNC      -->
           <!-- ============================================================= -->
           <div id="reviewStudioShell" class="review-studio-shell rounded-2xl p-5 sm:p-7 space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div>
                 <h3 class="font-display text-3xl sm:text-4xl text-white tracking-wide leading-none">FPS REVIEW STUDIO</h3>
-                <p class="text-xs text-neutral-300 mt-1">Drag the color-morphing slider for tactile audio feedback &amp; publish your verdict</p>
+                <p class="text-xs text-neutral-300 mt-1">One verified review per user per game &mdash; drag the slider to rate</p>
               </div>
               <div class="flex items-center gap-2.5 flex-wrap">
                 <button id="sfxToggleBtn" type="button" onclick="FPS.toggleSfx()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 font-mono text-[10px] font-bold uppercase tracking-wider text-[#FFAB00] flex items-center gap-1.5 transition">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                   <span id="sfxToggleLabel">SFX ON</span>
                 </button>
-                <div class="flex items-center gap-2.5 bg-black/55 border border-white/15 px-3.5 py-1.5 rounded-xl">
+                <div class="flex items-center gap-2.5 bg-black/60 border border-white/15 px-3.5 py-1.5 rounded-xl">
                   <span class="font-mono text-[10px] uppercase text-neutral-400">COMMUNITY AVG</span>
                   <span id="communityAvgScore" class="font-display text-2xl text-[#FFAB00] leading-none">9.7</span>
                   <span id="communityReviewCount" class="font-mono text-[10px] text-neutral-400">(0)</span>
@@ -841,65 +789,62 @@
               </div>
             </div>
 
-            <!-- Strict Google Sign-In Gate -->
-            <div id="reviewLockedGate" class="rounded-xl bg-black/45 border border-white/12 p-7 text-center space-y-3.5">
-              <div class="w-12 h-12 rounded-full bg-[#E50914]/20 border border-[#E50914]/65 text-[#E50914] flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(229,9,20,0.4)]">
+            <!-- Strict Login Gate -->
+            <div id="reviewLockedGate" class="rounded-xl bg-black/50 border border-white/12 p-7 text-center space-y-3.5">
+              <div class="w-12 h-12 rounded-full bg-[#E50914]/20 border border-[#E50914]/65 text-[#E50914] flex items-center justify-center mx-auto">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
               </div>
-              <h4 class="font-display text-2xl tracking-wide text-white">SIGN IN WITH GOOGLE TO RATE &amp; REVIEW</h4>
-              <p class="text-xs text-neutral-400 max-w-sm mx-auto">Unlock the color-morphing Review Studio and save your scores directly to the FPS community database.</p>
-              <button type="button" onclick="FPS.openAuthModal()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#E50914] to-[#ff202b] hover:from-[#ff1e29] hover:to-[#ff3b45] text-white font-condensed italic font-black text-xs tracking-widest uppercase shadow-[0_0_20px_rgba(229,9,20,0.45)] transition">
-                SIGN IN WITH GOOGLE
+              <h4 class="font-display text-2xl tracking-wide text-white">SIGN IN TO RATE &amp; REVIEW</h4>
+              <p class="text-xs text-neutral-400 max-w-sm mx-auto">Sign in with Google or Email to unlock the Review Studio and sync your verdict to the community database.</p>
+              <button type="button" onclick="FPS.openAuthModal()" class="px-6 py-2.5 rounded-xl bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-xs tracking-widest uppercase transition">
+                SIGN IN NOW
               </button>
             </div>
 
             <!-- Unlocked Dual-Ring Reactive Gauge & Color-Morphing Slider -->
             <div id="reviewUnlockedForm" class="hidden space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                <!-- Dual-Ring Animated SVG Circular Gauge -->
                 <div class="md:col-span-4 flex flex-col items-center justify-center">
-                  <div class="relative w-44 h-44 flex items-center justify-center">
-                    <svg class="w-full h-full -rotate-90 drop-shadow-[0_0_18px_var(--slider-glow)]" viewBox="0 0 120 120">
+                  <div class="relative w-40 h-40 flex items-center justify-center">
+                    <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
                       <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.08)" stroke-width="8" fill="none" />
                       <circle id="gaugeOuterRing" cx="60" cy="60" r="50" stroke="#3B82F6" stroke-width="8" stroke-dasharray="314.16" stroke-dashoffset="31.42" stroke-linecap="round" fill="none" class="transition-all duration-150" />
                       <circle id="gaugeInnerRing" cx="60" cy="60" r="39" stroke="#3B82F6" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="5 6" fill="none" class="gauge-tech-ring" />
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-3">
-                      <span id="gaugeScoreNum" class="font-display text-5xl text-white leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">9.0</span>
+                      <span id="gaugeScoreNum" class="font-display text-5xl text-white leading-none">9.0</span>
                       <span id="gaugeTierPill" class="mt-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase badge-cinema">ABSOLUTE CINEMA</span>
                     </div>
                   </div>
                   <p id="gaugeTagline" class="font-mono text-[11px] font-bold uppercase tracking-wider text-blue-300 mt-2 text-center">Cinematic Storytelling Masterclass</p>
                 </div>
 
-                <!-- Color-Morphing Slider + Floating Bubble + Tier Quick-Picks -->
                 <div class="md:col-span-8 space-y-4">
                   <div class="neon-slider-wrap">
                     <div id="sliderFloatingBubble" class="neon-slider-bubble">9.0</div>
                     <input id="reviewSlider" type="range" min="0" max="10" step="0.1" value="9.0" class="fps-color-slider" />
-                    <div class="flex justify-between font-mono text-[10px] text-neutral-400 mt-2.5 px-0.5 select-none">
+                    <div class="flex justify-between font-mono text-[10px] text-neutral-400 mt-2 px-0.5 select-none">
                       <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
                     </div>
                   </div>
 
-                  <!-- Exact 5-Zone Preset Pills -->
                   <div class="flex flex-wrap gap-2">
-                    <button type="button" onclick="FPS.setPresetScore(3.5)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-trash hover:scale-105 transition">TRASH CAN</button>
-                    <button type="button" onclick="FPS.setPresetScore(6.0)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-cantry hover:scale-105 transition">CAN TRY</button>
-                    <button type="button" onclick="FPS.setPresetScore(8.0)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-shouldplay hover:scale-105 transition">SHOULD PLAY</button>
-                    <button type="button" onclick="FPS.setPresetScore(9.2)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-cinema hover:scale-105 transition">ABSOLUTE CINEMA</button>
-                    <button type="button" onclick="FPS.setPresetScore(9.8)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-peak hover:scale-105 transition">PEAK</button>
+                    <button type="button" onclick="FPS.setPresetScore(3.5)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-trash">TRASH CAN</button>
+                    <button type="button" onclick="FPS.setPresetScore(6.0)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-cantry">CAN TRY</button>
+                    <button type="button" onclick="FPS.setPresetScore(8.0)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-shouldplay">SHOULD PLAY</button>
+                    <button type="button" onclick="FPS.setPresetScore(9.2)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-cinema">ABSOLUTE CINEMA</button>
+                    <button type="button" onclick="FPS.setPresetScore(9.8)" class="px-3 py-1 rounded-lg text-[11px] font-black uppercase badge-peak">PEAK</button>
                   </div>
 
                   <textarea id="reviewTextarea" rows="3" placeholder="Write your verdict on gameplay, narrative, visuals, and performance..."
                     class="w-full bg-black/60 border border-white/15 focus:border-[#FFAB00] rounded-xl p-3.5 text-sm text-white placeholder-neutral-500 outline-none"></textarea>
 
-                  <div class="flex items-center gap-3">
-                    <button id="reviewSubmitBtn" type="button" onclick="FPS.publishReview()" class="px-7 py-2.5 rounded-xl bg-gradient-to-r from-[#E50914] to-[#ff202b] hover:from-[#ff1e29] hover:to-[#ff3b45] text-white font-condensed italic font-black text-xs tracking-widest uppercase shadow-[0_0_20px_rgba(229,9,20,0.5)] transition">
+                  <div class="flex flex-wrap items-center gap-3">
+                    <button id="reviewSubmitBtn" type="button" onclick="FPS.publishReview()" class="px-7 py-2.5 rounded-xl bg-[#E50914] hover:bg-[#ff1e29] disabled:opacity-50 disabled:cursor-not-allowed text-white font-condensed italic font-black text-xs tracking-widest uppercase transition">
                       PUBLISH VERDICT
                     </button>
-                    <button id="reviewCancelEditBtn" type="button" onclick="FPS.cancelEditReview()" class="hidden px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold uppercase transition">
-                      CANCEL EDIT
+                    <button id="reviewDeleteMineBtn" type="button" onclick="FPS.deleteMyReview()" class="hidden px-4 py-2.5 rounded-xl bg-white/10 hover:bg-red-600 text-xs font-mono font-bold uppercase text-red-300 hover:text-white transition">
+                      DELETE MY REVIEW
                     </button>
                   </div>
                 </div>
@@ -924,11 +869,10 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- 7. NETFLIX-GRADE FULLSCREEN "FPS MEDIA HOUSE"                         -->
+  <!-- 7. NETFLIX-STYLE FULLSCREEN "FPS MEDIA HOUSE"                         -->
   <!-- ===================================================================== -->
-  <section id="media-house-view" class="fixed inset-0 z-[130] hidden bg-[#050508] overflow-y-auto">
-    <!-- Sticky Top Header + Inline Media House Search + Quick-Switch Poster Strip -->
-    <div class="sticky top-0 z-40 bg-[#050508]/94 backdrop-blur-2xl border-b border-white/10">
+  <section id="media-house-view" class="fixed inset-0 z-[130] hidden bg-[#06060A] overflow-y-auto">
+    <div class="nav-shell sticky top-0 z-40 border-b border-white/10">
       <div class="max-w-[1600px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3 shrink-0">
           <button type="button" onclick="FPS.closeMediaHouse()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/15 text-xs font-black tracking-wider uppercase flex items-center gap-1.5 transition">
@@ -941,12 +885,11 @@
           </div>
         </div>
 
-        <!-- Inline Media House Game Search Filter -->
         <div class="relative flex items-center w-44 sm:w-72">
           <svg class="w-3.5 h-3.5 text-neutral-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" /><path stroke-linecap="round" d="M21 21l-4.35-4.35" />
           </svg>
-          <input id="mhSearchInput" type="text" autocomplete="off" placeholder="Filter games in Media House..."
+          <input id="mhSearchInput" type="text" autocomplete="off" placeholder="Filter games..."
             oninput="FPS.filterMhStrip(this.value)"
             class="h-9 w-full bg-white/[0.08] focus:bg-[#0D0D16] border border-white/15 focus:border-[#FFAB00] rounded-full pl-8 pr-7 text-xs text-white placeholder-neutral-400 outline-none transition" />
           <button id="mhSearchClearBtn" type="button" onclick="FPS.clearMhSearch()" aria-label="Clear filter" class="hidden absolute right-2 w-5 h-5 rounded-full bg-white/15 hover:bg-[#E50914] text-white flex items-center justify-center transition">
@@ -955,45 +898,40 @@
         </div>
       </div>
 
-      <!-- High-Res Horizontal Quick-Switch Game Poster Strip -->
-      <div class="border-t border-white/[0.06] bg-black/55">
+      <div class="border-t border-white/[0.06] bg-black/60">
         <div id="mhQuickStrip" class="max-w-[1600px] mx-auto px-4 sm:px-8 py-2.5 flex gap-3 overflow-x-auto no-scrollbar"></div>
       </div>
     </div>
 
-    <!-- Full-Bleed Ambient Blurred Poster Cinema Stage -->
     <div class="relative overflow-hidden border-b border-white/10">
-      <img id="mhAmbientBg" src="" alt="" class="mh-ambient-img opacity-90" />
-      <div class="absolute inset-0 bg-gradient-to-b from-[#050508]/65 via-[#050508]/58 to-[#050508] pointer-events-none"></div>
+      <img id="mhAmbientBg" src="" alt="" decoding="async" class="mh-ambient-img opacity-85" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#06060A]/65 via-[#06060A]/60 to-[#06060A] pointer-events-none"></div>
 
       <div class="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-8 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          <!-- Main 16:9 Cinema Stage + HUD Controls -->
           <div id="mhPlayerCol" class="lg:col-span-8 flex flex-col gap-4">
-            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/20 shadow-[0_28px_90px_rgba(0,0,0,0.95),0_0_44px_rgba(229,9,20,0.22)]">
-              <iframe id="mhIframe" class="w-full h-full border-0" src="" title="Media House Cinema Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/20">
+              <iframe id="mhIframe" class="w-full h-full border-0" src="" title="Media House Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-              <!-- Cinema Stage Floating HUD -->
-              <div class="absolute top-3.5 right-3.5 z-20 flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
-                <button type="button" onclick="FPS.mhPrevEp()" class="px-3 py-1.5 rounded-full bg-black/80 hover:bg-white/20 border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">PREV EPISODE</button>
-                <button type="button" onclick="FPS.mhNextEp()" class="px-3 py-1.5 rounded-full bg-[#E50914]/90 hover:bg-[#ff1e29] border border-[#E50914] text-white font-mono text-[10px] font-bold uppercase transition">NEXT EPISODE</button>
-                <button id="mhAutoplayBtn" type="button" onclick="FPS.toggleMhAutoplay()" class="px-3 py-1.5 rounded-full bg-[#FFAB00]/20 hover:bg-[#FFAB00]/35 border border-[#FFAB00]/75 text-[#FFAB00] font-mono text-[10px] font-bold uppercase transition">AUTOPLAY NEXT: ON</button>
-                <button type="button" onclick="FPS.toggleMhWide()" class="hidden lg:inline-flex px-3 py-1.5 rounded-full bg-black/80 hover:bg-[#FFAB00] hover:text-black border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">
+              <div class="absolute top-3 right-3 z-20 flex flex-wrap items-center justify-end gap-1.5">
+                <button type="button" onclick="FPS.mhPrevEp()" class="px-2.5 py-1.5 rounded-full bg-black/85 hover:bg-white/20 border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">PREV</button>
+                <button type="button" onclick="FPS.mhNextEp()" class="px-2.5 py-1.5 rounded-full bg-[#E50914] hover:bg-[#ff1e29] border border-[#E50914] text-white font-mono text-[10px] font-bold uppercase transition">NEXT</button>
+                <button id="mhAutoplayBtn" type="button" onclick="FPS.toggleMhAutoplay()" class="px-2.5 py-1.5 rounded-full bg-black/85 border border-[#FFAB00]/70 text-[#FFAB00] font-mono text-[10px] font-bold uppercase transition">AUTOPLAY: ON</button>
+                <button type="button" onclick="FPS.toggleMhWide()" class="hidden lg:inline-flex px-2.5 py-1.5 rounded-full bg-black/85 hover:bg-[#FFAB00] hover:text-black border border-white/20 text-white font-mono text-[10px] font-bold uppercase transition">
                   <span id="mhWideLabel">THEATER WIDE</span>
                 </button>
-                <button id="mhSoundBtn" type="button" onclick="FPS.toggleMhSound()" class="px-3.5 py-1.5 rounded-full bg-black/85 hover:bg-[#FFAB00] hover:text-black border border-[#FFAB00]/60 text-[#FFAB00] font-mono text-[10px] font-bold uppercase transition">
+                <button id="mhSoundBtn" type="button" onclick="FPS.toggleMhSound()" class="px-3 py-1.5 rounded-full bg-black/85 hover:bg-[#FFAB00] hover:text-black border border-[#FFAB00]/60 text-[#FFAB00] font-mono text-[10px] font-bold uppercase transition">
                   UNMUTE
                 </button>
               </div>
             </div>
 
-            <!-- Now Playing Cinema Info Bar -->
             <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div class="flex items-start gap-3.5 min-w-0">
-                <img id="mhGameThumb" src="" alt="" class="w-20 h-14 rounded-xl object-cover border border-white/20 bg-black shrink-0" />
+                <img id="mhGameThumb" src="" alt="" decoding="async" class="w-20 h-14 rounded-xl object-cover border border-white/20 bg-black shrink-0" />
                 <div class="min-w-0 space-y-1">
                   <div class="flex flex-wrap items-center gap-2">
-                    <span id="mhEpTag" class="px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[10px] font-bold uppercase inline-flex items-center gap-1.5">
+                    <span class="px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[10px] font-bold uppercase inline-flex items-center gap-1.5">
                       <span class="eq-bars"><span></span><span></span><span></span></span>
                       <span id="mhEpTagText">EPISODE 01</span>
                     </span>
@@ -1011,8 +949,7 @@
             </div>
           </div>
 
-          <!-- Right Sidebar: UP NEXT — EPISODES Dock -->
-          <aside id="mhUpNextCol" class="lg:col-span-4 glass-panel rounded-2xl overflow-hidden flex flex-col max-h-[600px]">
+          <aside id="mhUpNextCol" class="lg:col-span-4 glass-panel rounded-2xl overflow-hidden flex flex-col max-h-[580px]">
             <div class="p-4 border-b border-white/10 flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="w-1.5 h-5 rounded-full bg-[#E50914]"></span>
@@ -1026,9 +963,9 @@
       </div>
     </div>
 
-    <!-- Smooth Animated 3-Tab Segmented Navigation -->
+    <!-- 3-Tab Navigation -->
     <div class="max-w-[1600px] mx-auto px-4 sm:px-8 py-8 space-y-6">
-      <div class="flex items-center gap-8 border-b border-white/12 overflow-x-auto no-scrollbar text-xs font-extrabold tracking-[0.16em] uppercase">
+      <div class="flex items-center gap-7 border-b border-white/12 overflow-x-auto no-scrollbar text-xs font-extrabold tracking-[0.16em] uppercase">
         <button id="mhTab-episodes" type="button" onclick="FPS.switchMhTab('episodes')" class="mh-tab-btn is-active pb-3.5 text-neutral-400 hover:text-white whitespace-nowrap flex items-center gap-2">
           <span>EPISODES &amp; MISSIONS</span>
           <span id="mhTabEpCount" class="font-mono text-[10px] px-2 py-0.5 rounded bg-white/10 text-neutral-200">0</span>
@@ -1044,7 +981,7 @@
         </button>
       </div>
 
-      <!-- TAB 1: EPISODES & MISSIONS WITH CREATOR PLAYTHROUGH SWITCHER -->
+      <!-- TAB 1: EPISODES -->
       <div id="mhPane-episodes" class="space-y-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -1068,21 +1005,26 @@
         <div id="mhCreatorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
       </div>
 
-      <!-- TAB 3: 50+ 4K SCREENSHOTS -->
-      <div id="mhPane-screenshots" class="hidden space-y-4">
+      <!-- TAB 3: CHUNKED LAZY 50+ 4K SCREENSHOTS -->
+      <div id="mhPane-screenshots" class="hidden space-y-5">
         <div class="glass-panel rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
           <span id="mhShotsTotalLabel" class="font-mono text-xs font-bold text-black bg-[#FFAB00] px-3 py-1 rounded-lg uppercase">50+ HD CAPTURES</span>
-          <span class="text-xs text-neutral-300">Tap any frame to open the fullscreen swipeable Lightbox or click Download HD.</span>
+          <span class="text-xs text-neutral-300">Tap any frame for fullscreen Lightbox or click Download HD.</span>
         </div>
         <div id="mhShotsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5"></div>
+        <div id="mhShotsLoadMoreWrap" class="hidden text-center pt-2">
+          <button type="button" onclick="FPS.loadMoreMhShots()" class="px-6 py-2.5 rounded-xl bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/20 font-mono text-xs font-bold uppercase tracking-wider transition">
+            LOAD MORE SCREENSHOTS
+          </button>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ===================================================================== -->
-  <!-- 8. FULLSCREEN SWIPEABLE PREV/NEXT HD SCREENSHOT LIGHTBOX              -->
+  <!-- 8. FULLSCREEN SWIPEABLE LIGHTBOX                                      -->
   <!-- ===================================================================== -->
-  <div id="lightbox" class="fixed inset-0 z-[185] hidden bg-black/95 backdrop-blur-2xl flex-col items-center justify-center p-4 select-none">
+  <div id="lightbox" class="fixed inset-0 z-[185] hidden bg-black/95 flex-col items-center justify-center p-4 select-none">
     <div class="absolute top-4 inset-x-4 flex items-center justify-between max-w-6xl mx-auto">
       <span id="lbCounter" class="font-mono text-xs font-bold text-neutral-200 bg-white/10 border border-white/15 px-3.5 py-1.5 rounded-full">1 / 50</span>
       <div class="flex items-center gap-2">
@@ -1095,18 +1037,17 @@
     <button type="button" onclick="FPS.stepLightbox(-1)" aria-label="Previous image" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/80 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
     </button>
-    <img id="lbImage" src="" alt="HD Screenshot" class="max-h-[82vh] max-w-[90vw] rounded-xl object-contain border border-white/20 shadow-2xl" />
+    <img id="lbImage" src="" alt="HD Screenshot" decoding="async" class="max-h-[82vh] max-w-[90vw] rounded-xl object-contain border border-white/20" />
     <button type="button" onclick="FPS.stepLightbox(1)" aria-label="Next image" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/80 hover:bg-[#E50914] border border-white/25 text-white flex items-center justify-center transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
     </button>
   </div>
 
   <!-- ===================================================================== -->
-  <!-- 9. UPGRADED WANNA PLAY HUB & SLIDE-OVER DRAWER                        -->
+  <!-- 9. WANNA PLAY HUB & SLIDE-OVER DRAWER                                 -->
   <!-- ===================================================================== -->
-  <div id="wannaPlayBackdrop" onclick="FPS.closeWannaPlayDrawer()" class="fixed inset-0 z-[135] hidden bg-black/75 backdrop-blur-sm"></div>
-  <aside id="wannaPlayDrawer" class="wanna-drawer-shell fixed inset-y-0 right-0 z-[140] w-full max-w-md border-l border-[#FFAB00]/30 shadow-[-20px_0_70px_rgba(0,0,0,0.9)] translate-x-full transition-transform duration-300 flex flex-col">
-    <!-- Top Header -->
+  <div id="wannaPlayBackdrop" onclick="FPS.closeWannaPlayDrawer()" class="fixed inset-0 z-[135] hidden bg-black/75"></div>
+  <aside id="wannaPlayDrawer" class="wanna-drawer-shell fixed inset-y-0 right-0 z-[140] w-full max-w-md border-l border-[#FFAB00]/30 translate-x-full transition-transform duration-300 flex flex-col">
     <div class="p-5 border-b border-white/10 space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2.5">
@@ -1118,11 +1059,10 @@
         </button>
       </div>
 
-      <!-- Queue Stats Bar (Total, Avg Score, Pinned Priority) -->
       <div class="grid grid-cols-3 gap-2">
         <div class="rounded-xl bg-white/[0.05] border border-white/10 p-2.5 text-center">
           <div id="wpStatTotal" class="font-display text-2xl text-white leading-none">0</div>
-          <div class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-1">TOTAL GAMES</div>
+          <div class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-1">TOTAL</div>
         </div>
         <div class="rounded-xl bg-white/[0.05] border border-white/10 p-2.5 text-center">
           <div id="wpStatAvg" class="font-display text-2xl text-[#FFAB00] leading-none">0.0</div>
@@ -1134,7 +1074,6 @@
         </div>
       </div>
 
-      <!-- Filter Pills + Sort Toggle -->
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div id="wpFilterPills" class="flex flex-wrap gap-1.5"></div>
         <button id="wpSortBtn" type="button" onclick="FPS.toggleWannaSort()" class="px-2.5 py-1 rounded-lg bg-white/[0.07] hover:bg-white/15 border border-white/15 font-mono text-[10px] font-bold uppercase text-[#FFAB00] transition">
@@ -1143,10 +1082,8 @@
       </div>
     </div>
 
-    <!-- Rich Queue Cards / Empty Quick-Add State -->
     <div id="drawerWannaList" class="flex-grow overflow-y-auto p-4 space-y-3"></div>
 
-    <!-- Footer Clear All -->
     <div class="p-4 border-t border-white/10 bg-black/55">
       <button type="button" onclick="FPS.clearWannaPlay()" class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-[#E50914]/25 border border-white/15 hover:border-[#E50914] text-xs font-mono font-bold uppercase tracking-wider text-neutral-300 hover:text-white transition">
         CLEAR ALL QUEUE
@@ -1155,24 +1092,30 @@
   </aside>
 
   <!-- ===================================================================== -->
-  <!-- 10. GOOGLE SIGN-IN MODAL                                              -->
+  <!-- 10. AUTH MODAL (GOOGLE SIGN-IN + EMAIL/PASSWORD SAFARI FALLBACK)      -->
   <!-- ===================================================================== -->
-  <div id="authModal" class="fixed inset-0 z-[170] hidden bg-black/85 backdrop-blur-md items-center justify-center p-4">
-    <div class="relative w-full max-w-md glass-panel rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl">
+  <div id="authModal" class="modal-backdrop fixed inset-0 z-[170] hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="relative w-full max-w-md glass-panel rounded-2xl p-6 sm:p-8 space-y-5 my-auto">
       <button type="button" onclick="FPS.closeAuthModal()" aria-label="Close sign in" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-[#E50914] text-white flex items-center justify-center transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
       </button>
-      <div class="text-center space-y-2.5">
-        <svg viewBox="0 0 440 280" class="w-24 h-auto mx-auto drop-shadow-[0_0_18px_rgba(255,171,0,0.5)]" aria-label="FPS">
+
+      <div class="text-center space-y-2">
+        <svg viewBox="0 0 440 280" class="w-20 h-auto mx-auto" aria-label="FPS">
           <rect x="8" y="8" width="424" height="264" rx="44" fill="#FFAB00" stroke="#FFAB00" stroke-width="6" />
           <rect x="22" y="22" width="396" height="236" rx="34" fill="#FFAB00" stroke="#050508" stroke-width="12" />
           <text x="60" y="172" fill="#050508" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-style="italic" font-size="148" letter-spacing="-4">FPS</text>
           <polygon points="322,116 337,159 382,159 345,186 359,230 322,203 285,230 299,186 262,159 307,159" fill="#FFFFFF" stroke="#050508" stroke-width="12" />
         </svg>
         <h3 class="font-display text-3xl text-white tracking-wide">SIGN IN TO FPS</h3>
-        <p class="text-xs text-neutral-300">Unlock the tactile Review Studio and sync your Wanna Play queue across all devices.</p>
+        <p class="text-xs text-neutral-300">Rate games, publish verdicts, and sync your Wanna Play queue.</p>
       </div>
-      <button type="button" onclick="FPS.signInGoogle()" class="w-full py-3 px-4 rounded-xl bg-white hover:bg-neutral-100 text-neutral-900 font-bold text-sm flex items-center justify-center gap-3 shadow-lg transition">
+
+      <!-- Crisp Inline Auth Error Banner (Displays exact hostname on unauthorized-domain) -->
+      <div id="authErrorBanner" class="hidden rounded-xl bg-red-950/90 border border-red-500/70 p-3 text-xs text-red-200 leading-relaxed"></div>
+
+      <!-- Synchronous Google Popup Sign-In -->
+      <button id="googleSignInBtn" type="button" onclick="FPS.signInGoogle()" class="w-full py-3 px-4 rounded-xl bg-white hover:bg-neutral-100 text-neutral-900 font-bold text-sm flex items-center justify-center gap-3 transition">
         <svg class="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -1181,7 +1124,31 @@
         </svg>
         <span>Continue with Google</span>
       </button>
-      <div class="text-center pt-3 border-t border-white/10 font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-400">
+
+      <div class="flex items-center gap-3">
+        <div class="h-px flex-grow bg-white/10"></div>
+        <span class="font-mono text-[10px] uppercase text-neutral-400">OR USE EMAIL &amp; PASSWORD</span>
+        <div class="h-px flex-grow bg-white/10"></div>
+      </div>
+
+      <!-- Mobile-Reliable Email & Password Sign-In / Sign-Up Toggle -->
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-1.5 bg-black/50 p-1 rounded-xl border border-white/10">
+          <button id="authModeLoginBtn" type="button" onclick="FPS.setAuthMode('login')" class="py-1.5 rounded-lg bg-[#E50914] text-white font-mono text-[11px] font-bold uppercase transition">SIGN IN</button>
+          <button id="authModeSignupBtn" type="button" onclick="FPS.setAuthMode('signup')" class="py-1.5 rounded-lg text-neutral-400 hover:text-white font-mono text-[11px] font-bold uppercase transition">CREATE ACCOUNT</button>
+        </div>
+
+        <form id="emailAuthForm" onsubmit="FPS.submitEmailAuth(event)" class="space-y-2.5">
+          <input id="authNameInput" type="text" placeholder="Display Name (e.g. Tanvir)" class="hidden w-full bg-black/60 border border-white/15 focus:border-[#FFAB00] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-500 outline-none" />
+          <input id="authEmailInput" type="email" required placeholder="Email address" class="w-full bg-black/60 border border-white/15 focus:border-[#FFAB00] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-500 outline-none" />
+          <input id="authPassInput" type="password" required minlength="6" placeholder="Password (min 6 chars)" class="w-full bg-black/60 border border-white/15 focus:border-[#FFAB00] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-500 outline-none" />
+          <button id="emailAuthSubmitBtn" type="submit" class="w-full py-2.5 rounded-xl bg-[#FFAB00] hover:bg-[#ffc038] text-black font-condensed italic font-black text-sm tracking-wider uppercase transition">
+            SIGN IN WITH EMAIL
+          </button>
+        </form>
+      </div>
+
+      <div class="text-center pt-2 border-t border-white/10 font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-400">
         CREATED &amp; ENGINEERED BY TANVIR HOSSAIN
       </div>
     </div>
@@ -1214,14 +1181,14 @@
   </footer>
 
   <!-- ===================================================================== -->
-  <!-- 12. COMPLETE APPLICATION ENGINE                                       -->
+  <!-- 12. CORE APPLICATION ENGINE                                           -->
   <!-- ===================================================================== -->
   <script>
     (function () {
       "use strict";
 
       /* ------------------------------------------------------------------- */
-      /* EXACT API KEYS & FIREBASE CONFIGURATION                             */
+      /* API KEYS & FIREBASE CONFIG                                          */
       /* ------------------------------------------------------------------- */
       const RAWG_API_KEY = "B42b5294e7ad4188a302096f92124fbe";
       const YT_API_KEY = "AIzaSyB64wc7E_iGjF0GwRdJo7E_5D-YgfiH_f4";
@@ -1236,7 +1203,7 @@
       };
 
       /* ------------------------------------------------------------------- */
-      /* 16 FLAGSHIP TITLES (ZERO HARDCODED RAWG IMAGE URLS)                 */
+      /* 16 CURATED FLAGSHIP TITLES (VERIFIED YT ARTWORK + RAWG SWAP)        */
       /* ------------------------------------------------------------------- */
       const FLAGSHIP_GAMES = [
         { shortId: "rdr2", slug: "red-dead-redemption-2", title: "Red Dead Redemption 2", trailerId: "eaW0tYpxyp0", score: 9.7, studio: "Rockstar Games", year: "2018", desc: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland." },
@@ -1267,11 +1234,10 @@
         { id: "dyn-action", title: "ACTION & SCI-FI", sub: "Explosive set-pieces & futuristic worlds", color: "#E50914", query: "genres=action&ordering=-metacritic&page_size=12" },
         { id: "dyn-rpg", title: "MASTERPIECE RPGS", sub: "Deep character progression & vast realms", color: "#FFAB00", query: "genres=role-playing-games-rpg&ordering=-metacritic&page_size=12" },
         { id: "dyn-shooters", title: "TACTICAL SHOOTERS", sub: "Precision gunplay & competitive combat", color: "#10B981", query: "genres=shooter&ordering=-metacritic&page_size=12" },
-        { id: "dyn-horror", title: "SURVIVAL HORROR", sub: "Atmospheric dread & relentless tension", color: "#EF4444", query: "tags=horror&ordering=-metacritic&page_size=12" },
-        { id: "dyn-adventure", title: "STORY ADVENTURES", sub: "Unforgettable narrative journeys", color: "#3B82F6", query: "genres=adventure&ordering=-metacritic&page_size=12" }
+        { id: "dyn-horror", title: "SURVIVAL HORROR", sub: "Atmospheric dread & relentless tension", color: "#EF4444", query: "tags=horror&ordering=-metacritic&page_size=12" }
       ];
 
-      const PLAYTHROUGH_CREATORS = ["ALL", "theRadBrad", "MKIceAndFire", "Shirrako", "Jacksepticeye", "Hollow"];
+      const PLAYTHROUGH_CREATORS = ["ALL", "theRadBrad", "MKIceAndFire", "Shirrako", "Jacksepticeye"];
       const WP_FILTERS = ["ALL", "PRIORITY", "ROCKSTAR", "PEAK 9.5+"];
 
       /* ------------------------------------------------------------------- */
@@ -1309,8 +1275,8 @@
           const gain = ctx.createGain();
           osc.type = "triangle";
           osc.frequency.setValueAtTime(freq, now);
-          osc.frequency.exponentialRampToValueAtTime(freq * 1.18, now + 0.024);
-          gain.gain.setValueAtTime(0.085, now);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.15, now + 0.024);
+          gain.gain.setValueAtTime(0.08, now);
           gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.032);
           osc.connect(gain).connect(ctx.destination);
           osc.start(now);
@@ -1337,14 +1303,14 @@
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = "sine";
-            const t = now + i * 0.032;
+            const t = now + i * 0.03;
             osc.frequency.setValueAtTime(f, t);
             gain.gain.setValueAtTime(0.001, t);
-            gain.gain.linearRampToValueAtTime(0.075, t + 0.015);
-            gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.24);
+            gain.gain.linearRampToValueAtTime(0.07, t + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.22);
             osc.connect(gain).connect(ctx.destination);
             osc.start(t);
-            osc.stop(t + 0.26);
+            osc.stop(t + 0.25);
           });
         },
 
@@ -1359,11 +1325,11 @@
             const t = now + i * 0.045;
             osc.frequency.setValueAtTime(f, t);
             gain.gain.setValueAtTime(0.001, t);
-            gain.gain.linearRampToValueAtTime(0.11, t + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.45);
+            gain.gain.linearRampToValueAtTime(0.1, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.42);
             osc.connect(gain).connect(ctx.destination);
             osc.start(t);
-            osc.stop(t + 0.48);
+            osc.stop(t + 0.45);
           });
         },
 
@@ -1377,9 +1343,9 @@
             const clack = ctx.createOscillator();
             const cGain = ctx.createGain();
             clack.type = "sawtooth";
-            clack.frequency.setValueAtTime(165, now);
-            clack.frequency.exponentialRampToValueAtTime(36, now + 0.14);
-            cGain.gain.setValueAtTime(0.42, now);
+            clack.frequency.setValueAtTime(160, now);
+            clack.frequency.exponentialRampToValueAtTime(34, now + 0.14);
+            cGain.gain.setValueAtTime(0.4, now);
             cGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
             clack.connect(cGain).connect(ctx.destination);
             clack.start(now);
@@ -1388,13 +1354,13 @@
             const boom = ctx.createOscillator();
             const bGain = ctx.createGain();
             boom.type = "triangle";
-            boom.frequency.setValueAtTime(98, now + 0.3);
-            boom.frequency.exponentialRampToValueAtTime(16, now + 1.05);
-            bGain.gain.setValueAtTime(0.85, now + 0.3);
-            bGain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+            boom.frequency.setValueAtTime(95, now + 0.28);
+            boom.frequency.exponentialRampToValueAtTime(16, now + 1.0);
+            bGain.gain.setValueAtTime(0.8, now + 0.28);
+            bGain.gain.exponentialRampToValueAtTime(0.001, now + 1.05);
             boom.connect(bGain).connect(ctx.destination);
-            boom.start(now + 0.3);
-            boom.stop(now + 1.12);
+            boom.start(now + 0.28);
+            boom.stop(now + 1.08);
           } catch {}
         }
       };
@@ -1403,11 +1369,13 @@
       /* APPLICATION STATE                                                   */
       /* ------------------------------------------------------------------- */
       let auth = null, db = null, currentUser = null;
-      let heroIdx = 0, heroTimer = null, heroVidTimer = null, heroMuted = true;
-      let activeModalGame = null, modalMuted = true, editingReviewId = null;
+      let authMode = "login";
+      let heroIdx = 0, heroTimer = null, heroVidTimer = null, heroMuted = true, heroInView = true;
 
+      let activeModalGame = null, modalMuted = true, isSubmittingReview = false;
       let mhGame = null, mhEpisodes = [], mhEpIdx = 0, mhMuted = true, mhWide = false, mhAutoplayNext = true;
       let mhCreators = [], mhLiveFilter = "ALL", mhEpCreator = "ALL", mhStripQuery = "";
+      let mhShotsVisibleCount = 18;
 
       let wpFilter = "ALL", wpSort = "recent";
       let lightboxList = [], lightboxIdx = 0;
@@ -1419,7 +1387,7 @@
       let wannaPlay = loadLocalJSON("fps_wanna_play", []);
 
       /* ------------------------------------------------------------------- */
-      /* HELPERS, CACHING & PRELOADER                                        */
+      /* UTILITIES                                                           */
       /* ------------------------------------------------------------------- */
       function esc(str) {
         return String(str == null ? "" : str)
@@ -1437,23 +1405,23 @@
         if (!box) return;
         const el = document.createElement("div");
         const border = type === "error" ? "border-red-500/80" : type === "gold" ? "border-[#FFAB00]/85" : "border-white/25";
-        el.className = `pointer-events-auto px-4 py-2.5 rounded-xl glass-panel border ${border} text-xs font-semibold text-white shadow-2xl transition-all duration-300`;
+        el.className = `pointer-events-auto px-4 py-2.5 rounded-xl bg-[#0D0D16] border ${border} text-xs font-semibold text-white shadow-xl transition-opacity duration-250`;
         el.textContent = msg;
         box.appendChild(el);
-        setTimeout(() => { el.style.opacity = "0"; setTimeout(() => el.remove(), 300); }, 2800);
+        setTimeout(() => { el.style.opacity = "0"; setTimeout(() => el.remove(), 260); }, 2800);
       }
 
       async function fetchCached(url, signal) {
         if (memCache.has(url)) return memCache.get(url);
         try {
-          const ss = sessionStorage.getItem("fps_v4_" + url);
+          const ss = sessionStorage.getItem("fps_v5_" + url);
           if (ss) { const parsed = JSON.parse(ss); memCache.set(url, parsed); return parsed; }
         } catch {}
         const res = await fetch(url, signal ? { signal } : undefined);
         if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         memCache.set(url, data);
-        try { sessionStorage.setItem("fps_v4_" + url, JSON.stringify(data)); } catch {}
+        try { sessionStorage.setItem("fps_v5_" + url, JSON.stringify(data)); } catch {}
         return data;
       }
 
@@ -1472,31 +1440,6 @@
         return `onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${safe}';}else{this.onerror=null;this.src='https://placehold.co/640x360/0E0E16/FFAB00?text=FPS';}"`;
       }
 
-      /* ------------------------------------------------------------------- */
-      /* EXACT 5-ZONE SLIDER COLORS + ROCKSTAR BADGE OVERRIDES               */
-      /* ------------------------------------------------------------------- */
-      // Used strictly for the Rating Slider so colors ALWAYS morph 0.0 -> 10.0 on EVERY game
-      function getSliderZone(score) {
-        const s = Number(score) || 0;
-        if (s >= 9.5) return { label: "PEAK", cls: "badge-peak", color: "#FFD700", glow: "rgba(255, 215, 0, 0.55)", tagline: "Hall of Fame Masterpiece" };
-        if (s >= 9.0) return { label: "ABSOLUTE CINEMA", cls: "badge-cinema", color: "#3B82F6", glow: "rgba(59, 130, 246, 0.52)", tagline: "Cinematic Storytelling Masterclass" };
-        if (s >= 7.0) return { label: "SHOULD PLAY", cls: "badge-shouldplay", color: "#10B981", glow: "rgba(16, 185, 129, 0.5)", tagline: "Strong Must-Play Experience" };
-        if (s >= 5.0) return { label: "CAN TRY", cls: "badge-cantry", color: "#EC4899", glow: "rgba(236, 72, 153, 0.5)", tagline: "Decent Pick on Sale" };
-        return { label: "TRASH CAN", cls: "badge-trash", color: "#EF4444", glow: "rgba(239, 68, 68, 0.55)", tagline: "Unplayable Disaster" };
-      }
-
-      // Used for Game Cards, Hero Billboard, Media House, and Published Badges (with Rockstar overrides)
-      function computeTier(score, title) {
-        const t = String(title || "").toLowerCase();
-        if (t.includes("red dead redemption")) {
-          return { label: "ABSOLUTE RDR", cls: "badge-rdr", color: "#FFAB00", glow: "rgba(229,9,20,0.55)" };
-        }
-        if (t.includes("grand theft auto") || t.includes("gta")) {
-          return { label: "ABSOLUTE GTA", cls: "badge-gta", color: "#34D399", glow: "rgba(16,185,129,0.5)" };
-        }
-        return getSliderZone(score);
-      }
-
       function formatDate(iso) {
         if (!iso) return "TBA";
         const d = new Date(iso);
@@ -1505,46 +1448,114 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* FIREBASE AUTH & CLOUD SYNC                                          */
+      /* UNIFIED 5-ZONE COLOR SYSTEM + ROCKSTAR OVERRIDES                    */
+      /* ------------------------------------------------------------------- */
+      function getSliderZone(score) {
+        const s = Number(score) || 0;
+        if (s >= 9.5) return { label: "PEAK", cls: "badge-peak", color: "#FFD700", glow: "rgba(255, 215, 0, 0.48)", tagline: "Hall of Fame Masterpiece" };
+        if (s >= 9.0) return { label: "ABSOLUTE CINEMA", cls: "badge-cinema", color: "#3B82F6", glow: "rgba(59, 130, 246, 0.45)", tagline: "Cinematic Storytelling Masterclass" };
+        if (s >= 7.0) return { label: "SHOULD PLAY", cls: "badge-shouldplay", color: "#10B981", glow: "rgba(16, 185, 129, 0.45)", tagline: "Strong Must-Play Experience" };
+        if (s >= 5.0) return { label: "CAN TRY", cls: "badge-cantry", color: "#EC4899", glow: "rgba(236, 72, 153, 0.45)", tagline: "Decent Pick on Sale" };
+        return { label: "TRASH CAN", cls: "badge-trash", color: "#EF4444", glow: "rgba(239, 68, 68, 0.48)", tagline: "Unplayable Disaster" };
+      }
+
+      function computeTier(score, title) {
+        const t = String(title || "").toLowerCase();
+        if (t.includes("red dead redemption")) {
+          return { label: "ABSOLUTE RDR", cls: "badge-rdr", color: "#FFAB00", glow: "rgba(229, 9, 20, 0.5)" };
+        }
+        if (t.includes("grand theft auto") || t.includes("gta")) {
+          return { label: "ABSOLUTE GTA", cls: "badge-gta", color: "#00FF66", glow: "rgba(0, 255, 102, 0.45)" };
+        }
+        return getSliderZone(score);
+      }
+
+      /* ------------------------------------------------------------------- */
+      /* 3. FIXED FIREBASE AUTH (SYNC POPUP + REDIRECT RESULT + EMAIL AUTH)  */
       /* ------------------------------------------------------------------- */
       function initFirebase() {
         try {
-          if (typeof firebase === "undefined") return;
+          if (typeof firebase === "undefined") {
+            setTimeout(initFirebase, 250);
+            return;
+          }
           if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
           auth = firebase.auth();
           db = firebase.firestore();
+
+          // Persist login cleanly across reloads on iOS/Android Safari
+          auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+
+          // Handle redirect sign-in result if returning from mobile redirect
+          auth.getRedirectResult()
+            .then((res) => {
+              if (res && res.user) {
+                closeAuthModal();
+                showToast(`Welcome back, ${res.user.displayName || "Player"}`, "gold");
+              }
+            })
+            .catch((err) => {
+              if (err && err.code) displayAuthError(err);
+            });
 
           auth.onAuthStateChanged(async (user) => {
             currentUser = user;
             renderNavAuth();
             updateReviewAuthGate();
             if (user) {
+              closeAuthModal();
               await syncWannaPlayFromCloud();
               if (activeModalGame) loadCommunityReviews(activeModalGame);
             }
           });
         } catch (err) {
-          console.warn("Firebase fallback mode:", err);
+          console.warn("Firebase init fallback:", err);
         }
+      }
+
+      function displayAuthError(err) {
+        const banner = document.getElementById("authErrorBanner");
+        if (!banner) return;
+        const code = (err && err.code) || "";
+        const host = window.location.hostname || "this domain";
+        let msg = (err && err.message) || "Authentication failed. Please try again.";
+
+        if (code === "auth/unauthorized-domain") {
+          msg = `Domain "${host}" is not authorized in Firebase Auth. Add "${host}" under Firebase Console -> Authentication -> Settings -> Authorized domains, or sign in with Email below.`;
+        } else if (code === "auth/popup-closed-by-user") {
+          msg = "Google sign-in popup was closed. Tap again or use Email & Password below.";
+        } else if (code === "auth/email-already-in-use") {
+          msg = "An account with this email already exists. Switch to SIGN IN above.";
+        } else if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
+          msg = "Invalid email or password. Check your credentials or create an account.";
+        }
+
+        banner.textContent = msg;
+        banner.classList.remove("hidden");
+      }
+
+      function clearAuthError() {
+        const banner = document.getElementById("authErrorBanner");
+        if (banner) { banner.textContent = ""; banner.classList.add("hidden"); }
       }
 
       function renderNavAuth() {
         const slot = document.getElementById("navAuthSlot");
         if (!slot) return;
         if (currentUser) {
-          const initial = esc((currentUser.displayName || "P").charAt(0).toUpperCase());
+          const initial = esc((currentUser.displayName || currentUser.email || "P").charAt(0).toUpperCase());
           const avatar = currentUser.photoURL
             ? `<img src="${esc(currentUser.photoURL)}" alt="" class="w-8 h-8 rounded-full border border-[#FFAB00] object-cover" onerror="this.style.display='none'" />`
             : `<div class="w-8 h-8 rounded-full bg-[#E50914] border border-[#FFAB00] flex items-center justify-center font-bold text-xs">${initial}</div>`;
           slot.innerHTML = `
             <div class="flex items-center gap-2">
               ${avatar}
-              <button type="button" onclick="FPS.signOutGoogle()" class="font-mono text-[11px] font-bold uppercase text-neutral-300 hover:text-[#E50914] transition">LOGOUT</button>
+              <button type="button" onclick="FPS.signOutUser()" class="font-mono text-[11px] font-bold uppercase text-neutral-300 hover:text-[#E50914] transition">LOGOUT</button>
             </div>
           `;
         } else {
           slot.innerHTML = `
-            <button type="button" onclick="FPS.openAuthModal()" class="h-9 px-3.5 sm:px-4 rounded-lg bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-xs tracking-wider uppercase shadow-[0_0_18px_rgba(229,9,20,0.5)] transition whitespace-nowrap">
+            <button type="button" onclick="FPS.openAuthModal()" class="h-9 px-3.5 sm:px-4 rounded-lg bg-[#E50914] hover:bg-[#ff1e29] text-white font-condensed italic font-black text-xs tracking-wider uppercase transition whitespace-nowrap">
               SIGN IN
             </button>
           `;
@@ -1552,6 +1563,7 @@
       }
 
       function openAuthModal() {
+        clearAuthError();
         const m = document.getElementById("authModal");
         m.classList.remove("hidden");
         m.classList.add("flex");
@@ -1563,15 +1575,82 @@
         m.classList.remove("flex");
       }
 
-      function signInGoogle() {
-        if (!auth) { showToast("Auth is initializing, please try again.", "error"); return; }
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider)
-          .then(() => { closeAuthModal(); showToast("Signed in with Google", "gold"); })
-          .catch(() => auth.signInWithRedirect(provider));
+      function setAuthMode(mode) {
+        authMode = mode;
+        clearAuthError();
+        const isSignup = mode === "signup";
+        document.getElementById("authNameInput").classList.toggle("hidden", !isSignup);
+        document.getElementById("emailAuthSubmitBtn").textContent = isSignup ? "CREATE ACCOUNT" : "SIGN IN WITH EMAIL";
+        document.getElementById("authModeLoginBtn").className = !isSignup
+          ? "py-1.5 rounded-lg bg-[#E50914] text-white font-mono text-[11px] font-bold uppercase transition"
+          : "py-1.5 rounded-lg text-neutral-400 hover:text-white font-mono text-[11px] font-bold uppercase transition";
+        document.getElementById("authModeSignupBtn").className = isSignup
+          ? "py-1.5 rounded-lg bg-[#E50914] text-white font-mono text-[11px] font-bold uppercase transition"
+          : "py-1.5 rounded-lg text-neutral-400 hover:text-white font-mono text-[11px] font-bold uppercase transition";
       }
 
-      function signOutGoogle() {
+      // SYNCHRONOUS popup invocation inside click handler (no await before signInWithPopup!)
+      function signInGoogle() {
+        clearAuthError();
+        if (!auth) {
+          displayAuthError({ message: "Auth SDK is still loading. Wait 1 second and tap again." });
+          return;
+        }
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: "select_account" });
+
+        auth.signInWithPopup(provider)
+          .then((res) => {
+            if (res && res.user) {
+              closeAuthModal();
+              showToast(`Signed in as ${res.user.displayName || "Player"}`, "gold");
+            }
+          })
+          .catch((err) => {
+            if (err && (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment")) {
+              auth.signInWithRedirect(provider).catch((reErr) => displayAuthError(reErr));
+            } else {
+              displayAuthError(err);
+            }
+          });
+      }
+
+      async function submitEmailAuth(e) {
+        e.preventDefault();
+        clearAuthError();
+        if (!auth) {
+          displayAuthError({ message: "Auth SDK is loading. Please try again." });
+          return;
+        }
+        const email = document.getElementById("authEmailInput").value.trim();
+        const pass = document.getElementById("authPassInput").value;
+        const name = document.getElementById("authNameInput").value.trim();
+        const btn = document.getElementById("emailAuthSubmitBtn");
+        btn.disabled = true;
+        btn.textContent = "PLEASE WAIT...";
+
+        try {
+          if (authMode === "signup") {
+            const cred = await auth.createUserWithEmailAndPassword(email, pass);
+            if (cred.user && name) {
+              await cred.user.updateProfile({ displayName: name });
+            }
+            closeAuthModal();
+            showToast("Account created & signed in", "gold");
+          } else {
+            await auth.signInWithEmailAndPassword(email, pass);
+            closeAuthModal();
+            showToast("Signed in successfully", "gold");
+          }
+        } catch (err) {
+          displayAuthError(err);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = authMode === "signup" ? "CREATE ACCOUNT" : "SIGN IN WITH EMAIL";
+        }
+      }
+
+      function signOutUser() {
         if (auth) auth.signOut().then(() => showToast("Signed out"));
       }
 
@@ -1608,11 +1687,12 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* 50-SECOND HERO BILLBOARD                                            */
+      /* 50-SECOND HERO BILLBOARD + INTERSECTION OBSERVER AUTO-PAUSE         */
       /* ------------------------------------------------------------------- */
       function initHero() {
         showHero(0);
         resetHeroTimer();
+
         const heroEl = document.getElementById("heroSection");
         let startX = 0;
         heroEl.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
@@ -1620,11 +1700,33 @@
           const dx = startX - e.changedTouches[0].clientX;
           if (Math.abs(dx) > 50) dx > 0 ? nextHero() : prevHero();
         }, { passive: true });
+
+        // Unload background Hero YouTube iframe when scrolled out of view to eliminate phone lag
+        const heroObs = new IntersectionObserver((entries) => {
+          heroInView = entries[0].isIntersecting;
+          if (!heroInView) {
+            pauseHeroVideo();
+          } else if (canPlayHeroVideo()) {
+            mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
+          }
+        }, { threshold: 0.15 });
+        heroObs.observe(heroEl);
+      }
+
+      function canPlayHeroVideo() {
+        if (!heroInView) return false;
+        if (!document.getElementById("reviewModal").classList.contains("hidden")) return false;
+        if (!document.getElementById("media-house-view").classList.contains("hidden")) return false;
+        if (!document.getElementById("search-view").classList.contains("hidden")) return false;
+        if (!document.getElementById("wannaPlayDrawer").classList.contains("translate-x-full")) return false;
+        return true;
       }
 
       function resetHeroTimer() {
         clearInterval(heroTimer);
-        heroTimer = setInterval(() => nextHero(), 50000);
+        heroTimer = setInterval(() => {
+          if (heroInView && canPlayHeroVideo()) nextHero();
+        }, 50000);
       }
 
       function pauseHeroVideo() {
@@ -1641,7 +1743,7 @@
         const poster = document.getElementById("heroPoster");
         poster.onerror = function () {
           if (!this.dataset.fb) { this.dataset.fb = "1"; this.src = g.fallbackPoster; }
-          else { this.onerror = null; this.src = "https://placehold.co/1280x720/050508/FFAB00?text=FPS"; }
+          else { this.onerror = null; this.src = "https://placehold.co/1280x720/06060A/FFAB00?text=FPS"; }
         };
         delete poster.dataset.fb;
         poster.src = g.poster;
@@ -1668,11 +1770,7 @@
       function mountHeroTrailer(game, snapIdx) {
         pauseHeroVideo();
         heroVidTimer = setTimeout(() => {
-          if (heroIdx !== snapIdx) return;
-          if (!document.getElementById("reviewModal").classList.contains("hidden")) return;
-          if (!document.getElementById("media-house-view").classList.contains("hidden")) return;
-          if (!document.getElementById("search-view").classList.contains("hidden")) return;
-
+          if (heroIdx !== snapIdx || !canPlayHeroVideo()) return;
           const wrap = document.getElementById("heroVideoWrap");
           const iframe = document.createElement("iframe");
           iframe.id = "heroIframe";
@@ -1682,7 +1780,7 @@
           iframe.onload = () => setTimeout(() => { if (heroIdx === snapIdx) iframe.classList.add("is-live"); }, 350);
           wrap.innerHTML = "";
           wrap.appendChild(iframe);
-        }, 650);
+        }, 700);
       }
 
       function nextHero() { showHero(heroIdx + 1); resetHeroTimer(); }
@@ -1698,7 +1796,7 @@
         const iframe = document.getElementById("heroIframe");
         if (iframe && iframe.contentWindow) {
           iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: heroMuted ? "mute" : "unMute", args: [] }), "*");
-        } else {
+        } else if (canPlayHeroVideo()) {
           mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
         }
       }
@@ -1709,26 +1807,21 @@
       function buildGameCardHTML(g) {
         const tier = computeTier(g.score, g.title);
         return `
-          <article onclick="FPS.openGameBySlug('${esc(g.slug)}')" style="--rim-color:${tier.color}; --rim-glow:${tier.glow};" class="cinema-card shrink-0 w-52 sm:w-64 rounded-2xl overflow-hidden cursor-pointer group flex flex-col justify-between">
+          <article onclick="FPS.openGameBySlug('${esc(g.slug)}')" style="--rim-color:${tier.color};" class="cinema-card shrink-0 w-48 sm:w-60 rounded-2xl overflow-hidden cursor-pointer group flex flex-col justify-between">
             <div class="relative aspect-[16/10] bg-[#12121B] overflow-hidden">
-              <img data-game-slug="${esc(g.slug)}" src="${esc(g.poster)}" ${imgFallbackAttr(g.fallbackPoster)} alt="${esc(g.title)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/35 pointer-events-none"></div>
-              <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${tier.cls}">${tier.label}</span>
-              <span class="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/85 border border-[#FFAB00]/55 font-mono text-[11px] font-bold text-[#FFAB00]">${Number(g.score).toFixed(1)}</span>
-              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <div class="w-11 h-11 rounded-full bg-[#E50914]/90 border border-white/40 flex items-center justify-center shadow-[0_0_24px_rgba(229,9,20,0.8)]">
-                  <svg class="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-              </div>
+              <img data-game-slug="${esc(g.slug)}" src="${esc(g.poster)}" ${imgFallbackAttr(g.fallbackPoster)} alt="${esc(g.title)}" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+              <span class="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-black uppercase ${tier.cls}">${tier.label}</span>
+              <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/85 border border-[#FFAB00]/55 font-mono text-[11px] font-bold text-[#FFAB00]">${Number(g.score).toFixed(1)}</span>
             </div>
-            <div class="p-3.5 flex-grow flex flex-col justify-between gap-2">
+            <div class="p-3 flex-grow flex flex-col justify-between gap-2">
               <div>
                 <h3 class="font-display text-xl text-white tracking-wide leading-tight truncate group-hover:text-[#FFAB00] transition-colors">${esc(g.title)}</h3>
                 <p class="font-mono text-[10px] text-neutral-400 truncate mt-0.5">${esc(g.studio || "Featured Studio")} &bull; ${esc(g.year || "2024")}</p>
               </div>
               <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono uppercase">
                 <span class="text-neutral-400">REVIEW &amp; SPECS</span>
-                <span class="text-[#FFAB00] font-bold group-hover:translate-x-0.5 transition-transform">OPEN &rarr;</span>
+                <span class="text-[#FFAB00] font-bold">OPEN &rarr;</span>
               </div>
             </div>
           </article>
@@ -1758,7 +1851,7 @@
             loadExtraRawgRows();
             obs.disconnect();
           }
-        }, { rootMargin: "240px" });
+        }, { rootMargin: "220px" });
         obs.observe(sentinel);
       }
 
@@ -1786,7 +1879,7 @@
             });
             if (!games.length) return;
             const sec = document.createElement("section");
-            sec.className = "space-y-3.5";
+            sec.className = "catalog-row space-y-3";
             sec.innerHTML = `
               <div class="flex items-center justify-between pl-3.5" style="border-left: 4px solid ${cat.color};">
                 <div>
@@ -1798,7 +1891,7 @@
                   <button type="button" onclick="FPS.scrollRow('track-${cat.id}', 1)" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/20 border border-white/15 flex items-center justify-center transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></button>
                 </div>
               </div>
-              <div id="track-${cat.id}" class="flex gap-4 overflow-x-auto no-scrollbar py-3">${games.map(buildGameCardHTML).join("")}</div>
+              <div id="track-${cat.id}" class="flex gap-4 overflow-x-auto no-scrollbar py-2">${games.map(buildGameCardHTML).join("")}</div>
             `;
             container.appendChild(sec);
           } catch {}
@@ -1809,7 +1902,7 @@
 
       function scrollRow(trackId, dir) {
         const el = document.getElementById(trackId);
-        if (el) el.scrollBy({ left: dir * 560, behavior: "smooth" });
+        if (el) el.scrollBy({ left: dir * 520, behavior: "smooth" });
       }
 
       function scrollToRow(rowId) {
@@ -1824,12 +1917,8 @@
       /* ------------------------------------------------------------------- */
       function triggerRdr2Intro(onDone) {
         const overlay = document.getElementById("rdr2Overlay");
-        const stage = document.getElementById("rdr2Stage");
         overlay.classList.remove("hidden", "opacity-0");
         overlay.classList.add("flex");
-        stage.classList.remove("rdr-shake");
-        void stage.offsetWidth;
-        stage.classList.add("rdr-shake");
         SoundFX.playShotgunBoom();
 
         let finished = false;
@@ -1841,10 +1930,48 @@
             overlay.classList.remove("flex", "opacity-0");
             overlay.classList.add("hidden");
             onDone();
-          }, 300);
+          }, 260);
         }
         overlay.onclick = finish;
-        setTimeout(finish, 1750);
+        setTimeout(finish, 1650);
+      }
+
+      /* ------------------------------------------------------------------- */
+      /* 2. TOP-RIGHT LIVE COLOR-CODED RATING GAUGE UPDATER                  */
+      /* ------------------------------------------------------------------- */
+      function updateTopRatingGauge(score, sourceLabel, pulse) {
+        if (!activeModalGame) return;
+        const s = Math.min(10, Math.max(0, Number(score) || 0));
+        // Rockstar overrides apply when score >= 9.5 or default consensus; slider zone colors always reflect score!
+        const isRockstarHigh = s >= 9.5 && (
+          activeModalGame.title.toLowerCase().includes("red dead redemption") ||
+          activeModalGame.title.toLowerCase().includes("grand theft auto") ||
+          activeModalGame.title.toLowerCase().includes("gta")
+        );
+        const zone = isRockstarHigh ? computeTier(s, activeModalGame.title) : getSliderZone(s);
+
+        const card = document.getElementById("topRatingGaugeCard");
+        if (card) {
+          card.style.setProperty("--top-gauge-color", zone.color);
+          card.style.setProperty("--top-gauge-glow", zone.glow);
+          if (pulse) {
+            card.classList.remove("gauge-pulse");
+            void card.offsetWidth;
+            card.classList.add("gauge-pulse");
+          }
+        }
+
+        const ring = document.getElementById("topGaugeRing");
+        const inner = document.getElementById("topGaugeInner");
+        ring.style.stroke = zone.color;
+        ring.style.strokeDashoffset = (314.16 - 314.16 * (s / 10)).toFixed(2);
+        inner.style.stroke = zone.color;
+
+        document.getElementById("topGaugeScore").textContent = s.toFixed(1);
+        document.getElementById("topGaugeSource").textContent = sourceLabel;
+        const tierEl = document.getElementById("topGaugeTier");
+        tierEl.className = `px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${zone.cls}`;
+        tierEl.textContent = zone.label;
       }
 
       /* ------------------------------------------------------------------- */
@@ -1878,7 +2005,7 @@
         pauseHeroVideo();
         activeModalGame = { ...game };
         modalMuted = true;
-        editingReviewId = null;
+        isSubmittingReview = false;
         SoundFX.lastStep = null;
         SoundFX.lastZone = null;
 
@@ -1890,7 +2017,6 @@
         badge.className = `px-3 py-0.5 rounded text-xs font-black uppercase ${tier.cls}`;
         badge.textContent = tier.label;
 
-        document.getElementById("modalScoreVal").textContent = Number(game.score).toFixed(1);
         document.getElementById("modalTitle").textContent = game.title.toUpperCase();
         document.getElementById("modalPosterBg").src = game.poster;
         document.getElementById("modalSynopsis").textContent = game.desc || "Loading full synopsis...";
@@ -1906,14 +2032,19 @@
         document.getElementById("modalSpecsWrap").classList.add("hidden");
         document.getElementById("modalSoundBtn").textContent = "UNMUTE SOUND";
 
+        // Paint top-right rating gauge immediately with FPS consensus
+        updateTopRatingGauge(game.score, "FPS CONSENSUS", false);
+
         syncModalWannaBtn();
         updateReviewAuthGate();
+
         const slider = document.getElementById("reviewSlider");
         slider.value = 9.0;
-        applySliderState(9.0, false);
+        applySliderState(9.0, false, false);
         document.getElementById("reviewTextarea").value = "";
         document.getElementById("reviewSubmitBtn").textContent = "PUBLISH VERDICT";
-        document.getElementById("reviewCancelEditBtn").classList.add("hidden");
+        document.getElementById("reviewSubmitBtn").disabled = false;
+        document.getElementById("reviewDeleteMineBtn").classList.add("hidden");
 
         const ytId = await findTrailerId(activeModalGame);
         document.getElementById("modalIframe").src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=1&playsinline=1&rel=0&enablejsapi=1`;
@@ -1978,9 +2109,7 @@
         document.getElementById("modalIframe").src = "";
         document.body.style.overflow = "";
         activeModalGame = null;
-        if (document.getElementById("media-house-view").classList.contains("hidden")) {
-          mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
-        }
+        if (canPlayHeroVideo()) mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
       }
 
       function toggleModalSound() {
@@ -1996,13 +2125,12 @@
       /* OFFICIAL STOREFRONT REDIRECTS (INLINE BRAND SVGS)                   */
       /* ------------------------------------------------------------------- */
       const STORE_CATALOG = {
-        1: { name: "Steam", color: "hover:border-sky-400 hover:shadow-[0_0_16px_rgba(56,189,248,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-9.95 9.05l5.33 2.2a2.8 2.8 0 011.6-.49l2.4-3.47v-.05a3.75 3.75 0 113.75 3.75h-.09l-3.41 2.44a2.8 2.8 0 01-5.58.25L2.27 14.1A10 10 0 1012 2z"/></svg>` },
-        3: { name: "PlayStation Store", color: "hover:border-blue-500 hover:shadow-[0_0_16px_rgba(59,130,246,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9.5 4v14.8l3.2 1.1V8.6c0-.8.4-1.2 1-1 .7.2 1 .8 1 1.7v4.4c2.1 1 3.8 0 3.8-2.6 0-2.7-1.2-4-4.2-5L9.5 4zM2 16.5l5.8-2v2.4l-2.6.9 2.6.9v2L2 18.7v-2.2zm14.2 1.1l5.8-2v2.2l-5.8 2v-2.2z"/></svg>` },
-        2: { name: "Xbox Store", color: "hover:border-emerald-500 hover:shadow-[0_0_16px_rgba(16,185,129,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm4.8 4.4c1.3 1.4 2.1 3.3 2.2 5.4-1.2-2-3.2-4.2-5.4-5.7a8 8 0 013.2.3zM7.2 6.4a8 8 0 013.2-.3C8.2 7.6 6.2 9.8 5 11.8c.1-2.1.9-4 2.2-5.4zM12 10.6c2.2 1.7 4.2 4.1 5 6.4a8 8 0 01-10 0c.8-2.3 2.8-4.7 5-6.4z"/></svg>` },
-        11: { name: "Epic Games", color: "hover:border-[#FFAB00] hover:shadow-[0_0_16px_rgba(255,171,0,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M4 3h16v14.5L12 21l-8-3.5V3zm4 4v9h8v-2h-5.5v-1.8H15v-2h-4.5V9H16V7H8z"/></svg>` },
-        6: { name: "Nintendo eShop", color: "hover:border-red-500 hover:shadow-[0_0_16px_rgba(239,68,68,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M5 4h5v16H5a2 2 0 01-2-2V6a2 2 0 012-2zm9 0h5a2 2 0 012 2v12a2 2 0 01-2 2h-5V4zm-6.5 5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm9 4a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>` },
-        5: { name: "GOG", color: "hover:border-purple-400 hover:shadow-[0_0_16px_rgba(192,132,252,0.35)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>` },
-        rockstar: { name: "Rockstar Launcher", color: "hover:border-[#FFAB00] hover:shadow-[0_0_16px_rgba(255,171,0,0.45)]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6L22 9.4l-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.4l7.1-.8L12 2z"/></svg>` }
+        1: { name: "Steam", color: "hover:border-sky-400", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-9.95 9.05l5.33 2.2a2.8 2.8 0 011.6-.49l2.4-3.47v-.05a3.75 3.75 0 113.75 3.75h-.09l-3.41 2.44a2.8 2.8 0 01-5.58.25L2.27 14.1A10 10 0 1012 2z"/></svg>` },
+        3: { name: "PlayStation Store", color: "hover:border-blue-500", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9.5 4v14.8l3.2 1.1V8.6c0-.8.4-1.2 1-1 .7.2 1 .8 1 1.7v4.4c2.1 1 3.8 0 3.8-2.6 0-2.7-1.2-4-4.2-5L9.5 4zM2 16.5l5.8-2v2.4l-2.6.9 2.6.9v2L2 18.7v-2.2zm14.2 1.1l5.8-2v2.2l-5.8 2v-2.2z"/></svg>` },
+        2: { name: "Xbox Store", color: "hover:border-emerald-500", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm4.8 4.4c1.3 1.4 2.1 3.3 2.2 5.4-1.2-2-3.2-4.2-5.4-5.7a8 8 0 013.2.3zM7.2 6.4a8 8 0 013.2-.3C8.2 7.6 6.2 9.8 5 11.8c.1-2.1.9-4 2.2-5.4zM12 10.6c2.2 1.7 4.2 4.1 5 6.4a8 8 0 01-10 0c.8-2.3 2.8-4.7 5-6.4z"/></svg>` },
+        11: { name: "Epic Games", color: "hover:border-[#FFAB00]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M4 3h16v14.5L12 21l-8-3.5V3zm4 4v9h8v-2h-5.5v-1.8H15v-2h-4.5V9H16V7H8z"/></svg>` },
+        6: { name: "Nintendo eShop", color: "hover:border-red-500", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M5 4h5v16H5a2 2 0 01-2-2V6a2 2 0 012-2zm9 0h5a2 2 0 012 2v12a2 2 0 01-2 2h-5V4zm-6.5 5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm9 4a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>` },
+        rockstar: { name: "Rockstar Launcher", color: "hover:border-[#FFAB00]", svg: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6L22 9.4l-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.4l7.1-.8L12 2z"/></svg>` }
       };
 
       function renderStorefronts(game, rawgStores) {
@@ -2041,31 +2169,30 @@
         (rawgShots || []).forEach((s) => { if (s.image && !urls.includes(s.image)) urls.push(s.image); });
         const shots = urls.slice(0, 8);
         document.getElementById("modalShotsGrid").innerHTML = shots.map((u, i) => `
-          <button type="button" onclick="FPS.openLightbox(${i}, 'modal')" class="aspect-video rounded-xl overflow-hidden bg-black border border-white/12 hover:border-[#FFAB00] transition group">
-            <img src="${esc(u)}" ${imgFallbackAttr(game.fallbackPoster)} alt="Screenshot" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <button type="button" onclick="FPS.openLightbox(${i}, 'modal')" class="aspect-video rounded-xl overflow-hidden bg-black border border-white/12 hover:border-[#FFAB00] transition">
+            <img src="${esc(u)}" ${imgFallbackAttr(game.fallbackPoster)} alt="Screenshot" loading="lazy" decoding="async" class="w-full h-full object-cover" />
           </button>
         `).join("");
         activeModalGame._shots = shots;
       }
 
       /* ------------------------------------------------------------------- */
-      /* CRITICAL FIX: COLOR-MORPHING SLIDER + REVIEW STUDIO                 */
+      /* 1. COLOR-MORPHING SLIDER + DETERMINISTIC DEDUPED REVIEWS            */
       /* ------------------------------------------------------------------- */
       function initSliderListeners() {
         const slider = document.getElementById("reviewSlider");
         if (!slider) return;
-        const handler = (e) => applySliderState(e.target.value, true);
+        const handler = (e) => applySliderState(e.target.value, true, true);
         slider.addEventListener("input", handler);
         slider.addEventListener("change", handler);
       }
 
-      function applySliderState(val, playAudio) {
+      function applySliderState(val, playAudio, previewTopGauge) {
         const score = Math.min(10, Math.max(0, parseFloat(val) || 0));
         const pct = (score / 10) * 100;
         const pctStr = `${pct.toFixed(1)}%`;
         const zone = getSliderZone(score);
 
-        // Update CSS Custom Properties on :root, #reviewStudioShell, and #reviewSlider for guaranteed iOS/iPad Safari reactivity
         const shell = document.getElementById("reviewStudioShell");
         const slider = document.getElementById("reviewSlider");
         [document.documentElement, shell, slider].forEach((node) => {
@@ -2074,13 +2201,10 @@
           node.style.setProperty("--slider-glow", zone.glow);
           node.style.setProperty("--slider-pct", pctStr);
         });
-
-        // Explicitly sync inline background gradient on slider for Safari instant repaint
         if (slider) {
-          slider.style.background = `linear-gradient(to right, ${zone.color} 0%, ${zone.color} ${pctStr}, #22222c ${pctStr}, #22222c 100%)`;
+          slider.style.background = `linear-gradient(to right, ${zone.color} 0%, ${zone.color} ${pctStr}, #22222E ${pctStr}, #22222E 100%)`;
         }
 
-        // Update Dual-Ring SVG Circular Gauge
         document.getElementById("gaugeScoreNum").textContent = score.toFixed(1);
         const outer = document.getElementById("gaugeOuterRing");
         const inner = document.getElementById("gaugeInnerRing");
@@ -2096,10 +2220,14 @@
         tag.textContent = zone.tagline;
         tag.style.color = zone.color;
 
-        // Floating Score Tooltip Bubble above Thumb
         const bubble = document.getElementById("sliderFloatingBubble");
         bubble.textContent = score.toFixed(1);
         bubble.style.left = `calc(${pct}% + ${14 - pct * 0.28}px)`;
+
+        // Live-preview the top-right gauge while logged-in user drags the slider
+        if (previewTopGauge && currentUser && activeModalGame) {
+          updateTopRatingGauge(score, "LIVE PREVIEW", false);
+        }
 
         if (playAudio) {
           SoundFX.playTick(score);
@@ -2113,7 +2241,7 @@
       function setPresetScore(val) {
         const slider = document.getElementById("reviewSlider");
         if (slider) slider.value = val;
-        applySliderState(val, true);
+        applySliderState(val, true, true);
       }
 
       function toggleSfx() {
@@ -2148,17 +2276,33 @@
         return Array.from(keys);
       }
 
+      function getReviewTimestampMs(r) {
+        if (r.updatedAt && typeof r.updatedAt.toMillis === "function") return r.updatedAt.toMillis();
+        if (r.createdAt && typeof r.createdAt.toMillis === "function") return r.createdAt.toMillis();
+        return Number(r.updatedMs || r.createdMs || 0);
+      }
+
       async function loadCommunityReviews(game) {
         const listEl = document.getElementById("communityReviewsList");
         const keys = getGameReviewKeys(game);
         const keyStrs = keys.map(String);
-        const map = new Map();
 
+        // Deduplicate strictly by userId per game (keeping newest record)
+        const byUser = new Map();
+        function upsertReview(rec) {
+          const uid = String(rec.userId || rec.docId || Math.random());
+          const ts = getReviewTimestampMs(rec);
+          const existing = byUser.get(uid);
+          if (!existing || ts >= getReviewTimestampMs(existing)) {
+            byUser.set(uid, { ...rec, updatedMs: ts });
+          }
+        }
+
+        // 1. Load local reviews
         const localCombined = [...loadLocalJSON("fps_reviews_v2", []), ...loadLocalJSON("fps_reviews", [])];
-        localCombined.filter((r) => keyStrs.includes(String(r.gameId))).forEach((r) => {
-          map.set(r.docId || `${r.userId}_${r.createdMs || r.timestamp}`, r);
-        });
+        localCombined.filter((r) => keyStrs.includes(String(r.gameId))).forEach(upsertReview);
 
+        // 2. Load Firestore community reviews (no .orderBy() so composite index is never required)
         if (db) {
           try {
             const snaps = await Promise.all(
@@ -2168,19 +2312,35 @@
               if (!snap) return;
               snap.forEach((doc) => {
                 const d = doc.data();
-                const ms = d.createdAt && d.createdAt.toMillis ? d.createdAt.toMillis() : (d.createdMs || Date.now());
-                map.set(doc.id, { ...d, docId: doc.id, createdMs: ms });
+                upsertReview({ ...d, docId: doc.id });
               });
             });
           } catch {}
         }
 
-        const reviews = Array.from(map.values()).sort((a, b) => (b.createdMs || 0) - (a.createdMs || 0));
+        if (!activeModalGame || activeModalGame.slug !== game.slug) return;
+
+        const reviews = Array.from(byUser.values()).sort((a, b) => (b.updatedMs || 0) - (a.updatedMs || 0));
         activeModalGame._reviews = reviews;
 
+        // Check if current signed-in user already reviewed this game
+        const myReview = currentUser ? reviews.find((r) => r.userId === currentUser.uid) : null;
+        if (myReview) {
+          document.getElementById("reviewSlider").value = myReview.score;
+          applySliderState(myReview.score, false, false);
+          document.getElementById("reviewTextarea").value = myReview.verdict || myReview.text || "";
+          document.getElementById("reviewSubmitBtn").textContent = "UPDATE VERDICT";
+          document.getElementById("reviewDeleteMineBtn").classList.remove("hidden");
+        } else {
+          document.getElementById("reviewSubmitBtn").textContent = "PUBLISH VERDICT";
+          document.getElementById("reviewDeleteMineBtn").classList.add("hidden");
+        }
+
+        // Update Community Average & Top-Right Live Rating Gauge
         if (!reviews.length) {
           document.getElementById("communityAvgScore").textContent = Number(game.score).toFixed(1);
           document.getElementById("communityReviewCount").textContent = "(Official)";
+          updateTopRatingGauge(game.score, "FPS CONSENSUS", false);
           listEl.innerHTML = `<div class="text-xs font-mono text-neutral-400 py-4 text-center">No community verdicts yet. Be the first critic to rate this title.</div>`;
           return;
         }
@@ -2189,26 +2349,32 @@
         document.getElementById("communityAvgScore").textContent = avg.toFixed(1);
         document.getElementById("communityReviewCount").textContent = `(${reviews.length})`;
 
-        listEl.innerHTML = reviews.map((r, idx) => {
+        if (myReview) {
+          updateTopRatingGauge(myReview.score, "YOUR RATING", false);
+        } else {
+          updateTopRatingGauge(avg, "COMMUNITY AVG", false);
+        }
+
+        listEl.innerHTML = reviews.map((r) => {
           const z = getSliderZone(r.score);
           const isMine = currentUser && r.userId === currentUser.uid;
-          const dateStr = r.timestamp || (r.createdMs ? new Date(r.createdMs).toLocaleDateString() : "");
+          const dateStr = r.timestamp || (r.updatedMs ? new Date(r.updatedMs).toLocaleDateString() : "");
           return `
-            <div class="rounded-xl bg-black/50 border border-white/10 p-4 space-y-2">
+            <div class="rounded-xl bg-black/55 border ${isMine ? "border-[#FFAB00]/60" : "border-white/10"} p-4 space-y-2">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-2.5">
                   <div class="w-7 h-7 rounded-full bg-[#E50914] text-white font-bold text-xs flex items-center justify-center uppercase">${esc((r.userName || "P").charAt(0))}</div>
                   <div>
-                    <div class="text-xs font-bold text-white">${esc(r.userName || "Player")}</div>
+                    <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>${esc(r.userName || "Player")}</span>
+                      ${isMine ? `<span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#FFAB00]/20 text-[#FFAB00]">YOU</span>` : ""}
+                    </div>
                     <div class="font-mono text-[10px] text-neutral-400">${esc(dateStr)}</div>
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${z.cls}">${Number(r.score).toFixed(1)} &bull; ${z.label}</span>
-                  ${isMine ? `
-                    <button type="button" onclick="FPS.startEditReview(${idx})" class="text-[10px] font-mono font-bold text-[#FFAB00] hover:underline">EDIT</button>
-                    <button type="button" onclick="FPS.deleteReview(${idx})" class="text-[10px] font-mono font-bold text-red-400 hover:underline">DELETE</button>
-                  ` : ""}
+                  ${isMine ? `<button type="button" onclick="FPS.deleteMyReview()" class="text-[10px] font-mono font-bold text-red-400 hover:underline">DELETE</button>` : ""}
                 </div>
               </div>
               <p class="text-xs sm:text-sm text-neutral-200 leading-relaxed">${esc(r.verdict || r.text || "")}</p>
@@ -2217,93 +2383,97 @@
         }).join("");
       }
 
+      // Deterministic Composite Document ID + Mutex Lock (Zero Duplicate Reviews!)
       async function publishReview() {
         if (!currentUser) { openAuthModal(); return; }
-        if (!activeModalGame) return;
+        if (!activeModalGame || isSubmittingReview) return;
 
         const score = parseFloat(document.getElementById("reviewSlider").value);
         const verdict = document.getElementById("reviewTextarea").value.trim();
         if (!verdict) { showToast("Write a short verdict before publishing.", "error"); return; }
 
+        isSubmittingReview = true;
+        const submitBtn = document.getElementById("reviewSubmitBtn");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "SAVING...";
+
+        const gameIdStr = String(activeModalGame.slug);
+        const docId = `${gameIdStr}_${currentUser.uid}`;
         const z = getSliderZone(score);
         const nowMs = Date.now();
-        const payload = {
-          gameId: String(activeModalGame.slug),
+
+        const reviewData = {
+          docId,
+          gameId: gameIdStr,
           gameTitle: activeModalGame.title,
           userId: currentUser.uid,
-          userName: currentUser.displayName || "Verified Player",
+          userName: currentUser.displayName || (currentUser.email ? currentUser.email.split("@")[0] : "Verified Player"),
           score,
           tier: z.label,
           verdict,
           timestamp: new Date().toLocaleDateString(),
-          createdMs: nowMs
+          updatedMs: nowMs
         };
 
-        const local = loadLocalJSON("fps_reviews_v2", []);
-        if (editingReviewId) {
-          const idx = local.findIndex((x) => x.docId === editingReviewId);
-          if (idx > -1) local[idx] = { ...local[idx], ...payload };
-          else local.unshift({ ...payload, docId: editingReviewId });
-        } else {
-          payload.docId = "loc_" + nowMs;
-          local.unshift(payload);
+        try {
+          // 1. Deduplicated localStorage write (replace any existing entry for this gameId + userId)
+          const keyStrs = getGameReviewKeys(activeModalGame).map(String);
+          const local = loadLocalJSON("fps_reviews_v2", []).filter(
+            (x) => !(keyStrs.includes(String(x.gameId)) && x.userId === currentUser.uid)
+          );
+          local.unshift(reviewData);
+          localStorage.setItem("fps_reviews_v2", JSON.stringify(local));
+
+          // 2. Deterministic Firestore write via .doc(docId).set(..., { merge: true })
+          if (db) {
+            await db.collection("game_reviews").doc(docId).set({
+              ...reviewData,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+          }
+
+          SoundFX.playPublishChord();
+          updateTopRatingGauge(score, "YOUR RATING", true);
+          showToast("Verdict saved to FPS database", "gold");
+          await loadCommunityReviews(activeModalGame);
+        } catch (err) {
+          console.warn("Review save error:", err);
+          showToast("Saved locally (offline sync)", "gold");
+          await loadCommunityReviews(activeModalGame);
+        } finally {
+          isSubmittingReview = false;
+          submitBtn.disabled = false;
+          submitBtn.textContent = "UPDATE VERDICT";
         }
+      }
+
+      async function deleteMyReview() {
+        if (!currentUser || !activeModalGame || isSubmittingReview) return;
+        const keyStrs = getGameReviewKeys(activeModalGame).map(String);
+
+        // Remove from localStorage
+        const local = loadLocalJSON("fps_reviews_v2", []).filter(
+          (x) => !(keyStrs.includes(String(x.gameId)) && x.userId === currentUser.uid)
+        );
         localStorage.setItem("fps_reviews_v2", JSON.stringify(local));
 
-        SoundFX.playPublishChord();
-
+        // Remove deterministic doc + any legacy docs by this user for this game in Firestore
         if (db) {
           try {
-            if (editingReviewId && !editingReviewId.startsWith("loc_")) {
-              await db.collection("game_reviews").doc(editingReviewId).update({
-                score, tier: z.label, verdict, timestamp: payload.timestamp
-              });
-            } else {
-              await db.collection("game_reviews").add({
-                ...payload,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-              });
-            }
+            const docId = `${activeModalGame.slug}_${currentUser.uid}`;
+            await db.collection("game_reviews").doc(docId).delete().catch(() => {});
+            const myExisting = (activeModalGame._reviews || []).filter((r) => r.userId === currentUser.uid && r.docId && r.docId !== docId);
+            await Promise.all(myExisting.map((r) => db.collection("game_reviews").doc(r.docId).delete().catch(() => {})));
           } catch {}
         }
 
-        cancelEditReview();
-        showToast("Verdict published to FPS database", "gold");
-        loadCommunityReviews(activeModalGame);
-      }
-
-      function startEditReview(idx) {
-        const r = activeModalGame && activeModalGame._reviews && activeModalGame._reviews[idx];
-        if (!r) return;
-        editingReviewId = r.docId || null;
-        document.getElementById("reviewSlider").value = r.score;
-        applySliderState(r.score, false);
-        document.getElementById("reviewTextarea").value = r.verdict || r.text || "";
-        document.getElementById("reviewSubmitBtn").textContent = "UPDATE VERDICT";
-        document.getElementById("reviewCancelEditBtn").classList.remove("hidden");
-      }
-
-      function cancelEditReview() {
-        editingReviewId = null;
         document.getElementById("reviewTextarea").value = "";
-        document.getElementById("reviewSubmitBtn").textContent = "PUBLISH VERDICT";
-        document.getElementById("reviewCancelEditBtn").classList.add("hidden");
-      }
-
-      async function deleteReview(idx) {
-        const r = activeModalGame && activeModalGame._reviews && activeModalGame._reviews[idx];
-        if (!r) return;
-        const local = loadLocalJSON("fps_reviews_v2", []).filter((x) => x.docId !== r.docId && !(x.userId === r.userId && x.createdMs === r.createdMs));
-        localStorage.setItem("fps_reviews_v2", JSON.stringify(local));
-        if (db && r.docId && !r.docId.startsWith("loc_")) {
-          try { await db.collection("game_reviews").doc(r.docId).delete(); } catch {}
-        }
-        showToast("Review deleted");
-        loadCommunityReviews(activeModalGame);
+        showToast("Your review was deleted");
+        await loadCommunityReviews(activeModalGame);
       }
 
       /* ------------------------------------------------------------------- */
-      /* MAJOR UPGRADE: NETFLIX-GRADE FPS MEDIA HOUSE                        */
+      /* NETFLIX-STYLE FPS MEDIA HOUSE (WITH CHUNKED LAZY 50+ SHOTS)         */
       /* ------------------------------------------------------------------- */
       function openMediaHouse(game) {
         pauseHeroVideo();
@@ -2321,7 +2491,7 @@
         document.getElementById("media-house-view").classList.add("hidden");
         document.getElementById("mhIframe").src = "";
         document.body.style.overflow = "";
-        mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
+        if (canPlayHeroVideo()) mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
       }
 
       function openHeroInMediaHouse() { openMediaHouse(FLAGSHIP_GAMES[heroIdx]); }
@@ -2373,13 +2543,12 @@
         strip.innerHTML = filtered.map((g) => {
           const isActive = g.slug === cur;
           return `
-            <button type="button" onclick="FPS.switchMhBySlug('${esc(g.slug)}')" class="shrink-0 group relative rounded-xl overflow-hidden w-36 sm:w-44 aspect-[16/9] border-2 transition ${isActive ? "border-[#FFAB00] ring-2 ring-[#E50914]/70 shadow-[0_0_22px_rgba(255,171,0,0.45)] scale-[1.03]" : "border-white/12 hover:border-white/40 opacity-80 hover:opacity-100"}">
-              <img data-game-slug="${esc(g.slug)}" src="${esc(g.poster)}" ${imgFallbackAttr(g.fallbackPoster)} alt="${esc(g.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent"></div>
-              <div class="absolute bottom-1.5 inset-x-2 text-left">
-                <div class="font-display text-sm sm:text-base text-white leading-none truncate">${esc(g.title)}</div>
+            <button type="button" onclick="FPS.switchMhBySlug('${esc(g.slug)}')" class="shrink-0 relative rounded-xl overflow-hidden w-32 sm:w-40 aspect-[16/9] border-2 transition ${isActive ? "border-[#FFAB00]" : "border-white/12 opacity-80 hover:opacity-100"}">
+              <img data-game-slug="${esc(g.slug)}" src="${esc(g.poster)}" ${imgFallbackAttr(g.fallbackPoster)} alt="${esc(g.title)}" loading="lazy" decoding="async" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+              <div class="absolute bottom-1 inset-x-2 text-left">
+                <div class="font-display text-sm text-white leading-none truncate">${esc(g.title)}</div>
               </div>
-              ${isActive ? `<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E50914] shadow-[0_0_8px_#E50914]"></span>` : ""}
             </button>
           `;
         }).join("");
@@ -2402,7 +2571,7 @@
 
       function renderMhCreatorSwitcher() {
         document.getElementById("mhCreatorSwitcherPills").innerHTML = PLAYTHROUGH_CREATORS.map((c) => `
-          <button type="button" onclick="FPS.switchMhEpCreator('${esc(c)}')" class="px-3 py-1.5 rounded-xl font-mono text-[10px] font-bold uppercase border transition ${mhEpCreator === c ? "bg-[#E50914] border-[#E50914] text-white shadow-[0_0_16px_rgba(229,9,20,0.5)]" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-300"}">
+          <button type="button" onclick="FPS.switchMhEpCreator('${esc(c)}')" class="px-3 py-1.5 rounded-xl font-mono text-[10px] font-bold uppercase border transition ${mhEpCreator === c ? "bg-[#E50914] border-[#E50914] text-white" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-300"}">
             ${esc(c === "ALL" ? "ALL CREATORS" : c)}
           </button>
         `).join("");
@@ -2416,14 +2585,14 @@
           ? `${mhGame.title} full gameplay walkthrough part 1`
           : `${mhGame.title} ${creator} walkthrough part 1`;
         try {
-          const ytEps = await fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&key=${YT_API_KEY}&type=video&maxResults=15`);
+          const ytEps = await fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&key=${YT_API_KEY}&type=video&maxResults=12`);
           if (ytEps && ytEps.items && ytEps.items.length) {
             mhEpisodes = mapYtToEpisodes(ytEps.items, mhGame);
             playMhEp(0);
             return;
           }
         } catch {}
-        showToast(`Loaded curated chronological episodes for ${creator}`);
+        showToast(`Loaded curated episodes for ${creator}`);
       }
 
       function mapYtToEpisodes(items, game) {
@@ -2444,6 +2613,7 @@
         mhMuted = true;
         mhLiveFilter = "ALL";
         mhEpCreator = "ALL";
+        mhShotsVisibleCount = 18;
         const tier = computeTier(game.score, game.title);
 
         document.getElementById("mhAmbientBg").src = game.poster;
@@ -2459,18 +2629,17 @@
         syncMhWannaBtn();
 
         const [ytEps, ytLive, rawgShots1, rawgShots2] = await Promise.all([
-          fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " full gameplay walkthrough part 1")}&key=${YT_API_KEY}&type=video&maxResults=15`).catch(() => null),
-          fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " live gameplay stream")}&key=${YT_API_KEY}&type=video&maxResults=12`).catch(() => null),
+          fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " full gameplay walkthrough part 1")}&key=${YT_API_KEY}&type=video&maxResults=12`).catch(() => null),
+          fetchCached(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(game.title + " live gameplay stream")}&key=${YT_API_KEY}&type=video&maxResults=10`).catch(() => null),
           fetchCached(`https://api.rawg.io/api/games/${game.rawgId || game.slug}/screenshots?key=${RAWG_API_KEY}&page=1&page_size=40`).catch(() => null),
           fetchCached(`https://api.rawg.io/api/games/${game.rawgId || game.slug}/screenshots?key=${RAWG_API_KEY}&page=2&page_size=40`).catch(() => null)
         ]);
 
-        // 1. Chronological Episodes
         let eps = (ytEps && ytEps.items && ytEps.items.length) ? mapYtToEpisodes(ytEps.items, game) : [];
         if (!eps.length) {
           const baseVid = game.trailerId || "eaW0tYpxyp0";
           const fallbackMissions = [
-            ["Part 1: Prologue & Opening Sequence", "Opening story cinematic, movement tutorial, and first combat encounter.", "32:18"],
+            ["Part 1: Prologue & Opening Sequence", "Opening story cinematic, movement tutorial, and first encounter.", "32:18"],
             ["Part 2: First Campaign Mission", "Entering the open world, core gear unlocks, and main quest kickoff.", "38:45"],
             ["Part 3: Territory Infiltration", "Stealth reconnaissance and tactical takedowns across hostile territory.", "29:50"],
             ["Part 4: High-Stakes Heist & Pursuit", "Explosive set-piece sequence with high-speed escape mechanics.", "41:12"],
@@ -2487,8 +2656,7 @@
         mhEpisodes = eps;
         playMhEp(0);
 
-        // 2. Live Streams & Gaming YouTubers
-        const viewerMocks = ["48.2K WATCHING", "29.6K WATCHING", "61.4K WATCHING", "19.8K WATCHING", "34.1K WATCHING", "15.9K WATCHING"];
+        const viewerMocks = ["48.2K WATCHING", "29.6K WATCHING", "61.4K WATCHING", "19.8K WATCHING"];
         let creators = [];
         if (ytLive && ytLive.items && ytLive.items.length) {
           creators = ytLive.items.filter((i) => i.id && i.id.videoId).map((i, idx) => ({
@@ -2504,17 +2672,15 @@
           const baseVid = game.trailerId || "eaW0tYpxyp0";
           creators = [
             { vid: baseVid, title: `${game.title} Full 4K60 Story Walkthrough`, channel: "theRadBrad", live: true, viewers: "64.2K WATCHING", thumb: game.poster },
-            { vid: baseVid, title: `${game.title} No Commentary Ultra Graphics Movie`, channel: "MKIceAndFire", live: false, viewers: "28.9K VIEWS", thumb: game.poster },
-            { vid: baseVid, title: `${game.title} All Bosses & Secret Endings Guide`, channel: "Shirrako", live: true, viewers: "41.5K WATCHING", thumb: game.poster },
-            { vid: baseVid, title: `${game.title} 100% Blind Playthrough Marathon`, channel: "Jacksepticeye", live: true, viewers: "52.1K WATCHING", thumb: game.poster },
-            { vid: baseVid, title: `${game.title} Nightmare Difficulty Survival Run`, channel: "Hollow", live: false, viewers: "22.4K VIEWS", thumb: game.poster }
+            { vid: baseVid, title: `${game.title} No Commentary Ultra Graphics`, channel: "MKIceAndFire", live: false, viewers: "28.9K VIEWS", thumb: game.poster },
+            { vid: baseVid, title: `${game.title} All Bosses & Secret Endings`, channel: "Shirrako", live: true, viewers: "41.5K WATCHING", thumb: game.poster },
+            { vid: baseVid, title: `${game.title} 100% Blind Playthrough Marathon`, channel: "Jacksepticeye", live: true, viewers: "52.1K WATCHING", thumb: game.poster }
           ];
         }
         mhCreators = creators;
         document.getElementById("mhTabLiveCount").textContent = creators.length;
         renderMhCreators();
 
-        // 3. 50+ Unique Downloadable 4K Screenshots
         const shotSet = new Set();
         if (game.poster) shotSet.add(game.poster);
         [rawgShots1, rawgShots2].forEach((pack) => {
@@ -2548,12 +2714,11 @@
         document.getElementById("mhTabEpCount").textContent = mhEpisodes.length;
         document.getElementById("mhIframe").src = `https://www.youtube-nocookie.com/embed/${ep.vid}?autoplay=1&mute=${mhMuted ? 1 : 0}&controls=1&playsinline=1&rel=0&enablejsapi=1`;
 
-        // Sidebar Up Next List
         document.getElementById("mhUpNextList").innerHTML = mhEpisodes.map((e, i) => `
-          <button type="button" onclick="FPS.playMhEp(${i})" class="w-full text-left p-2.5 rounded-xl border transition flex items-center gap-2.5 ${i === mhEpIdx ? "bg-[#E50914]/22 border-[#E50914] shadow-[0_0_16px_rgba(229,9,20,0.3)]" : "bg-white/[0.03] hover:bg-white/[0.09] border-white/10"}">
+          <button type="button" onclick="FPS.playMhEp(${i})" class="w-full text-left p-2.5 rounded-xl border transition flex items-center gap-2.5 ${i === mhEpIdx ? "bg-[#E50914]/20 border-[#E50914]" : "bg-white/[0.03] hover:bg-white/[0.08] border-white/10"}">
             <span class="font-display text-2xl w-6 text-center shrink-0 ${i === mhEpIdx ? "text-[#E50914]" : "text-white/40"}">${String(i + 1).padStart(2, "0")}</span>
             <div class="relative w-20 aspect-video rounded-lg overflow-hidden bg-black shrink-0">
-              <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} alt="" class="w-full h-full object-cover" />
+              <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} alt="" loading="lazy" decoding="async" class="w-full h-full object-cover" />
               <span class="absolute bottom-0.5 right-0.5 px-1 rounded bg-black/85 font-mono text-[8px] text-white">${esc(e.duration || "32:00")}</span>
             </div>
             <div class="min-w-0">
@@ -2565,33 +2730,24 @@
           </button>
         `).join("");
 
-        // Tab 1: Netflix-Style Numbered Episode Rows (01, 02, 03...)
         document.getElementById("mhEpisodesRows").innerHTML = mhEpisodes.map((e, i) => {
           const playing = i === mhEpIdx;
           return `
-            <article onclick="FPS.playMhEp(${i})" class="mh-ep-row ${playing ? "is-playing" : ""} rounded-2xl p-3.5 sm:p-4 cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4 group">
-              <div class="flex items-center gap-3.5 shrink-0">
-                <div class="font-display text-4xl sm:text-5xl w-11 text-center leading-none ${playing ? "text-[#E50914]" : "text-white/35 group-hover:text-[#FFAB00]"}">${String(i + 1).padStart(2, "0")}</div>
+            <article onclick="FPS.playMhEp(${i})" class="mh-ep-row ${playing ? "is-playing" : ""} rounded-2xl p-3.5 cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4 group">
+              <div class="flex items-center gap-3 shrink-0">
+                <div class="font-display text-4xl sm:text-5xl w-11 text-center leading-none ${playing ? "text-[#E50914]" : "text-white/35"}">${String(i + 1).padStart(2, "0")}</div>
                 <div class="relative w-36 sm:w-48 aspect-video rounded-xl overflow-hidden bg-black border border-white/15 shrink-0">
-                  <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <img src="${esc(e.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" decoding="async" alt="" class="w-full h-full object-cover" />
                   <span class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/85 font-mono text-[9px] font-bold text-white">${esc(e.duration || "35:00")}</span>
-                  ${playing ? `
-                    <div class="absolute inset-x-0 bottom-0 h-1 bg-white/20"><div class="h-full w-2/3 bg-gradient-to-r from-[#E50914] to-[#FFAB00]"></div></div>
-                  ` : ""}
                 </div>
               </div>
-              <div class="min-w-0 flex-grow space-y-1.5">
+              <div class="min-w-0 flex-grow space-y-1">
                 <div class="flex flex-wrap items-center gap-2">
-                  ${playing ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase"><span class="eq-bars"><span></span><span></span><span></span></span><span>NOW PLAYING</span></span>` : ""}
+                  ${playing ? `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase"><span class="eq-bars"><span></span><span></span><span></span></span><span>NOW PLAYING</span></span>` : ""}
                   <span class="font-mono text-[10px] font-bold uppercase text-[#FFAB00]">${esc(e.channel)}</span>
                 </div>
-                <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[#FFAB00] line-clamp-1 transition">${esc(e.title)}</h4>
-                <p class="text-xs text-neutral-400 line-clamp-2 leading-relaxed">${esc(e.desc)}</p>
-              </div>
-              <div class="hidden md:flex shrink-0">
-                <span class="w-10 h-10 rounded-full ${playing ? "bg-[#E50914] text-white" : "bg-white/10 group-hover:bg-[#FFAB00] group-hover:text-black text-white"} flex items-center justify-center transition">
-                  <svg class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </span>
+                <h4 class="text-sm sm:text-base font-bold text-white line-clamp-1">${esc(e.title)}</h4>
+                <p class="text-xs text-neutral-400 line-clamp-2">${esc(e.desc)}</p>
               </div>
             </article>
           `;
@@ -2603,10 +2759,7 @@
 
       function toggleMhAutoplay() {
         mhAutoplayNext = !mhAutoplayNext;
-        const btn = document.getElementById("mhAutoplayBtn");
-        btn.textContent = mhAutoplayNext ? "AUTOPLAY NEXT: ON" : "AUTOPLAY NEXT: OFF";
-        btn.classList.toggle("text-[#FFAB00]", mhAutoplayNext);
-        btn.classList.toggle("text-neutral-400", !mhAutoplayNext);
+        document.getElementById("mhAutoplayBtn").textContent = mhAutoplayNext ? "AUTOPLAY: ON" : "AUTOPLAY: OFF";
       }
 
       function toggleMhSound() {
@@ -2633,19 +2786,18 @@
       }
 
       function renderMhCreators() {
-        const channels = ["ALL", ...Array.from(new Set(mhCreators.map((c) => c.channel))).slice(0, 7)];
+        const channels = ["ALL", ...Array.from(new Set(mhCreators.map((c) => c.channel))).slice(0, 6)];
         document.getElementById("mhLiveFilterPills").innerHTML = channels.map((ch) => `
-          <button type="button" onclick="FPS.filterMhCreators('${esc(ch)}')" class="px-3 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${mhLiveFilter === ch ? "bg-[#E50914] border-[#E50914] text-white" : "bg-white/5 hover:bg-white/15 border-white/15 text-neutral-300"}">${esc(ch)}</button>
+          <button type="button" onclick="FPS.filterMhCreators('${esc(ch)}')" class="px-3 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${mhLiveFilter === ch ? "bg-[#E50914] border-[#E50914] text-white" : "bg-white/5 border-white/15 text-neutral-300"}">${esc(ch)}</button>
         `).join("");
 
         const filtered = mhLiveFilter === "ALL" ? mhCreators : mhCreators.filter((c) => c.channel === mhLiveFilter);
         document.getElementById("mhCreatorsGrid").innerHTML = filtered.map((c) => `
-          <article onclick="FPS.playMhCreatorVideo('${esc(c.vid)}', '${esc(c.title)}', '${esc(c.channel)}')" style="--rim-color:#E50914; --rim-glow:rgba(229,9,20,0.45);" class="cinema-card rounded-2xl overflow-hidden cursor-pointer flex flex-col">
+          <article onclick="FPS.playMhCreatorVideo('${esc(c.vid)}', '${esc(c.title)}', '${esc(c.channel)}')" class="cinema-card rounded-2xl overflow-hidden cursor-pointer flex flex-col">
             <div class="relative aspect-video bg-black overflow-hidden">
-              <img src="${esc(c.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" alt="" class="w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30"></div>
-              ${c.live ? `<span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase flex items-center gap-1.5 shadow-[0_0_12px_rgba(229,9,20,0.7)]"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>LIVE</span>` : ""}
-              <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 border border-white/15 font-mono text-[9px] font-bold text-neutral-200">${esc(c.viewers)}</span>
+              <img src="${esc(c.thumb)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" decoding="async" alt="" class="w-full h-full object-cover" />
+              ${c.live ? `<span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-[#E50914] text-white font-mono text-[9px] font-bold uppercase">LIVE</span>` : ""}
+              <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[9px] font-bold text-neutral-200">${esc(c.viewers)}</span>
             </div>
             <div class="p-3.5">
               <div class="font-mono text-[10px] font-bold text-[#FFAB00] uppercase truncate">${esc(c.channel)}</div>
@@ -2665,22 +2817,32 @@
         document.getElementById("media-house-view").scrollTo({ top: 0, behavior: "smooth" });
       }
 
+      // Chunked Lazy Rendering for 50+ Screenshots (first 18 immediate, then Load More to 50+)
       function renderMhShots() {
         const shots = (mhGame && mhGame._shots) || [];
         document.getElementById("mhShotsBadge").textContent = `${shots.length}`;
         document.getElementById("mhShotsTotalLabel").textContent = `${shots.length} HD CAPTURES`;
-        document.getElementById("mhShotsGrid").innerHTML = shots.map((u, i) => `
+
+        const slice = shots.slice(0, mhShotsVisibleCount);
+        document.getElementById("mhShotsGrid").innerHTML = slice.map((u, i) => `
           <div class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/12 hover:border-[#FFAB00] transition group">
-            <img onclick="FPS.openLightbox(${i}, 'mh')" src="${esc(u)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" alt="HD Frame ${i + 1}" class="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform duration-300" />
-            <button type="button" onclick="FPS.downloadImageUrl('${esc(u)}', 'FPS-${esc(mhGame.slug)}-${i + 1}.jpg')" class="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/85 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white font-mono text-[9px] font-bold uppercase opacity-95 sm:opacity-0 sm:group-hover:opacity-100 transition">
-              DOWNLOAD HD
+            <img onclick="FPS.openLightbox(${i}, 'mh')" src="${esc(u)}" ${imgFallbackAttr(mhGame.fallbackPoster)} loading="lazy" decoding="async" alt="HD Frame ${i + 1}" class="w-full h-full object-cover cursor-pointer" />
+            <button type="button" onclick="FPS.downloadImageUrl('${esc(u)}', 'FPS-${esc(mhGame.slug)}-${i + 1}.jpg')" class="absolute bottom-2 right-2 px-2 py-1 rounded-lg bg-black/85 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white font-mono text-[9px] font-bold uppercase transition">
+              HD
             </button>
           </div>
         `).join("");
+
+        document.getElementById("mhShotsLoadMoreWrap").classList.toggle("hidden", mhShotsVisibleCount >= shots.length);
+      }
+
+      function loadMoreMhShots() {
+        mhShotsVisibleCount += 24;
+        renderMhShots();
       }
 
       /* ------------------------------------------------------------------- */
-      /* FULLSCREEN SWIPEABLE LIGHTBOX                                       */
+      /* SWIPEABLE LIGHTBOX                                                  */
       /* ------------------------------------------------------------------- */
       function initLightboxSwipe() {
         const lb = document.getElementById("lightbox");
@@ -2741,7 +2903,7 @@
       }
 
       /* ------------------------------------------------------------------- */
-      /* MAJOR UPGRADE: WANNA PLAY HUB & SLIDE-OVER DRAWER                   */
+      /* WANNA PLAY HUB & SLIDE-OVER DRAWER                                  */
       /* ------------------------------------------------------------------- */
       function isInWannaPlay(slug) { return wannaPlay.some((x) => x.slug === slug); }
 
@@ -2777,7 +2939,7 @@
         if (!game) return;
         if (isInWannaPlay(game.slug)) {
           wannaPlay = wannaPlay.filter((x) => x.slug !== game.slug);
-          showToast(`Removed ${game.title} from Wanna Play`);
+          showToast(`Removed ${game.title}`);
         } else {
           wannaPlay.unshift({
             slug: game.slug,
@@ -2803,13 +2965,9 @@
         if (!item) return;
         item.priority = !item.priority;
         saveWannaPlay();
-        showToast(item.priority ? `Pinned ${item.title} as Priority` : `Unpinned ${item.title}`, "gold");
       }
 
-      function setWannaFilter(f) {
-        wpFilter = f;
-        renderWannaPlayDrawer();
-      }
+      function setWannaFilter(f) { wpFilter = f; renderWannaPlayDrawer(); }
 
       function toggleWannaSort() {
         wpSort = wpSort === "recent" ? "score" : "recent";
@@ -2824,8 +2982,8 @@
         const active = isInWannaPlay(g.slug);
         btn.textContent = active ? "IN WANNA PLAY" : "+ WANNA PLAY";
         btn.className = active
-          ? "px-4 py-3 rounded-xl bg-[#FFAB00] text-black font-black text-xs tracking-wider uppercase shadow-[0_0_18px_rgba(255,171,0,0.45)] transition active:scale-95"
-          : "px-4 py-3 rounded-xl bg-black/65 hover:bg-[#FFAB00]/20 backdrop-blur-md border border-[#FFAB00]/70 text-white font-bold text-xs tracking-wider uppercase transition active:scale-95";
+          ? "px-4 py-3 rounded-xl bg-[#FFAB00] text-black font-black text-xs tracking-wider uppercase transition active:scale-95"
+          : "px-4 py-3 rounded-xl bg-black/75 hover:bg-[#FFAB00]/20 border border-[#FFAB00]/70 text-white font-bold text-xs tracking-wider uppercase transition active:scale-95";
       }
 
       function syncModalWannaBtn() {
@@ -2849,7 +3007,7 @@
         document.getElementById("wpStatPriority").textContent = prioCount;
 
         document.getElementById("wpFilterPills").innerHTML = WP_FILTERS.map((f) => `
-          <button type="button" onclick="FPS.setWannaFilter('${f}')" class="px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${wpFilter === f ? "bg-[#FFAB00] border-[#FFAB00] text-black" : "bg-white/[0.05] hover:bg-white/[0.12] border-white/12 text-neutral-300"}">${f}</button>
+          <button type="button" onclick="FPS.setWannaFilter('${f}')" class="px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold uppercase border transition ${wpFilter === f ? "bg-[#FFAB00] border-[#FFAB00] text-black" : "bg-white/[0.05] border-white/12 text-neutral-300"}">${f}</button>
         `).join("");
 
         const list = document.getElementById("drawerWannaList");
@@ -2862,14 +3020,9 @@
           ];
           list.innerHTML = `
             <div class="py-12 px-3 text-center space-y-4">
-              <div class="w-14 h-14 rounded-2xl bg-[#FFAB00]/15 border border-[#FFAB00]/45 text-[#FFAB00] flex items-center justify-center mx-auto">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
-              </div>
-              <div>
-                <div class="font-display text-3xl text-white">YOUR QUEUE IS EMPTY</div>
-                <p class="text-xs text-neutral-400 mt-1">Start your backlog with one tap on these flagship legends:</p>
-              </div>
-              <div class="flex flex-wrap justify-center gap-2 pt-1">
+              <div class="font-display text-3xl text-white">YOUR QUEUE IS EMPTY</div>
+              <p class="text-xs text-neutral-400">Quick-add a flagship title below:</p>
+              <div class="flex flex-wrap justify-center gap-2">
                 ${picks.map((p) => `<button type="button" onclick="FPS.quickAddFlagship('${p.slug}')" class="px-3 py-1.5 rounded-xl bg-white/[0.07] hover:bg-[#FFAB00] hover:text-black border border-[#FFAB00]/50 font-mono text-[11px] font-bold uppercase text-[#FFAB00] transition">${p.label}</button>`).join("")}
               </div>
             </div>
@@ -2893,14 +3046,14 @@
         list.innerHTML = items.map((item) => {
           const tier = computeTier(item.score, item.title);
           return `
-            <div class="rounded-2xl bg-white/[0.05] border ${item.priority ? "border-[#FFAB00]/70 shadow-[0_0_20px_rgba(255,171,0,0.16)]" : "border-white/12"} p-3 space-y-3 transition">
+            <div class="rounded-2xl bg-white/[0.05] border ${item.priority ? "border-[#FFAB00]/75" : "border-white/12"} p-3 space-y-3">
               <div class="flex items-start gap-3">
-                <img src="${esc(item.poster)}" ${imgFallbackAttr()} alt="${esc(item.title)}" class="w-20 h-14 rounded-xl object-cover bg-black border border-white/15 shrink-0" />
+                <img src="${esc(item.poster)}" ${imgFallbackAttr()} alt="${esc(item.title)}" loading="lazy" decoding="async" class="w-20 h-14 rounded-xl object-cover bg-black border border-white/15 shrink-0" />
                 <div class="min-w-0 flex-grow">
                   <div class="flex items-center justify-between gap-2">
                     <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase ${tier.cls}">${tier.label}</span>
                     <div class="flex items-center gap-1">
-                      <button type="button" onclick="FPS.toggleWannaPriority('${esc(item.slug)}')" title="Pin Priority" class="w-7 h-7 rounded-lg ${item.priority ? "bg-[#FFAB00]/25 text-[#FFAB00]" : "bg-white/5 text-neutral-400 hover:text-[#FFAB00]"} flex items-center justify-center transition">
+                      <button type="button" onclick="FPS.toggleWannaPriority('${esc(item.slug)}')" title="Pin Priority" class="w-7 h-7 rounded-lg ${item.priority ? "bg-[#FFAB00]/25 text-[#FFAB00]" : "bg-white/5 text-neutral-400"} flex items-center justify-center transition">
                         <svg class="w-3.5 h-3.5 ${item.priority ? "fill-[#FFAB00]" : "fill-none"}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                       </button>
                       <button type="button" onclick="FPS.removeWannaPlay('${esc(item.slug)}')" aria-label="Remove" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-[#E50914] text-neutral-300 hover:text-white flex items-center justify-center transition">
@@ -2958,11 +3111,14 @@
         const opening = d.classList.contains("translate-x-full");
         d.classList.toggle("translate-x-full", !opening);
         b.classList.toggle("hidden", !opening);
+        if (opening) pauseHeroVideo();
+        else if (canPlayHeroVideo()) mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
       }
 
       function closeWannaPlayDrawer() {
         document.getElementById("wannaPlayDrawer").classList.add("translate-x-full");
         document.getElementById("wannaPlayBackdrop").classList.add("hidden");
+        if (canPlayHeroVideo()) mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
       }
 
       /* ------------------------------------------------------------------- */
@@ -3006,7 +3162,7 @@
                   genres: (item.genres || []).map((x) => x.name)
                 };
                 gameRegistry.set(mapped.slug, mapped);
-                return buildGameCardHTML(mapped).replace("w-52 sm:w-64", "w-full");
+                return buildGameCardHTML(mapped).replace("w-48 sm:w-60", "w-full");
               }).join("");
             } catch (err) {
               if (err.name !== "AbortError") document.getElementById("searchStatusLabel").textContent = "Search unavailable right now.";
@@ -3021,7 +3177,7 @@
         document.getElementById("navClearSearchBtn").classList.add("hidden");
         document.getElementById("search-view").classList.add("hidden");
         document.getElementById("home-view").classList.remove("hidden");
-        mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
+        if (canPlayHeroVideo()) mountHeroTrailer(FLAGSHIP_GAMES[heroIdx], heroIdx);
       }
 
       function goHome() {
@@ -3063,12 +3219,12 @@
         openMediaHouse, openMediaHouseFromModal, closeMediaHouse, openModalFromMh,
         switchMhBySlug, filterMhStrip, clearMhSearch, switchMhEpCreator, playMhEp, mhNextEp, mhPrevEp,
         toggleMhAutoplay, toggleMhSound, toggleMhWide, switchMhTab, filterMhCreators, playMhCreatorVideo,
-        toggleMhWannaPlay: () => toggleWannaPlayGame(mhGame),
+        toggleMhWannaPlay: () => toggleWannaPlayGame(mhGame), loadMoreMhShots,
         openLightbox, stepLightbox, closeLightbox, downloadLightboxImg, downloadImageUrl,
-        toggleSfx, setPresetScore, publishReview, startEditReview, cancelEditReview, deleteReview,
+        toggleSfx, setPresetScore, publishReview, deleteMyReview,
         toggleWannaPlayDrawer, closeWannaPlayDrawer, setWannaFilter, toggleWannaSort, toggleWannaPriority,
         quickAddFlagship, openReviewFromWanna, openMediaHouseFromWanna, removeWannaPlay, clearWannaPlay,
-        openAuthModal, closeAuthModal, signInGoogle, signOutGoogle
+        openAuthModal, closeAuthModal, setAuthMode, signInGoogle, submitEmailAuth, signOutUser
       };
 
       window.addEventListener("DOMContentLoaded", () => {
@@ -3080,7 +3236,7 @@
         initEndlessScroll();
         initLightboxSwipe();
         hydrateFlagshipPosters();
-        setTimeout(initFirebase, 100);
+        initFirebase();
       });
     })();
   </script>
