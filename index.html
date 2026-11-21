@@ -18,7 +18,7 @@
       --fps-gold: #FFAB00;
       --fps-gold-bright: #FFB81C;
       --fps-red: #E50914;
-      --fps-bg: #050608;
+      --fps-bg: #070709;
       --fps-surface: #0D0F16;
       --fps-card: #12151F;
       --gauge-color: #3B82F6;
@@ -37,6 +37,7 @@
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--fps-bg);
+      background-image: radial-gradient(circle at 18% 0%, rgba(255, 171, 0, 0.06) 0%, transparent 42%), radial-gradient(circle at 82% 10%, rgba(229, 9, 20, 0.05) 0%, transparent 38%);
       color: #ffffff;
       overflow-x: hidden;
       margin: 0;
@@ -110,8 +111,134 @@
 
     @keyframes splashCurtainExit {
       0% { opacity: 1; }
-      80% { opacity: 1; }
+      82% { opacity: 1; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; }
+    }
+
+    @keyframes creditShimmerFade {
+      0% { opacity: 0; transform: translateY(10px); letter-spacing: 0.42em; }
+      45% { opacity: 1; transform: translateY(0); letter-spacing: 0.28em; }
+      100% { opacity: 1; transform: translateY(0); letter-spacing: 0.28em; }
+    }
+
+    @keyframes creditTextShine {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .splash-curtain {
+      animation: splashCurtainExit 1.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .splash-credit-line {
+      opacity: 0;
+      background: linear-gradient(90deg, #a1a1aa 0%, #ffffff 35%, #FFAB00 50%, #ffffff 65%, #a1a1aa 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: creditShimmerFade 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.78s forwards, creditTextShine 2.2s linear 0.9s infinite;
+    }
+
+    /* ==================== SPECIAL RDR2 SHOTGUN-SHELL LOADING INTRO ==================== */
+    @keyframes rdr2ShellDrop1 {
+      0% { transform: translate(-26px, -210px) rotate(-32deg) scale(0.85); opacity: 0; }
+      16% { opacity: 1; }
+      68% { transform: translate(-22px, 18px) rotate(148deg) scale(1.06); opacity: 1; }
+      84% { transform: translate(-28px, 6px) rotate(172deg) scale(1); opacity: 1; }
+      100% { transform: translate(-34px, 46px) rotate(196deg) scale(0.92); opacity: 0; }
+    }
+
+    @keyframes rdr2ShellDrop2 {
+      0% { transform: translate(26px, -210px) rotate(28deg) scale(0.85); opacity: 0; }
+      16% { opacity: 1; }
+      68% { transform: translate(22px, 20px) rotate(-142deg) scale(1.06); opacity: 1; }
+      84% { transform: translate(30px, 8px) rotate(-168deg) scale(1); opacity: 1; }
+      100% { transform: translate(36px, 48px) rotate(-192deg) scale(0.92); opacity: 0; }
+    }
+
+    @keyframes rdr2SmokePuff {
+      0% { transform: scale(0.3) translateY(0); opacity: 0; }
+      25% { opacity: 0.48; }
+      100% { transform: scale(2.4) translateY(-55px); opacity: 0; }
+    }
+
+    @keyframes rdr2ScreenShake {
+      0%, 100% { transform: translate(0, 0); }
+      15% { transform: translate(-6px, 4px); }
+      30% { transform: translate(6px, -5px); }
+      45% { transform: translate(-4px, 3px); }
+      60% { transform: translate(4px, -2px); }
+      75% { transform: translate(-2px, 1px); }
+    }
+
+    @keyframes rdr2GunshotFlash {
+      0% { opacity: 0; }
+      18% { opacity: 0.85; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes rdr2StampSlam {
+      0% { transform: scale(2.1); opacity: 0; filter: blur(10px); }
+      42% { transform: scale(0.95); opacity: 1; filter: blur(0); }
+      60% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes rdr2GrainShift {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-2%, 2%); }
+      50% { transform: translate(2%, -1%); }
+      75% { transform: translate(-1%, -2%); }
+    }
+
+    .rdr2-crimson-bg {
+      background: radial-gradient(circle at center, #9b0f14 0%, #6b070b 52%, #360204 100%);
+    }
+
+    .rdr2-grain {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
+      background-size: 3px 3px;
+      animation: rdr2GrainShift 0.25s steps(2) infinite;
+    }
+
+    .rdr2-shake-active {
+      animation: rdr2ScreenShake 0.26s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    .rdr2-shell-1-anim {
+      animation: rdr2ShellDrop1 0.88s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+    }
+
+    .rdr2-shell-2-anim {
+      animation: rdr2ShellDrop2 0.88s cubic-bezier(0.22, 1, 0.36, 1) 0.42s forwards;
+    }
+
+    .rdr2-smoke-1 {
+      animation: rdr2SmokePuff 0.75s ease-out 0.18s forwards;
+    }
+
+    .rdr2-smoke-2 {
+      animation: rdr2SmokePuff 0.75s ease-out 0.5s forwards;
+    }
+
+    .rdr2-flash-anim {
+      animation: rdr2GunshotFlash 0.32s ease-out 0.95s forwards;
+    }
+
+    .rdr2-stamp-anim {
+      opacity: 0;
+      animation: rdr2StampSlam 0.48s cubic-bezier(0.16, 1, 0.3, 1) 0.96s forwards;
+    }
+
+    /* Upgraded WANNA PLAY Slide-Over Drawer */
+    .wanna-play-drawer-panel {
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .wanna-play-drawer-closed {
+      transform: translateX(100%);
+    }
+    .wanna-play-drawer-open {
+      transform: translateX(0);
     }
 
     .splash-curtain {
@@ -262,8 +389,15 @@
 
     /* Netflix Card Hover & Depth */
     .game-card {
-      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
       cursor: pointer;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .game-card:hover {
+      transform: translateY(-7px) scale(1.045);
+      z-index: 25;
+      box-shadow: 0 26px 44px -10px rgba(0, 0, 0, 0.96), 0 0 28px rgba(255, 171, 0, 0.36), 0 0 0 1px rgba(229, 9, 20, 0.4);
+      border-color: rgba(255, 171, 0, 0.85);
     }
     .game-card:hover {
       transform: translateY(-6px) scale(1.045);
@@ -342,9 +476,9 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#050608] text-white selection:bg-[#FFAB00] selection:text-black">
+<body class="min-h-screen flex flex-col bg-[#070709] text-white selection:bg-[#FFAB00] selection:text-black">
 
-  <!-- ==================== 1. ROCKSTAR-STYLE ANIMATED FPS SVG SPLASH (~1.6s, CLICK TO SKIP) ==================== -->
+  <!-- ==================== 1. ROCKSTAR-STYLE ANIMATED FPS SVG SPLASH (~1.8s, CLICK TO SKIP) ==================== -->
   <div id="studioSplash" onclick="FPS.skipSplash()" class="fixed inset-0 z-[120] bg-black flex flex-col items-center justify-center splash-curtain cursor-pointer select-none overflow-hidden px-6">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,171,0,0.18)_0%,rgba(0,0,0,1)_68%)] pointer-events-none"></div>
 
@@ -419,9 +553,95 @@
       </svg>
     </div>
 
-    <span class="relative z-10 mt-6 text-[10px] font-bold tracking-[0.35em] uppercase text-gray-500">
-      TAP ANYWHERE TO ENTER
-    </span>
+    <!-- Creator Credit Directly Below Logo -->
+    <div class="relative z-10 mt-6 flex flex-col items-center gap-2">
+      <div class="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#FFAB00] to-transparent opacity-80"></div>
+      <p class="splash-credit-line text-xs sm:text-sm font-black uppercase tracking-[0.28em] text-center">
+        MADE BY TANVIR HOSSAIN
+      </p>
+      <span class="mt-2 text-[10px] font-bold tracking-[0.35em] uppercase text-gray-500">
+        TAP ANYWHERE TO ENTER
+      </span>
+    </div>
+  </div>
+
+  <!-- ==================== 1B. SPECIAL RDR2 SHOTGUN-SHELL LOADING INTRO ==================== -->
+  <div id="rdr2LoadingOverlay" onclick="FPS.skipRdr2Intro()" class="fixed inset-0 z-[125] hidden rdr2-crimson-bg flex flex-col items-center justify-center overflow-hidden select-none cursor-pointer transition-opacity duration-300">
+    <!-- Subtle Vintage Film Grain & Deep Vignette -->
+    <div class="absolute inset-0 rdr2-grain opacity-35 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_25%,rgba(0,0,0,0.82)_100%)] pointer-events-none"></div>
+
+    <!-- Gunshot White Flash -->
+    <div id="rdr2FlashLayer" class="absolute inset-0 bg-white opacity-0 pointer-events-none z-30"></div>
+
+    <!-- Animated Stage Container -->
+    <div id="rdr2Stage" class="relative z-20 flex flex-col items-center justify-center w-full max-w-xl px-6 text-center">
+      <!-- 2 Ejecting Brass & Crimson Shotgun Shells + Smoke Wisps -->
+      <div class="relative h-36 w-56 flex items-center justify-center mb-2">
+        <div id="rdr2Smoke1" class="absolute w-16 h-16 rounded-full bg-white/30 blur-xl opacity-0 pointer-events-none" style="left: 26%; top: 38%;"></div>
+        <div id="rdr2Smoke2" class="absolute w-16 h-16 rounded-full bg-white/30 blur-xl opacity-0 pointer-events-none" style="right: 26%; top: 38%;"></div>
+
+        <!-- Shotgun Shell 1 -->
+        <svg id="rdr2Shell1" viewBox="0 0 44 108" class="w-10 h-24 absolute opacity-0 drop-shadow-[0_14px_20px_rgba(0,0,0,0.85)]" aria-hidden="true">
+          <defs>
+            <linearGradient id="brassGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#926213" />
+              <stop offset="35%" stop-color="#FDE047" />
+              <stop offset="65%" stop-color="#D97706" />
+              <stop offset="100%" stop-color="#78350F" />
+            </linearGradient>
+            <linearGradient id="hullGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#5B0509" />
+              <stop offset="40%" stop-color="#DC2626" />
+              <stop offset="100%" stop-color="#450A0A" />
+            </linearGradient>
+          </defs>
+          <!-- Crimped Red Hull -->
+          <rect x="8" y="6" width="28" height="62" rx="4" fill="url(#hullGrad1)" stroke="#1a0202" stroke-width="2" />
+          <line x1="15" y1="10" x2="15" y2="66" stroke="rgba(255,255,255,0.22)" stroke-width="2" />
+          <!-- Brass Base & Rim -->
+          <rect x="8" y="66" width="28" height="28" fill="url(#brassGrad1)" stroke="#1a0202" stroke-width="2" />
+          <rect x="4" y="92" width="36" height="9" rx="2" fill="url(#brassGrad1)" stroke="#1a0202" stroke-width="2" />
+          <line x1="10" y1="74" x2="34" y2="74" stroke="rgba(0,0,0,0.35)" stroke-width="1.5" />
+          <line x1="10" y1="84" x2="34" y2="84" stroke="rgba(0,0,0,0.35)" stroke-width="1.5" />
+        </svg>
+
+        <!-- Shotgun Shell 2 -->
+        <svg id="rdr2Shell2" viewBox="0 0 44 108" class="w-10 h-24 absolute opacity-0 drop-shadow-[0_14px_20px_rgba(0,0,0,0.85)]" aria-hidden="true">
+          <rect x="8" y="6" width="28" height="62" rx="4" fill="url(#hullGrad1)" stroke="#1a0202" stroke-width="2" />
+          <line x1="15" y1="10" x2="15" y2="66" stroke="rgba(255,255,255,0.22)" stroke-width="2" />
+          <rect x="8" y="66" width="28" height="28" fill="url(#brassGrad1)" stroke="#1a0202" stroke-width="2" />
+          <rect x="4" y="92" width="36" height="9" rx="2" fill="url(#brassGrad1)" stroke="#1a0202" stroke-width="2" />
+          <line x1="10" y1="74" x2="34" y2="74" stroke="rgba(0,0,0,0.35)" stroke-width="1.5" />
+          <line x1="10" y1="84" x2="34" y2="84" stroke="rgba(0,0,0,0.35)" stroke-width="1.5" />
+        </svg>
+      </div>
+
+      <!-- Rockstar-Style R★ / ABSOLUTE RDR Western Emblem Stamp -->
+      <div id="rdr2EmblemStamp" class="opacity-0 flex flex-col items-center space-y-4">
+        <div class="w-32 sm:w-36 drop-shadow-[0_18px_36px_rgba(0,0,0,0.9)]">
+          <svg viewBox="0 0 180 150" class="w-full h-auto" role="img" aria-label="Absolute RDR Emblem">
+            <rect x="8" y="8" width="164" height="134" rx="22" fill="#0A0A0A" stroke="#FFAB00" stroke-width="6" />
+            <rect x="16" y="16" width="148" height="118" rx="16" fill="#FFFFFF" />
+            <text x="68" y="108" text-anchor="middle" fill="#050608" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="108">R</text>
+            <polygon points="128,62 136,86 162,86 141,101 149,125 128,110 107,125 115,101 94,86 120,86" fill="#050608" stroke="#FFFFFF" stroke-width="4" />
+            <polygon points="128,70 133,86 150,86 136,96 141,112 128,102 115,112 120,96 106,86 123,86" fill="#FFAB00" />
+          </svg>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-2 px-4 py-1 rounded bg-black/85 border border-[#FFAB00] text-[#FEF08A] text-[11px] font-black tracking-[0.28em] uppercase shadow-[0_0_24px_rgba(0,0,0,0.85)]">
+            ABSOLUTE RDR
+          </div>
+          <h2 class="font-rockstar italic text-3xl sm:text-5xl font-black tracking-wider uppercase text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.95)]">
+            RED DEAD REDEMPTION II
+          </h2>
+          <p class="text-[10px] font-extrabold tracking-[0.34em] uppercase text-white/75">
+            ROCKSTAR GAMES &bull; CLICK TO SKIP
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ==================== 2. NETFLIX-STYLE GOOGLE-ONLY LOGIN SCREEN ==================== -->
@@ -474,17 +694,17 @@
       <button onclick="FPS.dismissLoginAsGuest()" class="mt-4 w-full py-2.5 text-xs font-bold tracking-widest uppercase text-gray-400 hover:text-white transition">
         Continue as Guest &rarr;
       </button>
+
+      <div class="mt-6 pt-4 border-t border-white/10">
+        <p class="text-[10px] font-extrabold tracking-[0.26em] uppercase text-gray-400">
+          CREATED &amp; DESIGNED BY <span class="text-[#FFAB00]">TANVIR HOSSAIN</span>
+        </p>
+      </div>
     </div>
   </div>
 
   <!-- ==================== 3. SINGLE-ROW STICKY OBSIDIAN NAVBAR ==================== -->
-  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-3 sm:px-6 lg:px-10 flex items-center justify-between gap-2.5 bg-[#050608]/85 backdrop-blur-xl border-b border-white/10">
-    <!-- Left: Crisp Mini FPS Yellow SVG Logo + Non-Wrapping Nav Links -->
-    <div class="flex items-center gap-4 lg:gap-7 min-w-0 flex-nowrap">
-      <button onclick="FPS.returnToHome(true)" aria-label="FPS Home" class="flex items-center flex-shrink-0 group focus:outline-none">
-        <svg viewBox="0 0 440 280" class="h-10 sm:h-11 w-auto drop-shadow-[0_0_12px_rgba(255,171,0,0.4)] group-hover:scale-105 group-hover:drop-shadow-[0_0_20px_rgba(255,171,0,0.7)] transition">
-          <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
-          <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
+  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-3 sm:px-6 lg:px-10 flex items-center justify-between gap-2.5 bg-[#070709]/85 backdrop-blur-xl border-b border-white/[0.08]">
           <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
           <text x="198" y="174" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="162" letter-spacing="-4" transform="skewX(-6) translate(16, 0)">FPS</text>
           <text x="170" y="224" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Inter', sans-serif" font-weight="800" font-style="italic" font-size="22" letter-spacing="3.2">GAME RATING &amp; REVIEWS</text>
@@ -502,10 +722,13 @@
         <button onclick="FPS.jumpToHomeSection('row-cinema')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>ABSOLUTE CINEMA
         </button>
+        <button onclick="FPS.jumpToHomeSection('row-shooters')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#E50914]"></span>SHOOTERS
+        </button>
       </nav>
     </div>
 
-    <!-- Right: Zero-Glitch Search + WANNA PLAY + Auth -->
+    <!-- Right: Zero-Glitch Search + Upgraded WANNA PLAY + Auth -->
     <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 flex-nowrap">
       <!-- Search Bar -->
       <div class="relative w-32 sm:w-48 md:w-60">
@@ -522,11 +745,14 @@
         </button>
       </div>
 
-      <!-- WANNA PLAY Button -->
-      <button onclick="FPS.openWannaPlayModal()" class="h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-extrabold tracking-wider uppercase text-white flex items-center gap-1.5 whitespace-nowrap transition">
-        <svg class="w-3.5 h-3.5 text-[#FFAB00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+      <!-- Upgraded Pill-Shaped Glass WANNA PLAY Button -->
+      <button onclick="FPS.openWannaPlayModal()" class="group h-9 px-3.5 rounded-full bg-white/[0.06] hover:bg-[#FFAB00]/15 backdrop-blur-md border border-[#FFAB00]/55 hover:border-[#FFAB00] text-[11px] font-black tracking-wider uppercase text-white flex items-center gap-2 whitespace-nowrap shadow-[0_0_16px_rgba(255,171,0,0.16)] hover:shadow-[0_0_22px_rgba(255,171,0,0.35)] transition active:scale-95">
+        <svg class="w-3.5 h-3.5 text-[#FFAB00] flex-shrink-0 group-hover:scale-110 transition" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v5m-2.5-2.5h5" />
+        </svg>
         <span class="hidden sm:inline">WANNA PLAY</span>
-        <span id="navWannaPlayCount" class="font-mono-num px-1.5 py-0.5 rounded bg-[#FFAB00] text-black text-[10px] font-black leading-none">0</span>
+        <span id="navWannaPlayCount" class="font-mono-num min-w-[20px] h-5 px-1.5 rounded-full bg-[#FFAB00] text-black text-[10px] font-black inline-flex items-center justify-center shadow-[0_0_12px_rgba(255,171,0,0.75)]">0</span>
       </button>
 
       <!-- Sign In Button -->
@@ -620,9 +846,9 @@
 
           <!-- Hero Action Buttons -->
           <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
-            <button onclick="FPS.openHeroModal('reviews')" class="px-5 sm:px-6 py-3.5 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black font-black text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(255,171,0,0.5)] transition active:scale-95">
-              <svg class="w-4 h-4 fill-black" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <span>WATCH TRAILER</span>
+            <button id="heroWannaPlayBtn" onclick="FPS.toggleHeroWannaPlay()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-extrabold text-xs tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
+              <svg id="heroWannaPlayIcon" class="w-4 h-4 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              <span id="heroWannaPlayText">+ WANNA PLAY</span>
             </button>
 
             <button onclick="FPS.openHeroModal('reviews')" class="px-5 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/35 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
@@ -686,9 +912,9 @@
             <span id="modalTopBreadcrumb" class="text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white truncate">GAME REVIEW THEATER</span>
           </div>
           <div class="flex items-center gap-2">
-            <button id="modalWannaPlayBtn" onclick="FPS.toggleCurrentWannaPlay()" class="h-9 px-3.5 rounded-lg bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition">
-              <svg id="modalWannaPlayIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
-              <span id="modalWannaPlayLabel" class="hidden sm:inline">WANNA PLAY</span>
+            <button id="modalWannaPlayBtn" onclick="FPS.toggleCurrentWannaPlay()" class="h-9 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
+              <svg id="modalWannaPlayIcon" class="w-3.5 h-3.5 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              <span id="modalWannaPlayLabel" class="hidden sm:inline">+ WANNA PLAY</span>
             </button>
             <button onclick="FPS.copyShareLink()" title="Copy Share Link" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
@@ -1020,72 +1246,72 @@
               <div>
                 <span class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">EXACT LAUNCH DATE</span>
                 <span id="fullMetaLaunchDate" class="block text-sm font-bold text-white mt-1">--</span>
-              </div>
-              <div>
-                <span class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">ESRB &amp; METACRITIC</span>
-                <span id="fullMetaRatings" class="block text-sm font-bold text-white mt-1">--</span>
-              </div>
-            </div>
+  <!-- ==================== 8. UPGRADED WANNA PLAY SLIDE-OVER DRAWER ==================== -->
+  <div id="wannaPlayModal" class="fixed inset-0 z-[95] bg-black/75 backdrop-blur-md hidden flex justify-end">
+    <aside id="wannaPlayDrawerPanel" class="wanna-play-drawer-panel wanna-play-drawer-closed w-full max-w-md h-full bg-[#0A0C12]/95 backdrop-blur-2xl border-l border-white/10 shadow-[-24px_0_80px_rgba(0,0,0,0.95)] flex flex-col">
+      <!-- Drawer Header -->
+      <div class="px-6 py-5 border-b border-white/10 bg-gradient-to-r from-[#FFAB00]/10 via-transparent to-transparent flex items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v5m-2.5-2.5h5" />
+            </svg>
+            <h3 class="text-base font-black tracking-widest uppercase text-white">WANNA PLAY</h3>
           </div>
+          <p id="wannaPlayHeaderStats" class="text-[11px] font-bold tracking-wider uppercase text-gray-400 mt-1">0 GAMES QUEUED</p>
+        </div>
 
-          <!-- TAB 3: SCREENSHOTS & PC SPECS -->
-          <div id="tabPane-specs" class="hidden space-y-8">
-            <div class="space-y-3">
-              <h4 class="text-xs font-black tracking-[0.2em] uppercase text-white">HD SCREENSHOT GALLERY</h4>
-              <div id="modalFullScreenshotsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
-            </div>
-
-            <div class="space-y-3">
-              <h4 class="text-xs font-black tracking-[0.2em] uppercase text-white">PC SYSTEM REQUIREMENTS</h4>
-              <div id="modalPcSpecsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
-          </div>
-
+        <div class="flex items-center gap-2">
+          <button id="clearAllWannaPlayBtn" onclick="FPS.clearAllWannaPlay()" class="hidden px-3 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 border border-red-500/35 text-[10px] font-black tracking-widest uppercase text-red-300 transition">
+            CLEAR ALL
+          </button>
+          <button onclick="FPS.closeWannaPlayModal()" aria-label="Close Wanna Play" class="w-9 h-9 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ==================== 7. HD SCREENSHOT LIGHTBOX ==================== -->
-  <div id="screenshotLightbox" class="fixed inset-0 z-[115] bg-black/95 backdrop-blur-xl hidden flex items-center justify-center p-4" onclick="FPS.closeLightbox()">
-    <button onclick="FPS.closeLightbox()" aria-label="Close screenshot" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-    <img id="lightboxImage" src="" alt="Game Screenshot" class="max-w-full max-h-[88vh] rounded-xl border border-white/20 shadow-2xl object-contain" onclick="event.stopPropagation()" />
-  </div>
-
-  <!-- ==================== 8. WANNA PLAY DRAWER / MODAL ==================== -->
-  <div id="wannaPlayModal" class="fixed inset-0 z-[95] bg-black/88 backdrop-blur-xl hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-2xl bg-[#0D0F16] border border-white/15 rounded-2xl p-6 max-h-[82vh] flex flex-col shadow-2xl">
-      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-        <h3 class="text-base sm:text-lg font-black tracking-wider uppercase text-white flex items-center gap-2.5">
-          <svg class="w-5 h-5 text-[#FFAB00]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
-          MY WANNA PLAY LIST
-        </h3>
-        <button onclick="FPS.closeWannaPlayModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <div id="wannaPlayList" class="flex-grow overflow-y-auto space-y-3 pr-1"></div>
-    </div>
+      <!-- Drawer Content -->
+      <div id="wannaPlayList" class="flex-grow overflow-y-auto p-5 space-y-3.5"></div>
+    </aside>
   </div>
 
   <!-- ==================== 9. TOAST NOTIFICATION ==================== -->
   <div id="toastBox" class="fixed bottom-6 right-6 z-[130] hidden px-4 py-3 rounded-xl bg-[#131724] border border-[#FFAB00]/50 text-xs font-extrabold tracking-wider uppercase text-white shadow-[0_12px_40px_rgba(0,0,0,0.85)]"></div>
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="border-t border-white/10 bg-[#040507] py-10 px-6 text-center">
-    <div class="max-w-4xl mx-auto space-y-2.5 flex flex-col items-center">
-      <svg viewBox="0 0 440 280" class="h-10 w-auto">
-        <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
-        <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
-        <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
-        <text x="198" y="174" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="162" letter-spacing="-4" transform="skewX(-6) translate(16, 0)">FPS</text>
-        <text x="170" y="224" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Inter', sans-serif" font-weight="800" font-style="italic" font-size="22" letter-spacing="3.2">GAME RATING &amp; REVIEWS</text>
-        <polygon points="322,126 336,166 378,166 344,191 357,231 322,206 287,231 300,191 266,166 308,166" fill="#FFFFFF" stroke="#000000" stroke-width="11" stroke-linejoin="miter" />
-      </svg>
+  <!-- ==================== PREMIUM FOOTER WITH CREDITS & QUICK LINKS ==================== -->
+  <footer class="border-t border-white/[0.08] bg-[#040507] py-12 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col items-center text-center space-y-5">
+      <button onclick="FPS.returnToHome(true)" aria-label="Return to top" class="hover:scale-105 transition">
+        <svg viewBox="0 0 440 280" class="h-12 w-auto drop-shadow-[0_0_16px_rgba(255,171,0,0.3)]">
+          <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
+          <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
+          <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
+          <text x="198" y="174" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="162" letter-spacing="-4" transform="skewX(-6) translate(16, 0)">FPS</text>
+          <text x="170" y="224" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Inter', sans-serif" font-weight="800" font-style="italic" font-size="22" letter-spacing="3.2">GAME RATING &amp; REVIEWS</text>
+          <polygon points="322,126 336,166 378,166 344,191 357,231 322,206 287,231 300,191 266,166 308,166" fill="#FFFFFF" stroke="#000000" stroke-width="11" stroke-linejoin="miter" />
+        </svg>
+      </button>
+
+      <!-- Quick Links -->
+      <div class="flex flex-wrap items-center justify-center gap-5 text-[11px] font-extrabold tracking-widest uppercase text-gray-300">
+        <button onclick="FPS.jumpToHomeSection('row-rockstar')" class="hover:text-[#FFAB00] transition">ROCKSTAR VAULT</button>
+        <span class="text-white/20">&bull;</span>
+        <button onclick="FPS.jumpToHomeSection('row-peak')" class="hover:text-[#FFAB00] transition">PEAK TIER</button>
+        <span class="text-white/20">&bull;</span>
+        <button onclick="FPS.openWannaPlayModal()" class="hover:text-[#FFAB00] transition">WANNA PLAY</button>
+      </div>
+
+      <!-- Prominent Creator Credit -->
+      <div class="px-5 py-2 rounded-full bg-white/[0.04] border border-[#FFAB00]/30 shadow-[0_0_24px_rgba(255,171,0,0.12)]">
+        <p class="text-[11px] sm:text-xs font-black tracking-[0.26em] uppercase text-white">
+          CREATED &amp; ENGINEERED BY <span class="text-[#FFAB00]">TANVIR HOSSAIN</span>
+        </p>
+      </div>
+
       <p class="text-xs text-gray-400">Live Game Data &amp; Storefronts via RAWG API &bull; Official Trailers via YouTube Data API v3 &bull; Cloud Sync via Firebase Firestore</p>
-      <p class="text-[10px] text-gray-500 uppercase tracking-[0.25em]">&copy; 2026 FPS — GAME RATING &amp; REVIEWS</p>
+      <p class="text-[10px] text-gray-500 uppercase tracking-[0.25em]">&copy; 2026 FPS — GAME RATING &amp; REVIEWS. ALL RIGHTS RESERVED.</p>
     </div>
   </footer>
 
@@ -1311,6 +1537,10 @@
     let activeTierFilter = "ALL";
     let selectedVerdictTags = new Set();
     let editingReviewId = null;
+
+    // RDR2 Special Intro State
+    let rdr2IntroTimers = [];
+    let rdr2PendingOpen = null;
 
     // Search View State (Zero-Glitch)
     let isSearchActive = false;
@@ -1750,10 +1980,17 @@
       const slide = heroSlides[currentHeroIdx];
       if (!slide) return;
       const inList = wannaPlayList.some((g) => String(g.id) === String(slide.id) || g.name === slide.name);
+      const btn = document.getElementById("heroWannaPlayBtn");
       const txt = document.getElementById("heroWannaPlayText");
       const icon = document.getElementById("heroWannaPlayIcon");
-      if (txt) txt.textContent = inList ? "IN WANNA PLAY" : "WANNA PLAY";
+      if (btn) {
+        btn.className = inList
+          ? "px-4 py-3.5 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black font-black text-xs tracking-wider uppercase flex items-center gap-2 shadow-[0_0_24px_rgba(255,171,0,0.5)] transition active:scale-95"
+          : "px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-extrabold text-xs tracking-wider uppercase flex items-center gap-2 transition active:scale-95";
+      }
+      if (txt) txt.textContent = inList ? "IN WANNA PLAY" : "+ WANNA PLAY";
       if (icon) {
+        icon.setAttribute("class", inList ? "w-4 h-4 text-black" : "w-4 h-4 text-[#FFAB00]");
         icon.innerHTML = inList
           ? `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>`
           : `<path stroke-linecap="round" d="M12 5v14m-7-7h14"/>`;
@@ -1889,217 +2126,184 @@
     }
 
     // =========================================================================
-    // 10. YOUTUBE DATA API v3 FETCH + LOCALSTORAGE CACHE
+    // 11B. SPECIAL RDR2 SHOTGUN-SHELL LOADING INTRO + WEB AUDIO SYNTHESIZER
     // =========================================================================
-    async function fetchYouTubeTrailerId(gameName) {
-      const key = (gameName || "").toLowerCase().trim();
-      if (KNOWN_YT_MAP[key]) return KNOWN_YT_MAP[key];
-      if (ytCache[key]) return ytCache[key];
+    function isRedDeadRedemption2(game) {
+      const n = (game?.name || game?.title || "").toLowerCase();
+      const s = (game?.slug || "").toLowerCase();
+      return n.includes("red dead redemption 2") || n.includes("red dead redemption ii") || s === "red-dead-redemption-2";
+    }
+
+    function playRdr2WebAudioSequence() {
       try {
-        const q = encodeURIComponent(`${gameName} official trailer`);
-        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${q}&type=video&videoEmbeddable=true&key=${YOUTUBE_API_KEY}`);
-        const data = await res.json();
-        const vid = data?.items?.[0]?.id?.videoId;
-        if (vid) {
-          ytCache[key] = vid;
-          localStorage.setItem("fps_yt_cache_v5", JSON.stringify(ytCache));
-          return vid;
-        }
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === "suspended") ctx.resume();
+        const now = ctx.currentTime;
+
+        const playShellClackAndPing = (offsetSec) => {
+          const t = now + offsetSec;
+          // 1. Metallic chamber pump clack (filtered noise burst)
+          const bufSize = Math.floor(ctx.sampleRate * 0.09);
+          const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.018));
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = "bandpass";
+          filter.frequency.setValueAtTime(1450, t);
+          filter.Q.setValueAtTime(2.6, t);
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.45, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.085);
+          noise.connect(filter).connect(gain).connect(ctx.destination);
+          noise.start(t);
+
+          // 2. Brass shell drop metallic ping
+          const osc = ctx.createOscillator();
+          const oscGain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(2950, t + 0.07);
+          osc.frequency.exponentialRampToValueAtTime(1950, t + 0.2);
+          oscGain.gain.setValueAtTime(0.14, t + 0.07);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.24);
+          osc.connect(oscGain).connect(ctx.destination);
+          osc.start(t + 0.07);
+          osc.stop(t + 0.25);
+        };
+
+        const playShotgunBoom = (offsetSec) => {
+          const t = now + offsetSec;
+          // Deep western shotgun blast (low-passed noise)
+          const bufSize = Math.floor(ctx.sampleRate * 0.65);
+          const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.14));
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const lp = ctx.createBiquadFilter();
+          lp.type = "lowpass";
+          lp.frequency.setValueAtTime(1100, t);
+          lp.frequency.exponentialRampToValueAtTime(110, t + 0.55);
+          const nGain = ctx.createGain();
+          nGain.gain.setValueAtTime(0.75, t);
+          nGain.gain.exponentialRampToValueAtTime(0.001, t + 0.62);
+          noise.connect(lp).connect(nGain).connect(ctx.destination);
+          noise.start(t);
+
+          // Sub-bass cinematic resonance slam
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = "sine";
+          sub.frequency.setValueAtTime(118, t);
+          sub.frequency.exponentialRampToValueAtTime(34, t + 0.55);
+          subGain.gain.setValueAtTime(0.65, t);
+          subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
+          sub.connect(subGain).connect(ctx.destination);
+          sub.start(t);
+          sub.stop(t + 0.68);
+        };
+
+        playShellClackAndPing(0.12);
+        playShellClackAndPing(0.44);
+        playShotgunBoom(0.95);
+
+        setTimeout(() => { ctx.close().catch(() => {}); }, 2600);
       } catch (_) {}
-      return null;
     }
 
-    // =========================================================================
-    // 11. PARALLEL FAST CAROUSELS + SHIMMER SKELETONS + ENDLESS SCROLLING
-    // =========================================================================
-    const ALL_CATALOG_ROWS = [
-      { id: "row-rockstar", title: "Rockstar Vault", tag: "EXCLUSIVE EDITIONS", accent: "bg-[#FFAB00]", query: "developers=rockstar-games&ordering=-rating" },
-      { id: "row-peak", title: "Peak Tier", tag: "9.5 – 10.0 CRITIC", accent: "bg-amber-400", query: "ordering=-metacritic&metacritic=94,100" },
-      { id: "row-cinema", title: "Absolute Cinema", tag: "9.0 – 9.4 CRITIC", accent: "bg-blue-500", query: "ordering=-metacritic&metacritic=90,93" },
-      { id: "row-shooters", title: "Tactical & Action Shooters", tag: "HIGH OCTANE", accent: "bg-[#E50914]", query: "genres=shooter,action&ordering=-added" },
-      { id: "row-openworld", title: "Open World Epics", tag: "MASSIVE WORLDS", accent: "bg-emerald-500", query: "tags=open-world&ordering=-metacritic&metacritic=84,99" },
-      { id: "row-rpg", title: "RPG Masterpieces", tag: "DEEP LORE", accent: "bg-purple-500", query: "genres=role-playing-games-rpg&ordering=-metacritic&metacritic=84,99" },
-      { id: "row-horror", title: "Survival Horror", tag: "DARK ATMOSPHERE", accent: "bg-red-700", query: "tags=horror,survival-horror&ordering=-metacritic" },
-      { id: "row-indie", title: "Indie Gems", tag: "CRITIC DARLINGS", accent: "bg-teal-400", query: "genres=indie&ordering=-metacritic&metacritic=85,99" },
-      { id: "row-racing", title: "Racing & Sports", tag: "MOTORSPORT", accent: "bg-orange-500", query: "genres=racing,sports&ordering=-metacritic&metacritic=78,99" },
-      { id: "row-strategy", title: "Strategy", tag: "TACTICAL COMMAND", accent: "bg-indigo-400", query: "genres=strategy&ordering=-metacritic&metacritic=82,99" },
-      { id: "row-fighting", title: "Fighting", tag: "COMPETITIVE ARENA", accent: "bg-pink-500", query: "genres=fighting&ordering=-metacritic" },
-      { id: "row-scifi", title: "Sci-Fi Worlds", tag: "FUTURISTIC", accent: "bg-cyan-400", query: "tags=sci-fi,cyberpunk&ordering=-metacritic" }
-    ];
+    function clearRdr2IntroTimers() {
+      rdr2IntroTimers.forEach((id) => clearTimeout(id));
+      rdr2IntroTimers = [];
+    }
 
-    let nextVerticalRowIndex = 0;
-    let isLoadingVertical = false;
+    function triggerRdr2IntroThenOpen(game, defaultTab) {
+      clearRdr2IntroTimers();
+      rdr2PendingOpen = { game, defaultTab };
 
-    function createGameCard(game, fullWidth = false) {
-      const rating = getOfficialRatingInfo(game);
-      const card = document.createElement("article");
-      card.className = `game-card relative ${fullWidth ? "w-full" : "flex-shrink-0 w-44 sm:w-52 md:w-56"} bg-[#12151f] rounded-xl overflow-hidden border border-white/10 shadow-xl select-none`;
-      const year = (game.released || "2024").split("-")[0];
+      // Pause hero background trailer immediately
+      clearTimeout(heroVideoFadeTimer);
+      const heroShell = document.getElementById("heroVideoShell");
+      if (heroShell) heroShell.innerHTML = "";
 
-      card.innerHTML = `
-        <div class="relative w-full aspect-[3/4] overflow-hidden bg-[#151822]">
-          <img
-            src="${game.background_image}"
-            alt="${escapeHtml(game.name)}"
-            loading="lazy"
-            decoding="async"
-            class="w-full h-full object-cover"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent pointer-events-none"></div>
-          <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">
-            ${rating.label}
-          </div>
-          <div class="absolute bottom-3 left-3 right-3 space-y-1">
-            <h3 class="text-white text-xs sm:text-sm font-extrabold line-clamp-1 drop-shadow">${escapeHtml(game.name)}</h3>
-            <div class="flex items-center justify-between font-mono-num text-[11px] font-bold">
-              <span class="inline-flex items-center gap-1 text-[#FFAB00]">
-                <svg class="w-3 h-3 fill-[#FFAB00]" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                ${rating.score}
-              </span>
-              <span class="text-gray-300">${year}</span>
-            </div>
-          </div>
-        </div>
-      `;
+      const overlay = document.getElementById("rdr2LoadingOverlay");
+      const stage = document.getElementById("rdr2Stage");
+      const shell1 = document.getElementById("rdr2Shell1");
+      const shell2 = document.getElementById("rdr2Shell2");
+      const smoke1 = document.getElementById("rdr2Smoke1");
+      const smoke2 = document.getElementById("rdr2Smoke2");
+      const flash = document.getElementById("rdr2FlashLayer");
+      const stamp = document.getElementById("rdr2EmblemStamp");
 
-      card.addEventListener("click", () => {
-        if (card.closest(".drag-scroll")?.dataset.wasDragged === "1") return;
-        openReviewModal(game, "reviews");
+      // Reset classes cleanly to replay CSS animations
+      [shell1, shell2, smoke1, smoke2, flash, stamp, stage].forEach((el) => {
+        if (!el) return;
+        el.classList.remove("rdr2-shell-1-anim", "rdr2-shell-2-anim", "rdr2-smoke-1", "rdr2-smoke-2", "rdr2-flash-anim", "rdr2-stamp-anim", "rdr2-shake-active");
       });
 
-      return card;
+      overlay.style.opacity = "1";
+      overlay.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      void overlay.offsetWidth; // Force reflow
+
+      shell1.classList.add("rdr2-shell-1-anim");
+      shell2.classList.add("rdr2-shell-2-anim");
+      smoke1.classList.add("rdr2-smoke-1");
+      smoke2.classList.add("rdr2-smoke-2");
+      flash.classList.add("rdr2-flash-anim");
+      stamp.classList.add("rdr2-stamp-anim");
+
+      // Micro-shakes synced to shell impacts & logo slam
+      rdr2IntroTimers.push(setTimeout(() => {
+        stage.classList.remove("rdr2-shake-active");
+        void stage.offsetWidth;
+        stage.classList.add("rdr2-shake-active");
+      }, 150));
+      rdr2IntroTimers.push(setTimeout(() => {
+        stage.classList.remove("rdr2-shake-active");
+        void stage.offsetWidth;
+        stage.classList.add("rdr2-shake-active");
+      }, 470));
+      rdr2IntroTimers.push(setTimeout(() => {
+        stage.classList.remove("rdr2-shake-active");
+        void stage.offsetWidth;
+        stage.classList.add("rdr2-shake-active");
+      }, 960));
+
+      // Synthesized Web Audio sound effects (unlocked by user click)
+      playRdr2WebAudioSequence();
+
+      // Smooth fade out at 1.95s into RDR2 Review Theater Modal
+      rdr2IntroTimers.push(setTimeout(() => {
+        finishRdr2IntroAndOpen();
+      }, 1950));
     }
 
-    function createRowShell(rowConfig) {
-      const container = document.getElementById("catalogRowsContainer");
-      const sliderId = `${rowConfig.id}-slider`;
-
-      const section = document.createElement("section");
-      section.id = rowConfig.id;
-      section.className = "space-y-3.5";
-      section.innerHTML = `
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <span class="w-1.5 h-5 rounded-sm ${rowConfig.accent} flex-shrink-0"></span>
-            <h2 class="text-sm sm:text-base font-black tracking-wider uppercase text-white truncate">${rowConfig.title}</h2>
-            <span class="hidden sm:inline text-[10px] font-bold tracking-widest uppercase text-gray-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">${rowConfig.tag}</span>
-          </div>
-          <div class="flex items-center gap-2 flex-shrink-0">
-            <button onclick="FPS.scrollSlider('${sliderId}', -640)" aria-label="Scroll left" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/15 text-white flex items-center justify-center transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-            </button>
-            <button onclick="FPS.scrollSlider('${sliderId}', 640)" aria-label="Scroll right" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/15 text-white flex items-center justify-center transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-        </div>
-        <div id="${sliderId}" data-page="1" data-loading="0" data-has-more="1" class="drag-scroll flex gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-0.5 scroll-smooth">
-          ${Array.from({ length: 7 }).map(() => `<div class="flex-shrink-0 w-44 sm:w-52 md:w-56 aspect-[3/4] rounded-xl skeleton-shimmer border border-white/5"></div>`).join("")}
-        </div>
-      `;
-
-      container.appendChild(section);
-      const slider = document.getElementById(sliderId);
-      enableMouseDragScroll(slider);
-
-      slider.addEventListener("scroll", () => {
-        if (slider.dataset.loading === "1" || slider.dataset.hasMore === "0") return;
-        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 420) {
-          const nextPage = parseInt(slider.dataset.page || "1", 10) + 1;
-          fetchRowPage(slider, rowConfig.query, nextPage, false);
-        }
-      });
-
-      return slider;
-    }
-
-    async function fetchRowPage(slider, queryStr, page, clearSkeletons = false) {
-      slider.dataset.loading = "1";
-      slider.dataset.page = String(page);
-      try {
-        const url = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&${queryStr}&page=${page}&page_size=16`;
-        const data = await cachedFetchJSON(url);
-        if (clearSkeletons) slider.innerHTML = "";
-        if (!data.results || !data.results.length) {
-          slider.dataset.hasMore = "0";
-          return;
-        }
-        const frag = document.createDocumentFragment();
-        let appended = 0;
-        for (const game of data.results) {
-          if (!game.background_image || globalRenderedIds.has(game.id)) continue;
-          globalRenderedIds.add(game.id);
-          frag.appendChild(createGameCard(game));
-          appended++;
-        }
-        slider.appendChild(frag);
-        if (!data.next) {
-          slider.dataset.hasMore = "0";
-        } else if (appended < 4 && page < 4) {
-          await fetchRowPage(slider, queryStr, page + 1, false);
-        }
-      } catch (err) {
-        if (clearSkeletons) slider.innerHTML = "";
-      } finally {
-        slider.dataset.loading = "0";
+    function finishRdr2IntroAndOpen() {
+      clearRdr2IntroTimers();
+      const overlay = document.getElementById("rdr2LoadingOverlay");
+      const pending = rdr2PendingOpen;
+      rdr2PendingOpen = null;
+      if (overlay) {
+        overlay.style.opacity = "0";
+        setTimeout(() => {
+          overlay.classList.add("hidden");
+          overlay.style.opacity = "1";
+        }, 260);
+      }
+      if (pending) {
+        openReviewModal(pending.game, pending.defaultTab, true);
       }
     }
 
-    async function mountInitialRowsParallel() {
-      const batch = ALL_CATALOG_ROWS.slice(0, 4);
-      nextVerticalRowIndex = batch.length;
-      const sliders = batch.map((cfg) => ({ cfg, slider: createRowShell(cfg) }));
-      await Promise.all(sliders.map(({ cfg, slider }) => fetchRowPage(slider, cfg.query, 1, true)));
-    }
-
-    function scrollSlider(sliderId, delta) {
-      const el = document.getElementById(sliderId);
-      if (el) el.scrollBy({ left: delta, behavior: "smooth" });
-    }
-
-    function enableMouseDragScroll(slider) {
-      let isDown = false, startX = 0, scrollLeft = 0;
-      slider.addEventListener("mousedown", (e) => {
-        isDown = true;
-        slider.dataset.wasDragged = "0";
-        slider.classList.add("is-dragging");
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-      });
-      slider.addEventListener("mouseleave", () => { isDown = false; slider.classList.remove("is-dragging"); });
-      slider.addEventListener("mouseup", () => {
-        isDown = false;
-        slider.classList.remove("is-dragging");
-        setTimeout(() => { slider.dataset.wasDragged = "0"; }, 60);
-      });
-      slider.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 1.4;
-        if (Math.abs(walk) > 8) {
-          slider.dataset.wasDragged = "1";
-          e.preventDefault();
-          slider.scrollLeft = scrollLeft - walk;
-        }
-      });
-    }
-
-    function setupEndlessVerticalObserver() {
-      const sentinel = document.getElementById("verticalSentinel");
-      const observer = new IntersectionObserver(async (entries) => {
-        if (!entries[0].isIntersecting || isLoadingVertical || isSearchActive) return;
-        if (nextVerticalRowIndex >= ALL_CATALOG_ROWS.length) {
-          sentinel.classList.add("hidden");
-          return;
-        }
-        isLoadingVertical = true;
-        const cfg = ALL_CATALOG_ROWS[nextVerticalRowIndex++];
-        const slider = createRowShell(cfg);
-        await fetchRowPage(slider, cfg.query, 1, true);
-        isLoadingVertical = false;
-        if (nextVerticalRowIndex >= ALL_CATALOG_ROWS.length) sentinel.classList.add("hidden");
-      }, { rootMargin: "500px" });
-      observer.observe(sentinel);
+    function skipRdr2Intro() {
+      finishRdr2IntroAndOpen();
     }
 
     // =========================================================================
@@ -2349,11 +2553,12 @@
         arc.style.strokeDashoffset = scoreNum === null ? String(circ) : String(circ - (circ * scoreNum) / 10);
       }
       if (glow) {
-        glow.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+    async function openReviewModal(game, defaultTab = "reviews", skipRdr2 = false) {
+      if (!skipRdr2 && isRedDeadRedemption2(game)) {
+        triggerRdr2IntroThenOpen(game, defaultTab);
+        return;
       }
-    }
 
-    async function openReviewModal(game, defaultTab = "reviews") {
       currentModalGame = { ...game };
       currentModalGameKey = String(game.rawgId || game.id || game.slug || game.name.toLowerCase());
       activeTierFilter = "ALL";
@@ -2900,13 +3105,21 @@
     function syncModalWannaPlayButton() {
       if (!currentModalGame) return;
       const exists = wannaPlayList.some((g) => String(g.id) === String(currentModalGame.id) || g.name === currentModalGame.name);
+      const btn = document.getElementById("modalWannaPlayBtn");
       const label = document.getElementById("modalWannaPlayLabel");
       const icon = document.getElementById("modalWannaPlayIcon");
+      if (btn) {
+        btn.className = exists
+          ? "h-9 px-3.5 rounded-full bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 shadow-[0_0_18px_rgba(255,171,0,0.45)] transition active:scale-95"
+          : "h-9 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95";
+      }
       if (exists) {
         label.textContent = "IN WANNA PLAY";
+        icon.setAttribute("class", "w-3.5 h-3.5 text-black");
         icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>`;
       } else {
-        label.textContent = "WANNA PLAY";
+        label.textContent = "+ WANNA PLAY";
+        icon.setAttribute("class", "w-3.5 h-3.5 text-[#FFAB00]");
         icon.innerHTML = `<path stroke-linecap="round" d="M12 5v14m-7-7h14"/>`;
       }
     }
@@ -2920,42 +3133,100 @@
 
     function openWannaPlayModal() {
       const list = document.getElementById("wannaPlayList");
+      const statsEl = document.getElementById("wannaPlayHeaderStats");
+      const clearBtn = document.getElementById("clearAllWannaPlayBtn");
+      const backdrop = document.getElementById("wannaPlayModal");
+      const panel = document.getElementById("wannaPlayDrawerPanel");
+
+      statsEl.textContent = `${wannaPlayList.length} ${wannaPlayList.length === 1 ? "GAME" : "GAMES"} QUEUED`;
+      clearBtn.classList.toggle("hidden", wannaPlayList.length === 0);
       list.innerHTML = "";
+
       if (!wannaPlayList.length) {
         list.innerHTML = `
-          <div class="py-12 text-center space-y-2 text-gray-400">
-            <p class="text-sm font-black uppercase tracking-wider text-white">Your WANNA PLAY List is Empty</p>
-            <p class="text-xs">Tap + WANNA PLAY on any game to build your personal queue.</p>
+          <div class="h-full flex flex-col items-center justify-center text-center py-16 px-6 space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-[#FFAB00]/10 border border-[#FFAB00]/35 flex items-center justify-center text-[#FFAB00]">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v5m-2.5-2.5h5" />
+              </svg>
+            </div>
+            <div class="space-y-1.5">
+              <p class="text-sm font-black uppercase tracking-wider text-white">Your Wanna Play Queue Is Empty</p>
+              <p class="text-xs text-gray-400 leading-relaxed">Save upcoming or must-play titles here so you can jump straight into trailers, ratings, and store links.</p>
+            </div>
+            <button onclick="FPS.closeWannaPlayModal(); FPS.jumpToHomeSection('row-peak');" class="px-5 py-2.5 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-xs font-black tracking-widest uppercase shadow-[0_6px_22px_rgba(255,171,0,0.4)] transition active:scale-95">
+              BROWSE TOP GAMES
+            </button>
           </div>
         `;
       } else {
         wannaPlayList.forEach((game, idx) => {
           const rating = getOfficialRatingInfo(game);
+          const year = (game.released || "2024").split("-")[0];
+          const platPills = (game.platforms || [])
+            .map((p) => p.platform?.name)
+            .filter(Boolean)
+            .slice(0, 3)
+            .map((p) => `<span class="px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[9px] font-bold text-gray-300">${escapeHtml(p)}</span>`)
+            .join("");
+
           const item = document.createElement("div");
-          item.className = "flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-[#FFAB00]/40 transition";
+          item.className = "rounded-2xl bg-white/[0.035] border border-white/10 hover:border-[#FFAB00]/45 p-3.5 space-y-3 transition";
           item.innerHTML = `
-            <div class="flex items-center gap-3.5 cursor-pointer min-w-0 flex-grow" onclick="FPS.openFromWannaPlay(${idx})">
-              <img src="${game.background_image}" alt="${escapeHtml(game.name)}" loading="lazy" class="w-16 h-12 rounded-lg object-cover flex-shrink-0" />
-              <div class="min-w-0">
-                <h4 class="text-sm font-bold text-white truncate">${escapeHtml(game.name)}</h4>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="font-mono-num text-xs font-black text-[#FFAB00]">${rating.score}</span>
-                  <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">${rating.label}</span>
+            <div class="flex gap-3.5">
+              <img src="${game.background_image}" alt="${escapeHtml(game.name)}" loading="lazy" class="w-24 h-16 rounded-xl object-cover flex-shrink-0 border border-white/10 cursor-pointer" onclick="FPS.openFromWannaPlay(${idx})" />
+              <div class="min-w-0 flex-grow">
+                <div class="flex items-start justify-between gap-2">
+                  <h4 onclick="FPS.openFromWannaPlay(${idx})" class="text-sm font-black text-white truncate cursor-pointer hover:text-[#FFAB00] transition">${escapeHtml(game.name)}</h4>
+                  <span class="font-mono-num text-[11px] font-bold text-gray-400 flex-shrink-0">${year}</span>
                 </div>
+                <div class="flex items-center gap-2 mt-1.5">
+                  <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">${rating.label}</span>
+                  <span class="font-mono-num text-xs font-black text-[#FFAB00]">${rating.score}</span>
+                </div>
+                ${platPills ? `<div class="flex flex-wrap gap-1 mt-2">${platPills}</div>` : ""}
               </div>
             </div>
-            <button onclick="FPS.removeWannaPlayItem(${idx})" class="p-2 text-gray-400 hover:text-red-500 transition" title="Remove">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-            </button>
+            <div class="flex items-center gap-2 pt-1 border-t border-white/[0.07]">
+              <button onclick="FPS.openFromWannaPlay(${idx})" class="flex-grow py-2 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-[11px] font-black tracking-widest uppercase transition active:scale-[0.98]">
+                OPEN REVIEW
+              </button>
+              <button onclick="FPS.removeWannaPlayItem(${idx})" class="px-3 py-2 rounded-xl bg-white/[0.06] hover:bg-red-500/25 border border-white/10 hover:border-red-500/40 text-gray-300 hover:text-red-300 text-[10px] font-extrabold tracking-wider uppercase transition" title="Remove">
+                REMOVE
+              </button>
+            </div>
           `;
           list.appendChild(item);
         });
       }
-      document.getElementById("wannaPlayModal").classList.remove("hidden");
+
+      backdrop.classList.remove("hidden");
+      requestAnimationFrame(() => {
+        panel.classList.remove("wanna-play-drawer-closed");
+        panel.classList.add("wanna-play-drawer-open");
+      });
     }
 
     function closeWannaPlayModal() {
-      document.getElementById("wannaPlayModal").classList.add("hidden");
+      const backdrop = document.getElementById("wannaPlayModal");
+      const panel = document.getElementById("wannaPlayDrawerPanel");
+      if (panel) {
+        panel.classList.remove("wanna-play-drawer-open");
+        panel.classList.add("wanna-play-drawer-closed");
+      }
+      setTimeout(() => {
+        if (backdrop) backdrop.classList.add("hidden");
+      }, 260);
+    }
+
+    function clearAllWannaPlay() {
+      wannaPlayList = [];
+      persistWannaPlay();
+      syncHeroWannaPlayButton();
+      syncModalWannaPlayButton();
+      openWannaPlayModal();
+      showToast("WANNA PLAY queue cleared");
     }
 
     function openFromWannaPlay(idx) {
@@ -2969,6 +3240,7 @@
       wannaPlayList.splice(idx, 1);
       persistWannaPlay();
       syncHeroWannaPlayButton();
+      syncModalWannaPlayButton();
       openWannaPlayModal();
     }
 
@@ -3006,6 +3278,7 @@
 
     window.FPS = {
       skipSplash,
+      skipRdr2Intro,
       loginWithGoogle,
       logout,
       openLoginModal,
@@ -3037,6 +3310,7 @@
       toggleCurrentWannaPlay,
       openWannaPlayModal,
       closeWannaPlayModal,
+      clearAllWannaPlay,
       openFromWannaPlay,
       removeWannaPlayItem,
       copyShareLink
@@ -3050,14 +3324,14 @@
       renderVerdictTagButtons();
       updateInteractiveGauge(9.2);
 
-      // Remove 1.65s Rockstar-style FPS SVG Splash automatically
+      // Remove 1.85s Rockstar-style FPS SVG Splash automatically
       setTimeout(() => {
         const splash = document.getElementById("studioSplash");
         if (splash) splash.remove();
         if (!localStorage.getItem("fps_guest_dismissed") && !currentUser) {
           openLoginModal();
         }
-      }, 1700);
+      }, 1900);
 
       // Instant Hero First Paint + Parallel Initial 4 Carousels
       initHeroBillboard();
