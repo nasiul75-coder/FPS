@@ -3,24 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FPS — Official Game Critique &amp; 4K Trailer Network</title>
+  <title>FPS — GAME RATING &amp; REVIEWS</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Inter, Bebas Neue, Oswald, JetBrains Mono -->
+  <!-- Google Fonts: Inter, Barlow Condensed (Rockstar-style Italic Display), JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,700;1,800;1,900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --fps-red: #e50914;
-      --fps-red-bright: #ff1e29;
-      --fps-bg: #06070a;
-      --fps-surface: #0e1017;
-      --fps-card: #12151f;
-      --gauge-color: #3b82f6;
+      --fps-gold: #FFAB00;
+      --fps-gold-bright: #FFB81C;
+      --fps-red: #E50914;
+      --fps-bg: #050608;
+      --fps-surface: #0D0F16;
+      --fps-card: #12151F;
+      --gauge-color: #3B82F6;
     }
 
     * {
@@ -41,13 +42,8 @@
       margin: 0;
     }
 
-    .font-brand {
-      font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 0.12em;
-    }
-
-    .font-display {
-      font-family: 'Oswald', sans-serif;
+    .font-rockstar {
+      font-family: 'Barlow Condensed', 'Inter', sans-serif;
     }
 
     .font-mono-num {
@@ -63,46 +59,114 @@
       display: none;
     }
 
-    /* Custom Obsidian Scrollbar */
+    /* Obsidian Scrollbar */
     ::-webkit-scrollbar {
       width: 7px;
       height: 7px;
     }
     ::-webkit-scrollbar-track {
-      background: #06070a;
+      background: #050608;
     }
     ::-webkit-scrollbar-thumb {
-      background: #222636;
+      background: #232736;
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: var(--fps-red);
+      background: var(--fps-gold);
     }
 
-    /* Rockstar-Style Cinematic Studio Splash */
-    @keyframes splashFadeOut {
+    /* ==================== ROCKSTAR-STYLE FPS SVG SPLASH ANIMATIONS (~1.6s) ==================== */
+    @keyframes splashBadgeSlam {
+      0% { transform: scale(1.75) translateY(-12px); opacity: 0; filter: blur(12px) drop-shadow(0 0 0 rgba(255,171,0,0)); }
+      38% { transform: scale(0.96) translateY(0); opacity: 1; filter: blur(0) drop-shadow(0 0 55px rgba(255,171,0,0.85)); }
+      52% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 38px rgba(255,171,0,0.65)); }
+      100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 30px rgba(255,171,0,0.5)); }
+    }
+
+    @keyframes fpsLettersPunch {
+      0% { transform: translateX(-48px) skewX(-16deg) scale(1.18); opacity: 0; }
+      55% { transform: translateX(6px) skewX(-4deg) scale(1.02); opacity: 1; }
+      100% { transform: translateX(0) skewX(0deg) scale(1); opacity: 1; }
+    }
+
+    @keyframes starSpinLock {
+      0% { transform: rotate(-220deg) scale(0.1); opacity: 0; }
+      60% { transform: rotate(16deg) scale(1.22); opacity: 1; }
+      82% { transform: rotate(-6deg) scale(0.95); opacity: 1; }
+      100% { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+
+    @keyframes subtitleTrackIn {
+      0% { opacity: 0; letter-spacing: 0.36em; transform: translateY(8px); }
+      100% { opacity: 1; letter-spacing: 0.14em; transform: translateY(0); }
+    }
+
+    @keyframes goldGlintSweep {
+      0% { transform: translateX(-260px) skewX(-24deg); opacity: 0; }
+      20% { opacity: 0.9; }
+      80% { opacity: 0.9; }
+      100% { transform: translateX(520px) skewX(-24deg); opacity: 0; }
+    }
+
+    @keyframes splashCurtainExit {
       0% { opacity: 1; }
-      78% { opacity: 1; }
+      80% { opacity: 1; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
-    @keyframes emblemImpact {
-      0% { transform: scale(1.45); opacity: 0; filter: blur(14px); }
-      26% { transform: scale(1); opacity: 1; filter: blur(0); }
-      78% { transform: scale(1.03); opacity: 1; }
-      100% { transform: scale(1.1); opacity: 0; }
+
+    .splash-curtain {
+      animation: splashCurtainExit 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    @keyframes sheenSweep {
-      0% { transform: translateX(-120%) skewX(-18deg); }
-      100% { transform: translateX(180%) skewX(-18deg); }
+
+    .splash-svg-badge {
+      animation: splashBadgeSlam 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform-origin: center;
     }
-    .animate-splash-exit {
-      animation: splashFadeOut 1.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+    .splash-svg-letters {
+      opacity: 0;
+      animation: fpsLettersPunch 0.48s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards;
+      transform-origin: 185px 140px;
     }
-    .animate-emblem-impact {
-      animation: emblemImpact 1.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    .splash-svg-star {
+      opacity: 0;
+      animation: starSpinLock 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+      transform-origin: 318px 180px;
     }
-    .animate-sheen {
-      animation: sheenSweep 1.15s ease-in-out infinite;
+
+    .splash-svg-sub {
+      opacity: 0;
+      animation: subtitleTrackIn 0.45s ease-out 0.68s forwards;
+    }
+
+    .splash-svg-glint {
+      opacity: 0;
+      animation: goldGlintSweep 0.65s ease-in-out 0.72s forwards;
+    }
+
+    /* Ambient Glint on Login Screen Logo */
+    .login-logo-wrap:hover .login-logo-glint {
+      animation: goldGlintSweep 0.85s ease-in-out;
+    }
+    .login-logo-wrap {
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.28s ease;
+      filter: drop-shadow(0 0 28px rgba(255, 171, 0, 0.38));
+    }
+    .login-logo-wrap:hover {
+      transform: scale(1.04);
+      filter: drop-shadow(0 0 42px rgba(255, 171, 0, 0.65));
+    }
+
+    /* Shimmer Skeleton Loader */
+    @keyframes shimmerMove {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton-shimmer {
+      background: linear-gradient(90deg, #12151f 25%, #1c2132 50%, #12151f 75%);
+      background-size: 800px 100%;
+      animation: shimmerMove 1.2s infinite linear;
     }
 
     /* Full-Bleed Background YouTube Hero Trailer */
@@ -125,95 +189,95 @@
       border: 0;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.85s ease;
+      transition: opacity 0.75s ease;
     }
     .hero-video-frame.is-playing {
       opacity: 1;
     }
 
-    /* Multi-Stop High-Contrast Hero Gradients (z-20, below z-30 typography) */
+    /* High-Contrast Hero Gradients */
     .hero-grad-bottom {
       background: linear-gradient(
         to top,
-        #06070a 0%,
-        rgba(6, 7, 10, 0.92) 16%,
-        rgba(6, 7, 10, 0.45) 48%,
-        rgba(6, 7, 10, 0.1) 76%,
-        rgba(6, 7, 10, 0.58) 100%
+        #050608 0%,
+        rgba(5, 6, 8, 0.92) 15%,
+        rgba(5, 6, 8, 0.44) 48%,
+        rgba(5, 6, 8, 0.1) 76%,
+        rgba(5, 6, 8, 0.58) 100%
       );
     }
     .hero-grad-left {
       background: linear-gradient(
         to right,
-        rgba(6, 7, 10, 0.94) 0%,
-        rgba(6, 7, 10, 0.65) 38%,
-        rgba(6, 7, 10, 0.16) 70%,
+        rgba(5, 6, 8, 0.94) 0%,
+        rgba(5, 6, 8, 0.64) 38%,
+        rgba(5, 6, 8, 0.16) 70%,
         transparent 100%
       );
     }
 
     /* Metallic Zero-Emoji Tier Badges */
     .badge-rdr {
-      background: linear-gradient(135deg, #991b1b 0%, #450a0a 100%);
-      border: 1px solid #f59e0b;
-      color: #fef08a;
+      background: linear-gradient(135deg, #991B1B 0%, #450A0A 100%);
+      border: 1px solid #FFAB00;
+      color: #FEF08A;
       box-shadow: 0 0 22px rgba(220, 38, 38, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
     .badge-gta {
-      background: linear-gradient(135deg, #065f46 0%, #022c22 100%);
-      border: 1px solid #10b981;
-      color: #a7f3d0;
-      box-shadow: 0 0 22px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      background: linear-gradient(135deg, #065F46 0%, #022C22 100%);
+      border: 1px solid #22C55E;
+      color: #BBF7D0;
+      box-shadow: 0 0 22px rgba(34, 197, 94, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
     .badge-peak {
-      background: linear-gradient(135deg, #92400e 0%, #451a03 100%);
-      border: 1px solid #f59e0b;
-      color: #fef3c7;
-      box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      background: linear-gradient(135deg, #92400E 0%, #451A03 100%);
+      border: 1px solid #FFAB00;
+      color: #FEF3C7;
+      box-shadow: 0 0 20px rgba(255, 171, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28);
     }
     .badge-cinema {
-      background: linear-gradient(135deg, #1d4ed8 0%, #172554 100%);
-      border: 1px solid #3b82f6;
-      color: #dbeafe;
+      background: linear-gradient(135deg, #1D4ED8 0%, #172554 100%);
+      border: 1px solid #3B82F6;
+      color: #DBEAFE;
       box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
     .badge-shouldplay {
-      background: linear-gradient(135deg, #047857 0%, #022c22 100%);
-      border: 1px solid #10b981;
-      color: #d1fae5;
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.45);
+      background: linear-gradient(135deg, #15803D 0%, #052E16 100%);
+      border: 1px solid #22C55E;
+      color: #DCFCE7;
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.45);
     }
     .badge-cantry {
-      background: linear-gradient(135deg, #be185d 0%, #500724 100%);
-      border: 1px solid #ec4899;
-      color: #fce7f3;
+      background: linear-gradient(135deg, #BE185D 0%, #500724 100%);
+      border: 1px solid #EC4899;
+      color: #FCE7F3;
       box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
     }
     .badge-trash {
-      background: linear-gradient(135deg, #b91c1c 0%, #450a0a 100%);
-      border: 1px solid #ef4444;
-      color: #fee2e2;
+      background: linear-gradient(135deg, #B91C1C 0%, #450A0A 100%);
+      border: 1px solid #EF4444;
+      color: #FEE2E2;
       box-shadow: 0 0 18px rgba(239, 68, 68, 0.5);
     }
 
     /* Netflix Card Hover & Depth */
     .game-card {
-      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
       cursor: pointer;
     }
     .game-card:hover {
       transform: translateY(-6px) scale(1.045);
       z-index: 25;
-      box-shadow: 0 24px 40px -8px rgba(0, 0, 0, 0.95), 0 0 28px rgba(229, 9, 20, 0.42);
-      border-color: rgba(229, 9, 20, 0.85);
+      box-shadow: 0 24px 40px -8px rgba(0, 0, 0, 0.95), 0 0 26px rgba(255, 171, 0, 0.35);
+      border-color: rgba(255, 171, 0, 0.8);
     }
 
-    /* Official Storefront Redirect Cards with Brand Glow */
+    /* Official Storefront Redirect Cards */
     .store-card {
       position: relative;
       background: rgba(255, 255, 255, 0.035);
       border: 1px solid rgba(255, 255, 255, 0.11);
-      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     }
     .store-card:hover {
       transform: translateY(-2px);
@@ -233,13 +297,13 @@
 
     /* Animated Score Bars & Circular SVG Gauge */
     .score-bar-fill {
-      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .gauge-ring-progress {
-      transition: stroke-dashoffset 0.2s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.25s ease;
+      transition: stroke-dashoffset 0.18s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.22s ease;
     }
     .gauge-ambient-glow {
-      transition: background 0.3s ease, box-shadow 0.3s ease;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
     }
 
     /* Precision Tactile Range Slider */
@@ -251,7 +315,6 @@
       border-radius: 9999px;
       outline: none;
       cursor: pointer;
-      transition: background 0.15s ease;
     }
     input[type="range"].fps-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -261,16 +324,12 @@
       border-radius: 9999px;
       background: #ffffff;
       border: 4px solid var(--gauge-color);
-      box-shadow: 0 0 22px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 20px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
       cursor: grab;
-      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.14s ease, border-color 0.18s ease;
     }
     input[type="range"].fps-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.16);
-    }
-    input[type="range"].fps-slider::-webkit-slider-thumb:active {
-      cursor: grabbing;
-      transform: scale(1.22);
+      transform: scale(1.15);
     }
     input[type="range"].fps-slider::-moz-range-thumb {
       width: 26px;
@@ -278,46 +337,125 @@
       border-radius: 9999px;
       background: #ffffff;
       border: 4px solid var(--gauge-color);
-      box-shadow: 0 0 22px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 20px var(--gauge-color), 0 4px 12px rgba(0, 0, 0, 0.85);
       cursor: grab;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#06070a] text-white selection:bg-[#e50914] selection:text-white">
+<body class="min-h-screen flex flex-col bg-[#050608] text-white selection:bg-[#FFAB00] selection:text-black">
 
-  <!-- ==================== 1. ROCKSTAR-STYLE CINEMATIC SPLASH SCREEN ==================== -->
-  <div id="studioSplash" class="fixed inset-0 z-[120] bg-[#040407] flex flex-col items-center justify-center animate-splash-exit overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.26)_0%,rgba(4,4,7,1)_68%)]"></div>
-    <div class="relative z-10 flex flex-col items-center animate-emblem-impact px-6 text-center">
-      <div class="relative w-32 h-32 rounded-2xl bg-black border-2 border-[#e50914] flex items-center justify-center shadow-[0_0_85px_rgba(229,9,20,0.9)] overflow-hidden mb-6">
-        <div class="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/25 to-transparent animate-sheen"></div>
-        <span class="font-brand text-7xl text-[#e50914] font-black leading-none pt-1.5">FPS</span>
-      </div>
-      <div class="font-display text-sm sm:text-base font-bold tracking-[0.42em] text-white uppercase">
-        FPS INTERACTIVE
-      </div>
-      <div class="text-[10px] sm:text-xs tracking-[0.34em] text-[#e50914] font-extrabold uppercase mt-2">
-        OFFICIAL GAME CRITIQUE NETWORK
-      </div>
+  <!-- ==================== 1. ROCKSTAR-STYLE ANIMATED FPS SVG SPLASH (~1.6s, CLICK TO SKIP) ==================== -->
+  <div id="studioSplash" onclick="FPS.skipSplash()" class="fixed inset-0 z-[120] bg-black flex flex-col items-center justify-center splash-curtain cursor-pointer select-none overflow-hidden px-6">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,171,0,0.18)_0%,rgba(0,0,0,1)_68%)] pointer-events-none"></div>
+
+    <!-- Exact Custom Rockstar-Style FPS SVG Badge with Staggered Kinetic Animation -->
+    <div class="relative z-10 w-72 sm:w-96 max-w-[88vw] splash-svg-badge">
+      <svg viewBox="0 0 440 280" class="w-full h-auto overflow-visible" role="img" aria-label="FPS Game Rating & Reviews">
+        <defs>
+          <clipPath id="splashBadgeClip">
+            <rect x="26" y="22" width="388" height="236" rx="46" />
+          </clipPath>
+          <linearGradient id="glintGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+            <stop offset="50%" stop-color="rgba(255,255,255,0.65)" />
+            <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+          </linearGradient>
+        </defs>
+
+        <!-- Outer Golden Rounded Border -->
+        <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
+        <!-- Inner Black Gap -->
+        <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
+        <!-- Inner Golden Filled Body -->
+        <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
+
+        <!-- Heavy Italic Condensed Black "FPS" -->
+        <g class="splash-svg-letters">
+          <text
+            x="198"
+            y="174"
+            text-anchor="middle"
+            fill="#000000"
+            font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif"
+            font-weight="900"
+            font-style="italic"
+            font-size="162"
+            letter-spacing="-4"
+            transform="skewX(-6) translate(16, 0)"
+          >FPS</text>
+        </g>
+
+        <!-- Italic Bold Black Subtitle Inside Badge -->
+        <g class="splash-svg-sub">
+          <text
+            x="170"
+            y="224"
+            text-anchor="middle"
+            fill="#000000"
+            font-family="'Barlow Condensed', 'Inter', sans-serif"
+            font-weight="800"
+            font-style="italic"
+            font-size="22"
+            letter-spacing="3.2"
+          >GAME RATING &amp; REVIEWS</text>
+        </g>
+
+        <!-- Diagonal Glint Sheen Clipped Inside Badge -->
+        <g clip-path="url(#splashBadgeClip)">
+          <rect x="0" y="0" width="95" height="280" fill="url(#glintGrad)" class="splash-svg-glint" />
+        </g>
+
+        <!-- Sharp 5-Pointed White Star with Thick Black Outline Overlapping Bottom-Right of "S" -->
+        <g class="splash-svg-star">
+          <polygon
+            points="322,126 336,166 378,166 344,191 357,231 322,206 287,231 300,191 266,166 308,166"
+            fill="#FFFFFF"
+            stroke="#000000"
+            stroke-width="11"
+            stroke-linejoin="miter"
+            stroke-miterlimit="10"
+          />
+        </g>
+      </svg>
     </div>
+
+    <span class="relative z-10 mt-6 text-[10px] font-bold tracking-[0.35em] uppercase text-gray-500">
+      TAP ANYWHERE TO ENTER
+    </span>
   </div>
 
-  <!-- ==================== 2. NETFLIX-STYLE GOOGLE LOGIN SCREEN ==================== -->
-  <div id="loginModal" class="fixed inset-0 z-[105] bg-black/88 backdrop-blur-2xl hidden flex items-center justify-center p-4">
-    <div class="relative w-full max-w-md bg-[#0e1017] border border-white/15 rounded-2xl p-8 shadow-[0_32px_95px_rgba(0,0,0,0.96)] overflow-hidden text-center">
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e50914] via-amber-400 to-[#e50914]"></div>
+  <!-- ==================== 2. NETFLIX-STYLE GOOGLE-ONLY LOGIN SCREEN ==================== -->
+  <div id="loginModal" class="fixed inset-0 z-[105] bg-black/90 backdrop-blur-2xl hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-md bg-[#0D0F16] border border-white/15 rounded-2xl p-8 shadow-[0_32px_95px_rgba(0,0,0,0.96)] overflow-hidden text-center">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FFAB00] via-[#E50914] to-[#FFAB00]"></div>
 
       <button onclick="FPS.dismissLoginAsGuest()" aria-label="Close login" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
 
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#e50914]/15 border border-[#e50914]/65 mb-5 shadow-[0_0_32px_rgba(229,9,20,0.4)]">
-        <span class="font-brand text-4xl text-[#e50914] pt-1">FPS</span>
+      <!-- Custom Animated Yellow/Black FPS SVG Logo -->
+      <div class="login-logo-wrap mx-auto w-44 mb-5 cursor-pointer">
+        <svg viewBox="0 0 440 280" class="w-full h-auto" role="img" aria-label="FPS Logo">
+          <defs>
+            <clipPath id="loginBadgeClip">
+              <rect x="28" y="24" width="384" height="232" rx="44" />
+            </clipPath>
+          </defs>
+          <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
+          <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
+          <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
+          <text x="198" y="174" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="162" letter-spacing="-4" transform="skewX(-6) translate(16, 0)">FPS</text>
+          <text x="170" y="224" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Inter', sans-serif" font-weight="800" font-style="italic" font-size="22" letter-spacing="3.2">GAME RATING &amp; REVIEWS</text>
+          <g clip-path="url(#loginBadgeClip)">
+            <rect x="-120" y="0" width="90" height="280" fill="url(#glintGrad)" class="login-logo-glint opacity-0" />
+          </g>
+          <polygon points="322,126 336,166 378,166 344,191 357,231 322,206 287,231 300,191 266,166 308,166" fill="#FFFFFF" stroke="#000000" stroke-width="11" stroke-linejoin="miter" />
+        </svg>
       </div>
 
-      <h2 class="text-2xl font-black tracking-wide text-white uppercase mb-2">Enter The Critique Network</h2>
+      <h2 class="text-xl sm:text-2xl font-black tracking-wide text-white uppercase mb-2">Sign In To FPS Network</h2>
       <p class="text-sm text-gray-300 mb-7 leading-relaxed">
-        Sign in with Google to publish live reviews to the FPS database, sync your watchlist, and unlock verified critic tools.
+        Continue with Google to publish instant reviews, sync your <span class="text-[#FFAB00] font-bold">WANNA PLAY</span> list, and rate games across every platform.
       </p>
 
       <button onclick="FPS.loginWithGoogle()" class="w-full py-3.5 px-5 bg-white hover:bg-gray-100 text-gray-950 font-extrabold rounded-xl shadow-xl flex items-center justify-center gap-3 transition active:scale-[0.98]">
@@ -339,71 +477,79 @@
     </div>
   </div>
 
-  <!-- ==================== 3. SINGLE-ROW STICKY GLASSMORPHIC NAVBAR ==================== -->
-  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3 bg-[#06070a]/82 backdrop-blur-xl border-b border-white/10">
-    <!-- Left: Brand + Non-Wrapping Nav Links -->
-    <div class="flex items-center gap-5 lg:gap-7 min-w-0 flex-nowrap">
-      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center whitespace-nowrap flex-shrink-0 group">
-        <span class="font-brand text-4xl text-[#e50914] font-black leading-none pt-1 group-hover:drop-shadow-[0_0_20px_rgba(229,9,20,0.95)] transition">FPS</span>
+  <!-- ==================== 3. SINGLE-ROW STICKY OBSIDIAN NAVBAR ==================== -->
+  <header id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 h-16 px-3 sm:px-6 lg:px-10 flex items-center justify-between gap-2.5 bg-[#050608]/85 backdrop-blur-xl border-b border-white/10">
+    <!-- Left: Crisp Mini FPS Yellow SVG Logo + Non-Wrapping Nav Links -->
+    <div class="flex items-center gap-4 lg:gap-7 min-w-0 flex-nowrap">
+      <button onclick="FPS.returnToHome(true)" aria-label="FPS Home" class="flex items-center flex-shrink-0 group focus:outline-none">
+        <svg viewBox="0 0 440 280" class="h-10 sm:h-11 w-auto drop-shadow-[0_0_12px_rgba(255,171,0,0.4)] group-hover:scale-105 group-hover:drop-shadow-[0_0_20px_rgba(255,171,0,0.7)] transition">
+          <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
+          <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
+          <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
+          <text x="198" y="174" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="162" letter-spacing="-4" transform="skewX(-6) translate(16, 0)">FPS</text>
+          <text x="170" y="224" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Inter', sans-serif" font-weight="800" font-style="italic" font-size="22" letter-spacing="3.2">GAME RATING &amp; REVIEWS</text>
+          <polygon points="322,126 336,166 378,166 344,191 357,231 322,206 287,231 300,191 266,166 308,166" fill="#FFFFFF" stroke="#000000" stroke-width="11" stroke-linejoin="miter" />
+        </svg>
       </button>
 
       <nav class="hidden lg:flex items-center gap-5 text-[11px] font-extrabold tracking-widest uppercase text-gray-300 whitespace-nowrap flex-nowrap">
-        <button onclick="FPS.scrollToSection('row-rockstar')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>ROCKSTAR VAULT
+        <button onclick="FPS.jumpToHomeSection('row-rockstar')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#FFAB00]"></span>ROCKSTAR VAULT
         </button>
-        <button onclick="FPS.scrollToSection('row-peak')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>PEAK TIER
+        <button onclick="FPS.jumpToHomeSection('row-peak')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>PEAK TIER
         </button>
-        <button onclick="FPS.scrollToSection('row-cinema')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>ABSOLUTE CINEMA
+        <button onclick="FPS.jumpToHomeSection('row-cinema')" class="hover:text-white transition whitespace-nowrap flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>ABSOLUTE CINEMA
         </button>
       </nav>
     </div>
 
-    <!-- Right: Search + Watchlist + Auth Dropdown -->
+    <!-- Right: Zero-Glitch Search + WANNA PLAY + Auth -->
     <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 flex-nowrap">
-      <!-- Instant Search Input -->
+      <!-- Search Bar -->
       <div class="relative w-32 sm:w-48 md:w-60">
         <svg class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
         <input
           id="searchInput"
           type="text"
+          autocomplete="off"
           placeholder="Search games..."
-          class="w-full h-9 bg-white/10 hover:bg-white/15 focus:bg-black/95 border border-white/15 focus:border-[#e50914] rounded-lg pl-9 pr-7 text-xs font-medium text-white placeholder-gray-400 outline-none transition"
+          class="w-full h-9 bg-white/10 hover:bg-white/15 focus:bg-black/95 border border-white/15 focus:border-[#FFAB00] rounded-lg pl-9 pr-8 text-xs font-medium text-white placeholder-gray-400 outline-none transition"
         />
-        <button id="clearSearchBtn" aria-label="Clear search" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button id="clearSearchBtn" onclick="FPS.exitSearchToHome()" aria-label="Clear search" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white/15 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <!-- Watchlist Button -->
-      <button onclick="FPS.openWatchlistModal()" class="h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-extrabold tracking-wider uppercase text-white flex items-center gap-1.5 whitespace-nowrap transition">
-        <svg class="w-3.5 h-3.5 text-[#e50914] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
-        <span class="hidden sm:inline">WATCHLIST</span>
-        <span id="navWatchlistCount" class="font-mono-num px-1.5 py-0.5 rounded bg-[#e50914] text-white text-[10px] font-black leading-none">0</span>
+      <!-- WANNA PLAY Button -->
+      <button onclick="FPS.openWannaPlayModal()" class="h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-extrabold tracking-wider uppercase text-white flex items-center gap-1.5 whitespace-nowrap transition">
+        <svg class="w-3.5 h-3.5 text-[#FFAB00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+        <span class="hidden sm:inline">WANNA PLAY</span>
+        <span id="navWannaPlayCount" class="font-mono-num px-1.5 py-0.5 rounded bg-[#FFAB00] text-black text-[10px] font-black leading-none">0</span>
       </button>
 
       <!-- Sign In Button -->
-      <button id="navLoginBtn" onclick="FPS.openLoginModal()" class="h-9 px-3.5 rounded-lg bg-[#e50914] hover:bg-[#ff1e29] text-white text-[11px] font-black tracking-wider uppercase whitespace-nowrap shadow-[0_0_16px_rgba(229,9,20,0.5)] transition">
+      <button id="navLoginBtn" onclick="FPS.openLoginModal()" class="h-9 px-3.5 rounded-lg bg-[#E50914] hover:bg-[#ff1e29] text-white text-[11px] font-black tracking-wider uppercase whitespace-nowrap shadow-[0_0_16px_rgba(229,9,20,0.45)] transition">
         SIGN IN
       </button>
 
       <!-- Authenticated User Avatar Dropdown -->
       <div id="navUserWrap" class="hidden relative">
         <button onclick="FPS.toggleUserDropdown()" class="h-9 flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full pl-1 pr-2.5 whitespace-nowrap transition">
-          <img id="navUserAvatar" src="" alt="Profile" class="w-7 h-7 rounded-full object-cover border border-[#e50914]" />
+          <img id="navUserAvatar" src="" alt="Profile" class="w-7 h-7 rounded-full object-cover border border-[#FFAB00]" />
           <span id="navUserName" class="hidden md:inline text-xs font-bold text-white max-w-[85px] truncate">Player</span>
           <svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
 
-        <div id="navUserDropdown" class="hidden absolute right-0 mt-2 w-52 bg-[#0e1017] border border-white/15 rounded-xl shadow-2xl p-2 z-50">
+        <div id="navUserDropdown" class="hidden absolute right-0 mt-2 w-52 bg-[#0D0F16] border border-white/15 rounded-xl shadow-2xl p-2 z-50">
           <div class="px-3 py-2 border-b border-white/10 mb-1">
             <div id="dropdownUserName" class="text-xs font-extrabold text-white truncate">FPS Member</div>
             <div id="dropdownUserEmail" class="text-[10px] text-gray-400 truncate">member@fps.gg</div>
           </div>
-          <button onclick="FPS.openWatchlistModal(); FPS.toggleUserDropdown(false);" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-xs font-bold text-gray-200 flex items-center gap-2 transition">
-            <svg class="w-3.5 h-3.5 text-[#e50914]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
-            <span>My Watchlist</span>
+          <button onclick="FPS.openWannaPlayModal(); FPS.toggleUserDropdown(false);" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-xs font-bold text-gray-200 flex items-center gap-2 transition">
+            <svg class="w-3.5 h-3.5 text-[#FFAB00]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+            <span>My Wanna Play</span>
           </button>
           <button onclick="FPS.logout()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-500/20 text-xs font-bold text-red-300 flex items-center gap-2 transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -414,131 +560,140 @@
     </div>
   </header>
 
-  <!-- ==================== 4. HERO BILLBOARD (50s TIMER, NO PROGRESS BAR, 20+ GAMES) ==================== -->
-  <section id="heroBillboard" class="relative w-full h-[88vh] min-h-[600px] max-h-[940px] overflow-hidden bg-[#06070a] select-none">
-    <!-- Layer 0: Official RAWG Poster -->
-    <div id="heroPosterLayer" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-700 scale-[1.01]"></div>
-
-    <!-- Layer 1: Full-Bleed Autoplaying YouTube Trailer -->
-    <div id="heroVideoShell" class="hero-video-shell"></div>
-
-    <!-- Layer 2: Multi-Stop Readability Gradients -->
-    <div class="absolute inset-0 z-20 pointer-events-none hero-grad-bottom"></div>
-    <div class="absolute inset-0 z-20 pointer-events-none hero-grad-left"></div>
-
-    <!-- Layer 3: Sharp Pure White Content & Actions -->
-    <div class="relative z-30 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pt-24 pb-20 flex flex-col justify-end">
-      <div class="max-w-2xl space-y-4">
-        <div class="flex flex-wrap items-center gap-2.5">
-          <span id="heroBadge" class="inline-flex items-center px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase badge-rdr">
-            ABSOLUTE RDR
-          </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/75 border border-amber-400/50 text-amber-300 font-mono-num text-xs font-extrabold tracking-wider">
-            <svg class="w-3.5 h-3.5 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span id="heroScore">9.7</span> / 10
-          </span>
-          <span id="heroMeta" class="text-xs sm:text-sm font-bold tracking-widest uppercase text-gray-200 drop-shadow">
-            ROCKSTAR GAMES &bull; 2018
-          </span>
-        </div>
-
-        <h1 id="heroTitle" onclick="FPS.openHeroModal('reviews')" class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.02] tracking-tight cursor-pointer hover:text-red-400 transition drop-shadow-[0_4px_24px_rgba(0,0,0,0.92)]">
-          Red Dead Redemption 2
-        </h1>
-
-        <p id="heroDescription" class="text-sm sm:text-base text-gray-200 leading-relaxed line-clamp-3 max-w-xl font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
-          Loading official game overview...
-        </p>
-
-        <!-- Hero Action Buttons -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
-          <button onclick="FPS.openHeroModal('reviews')" class="px-5 sm:px-6 py-3.5 rounded-xl bg-[#e50914] hover:bg-[#ff1e29] text-white font-black text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(229,9,20,0.65)] transition active:scale-95">
-            <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <span>WATCH TRAILER</span>
-          </button>
-
-          <button onclick="FPS.openHeroModal('reviews')" class="px-5 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/35 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            <span>REVIEW &amp; SPECS</span>
-          </button>
-
-          <button id="heroWatchlistBtn" onclick="FPS.toggleHeroWatchlist()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-xs tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
-            <span id="heroWatchlistText">WATCHLIST</span>
-          </button>
-
-          <button id="heroSoundBtn" onclick="FPS.toggleHeroSound()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-xs tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
-            <svg id="heroSoundIconMuted" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
-            <svg id="heroSoundIconOn" class="hidden w-4 h-4 text-[#e50914]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
-            <span id="heroSoundLabel">SOUND OFF</span>
-          </button>
+  <!-- ==================== 4. SEPARATE SEARCH VIEW (NEVER OVERWRITES HOME DOM) ==================== -->
+  <section id="search-view" class="hidden flex-grow pt-24 pb-24 max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-14">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-5 mb-7">
+      <div class="flex flex-wrap items-center gap-3.5">
+        <button onclick="FPS.exitSearchToHome()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/20 text-white text-xs font-black tracking-widest uppercase flex items-center gap-2 transition active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span>BACK TO HOME</span>
+        </button>
+        <div>
+          <span class="block text-[10px] font-extrabold tracking-[0.22em] uppercase text-[#FFAB00]">LIVE CATALOG SEARCH</span>
+          <h2 id="searchQueryHeading" class="text-lg sm:text-2xl font-black text-white tracking-tight">Searching...</h2>
         </div>
       </div>
+      <span id="searchCountText" class="font-mono-num text-xs font-bold tracking-widest uppercase text-gray-300 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-lg">0 TITLES</span>
     </div>
 
-    <!-- Sleek Left / Right Glass Arrows -->
-    <button onclick="FPS.prevHeroSlide()" aria-label="Previous slide" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/55 hover:bg-[#e50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <button onclick="FPS.nextHeroSlide()" aria-label="Next slide" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/55 hover:bg-[#e50914] border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-    </button>
-
-    <!-- Bottom Minimal Static Dots & Clean Slide Counter (No Animated Progress Bar) -->
-    <div class="absolute bottom-6 left-5 right-5 sm:left-10 sm:right-10 lg:left-14 lg:right-14 z-30 flex items-center justify-between gap-4">
-      <div id="heroIndicators" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 max-w-[72%]"></div>
-      <div id="heroCounter" class="font-mono-num text-xs sm:text-sm font-bold tracking-widest text-white bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/20 flex-shrink-0">
-        01 / 20
-      </div>
-    </div>
+    <div id="searchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
   </section>
 
-  <!-- ==================== 5. MAIN CATALOG (ENDLESS HORIZONTAL & VERTICAL) ==================== -->
-  <main class="relative z-30 flex-grow max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-14 pt-8 pb-24 space-y-12">
+  <!-- ==================== 5. DEDICATED HOME VIEW (PRESERVED INTACT DURING SEARCH) ==================== -->
+  <div id="home-view" class="flex-grow flex flex-col">
 
-    <!-- Live Search Results Section -->
-    <section id="searchSection" class="hidden space-y-4">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <h2 class="text-base sm:text-lg font-black tracking-wider uppercase text-white flex items-center gap-2.5">
-          <span class="w-1.5 h-5 rounded-sm bg-[#e50914]"></span>
-          <span>Search Results</span>
-        </h2>
-        <span id="searchCountText" class="font-mono-num text-xs font-bold tracking-wider uppercase text-gray-400"></span>
+    <!-- HERO BILLBOARD (50s INTERVAL, NO PROGRESS BAR, 22 GAMES, INSTANT FIRST PAINT) -->
+    <section id="heroBillboard" class="relative w-full h-[88vh] min-h-[600px] max-h-[940px] overflow-hidden bg-[#050608] select-none">
+      <!-- Layer 0: Official Poster -->
+      <div id="heroPosterLayer" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-700 scale-[1.01]"></div>
+
+      <!-- Layer 1: Full-Bleed Autoplaying YouTube Trailer -->
+      <div id="heroVideoShell" class="hero-video-shell"></div>
+
+      <!-- Layer 2: Readability Gradients -->
+      <div class="absolute inset-0 z-20 pointer-events-none hero-grad-bottom"></div>
+      <div class="absolute inset-0 z-20 pointer-events-none hero-grad-left"></div>
+
+      <!-- Layer 3: High-Contrast Content & Actions -->
+      <div class="relative z-30 h-full max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-14 pt-24 pb-20 flex flex-col justify-end">
+        <div class="max-w-2xl space-y-4">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span id="heroBadge" class="inline-flex items-center px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase badge-rdr">
+              ABSOLUTE RDR
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/75 border border-[#FFAB00]/55 text-[#FFAB00] font-mono-num text-xs font-extrabold tracking-wider">
+              <svg class="w-3.5 h-3.5 fill-[#FFAB00]" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span id="heroScore">9.7</span> / 10
+            </span>
+            <span id="heroMeta" class="text-xs sm:text-sm font-bold tracking-widest uppercase text-gray-200 drop-shadow">
+              ROCKSTAR GAMES &bull; 2018
+            </span>
+          </div>
+
+          <h1 id="heroTitle" onclick="FPS.openHeroModal('reviews')" class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.02] tracking-tight cursor-pointer hover:text-[#FFAB00] transition drop-shadow-[0_4px_24px_rgba(0,0,0,0.92)]">
+            Red Dead Redemption 2
+          </h1>
+
+          <p id="heroDescription" class="text-sm sm:text-base text-gray-200 leading-relaxed line-clamp-3 max-w-xl font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+            America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run across the rugged heartland.
+          </p>
+
+          <!-- Hero Action Buttons -->
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
+            <button onclick="FPS.openHeroModal('reviews')" class="px-5 sm:px-6 py-3.5 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black font-black text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(255,171,0,0.5)] transition active:scale-95">
+              <svg class="w-4 h-4 fill-black" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span>WATCH TRAILER</span>
+            </button>
+
+            <button onclick="FPS.openHeroModal('reviews')" class="px-5 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/35 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              <span>REVIEW &amp; SPECS</span>
+            </button>
+
+            <button id="heroWannaPlayBtn" onclick="FPS.toggleHeroWannaPlay()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-xs tracking-wider uppercase flex items-center gap-1.5 transition active:scale-95">
+              <svg id="heroWannaPlayIcon" class="w-4 h-4 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              <span id="heroWannaPlayText">WANNA PLAY</span>
+            </button>
+
+            <button id="heroSoundBtn" onclick="FPS.toggleHeroSound()" class="px-4 py-3.5 rounded-xl bg-black/65 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-xs tracking-wider uppercase flex items-center gap-2 transition active:scale-95">
+              <svg id="heroSoundIconMuted" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+              <svg id="heroSoundIconOn" class="hidden w-4 h-4 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+              <span id="heroSoundLabel">SOUND OFF</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <div id="searchGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
+
+      <!-- Left / Right Glass Arrows -->
+      <button onclick="FPS.prevHeroSlide()" aria-label="Previous slide" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/55 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button onclick="FPS.nextHeroSlide()" aria-label="Next slide" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black/55 hover:bg-[#FFAB00] hover:text-black border border-white/25 text-white flex items-center justify-center backdrop-blur-md transition active:scale-90">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+
+      <!-- Bottom Minimal Static Dots & Clean Slide Counter (NO PROGRESS BAR) -->
+      <div class="absolute bottom-6 left-5 right-5 sm:left-10 sm:right-10 lg:left-14 lg:right-14 z-30 flex items-center justify-between gap-4">
+        <div id="heroIndicators" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 max-w-[72%]"></div>
+        <div id="heroCounter" class="font-mono-num text-xs sm:text-sm font-bold tracking-widest text-white bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/20 flex-shrink-0">
+          01 / 16
+        </div>
+      </div>
     </section>
 
-    <!-- Dynamic Deduplicated Catalog Rows -->
-    <div id="catalogRowsContainer" class="space-y-12"></div>
+    <!-- MAIN DEDUPLICATED CAROUSEL ROWS -->
+    <main class="relative z-30 flex-grow max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-14 pt-8 pb-24 space-y-12">
+      <div id="catalogRowsContainer" class="space-y-12"></div>
 
-    <!-- Endless Vertical Scroll Sentinel -->
-    <div id="verticalSentinel" class="py-10 flex flex-col items-center justify-center gap-3">
-      <div class="w-8 h-8 border-2 border-[#e50914] border-t-transparent rounded-full animate-spin"></div>
-      <span class="text-[11px] font-extrabold tracking-[0.25em] uppercase text-gray-400">STREAMING MORE CATALOG TIERS...</span>
-    </div>
-  </main>
+      <!-- Endless Vertical Scroll Sentinel -->
+      <div id="verticalSentinel" class="py-10 flex flex-col items-center justify-center gap-3">
+        <div class="w-8 h-8 border-2 border-[#FFAB00] border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-[11px] font-extrabold tracking-[0.25em] uppercase text-gray-400">STREAMING MORE CATALOG TIERS...</span>
+      </div>
+    </main>
+  </div>
 
-  <!-- ==================== 6. ULTRA-POLISHED GAME REVIEW & STOREFRONT THEATER MODAL ==================== -->
+  <!-- ==================== 6. ULTRA-FAST REVIEW THEATER & STOREFRONT MODAL ==================== -->
   <div id="reviewModal" class="fixed inset-0 z-[80] bg-black/92 backdrop-blur-2xl hidden overflow-y-auto">
     <div class="min-h-screen w-full flex items-start justify-center p-2 sm:p-5 lg:p-8">
-      <div class="relative w-full max-w-6xl bg-[#0e1017] border border-white/15 rounded-2xl overflow-hidden shadow-[0_36px_115px_rgba(0,0,0,0.98)] my-2">
+      <div class="relative w-full max-w-6xl bg-[#0D0F16] border border-white/15 rounded-2xl overflow-hidden shadow-[0_36px_115px_rgba(0,0,0,0.98)] my-2">
 
-        <!-- Sticky Modal Header Bar -->
-        <div class="sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 py-3 bg-[#0e1017]/92 backdrop-blur-xl border-b border-white/10">
+        <!-- Sticky Modal Header -->
+        <div class="sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 py-3 bg-[#0D0F16]/94 backdrop-blur-xl border-b border-white/10">
           <div class="flex items-center gap-3 min-w-0">
-            <span class="font-brand text-2xl text-[#e50914] leading-none pt-0.5 flex-shrink-0">FPS</span>
+            <span class="px-2 py-0.5 rounded bg-[#FFAB00] text-black font-rockstar italic font-black text-base tracking-tight leading-none flex-shrink-0">FPS</span>
             <span class="text-gray-600">/</span>
             <span id="modalTopBreadcrumb" class="text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white truncate">GAME REVIEW THEATER</span>
           </div>
           <div class="flex items-center gap-2">
-            <button id="modalWatchlistBtn" onclick="FPS.toggleCurrentWatchlist()" class="h-9 px-3.5 rounded-lg bg-[#e50914] hover:bg-[#ff1e29] text-white text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition">
-              <svg id="modalWatchlistIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
-              <span id="modalWatchlistLabel" class="hidden sm:inline">ADD TO WATCHLIST</span>
+            <button id="modalWannaPlayBtn" onclick="FPS.toggleCurrentWannaPlay()" class="h-9 px-3.5 rounded-lg bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-[11px] font-black tracking-wider uppercase flex items-center gap-1.5 transition">
+              <svg id="modalWannaPlayIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14m-7-7h14"/></svg>
+              <span id="modalWannaPlayLabel" class="hidden sm:inline">WANNA PLAY</span>
             </button>
             <button onclick="FPS.copyShareLink()" title="Copy Share Link" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
             </button>
-            <button onclick="FPS.closeReviewModal()" aria-label="Close modal" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-[#e50914] border border-white/15 text-white flex items-center justify-center transition">
+            <button onclick="FPS.closeReviewModal()" aria-label="Close modal" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-[#E50914] border border-white/15 text-white flex items-center justify-center transition">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
@@ -546,18 +701,15 @@
 
         <!-- TOP 16:9 AUTOPLAYING VIDEO THEATER -->
         <div class="relative w-full aspect-video bg-black overflow-hidden">
-          <!-- Backdrop Layer shown briefly while YouTube ID resolves -->
           <div id="modalVideoBackdrop" class="absolute inset-0 z-0 bg-cover bg-center">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0e1017] via-black/40 to-black/25"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0D0F16] via-black/40 to-black/25"></div>
           </div>
 
-          <!-- Loading Spinner while resolving uncached YouTube trailer -->
           <div id="modalVideoLoader" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/55 backdrop-blur-sm">
-            <div class="w-10 h-10 border-2 border-[#e50914] border-t-transparent rounded-full animate-spin mb-3"></div>
+            <div class="w-10 h-10 border-2 border-[#FFAB00] border-t-transparent rounded-full animate-spin mb-3"></div>
             <span class="text-[11px] font-black tracking-[0.22em] uppercase text-white">LAUNCHING OFFICIAL TRAILER...</span>
           </div>
 
-          <!-- Guaranteed Autoplaying YouTube Nocookie Embed -->
           <iframe
             id="modalIframe"
             class="w-full h-full border-0 relative z-10"
@@ -567,32 +719,32 @@
             allowfullscreen>
           </iframe>
 
-          <!-- Floating UNMUTE SOUND / MUTE Pill Button -->
+          <!-- Floating UNMUTE SOUND / MUTE Button -->
           <button
             id="modalSoundToggleBtn"
             onclick="FPS.toggleModalSound()"
-            class="absolute top-4 right-4 z-30 px-4 py-2 rounded-full bg-black/80 hover:bg-[#e50914] backdrop-blur-md border border-white/30 text-white text-[11px] font-black tracking-widest uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(0,0,0,0.75)] transition active:scale-95"
+            class="absolute top-4 right-4 z-30 px-4 py-2 rounded-full bg-black/82 hover:bg-[#FFAB00] hover:text-black backdrop-blur-md border border-white/30 text-white text-[11px] font-black tracking-widest uppercase flex items-center gap-2 shadow-[0_8px_28px_rgba(0,0,0,0.75)] transition active:scale-95"
           >
-            <svg id="modalSoundIconMuted" class="w-4 h-4 text-[#e50914]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+            <svg id="modalSoundIconMuted" class="w-4 h-4 text-[#FFAB00]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
             <svg id="modalSoundIconOn" class="hidden w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
             <span id="modalSoundLabel">UNMUTE SOUND</span>
           </button>
         </div>
 
-        <!-- OFFICIAL "AVAILABLE ON / STOREFRONTS" SECTION WITH AUTHENTIC SVG LOGOS -->
-        <div id="modalStorefrontsWrap" class="px-4 sm:px-8 py-5 bg-[#0a0c12] border-b border-white/10">
+        <!-- OFFICIAL "AVAILABLE ON / STOREFRONTS" SECTION -->
+        <div id="modalStorefrontsWrap" class="px-4 sm:px-8 py-5 bg-[#090B10] border-b border-white/10">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div class="flex items-center gap-2">
-              <span class="w-1.5 h-4 rounded-sm bg-[#e50914]"></span>
-              <span class="text-[11px] font-black tracking-[0.22em] uppercase text-white">AVAILABLE ON / STOREFRONTS</span>
+              <span class="w-1.5 h-4 rounded-sm bg-[#FFAB00]"></span>
+              <span class="text-[11px] font-black tracking-[0.22em] uppercase text-white">AVAILABLE ON</span>
             </div>
-            <span id="storefrontsStatusText" class="text-[10px] font-bold tracking-widest uppercase text-gray-400">VERIFIED OFFICIAL STORES</span>
+            <span id="storefrontsStatusText" class="text-[10px] font-bold tracking-widest uppercase text-gray-400">OFFICIAL STOREFRONTS</span>
           </div>
           <div id="modalStorefrontsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
         </div>
 
         <!-- HD SCREENSHOTS STRIP -->
-        <div id="modalScreenshotsStripWrap" class="hidden px-4 sm:px-8 pt-4 bg-[#0e1017]">
+        <div id="modalScreenshotsStripWrap" class="hidden px-4 sm:px-8 pt-4 bg-[#0D0F16]">
           <div class="flex items-center justify-between mb-2">
             <span class="text-[10px] font-extrabold tracking-[0.22em] uppercase text-gray-400">OFFICIAL IN-GAME CAPTURES</span>
             <span class="text-[10px] font-bold tracking-wider uppercase text-gray-500">CLICK TO EXPAND</span>
@@ -603,8 +755,6 @@
         <!-- MAIN HEADER: TITLE + ACCURATE METADATA + DUAL CIRCULAR SCORES -->
         <div class="px-4 sm:px-8 pt-6 pb-6 border-b border-white/10">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-
-            <!-- Left 7 Cols: Title, Studios, Publishers, Launch Date, Playable On -->
             <div class="lg:col-span-7 space-y-4">
               <div class="flex flex-wrap items-center gap-2.5">
                 <span id="modalTierBadge" class="px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase badge-peak">PEAK</span>
@@ -636,40 +786,37 @@
                 </div>
               </div>
 
-              <!-- Playable On (Platforms) -->
               <div class="space-y-1.5">
                 <span class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">PLAYABLE ON</span>
                 <div id="metaPlatformsList" class="flex flex-wrap gap-1.5"></div>
               </div>
             </div>
 
-            <!-- Right 5 Cols: Dual Animated SVG Circular Score Showcase -->
+            <!-- Dual Animated SVG Circular Score Showcase -->
             <div class="lg:col-span-5 grid grid-cols-2 gap-4">
-              <!-- Ring 1: FPS Critic Score -->
               <div class="relative bg-white/[0.03] border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center overflow-hidden">
                 <div id="criticRingGlow" class="absolute inset-0 opacity-20 pointer-events-none"></div>
                 <span class="text-[10px] font-black tracking-[0.2em] uppercase text-gray-400 mb-2">FPS CRITIC</span>
                 <div class="relative w-28 h-28 flex items-center justify-center">
                   <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
                     <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9" />
-                    <circle id="criticRingArc" cx="60" cy="60" r="50" fill="none" stroke="#f59e0b" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="gauge-ring-progress" />
+                    <circle id="criticRingArc" cx="60" cy="60" r="50" fill="none" stroke="#FFAB00" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="gauge-ring-progress" />
                   </svg>
                   <div class="absolute inset-0 flex flex-col items-center justify-center">
                     <span id="criticRingScore" class="font-mono-num text-3xl font-black text-white leading-none">9.7</span>
                     <span class="text-[9px] font-bold tracking-widest uppercase text-gray-400 mt-0.5">/ 10</span>
                   </div>
                 </div>
-                <span id="criticRingLabel" class="mt-2 text-[10px] font-black tracking-widest uppercase text-amber-300">PEAK</span>
+                <span id="criticRingLabel" class="mt-2 text-[10px] font-black tracking-widest uppercase text-[#FFAB00]">PEAK</span>
               </div>
 
-              <!-- Ring 2: Live Community Score (Firestore) -->
               <div class="relative bg-white/[0.03] border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center overflow-hidden">
                 <div id="communityRingGlow" class="absolute inset-0 opacity-20 pointer-events-none"></div>
                 <span class="text-[10px] font-black tracking-[0.2em] uppercase text-gray-400 mb-2">COMMUNITY</span>
                 <div class="relative w-28 h-28 flex items-center justify-center">
                   <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
                     <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9" />
-                    <circle id="communityRingArc" cx="60" cy="60" r="50" fill="none" stroke="#3b82f6" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="gauge-ring-progress" />
+                    <circle id="communityRingArc" cx="60" cy="60" r="50" fill="none" stroke="#3B82F6" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="gauge-ring-progress" />
                   </svg>
                   <div class="absolute inset-0 flex flex-col items-center justify-center">
                     <span id="communityRingScore" class="font-mono-num text-3xl font-black text-white leading-none">--</span>
@@ -679,13 +826,12 @@
                 <span id="communityRingLabel" class="mt-2 text-[10px] font-black tracking-widest uppercase text-gray-400">BE THE FIRST</span>
               </div>
             </div>
-
           </div>
         </div>
 
-        <!-- TABBED NAVIGATION BAR -->
+        <!-- TABBED NAVIGATION -->
         <div class="px-4 sm:px-8 pt-4 border-b border-white/10 flex items-center gap-6 overflow-x-auto no-scrollbar text-xs font-extrabold tracking-widest uppercase">
-          <button id="tabBtn-reviews" onclick="FPS.switchModalTab('reviews')" class="pb-3.5 text-white border-b-2 border-[#e50914] whitespace-nowrap transition">
+          <button id="tabBtn-reviews" onclick="FPS.switchModalTab('reviews')" class="pb-3.5 text-white border-b-2 border-[#FFAB00] whitespace-nowrap transition">
             COMMUNITY REVIEWS &amp; WRITE REVIEW
           </button>
           <button id="tabBtn-overview" onclick="FPS.switchModalTab('overview')" class="pb-3.5 text-gray-400 hover:text-white border-b-2 border-transparent whitespace-nowrap transition">
@@ -699,36 +845,36 @@
         <!-- MODAL TAB CONTENT -->
         <div class="p-4 sm:p-8">
 
-          <!-- ==================== TAB 1: INTERACTIVE REVIEW STUDIO + COMMUNITY FEED ==================== -->
+          <!-- TAB 1: OPTIMISTIC INSTANT REVIEW STUDIO + COMMUNITY FEED -->
           <div id="tabPane-reviews" class="space-y-8">
-            <div class="relative rounded-2xl bg-gradient-to-br from-[#141825] via-[#0e111b] to-[#0a0c12] border border-white/15 p-5 sm:p-7 overflow-hidden shadow-2xl">
-              <div id="studioAmbientBackdrop" class="gauge-ambient-glow absolute -top-24 -left-24 w-80 h-80 rounded-full blur-[90px] opacity-25 pointer-events-none" style="background: #3b82f6;"></div>
+            <div class="relative rounded-2xl bg-gradient-to-br from-[#141825] via-[#0E111B] to-[#0A0C12] border border-white/15 p-5 sm:p-7 overflow-hidden shadow-2xl">
+              <div id="studioAmbientBackdrop" class="gauge-ambient-glow absolute -top-24 -left-24 w-80 h-80 rounded-full blur-[90px] opacity-25 pointer-events-none" style="background: #3B82F6;"></div>
 
               <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 mb-6">
                 <div>
-                  <span class="text-[10px] font-black tracking-[0.28em] uppercase text-[#e50914]">FPS VERDICT STUDIO</span>
+                  <span class="text-[10px] font-black tracking-[0.28em] uppercase text-[#FFAB00]">FPS VERDICT STUDIO</span>
                   <h3 id="composerHeading" class="text-xl sm:text-2xl font-black text-white uppercase tracking-wide mt-0.5">Drop Your Official Rating</h3>
                 </div>
                 <div id="dbSyncBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-widest uppercase text-gray-300">
                   <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>FIRESTORE LIVE SYNC</span>
+                  <span>INSTANT SYNC READY</span>
                 </div>
               </div>
 
               <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
-                <!-- Left 5 Cols: Color-Shifting Circular Gauge + Precision Slider -->
+                <!-- Color-Shifting Circular Gauge + Precision Slider -->
                 <div class="lg:col-span-5 flex flex-col items-center bg-black/45 border border-white/10 rounded-2xl p-6 space-y-5">
                   <div class="relative w-48 h-48 flex items-center justify-center">
-                    <div id="interactiveCircleGlow" class="gauge-ambient-glow absolute inset-3 rounded-full blur-2xl opacity-40" style="background: #3b82f6;"></div>
+                    <div id="interactiveCircleGlow" class="gauge-ambient-glow absolute inset-3 rounded-full blur-2xl opacity-40" style="background: #3B82F6;"></div>
                     <svg class="relative z-10 w-full h-full -rotate-90 drop-shadow-2xl" viewBox="0 0 180 180">
-                      <circle cx="90" cy="90" r="76" fill="rgba(6,7,10,0.78)" stroke="rgba(255,255,255,0.09)" stroke-width="12" />
+                      <circle cx="90" cy="90" r="76" fill="rgba(5,6,8,0.8)" stroke="rgba(255,255,255,0.09)" stroke-width="12" />
                       <circle
                         id="interactiveGaugeArc"
                         cx="90"
                         cy="90"
                         r="76"
                         fill="none"
-                        stroke="#3b82f6"
+                        stroke="#3B82F6"
                         stroke-width="12"
                         stroke-linecap="round"
                         stroke-dasharray="477.52"
@@ -744,11 +890,10 @@
                     </div>
                   </div>
 
-                  <!-- Precision 0.0 - 10.0 Slider -->
                   <div class="w-full space-y-2.5">
                     <div class="flex items-center justify-between text-[10px] font-extrabold tracking-widest uppercase text-gray-400">
                       <span>0.0 TRASH</span>
-                      <span>5.0 TRY</span>
+                      <span>4.0 TRY</span>
                       <span>7.0 PLAY</span>
                       <span>9.5 PEAK</span>
                     </div>
@@ -764,17 +909,16 @@
                     />
                   </div>
 
-                  <!-- Quick Tier Presets -->
                   <div class="grid grid-cols-5 gap-1.5 w-full pt-1">
                     <button type="button" onclick="FPS.setSliderPreset(3.0)" class="font-mono-num py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 border border-red-500/40 text-[10px] font-black text-red-300 transition">3.0</button>
-                    <button type="button" onclick="FPS.setSliderPreset(6.0)" class="font-mono-num py-1.5 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 border border-pink-500/40 text-[10px] font-black text-pink-300 transition">6.0</button>
-                    <button type="button" onclick="FPS.setSliderPreset(8.2)" class="font-mono-num py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/40 text-[10px] font-black text-emerald-300 transition">8.2</button>
+                    <button type="button" onclick="FPS.setSliderPreset(5.8)" class="font-mono-num py-1.5 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 border border-pink-500/40 text-[10px] font-black text-pink-300 transition">5.8</button>
+                    <button type="button" onclick="FPS.setSliderPreset(8.2)" class="font-mono-num py-1.5 rounded-lg bg-green-500/15 hover:bg-green-500/30 border border-green-500/40 text-[10px] font-black text-green-300 transition">8.2</button>
                     <button type="button" onclick="FPS.setSliderPreset(9.2)" class="font-mono-num py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 border border-blue-500/40 text-[10px] font-black text-blue-300 transition">9.2</button>
-                    <button type="button" onclick="FPS.setSliderPreset(9.8)" class="font-mono-num py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 text-[10px] font-black text-amber-300 transition">9.8</button>
+                    <button type="button" onclick="FPS.setSliderPreset(9.8)" class="font-mono-num py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 text-[10px] font-black text-[#FFAB00] transition">9.8</button>
                   </div>
                 </div>
 
-                <!-- Right 7 Cols: Verdict Tags + Headline + Review Body -->
+                <!-- Right: Verdict Tags + Headline + Review Body -->
                 <div class="lg:col-span-7 space-y-4">
                   <div class="space-y-2">
                     <label class="block text-[10px] font-extrabold tracking-[0.2em] uppercase text-gray-400">SELECT VERDICT TAGS</label>
@@ -788,7 +932,7 @@
                       type="text"
                       maxlength="90"
                       placeholder="e.g., A generational open-world masterpiece"
-                      class="w-full h-11 px-4 rounded-xl bg-black/55 border border-white/15 focus:border-[#e50914] text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+                      class="w-full h-11 px-4 rounded-xl bg-black/55 border border-white/15 focus:border-[#FFAB00] text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
                     />
                   </div>
 
@@ -799,7 +943,7 @@
                       rows="4"
                       maxlength="1000"
                       placeholder="Break down the gameplay loop, story pacing, visuals, soundtrack, and performance..."
-                      class="w-full p-4 rounded-xl bg-black/55 border border-white/15 focus:border-[#e50914] text-sm text-gray-100 placeholder-gray-500 outline-none resize-none transition"
+                      class="w-full p-4 rounded-xl bg-black/55 border border-white/15 focus:border-[#FFAB00] text-sm text-gray-100 placeholder-gray-500 outline-none resize-none transition"
                     ></textarea>
                   </div>
 
@@ -811,8 +955,8 @@
                       <button id="cancelEditBtn" type="button" onclick="FPS.resetReviewComposer()" class="hidden px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold tracking-wider uppercase text-white transition">
                         CANCEL EDIT
                       </button>
-                      <button id="publishReviewBtn" type="button" onclick="FPS.submitUserReview()" class="px-6 py-3 rounded-xl bg-[#e50914] hover:bg-[#ff1e29] text-white text-xs font-black tracking-widest uppercase shadow-[0_8px_24px_rgba(229,9,20,0.5)] flex items-center gap-2 transition active:scale-95">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                      <button id="publishReviewBtn" type="button" onclick="FPS.submitUserReview()" class="px-6 py-3 rounded-xl bg-[#FFAB00] hover:bg-[#FFB81C] text-black text-xs font-black tracking-widest uppercase shadow-[0_8px_24px_rgba(255,171,0,0.45)] flex items-center gap-2 transition active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         <span id="publishReviewBtnText">PUBLISH REVIEW</span>
                       </button>
                     </div>
@@ -825,13 +969,13 @@
             <div class="space-y-4">
               <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
                 <h4 class="text-sm font-black tracking-widest uppercase text-white flex items-center gap-2">
-                  <span class="w-1.5 h-4 rounded-sm bg-[#e50914]"></span>
+                  <span class="w-1.5 h-4 rounded-sm bg-[#FFAB00]"></span>
                   <span>COMMUNITY VERDICTS</span>
                   <span id="feedReviewCountBadge" class="font-mono-num px-2 py-0.5 rounded bg-white/10 text-[11px] font-bold text-gray-300">0</span>
                 </h4>
 
                 <div id="tierFilterBar" class="flex flex-wrap items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase">
-                  <button onclick="FPS.setReviewTierFilter('ALL')" data-filter="ALL" class="tier-filter-btn px-3 py-1 rounded-full bg-[#e50914] text-white transition">ALL</button>
+                  <button onclick="FPS.setReviewTierFilter('ALL')" data-filter="ALL" class="tier-filter-btn px-3 py-1 rounded-full bg-[#FFAB00] text-black transition">ALL</button>
                   <button onclick="FPS.setReviewTierFilter('PEAK')" data-filter="PEAK" class="tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition">PEAK</button>
                   <button onclick="FPS.setReviewTierFilter('ABSOLUTE CINEMA')" data-filter="ABSOLUTE CINEMA" class="tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition">CINEMA</button>
                   <button onclick="FPS.setReviewTierFilter('SHOULD PLAY')" data-filter="SHOULD PLAY" class="tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition">SHOULD PLAY</button>
@@ -844,7 +988,7 @@
             </div>
           </div>
 
-          <!-- ==================== TAB 2: OVERVIEW & CRITIC BREAKDOWN ==================== -->
+          <!-- TAB 2: OVERVIEW & CRITIC BREAKDOWN -->
           <div id="tabPane-overview" class="hidden space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4">
               <div id="modalGenres" class="flex flex-wrap gap-2"></div>
@@ -855,7 +999,7 @@
             </div>
 
             <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-2">
-              <h4 class="text-xs font-black tracking-[0.2em] uppercase text-[#e50914]">GAME SYNOPSIS</h4>
+              <h4 class="text-xs font-black tracking-[0.2em] uppercase text-[#FFAB00]">GAME SYNOPSIS</h4>
               <p id="modalSynopsis" class="text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line"></p>
             </div>
 
@@ -884,7 +1028,7 @@
             </div>
           </div>
 
-          <!-- ==================== TAB 3: SCREENSHOTS & PC SPECS ==================== -->
+          <!-- TAB 3: SCREENSHOTS & PC SPECS -->
           <div id="tabPane-specs" class="hidden space-y-8">
             <div class="space-y-3">
               <h4 class="text-xs font-black tracking-[0.2em] uppercase text-white">HD SCREENSHOT GALLERY</h4>
@@ -904,37 +1048,44 @@
 
   <!-- ==================== 7. HD SCREENSHOT LIGHTBOX ==================== -->
   <div id="screenshotLightbox" class="fixed inset-0 z-[115] bg-black/95 backdrop-blur-xl hidden flex items-center justify-center p-4" onclick="FPS.closeLightbox()">
-    <button onclick="FPS.closeLightbox()" aria-label="Close screenshot" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-[#e50914] text-white flex items-center justify-center transition">
+    <button onclick="FPS.closeLightbox()" aria-label="Close screenshot" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black text-white flex items-center justify-center transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <img id="lightboxImage" src="" alt="Game Screenshot" class="max-w-full max-h-[88vh] rounded-xl border border-white/20 shadow-2xl object-contain" onclick="event.stopPropagation()" />
   </div>
 
-  <!-- ==================== 8. WATCHLIST MODAL ==================== -->
-  <div id="watchlistModal" class="fixed inset-0 z-[95] bg-black/88 backdrop-blur-xl hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-2xl bg-[#0e1017] border border-white/15 rounded-2xl p-6 max-h-[82vh] flex flex-col shadow-2xl">
+  <!-- ==================== 8. WANNA PLAY DRAWER / MODAL ==================== -->
+  <div id="wannaPlayModal" class="fixed inset-0 z-[95] bg-black/88 backdrop-blur-xl hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-[#0D0F16] border border-white/15 rounded-2xl p-6 max-h-[82vh] flex flex-col shadow-2xl">
       <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
         <h3 class="text-base sm:text-lg font-black tracking-wider uppercase text-white flex items-center gap-2.5">
-          <svg class="w-5 h-5 text-[#e50914]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
-          MY WATCHLIST
+          <svg class="w-5 h-5 text-[#FFAB00]" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v18l-7-3.5L5 22V4z"/></svg>
+          MY WANNA PLAY LIST
         </h3>
-        <button onclick="FPS.closeWatchlistModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+        <button onclick="FPS.closeWannaPlayModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
-      <div id="watchlistList" class="flex-grow overflow-y-auto space-y-3 pr-1"></div>
+      <div id="wannaPlayList" class="flex-grow overflow-y-auto space-y-3 pr-1"></div>
     </div>
   </div>
 
   <!-- ==================== 9. TOAST NOTIFICATION ==================== -->
-  <div id="toastBox" class="fixed bottom-6 right-6 z-[130] hidden px-4 py-3 rounded-xl bg-[#131724] border border-white/20 text-xs font-extrabold tracking-wider uppercase text-white shadow-[0_12px_40px_rgba(0,0,0,0.85)]"></div>
+  <div id="toastBox" class="fixed bottom-6 right-6 z-[130] hidden px-4 py-3 rounded-xl bg-[#131724] border border-[#FFAB00]/50 text-xs font-extrabold tracking-wider uppercase text-white shadow-[0_12px_40px_rgba(0,0,0,0.85)]"></div>
 
   <!-- ==================== FOOTER ==================== -->
-  <footer class="border-t border-white/10 bg-[#040508] py-10 px-6 text-center">
-    <div class="max-w-4xl mx-auto space-y-2">
-      <div class="font-brand text-3xl text-[#e50914] font-black">FPS</div>
-      <p class="text-xs text-gray-400">Live Game Metadata &amp; Storefronts via RAWG API &bull; Official Trailers via YouTube Data API v3 &bull; Community Verdicts via Firebase Firestore</p>
-      <p class="text-[10px] text-gray-500 uppercase tracking-[0.25em]">&copy; 2026 FPS Interactive — Official Game Critique Network</p>
+  <footer class="border-t border-white/10 bg-[#040507] py-10 px-6 text-center">
+    <div class="max-w-4xl mx-auto space-y-2.5 flex flex-col items-center">
+      <svg viewBox="0 0 440 280" class="h-10 w-auto">
+        <rect x="12" y="8" width="416" height="264" rx="58" fill="#FFAB00" />
+        <rect x="20" y="16" width="400" height="248" rx="51" fill="#000000" />
+        <rect x="28" y="24" width="384" height="232" rx="44" fill="#FFAB00" />
+        <text x="198" y="174" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Arial Black', Impact, sans-serif" font-weight="900" font-style="italic" font-size="162" letter-spacing="-4" transform="skewX(-6) translate(16, 0)">FPS</text>
+        <text x="170" y="224" text-anchor="middle" fill="#000000" font-family="'Barlow Condensed', 'Inter', sans-serif" font-weight="800" font-style="italic" font-size="22" letter-spacing="3.2">GAME RATING &amp; REVIEWS</text>
+        <polygon points="322,126 336,166 378,166 344,191 357,231 322,206 287,231 300,191 266,166 308,166" fill="#FFFFFF" stroke="#000000" stroke-width="11" stroke-linejoin="miter" />
+      </svg>
+      <p class="text-xs text-gray-400">Live Game Data &amp; Storefronts via RAWG API &bull; Official Trailers via YouTube Data API v3 &bull; Cloud Sync via Firebase Firestore</p>
+      <p class="text-[10px] text-gray-500 uppercase tracking-[0.25em]">&copy; 2026 FPS — GAME RATING &amp; REVIEWS</p>
     </div>
   </footer>
 
@@ -954,6 +1105,7 @@
       query,
       where,
       getDocs,
+      getDoc,
       doc,
       setDoc,
       deleteDoc,
@@ -961,7 +1113,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // =========================================================================
-    // 1. EXACT EMBEDDED CREDENTIALS
+    // 1. API CREDENTIALS & FIREBASE INITIALIZATION
     // =========================================================================
     const RAWG_API_KEY = "B42b5294e7ad4188a302096f92124fbe";
     const YOUTUBE_API_KEY = "AIzaSyB64wc7E_iGjF0GwRdJo7E_5D-YgfiH_f4";
@@ -982,7 +1134,41 @@
     const googleProvider = new GoogleAuthProvider();
 
     // =========================================================================
-    // 2. 16 FLAGSHIP HERO SEEDS + VERIFIED CRITIC SCORES
+    // 2. FAST IN-MEMORY + SESSIONSTORAGE CACHE HELPER FOR ALL RAWG CALLS
+    // =========================================================================
+    const memCache = new Map();
+
+    async function cachedFetchJSON(url, signal = undefined) {
+      if (memCache.has(url)) return memCache.get(url);
+      try {
+        const stored = sessionStorage.getItem("fps_c_" + url);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          memCache.set(url, parsed);
+          return parsed;
+        }
+      } catch (_) {}
+
+      const res = await fetch(url, signal ? { signal } : undefined);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      memCache.set(url, data);
+      try {
+        sessionStorage.setItem("fps_c_" + url, JSON.stringify(data));
+      } catch (_) {}
+      return data;
+    }
+
+    // Non-blocking timeout race so Firestore never stalls UI
+    function withTimeout(promise, ms = 5000) {
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Sync timeout")), ms))
+      ]);
+    }
+
+    // =========================================================================
+    // 3. 16 FLAGSHIP HERO SEEDS + VERIFIED CRITIC SCORES
     // =========================================================================
     const FLAGSHIP_HERO_SEEDS = [
       { slug: "red-dead-redemption-2", title: "Red Dead Redemption 2", yt: "gmA6MrX81z4", score: 9.7, studio: "Rockstar Games", year: "2018", description: "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and bounty hunters massing on their heels, the gang must rob, steal and fight across the rugged heartland." },
@@ -1054,106 +1240,63 @@
     });
 
     // =========================================================================
-    // 3. OFFICIAL STOREFRONT METADATA + CRISP AUTHENTIC SVG BRAND LOGOS
+    // 4. OFFICIAL STOREFRONT CATALOG WITH INLINE SVG BRAND LOGOS
     // =========================================================================
     const STORE_CATALOG = {
       "playstation-store": {
-        key: "playstation-store",
-        name: "PlayStation Store",
-        sub: "PS5 / PS4",
-        accent: "#0070D1",
-        glow: "rgba(0, 112, 209, 0.45)",
+        key: "playstation-store", name: "PlayStation Store", sub: "PS5 / PS4", accent: "#0070D1", glow: "rgba(0, 112, 209, 0.45)",
         searchUrl: (q) => `https://store.playstation.com/search/${encodeURIComponent(q)}`,
         svg: `<svg class="w-6 h-6" viewBox="0 0 24 24" fill="#0070D1"><path d="M8.985 2.596v17.548l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.181.76.814.76 1.505v5.876c2.441 1.193 4.362-.002 4.362-3.153 0-3.237-1.126-4.675-4.438-5.827-1.307-.448-3.728-1.186-5.393-1.502zM4.01 16.055c-2.61.908-3.047 2.26-1.454 3.091 1.38.72 3.474.918 5.568.426v-2.075l-1.926.647c-.662.227-1.264.176-1.34-.114-.077-.29.365-.662 1.028-.89l2.238-.752V14.23l-4.114 1.825zm16.258-.752c-1.454-.453-3.27-.443-4.962.088l-1.472.495v2.118l3.527-1.213c.658-.225 1.26-.176 1.337.114.076.29-.366.663-1.029.888l-3.835 1.318v2.104l5.303-1.82c2.596-.892 3.166-2.429 1.131-4.092z"/></svg>`
       },
       "xbox-store": {
-        key: "xbox-store",
-        name: "Xbox Store",
-        sub: "Series X|S / PC",
-        accent: "#107C10",
-        glow: "rgba(16, 124, 16, 0.48)",
+        key: "xbox-store", name: "Xbox Store", sub: "Series X|S / PC", accent: "#107C10", glow: "rgba(16, 124, 16, 0.48)",
         searchUrl: (q) => `https://www.xbox.com/en-US/search?q=${encodeURIComponent(q)}`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#107C10"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.82 3.55c.72.58 1.35 1.28 1.84 2.08-1.49-.33-3.17.34-4.73 1.44 1.31-1.43 2.34-2.66 2.89-3.52zm-9.64 0c.55.86 1.58 2.09 2.89 3.52-1.56-1.1-3.24-1.77-4.73-1.44.49-.8 1.12-1.5 1.84-2.08zM12 10.6c2.58 2.13 5.29 5.39 5.51 7.64A8.03 8.03 0 0 1 12 20c-2.16 0-4.12-.86-5.51-1.76.22-2.25 2.93-5.51 5.51-7.64zm-7.82 2.24c.16-1.45.7-2.79 1.52-3.9 1.41.48 3.23 1.72 4.74 3.12-2.18 2.06-4.18 4.46-4.71 6.32a7.95 7.95 0 0 1-1.55-5.54zm15.64 0a7.95 7.95 0 0 1-1.55 5.54c-.53-1.86-2.53-4.26-4.71-6.32 1.51-1.4 3.33-2.64 4.74-3.12.82 1.11 1.36 2.45 1.52 3.9z"/></svg>`
       },
       "steam": {
-        key: "steam",
-        name: "Steam",
-        sub: "PC Digital",
-        accent: "#66C0F4",
-        glow: "rgba(102, 192, 244, 0.45)",
+        key: "steam", name: "Steam", sub: "PC Digital", accent: "#66C0F4", glow: "rgba(102, 192, 244, 0.45)",
         searchUrl: (q) => `https://store.steampowered.com/search/?term=${encodeURIComponent(q)}`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#66C0F4"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>`
       },
       "epic-games": {
-        key: "epic-games",
-        name: "Epic Games Store",
-        sub: "PC Digital",
-        accent: "#FFFFFF",
-        glow: "rgba(255, 255, 255, 0.35)",
+        key: "epic-games", name: "Epic Games Store", sub: "PC Digital", accent: "#FFFFFF", glow: "rgba(255, 255, 255, 0.35)",
         searchUrl: (q) => `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(q)}`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M4.5 2h15A1.5 1.5 0 0 1 21 3.5v13.9c0 .7-.4 1.35-1.02 1.68l-7.24 3.74a1.6 1.6 0 0 1-1.48 0l-7.24-3.74A1.88 1.88 0 0 1 3 17.4V3.5A1.5 1.5 0 0 1 4.5 2zm3.2 4.3v9.2h6.8v-1.85H9.85v-1.9h4.1V9.9h-4.1V8.15h4.55V6.3H7.7z"/></svg>`
       },
       "nintendo": {
-        key: "nintendo",
-        name: "Nintendo eShop",
-        sub: "Nintendo Switch",
-        accent: "#E60012",
-        glow: "rgba(230, 0, 18, 0.48)",
+        key: "nintendo", name: "Nintendo eShop", sub: "Nintendo Switch", accent: "#E60012", glow: "rgba(230, 0, 18, 0.48)",
         searchUrl: (q) => `https://www.nintendo.com/us/search/#q=${encodeURIComponent(q)}`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#E60012"><path d="M10.04 20.4H7.12C4.3 20.4 2 18.1 2 15.28V8.72C2 5.9 4.3 3.6 7.12 3.6h2.92c.46 0 .84.38.84.84v15.12c0 .46-.38.84-.84.84zm-1.12-14.8H7.12C5.4 5.6 4 7 4 8.72v6.56C4 17 5.4 18.4 7.12 18.4h1.8V5.6zM7.1 10.6a1.45 1.45 0 1 1 0-2.9 1.45 1.45 0 0 1 0 2.9zm9.78 9.8h-2.92a.84.84 0 0 1-.84-.84V4.44c0-.46.38-.84.84-.84h2.92C19.7 3.6 22 5.9 22 8.72v6.56c0 2.82-2.3 5.12-5.12 5.12zm.12-5.2a1.65 1.65 0 1 0 0-3.3 1.65 1.65 0 0 0 0 3.3z"/></svg>`
       },
       "gog": {
-        key: "gog",
-        name: "GOG.com",
-        sub: "DRM-Free PC",
-        accent: "#A855F7",
-        glow: "rgba(168, 85, 247, 0.45)",
+        key: "gog", name: "GOG.com", sub: "DRM-Free PC", accent: "#A855F7", glow: "rgba(168, 85, 247, 0.45)",
         searchUrl: (q) => `https://www.gog.com/en/games?query=${encodeURIComponent(q)}`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#A855F7"><rect x="2" y="2" width="20" height="20" rx="5" fill="#A855F7" fill-opacity="0.18" stroke="#A855F7" stroke-width="1.8"/><text x="12" y="15.2" text-anchor="middle" fill="#D8B4FE" font-family="Inter, sans-serif" font-weight="900" font-size="8.2">GOG</text></svg>`
       },
       "rockstar": {
-        key: "rockstar",
-        name: "Rockstar Launcher",
-        sub: "Official PC",
-        accent: "#F59E0B",
-        glow: "rgba(245, 158, 11, 0.48)",
+        key: "rockstar", name: "Rockstar Launcher", sub: "Official PC", accent: "#FFAB00", glow: "rgba(255, 171, 0, 0.48)",
         searchUrl: (q) => `https://store.rockstargames.com/search?q=${encodeURIComponent(q)}`,
-        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#F59E0B"><rect x="2" y="2" width="20" height="20" rx="4" fill="#F59E0B"/><path d="M7 16.5L8.6 7.5h4.3c2.1 0 3.2 1 2.9 2.7-.2 1.2-1 2-2.2 2.3l1.3 2.1h-2.4l-1.1-1.9h-1.3l-.7 3.8H7zm3.4-5.4h1.6c.8 0 1.3-.3 1.4-1 .1-.6-.3-.9-1.1-.9h-1.6l-.3 1.9zm5.9 2.2l.7 1.4 1.5.2-1.1 1.1.3 1.5-1.4-.7-1.4.7.3-1.5-1.1-1.1 1.5-.2.7-1.4z" fill="#06070a"/></svg>`
+        svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#FFAB00"><rect x="2" y="2" width="20" height="20" rx="4" fill="#FFAB00"/><path d="M7 16.5L8.6 7.5h4.3c2.1 0 3.2 1 2.9 2.7-.2 1.2-1 2-2.2 2.3l1.3 2.1h-2.4l-1.1-1.9h-1.3l-.7 3.8H7zm3.4-5.4h1.6c.8 0 1.3-.3 1.4-1 .1-.6-.3-.9-1.1-.9h-1.6l-.3 1.9zm5.9 2.2l.7 1.4 1.5.2-1.1 1.1.3 1.5-1.4-.7-1.4.7.3-1.5-1.1-1.1 1.5-.2.7-1.4z" fill="#050608"/></svg>`
       },
       "apple-appstore": {
-        key: "apple-appstore",
-        name: "App Store",
-        sub: "iOS / macOS",
-        accent: "#0D96F6",
-        glow: "rgba(13, 150, 246, 0.45)",
+        key: "apple-appstore", name: "App Store", sub: "iOS / macOS", accent: "#0D96F6", glow: "rgba(13, 150, 246, 0.45)",
         searchUrl: (q) => `https://apps.apple.com/us/search?term=${encodeURIComponent(q)}`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#0D96F6"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.96 6.32c.68-.83 1.14-1.98 1.01-3.12-.98.04-2.17.65-2.87 1.48-.63.73-1.18 1.9-1.03 3.02 1.1.08 2.22-.56 2.89-1.38z"/></svg>`
       },
       "google-play": {
-        key: "google-play",
-        name: "Google Play",
-        sub: "Android",
-        accent: "#34A853",
-        glow: "rgba(52, 168, 83, 0.45)",
+        key: "google-play", name: "Google Play", sub: "Android", accent: "#34A853", glow: "rgba(52, 168, 83, 0.45)",
         searchUrl: (q) => `https://play.google.com/store/search?q=${encodeURIComponent(q)}&c=apps`,
         svg: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="#34A853"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.65 1.65 0 0 1-.61-1.29V3.104c0-.51.23-.967.609-1.29zm11.297 11.298l2.53 2.53-11.27 6.453 8.74-8.983zm3.66-2.094l2.248 1.287c.78.447.78 1.573 0 2.02l-2.248 1.287-2.753-2.297 2.753-2.297zM6.166 1.905l11.27 6.453-2.53 2.53-8.74-8.983z"/></svg>`
       }
     };
 
     const RAWG_STORE_ID_TO_KEY = {
-      1: "steam",
-      2: "xbox-store",
-      3: "playstation-store",
-      4: "apple-appstore",
-      5: "gog",
-      6: "nintendo",
-      7: "xbox-store",
-      8: "google-play",
-      11: "epic-games"
+      1: "steam", 2: "xbox-store", 3: "playstation-store", 4: "apple-appstore",
+      5: "gog", 6: "nintendo", 7: "xbox-store", 8: "google-play", 11: "epic-games"
     };
 
     // =========================================================================
-    // 4. GLOBAL APPLICATION STATE
+    // 5. GLOBAL STATE
     // =========================================================================
     let currentUser = null;
     let heroSlides = [];
@@ -1169,25 +1312,28 @@
     let selectedVerdictTags = new Set();
     let editingReviewId = null;
 
-    const globalRenderedIds = new Set();
-    const rawgDetailCache = new Map();
-    const rawgScreenshotsCache = new Map();
-    const rawgStoresCache = new Map();
+    // Search View State (Zero-Glitch)
+    let isSearchActive = false;
+    let lastHomeScrollY = 0;
+    let searchAbortController = null;
+    let searchDebounceTimer = null;
 
-    let myWatchlist = JSON.parse(localStorage.getItem("fps_watchlist_v4") || "[]");
-    let ytCache = JSON.parse(localStorage.getItem("fps_yt_cache_v4") || "{}");
-    let localReviewsStore = JSON.parse(localStorage.getItem("fps_local_reviews_v4") || "{}");
+    const globalRenderedIds = new Set();
+
+    let wannaPlayList = JSON.parse(localStorage.getItem("fps_wanna_play") || "[]");
+    let ytCache = JSON.parse(localStorage.getItem("fps_yt_cache_v5") || "{}");
+    let localReviewsStore = JSON.parse(localStorage.getItem("fps_local_reviews_v5") || "{}");
 
     // =========================================================================
-    // 5. CUSTOM TIERED RATING SYSTEM & ROCKSTAR OVERRIDES (ZERO EMOJIS)
+    // 6. CUSTOM TIERED RATING SYSTEM & ROCKSTAR OVERRIDES (ZERO EMOJIS)
     // =========================================================================
     function getScoreTierMeta(scoreNum) {
       const s = Math.min(10, Math.max(0, Number(scoreNum)));
-      if (s >= 9.5) return { label: "PEAK", color: "#f59e0b", badgeClass: "badge-peak" };
-      if (s >= 9.0) return { label: "ABSOLUTE CINEMA", color: "#3b82f6", badgeClass: "badge-cinema" };
-      if (s >= 7.0) return { label: "SHOULD PLAY", color: "#10b981", badgeClass: "badge-shouldplay" };
-      if (s >= 5.0) return { label: "CAN TRY", color: "#ec4899", badgeClass: "badge-cantry" };
-      return { label: "TRASH CAN", color: "#ef4444", badgeClass: "badge-trash" };
+      if (s >= 9.5) return { label: "PEAK", color: "#FFAB00", badgeClass: "badge-peak" };
+      if (s >= 9.0) return { label: "ABSOLUTE CINEMA", color: "#3B82F6", badgeClass: "badge-cinema" };
+      if (s >= 7.0) return { label: "SHOULD PLAY", color: "#22C55E", badgeClass: "badge-shouldplay" };
+      if (s >= 4.0) return { label: "CAN TRY", color: "#EC4899", badgeClass: "badge-cantry" };
+      return { label: "TRASH CAN", color: "#EF4444", badgeClass: "badge-trash" };
     }
 
     function getOfficialRatingInfo(game) {
@@ -1216,9 +1362,9 @@
       score = Math.min(10, Math.max(0.5, Number(score)));
       const scoreStr = score.toFixed(1);
 
-      // Rockstar Special Overrides
+      // Special Rockstar Overrides
       if (name.includes("red dead redemption 2")) {
-        return { score: "9.7", scoreNum: 9.7, label: "ABSOLUTE RDR", color: "#f59e0b", badgeClass: "badge-rdr" };
+        return { score: "9.7", scoreNum: 9.7, label: "ABSOLUTE RDR", color: "#FFAB00", badgeClass: "badge-rdr" };
       }
       if (
         name.includes("grand theft auto v") ||
@@ -1227,7 +1373,8 @@
         name.includes("grand theft auto iv") ||
         name.includes("san andreas")
       ) {
-        return { score: "9.7", scoreNum: 9.7, label: "ABSOLUTE GTA", color: "#10b981", badgeClass: "badge-gta" };
+        const gtaScore = name.includes("vi") ? 9.9 : 9.7;
+        return { score: gtaScore.toFixed(1), scoreNum: gtaScore, label: "ABSOLUTE GTA", color: "#22C55E", badgeClass: "badge-gta" };
       }
 
       const tier = getScoreTierMeta(score);
@@ -1258,12 +1405,20 @@
       box.textContent = msg;
       box.classList.remove("hidden");
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => box.classList.add("hidden"), 2800);
+      toastTimer = setTimeout(() => box.classList.add("hidden"), 2500);
     }
 
     // =========================================================================
-    // 6. FIREBASE GOOGLE AUTHENTICATION + DROPDOWN
+    // 7. SPLASH & FIREBASE GOOGLE AUTHENTICATION
     // =========================================================================
+    function skipSplash() {
+      const splash = document.getElementById("studioSplash");
+      if (splash) splash.remove();
+      if (!localStorage.getItem("fps_guest_dismissed") && !currentUser) {
+        openLoginModal();
+      }
+    }
+
     async function loginWithGoogle() {
       const errEl = document.getElementById("loginErrorMsg");
       const btnText = document.getElementById("googleBtnText");
@@ -1311,14 +1466,11 @@
     function toggleUserDropdown(forceState) {
       const dd = document.getElementById("navUserDropdown");
       if (!dd) return;
-      if (typeof forceState === "boolean") {
-        dd.classList.toggle("hidden", !forceState);
-      } else {
-        dd.classList.toggle("hidden");
-      }
+      if (typeof forceState === "boolean") dd.classList.toggle("hidden", !forceState);
+      else dd.classList.toggle("hidden");
     }
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       currentUser = user;
       const loginModal = document.getElementById("loginModal");
       const navLoginBtn = document.getElementById("navLoginBtn");
@@ -1331,11 +1483,24 @@
         if (navLoginBtn) navLoginBtn.classList.add("hidden");
         if (navUserWrap) navUserWrap.classList.remove("hidden");
         if (navUserAvatar) {
-          navUserAvatar.src = user.photoURL || `https://placehold.co/80x80/e50914/ffffff?text=${encodeURIComponent((user.displayName || "P")[0])}`;
+          navUserAvatar.src = user.photoURL || `https://placehold.co/80x80/FFAB00/000000?text=${encodeURIComponent((user.displayName || "P")[0])}`;
         }
         if (navUserName) navUserName.textContent = (user.displayName || "Player").split(" ")[0];
         document.getElementById("dropdownUserName").textContent = user.displayName || "FPS Member";
         document.getElementById("dropdownUserEmail").textContent = user.email || "";
+
+        // Background sync WANNA PLAY list from Firestore
+        try {
+          const snap = await withTimeout(getDoc(doc(db, "user_wanna_play", user.uid)), 4500);
+          if (snap.exists() && Array.isArray(snap.data().games)) {
+            const merged = new Map();
+            [...wannaPlayList, ...snap.data().games].forEach((g) => merged.set(String(g.id || g.name), g));
+            wannaPlayList = Array.from(merged.values());
+            localStorage.setItem("fps_wanna_play", JSON.stringify(wannaPlayList));
+            updateWannaPlayBadgeCount();
+            syncHeroWannaPlayButton();
+          }
+        } catch (_) {}
       } else {
         if (navUserWrap) navUserWrap.classList.add("hidden");
         if (navLoginBtn) navLoginBtn.classList.remove("hidden");
@@ -1351,36 +1516,149 @@
       if (currentUser) {
         el.innerHTML = `Publishing as <span class="text-white font-bold">${escapeHtml(currentUser.displayName || "FPS Member")}</span>`;
       } else {
-        el.innerHTML = `Publishing as <span class="text-amber-400 font-bold">Guest Critic</span> &bull; <button type="button" onclick="FPS.openLoginModal()" class="text-[#e50914] hover:underline font-bold">Sign in with Google</button>`;
+        el.innerHTML = `Publishing as <span class="text-[#FFAB00] font-bold">Guest Critic</span> &bull; <button type="button" onclick="FPS.openLoginModal()" class="text-[#FFAB00] hover:underline font-bold">Sign in with Google</button>`;
       }
     }
 
     // =========================================================================
-    // 7. HERO BILLBOARD (50-SECOND TIMER, NO PROGRESS BAR, 20+ GAMES)
+    // 8. ZERO-GLITCH SEARCH SYSTEM WITH INSTANT BACK-TO-HOME (NO RELOAD)
+    // =========================================================================
+    const searchInput = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const homeView = document.getElementById("home-view");
+    const searchView = document.getElementById("search-view");
+    const searchGrid = document.getElementById("searchGrid");
+    const searchQueryHeading = document.getElementById("searchQueryHeading");
+    const searchCountText = document.getElementById("searchCountText");
+
+    function enterSearchView(queryText) {
+      if (!isSearchActive) {
+        lastHomeScrollY = window.scrollY || 0;
+        isSearchActive = true;
+        // Pause hero background trailer cleanly while searching
+        clearTimeout(heroVideoFadeTimer);
+        clearInterval(heroAutoTimer);
+        const heroShell = document.getElementById("heroVideoShell");
+        if (heroShell) heroShell.innerHTML = "";
+        homeView.classList.add("hidden");
+        searchView.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+      searchQueryHeading.textContent = `Results for "${queryText}"`;
+      clearSearchBtn.classList.remove("hidden");
+    }
+
+    function exitSearchToHome(scrollTop = false) {
+      if (searchAbortController) {
+        searchAbortController.abort();
+        searchAbortController = null;
+      }
+      clearTimeout(searchDebounceTimer);
+      searchInput.value = "";
+      clearSearchBtn.classList.add("hidden");
+
+      if (isSearchActive) {
+        isSearchActive = false;
+        searchView.classList.add("hidden");
+        homeView.classList.remove("hidden");
+        window.scrollTo({ top: scrollTop ? 0 : lastHomeScrollY, behavior: "instant" });
+        // Resume hero trailer smoothly
+        showHeroSlide(currentHeroIdx);
+      } else if (scrollTop) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function returnToHome(scrollTop = true) {
+      if (!document.getElementById("reviewModal").classList.contains("hidden")) {
+        closeReviewModal();
+      }
+      exitSearchToHome(scrollTop);
+    }
+
+    function jumpToHomeSection(id) {
+      if (isSearchActive) exitSearchToHome(false);
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const y = el.getBoundingClientRect().top + window.scrollY - 82;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }, 30);
+    }
+
+    function renderSearchSkeletons() {
+      searchGrid.innerHTML = Array.from({ length: 12 }).map(() => `
+        <div class="rounded-xl overflow-hidden border border-white/10 bg-[#12151f]">
+          <div class="aspect-[3/4] skeleton-shimmer"></div>
+        </div>
+      `).join("");
+    }
+
+    searchInput.addEventListener("input", (e) => {
+      const q = e.target.value.trim();
+      clearTimeout(searchDebounceTimer);
+
+      if (!q) {
+        exitSearchToHome(false);
+        return;
+      }
+
+      enterSearchView(q);
+      renderSearchSkeletons();
+      searchCountText.textContent = "SEARCHING...";
+
+      searchDebounceTimer = setTimeout(async () => {
+        if (searchAbortController) searchAbortController.abort();
+        searchAbortController = new AbortController();
+        const { signal } = searchAbortController;
+
+        try {
+          const url = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(q)}&page_size=24`;
+          const data = await cachedFetchJSON(url, signal);
+          if (signal.aborted || searchInput.value.trim() !== q) return;
+
+          const valid = (data.results || []).filter((g) => g.background_image);
+          searchCountText.textContent = `${valid.length} ${valid.length === 1 ? "TITLE" : "TITLES"} FOUND`;
+          searchGrid.innerHTML = "";
+
+          if (!valid.length) {
+            searchGrid.innerHTML = `
+              <div class="col-span-full py-16 text-center bg-white/[0.02] border border-white/10 rounded-2xl space-y-3">
+                <p class="text-base font-black uppercase tracking-wider text-white">No Games Found For "${escapeHtml(q)}"</p>
+                <p class="text-xs text-gray-400">Check spelling or try another title.</p>
+                <button onclick="FPS.exitSearchToHome()" class="mt-2 px-5 py-2.5 rounded-xl bg-[#FFAB00] text-black text-xs font-black tracking-widest uppercase">BACK TO HOME</button>
+              </div>
+            `;
+            return;
+          }
+
+          const frag = document.createDocumentFragment();
+          valid.forEach((g) => frag.appendChild(createGameCard(g, true)));
+          searchGrid.appendChild(frag);
+        } catch (err) {
+          if (err.name === "AbortError") return;
+          searchCountText.textContent = "ERROR";
+          searchGrid.innerHTML = `<div class="col-span-full py-10 text-center text-sm text-red-400">Unable to reach catalog right now. Please try again.</div>`;
+        }
+      }, 350);
+    });
+
+    // =========================================================================
+    // 9. HERO BILLBOARD (INSTANT PAINT, 50s INTERVAL, NO PROGRESS BAR, 22 GAMES)
     // =========================================================================
     async function hydrateHeroSlideFromRAWG(seed) {
       const slide = {
-        id: seed.slug,
-        rawgId: null,
-        name: seed.title,
-        slug: seed.slug,
-        yt: seed.yt,
-        forcedScore: seed.score,
-        studio: seed.studio,
-        released: seed.year,
-        description: seed.description,
+        id: seed.slug, rawgId: null, name: seed.title, slug: seed.slug,
+        yt: seed.yt, forcedScore: seed.score, studio: seed.studio,
+        released: seed.year, description: seed.description,
         background_image: `https://i.ytimg.com/vi/${seed.yt}/maxresdefault.jpg`,
-        platforms: [],
-        genres: [],
-        stores: []
+        platforms: [], genres: [], stores: []
       };
 
       try {
-        let res = await fetch(`https://api.rawg.io/api/games/${seed.slug}?key=${RAWG_API_KEY}`);
-        let data = res.ok ? await res.json() : null;
+        let data = await cachedFetchJSON(`https://api.rawg.io/api/games/${seed.slug}?key=${RAWG_API_KEY}`).catch(() => null);
         if (!data || !data.background_image) {
-          const sRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(seed.title)}&page_size=1`);
-          const sData = sRes.ok ? await sRes.json() : null;
+          const sData = await cachedFetchJSON(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(seed.title)}&page_size=1`).catch(() => null);
           if (sData?.results?.[0]) data = sData.results[0];
         }
         if (data) {
@@ -1394,72 +1672,56 @@
           if (data.stores) slide.stores = data.stores;
           if (data.metacritic) slide.metacritic = data.metacritic;
         }
-      } catch (err) {
-        console.warn("RAWG hero hydration fallback:", seed.title);
-      }
+      } catch (_) {}
       return slide;
     }
 
     async function initHeroBillboard() {
+      // INSTANT FIRST PAINT: Render immediately without waiting for network
       heroSlides = FLAGSHIP_HERO_SEEDS.map((seed) => ({
-        id: seed.slug,
-        rawgId: null,
-        name: seed.title,
-        slug: seed.slug,
-        yt: seed.yt,
-        forcedScore: seed.score,
-        studio: seed.studio,
-        released: seed.year,
-        description: seed.description,
+        id: seed.slug, rawgId: null, name: seed.title, slug: seed.slug,
+        yt: seed.yt, forcedScore: seed.score, studio: seed.studio,
+        released: seed.year, description: seed.description,
         background_image: `https://i.ytimg.com/vi/${seed.yt}/maxresdefault.jpg`,
-        platforms: [],
-        genres: [],
-        stores: []
+        platforms: [], genres: [], stores: []
       }));
 
       renderHeroIndicators();
       showHeroSlide(0);
       bindHeroGestures();
 
-      const hydrated = await Promise.all(FLAGSHIP_HERO_SEEDS.map(hydrateHeroSlideFromRAWG));
-      hydrated.forEach((h, i) => { heroSlides[i] = h; });
-      if (heroSlides[currentHeroIdx]?.background_image) {
-        document.getElementById("heroPosterLayer").style.backgroundImage = `url('${heroSlides[currentHeroIdx].background_image}')`;
-      }
-
-      // Append 6 additional top-rated RAWG titles so billboard always has 22 flagship games
-      try {
-        const extraRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&ordering=-metacritic&metacritic=88,100&page_size=22`);
-        const extraData = await extraRes.json();
-        const existingNames = new Set(heroSlides.map((s) => s.name.toLowerCase()));
-        let added = 0;
-        for (const g of (extraData.results || [])) {
-          if (added >= 6) break;
-          if (!g.background_image || existingNames.has(g.name.toLowerCase())) continue;
-          existingNames.add(g.name.toLowerCase());
-          heroSlides.push({
-            id: g.id,
-            rawgId: g.id,
-            name: g.name,
-            slug: g.slug,
-            yt: KNOWN_YT_MAP[g.name.toLowerCase()] || ytCache[g.name.toLowerCase()] || null,
-            metacritic: g.metacritic,
-            rating: g.rating,
-            studio: "Critically Acclaimed",
-            released: g.released || "2024",
-            description: "Critically acclaimed release ranked among the highest-rated titles. Open Review & Specs for verified studios, storefronts, screenshots, and trailer.",
-            background_image: g.background_image,
-            platforms: g.platforms || [],
-            genres: g.genres || [],
-            stores: g.stores || []
-          });
-          added++;
+      // Hydrate RAWG high-res posters + extra 6 top-rated titles in parallel in background
+      Promise.all([
+        Promise.all(FLAGSHIP_HERO_SEEDS.map(hydrateHeroSlideFromRAWG)),
+        cachedFetchJSON(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&ordering=-metacritic&metacritic=88,100&page_size=22`).catch(() => null)
+      ]).then(([hydrated, extraData]) => {
+        hydrated.forEach((h, i) => { heroSlides[i] = h; });
+        if (!isSearchActive && heroSlides[currentHeroIdx]?.background_image) {
+          document.getElementById("heroPosterLayer").style.backgroundImage = `url('${heroSlides[currentHeroIdx].background_image}')`;
         }
-        renderHeroIndicators();
-        updateHeroCounter();
-      } catch (err) {
-        console.warn("Extra hero fetch skipped:", err);
-      }
+
+        if (extraData?.results) {
+          const existingNames = new Set(heroSlides.map((s) => s.name.toLowerCase()));
+          let added = 0;
+          for (const g of extraData.results) {
+            if (added >= 6) break;
+            if (!g.background_image || existingNames.has(g.name.toLowerCase())) continue;
+            existingNames.add(g.name.toLowerCase());
+            heroSlides.push({
+              id: g.id, rawgId: g.id, name: g.name, slug: g.slug,
+              yt: KNOWN_YT_MAP[g.name.toLowerCase()] || ytCache[g.name.toLowerCase()] || null,
+              metacritic: g.metacritic, rating: g.rating, studio: "Critically Acclaimed",
+              released: g.released || "2024",
+              description: "Critically acclaimed release ranked among the highest-rated titles. Open Review & Specs for verified studios, storefronts, screenshots, and trailer.",
+              background_image: g.background_image,
+              platforms: g.platforms || [], genres: g.genres || [], stores: g.stores || []
+            });
+            added++;
+          }
+          renderHeroIndicators();
+          updateHeroCounter();
+        }
+      });
     }
 
     function updateHeroCounter() {
@@ -1478,18 +1740,24 @@
         btn.title = slide.name;
         btn.onclick = () => showHeroSlide(idx);
         btn.className = idx === currentHeroIdx
-          ? "h-2 w-6 rounded-full bg-[#e50914] shadow-[0_0_12px_rgba(229,9,20,0.9)] transition-all flex-shrink-0"
+          ? "h-2 w-6 rounded-full bg-[#FFAB00] shadow-[0_0_12px_rgba(255,171,0,0.85)] transition-all flex-shrink-0"
           : "h-2 w-2 rounded-full bg-white/35 hover:bg-white/75 transition-all flex-shrink-0";
         container.appendChild(btn);
       });
     }
 
-    function syncHeroWatchlistButton() {
+    function syncHeroWannaPlayButton() {
       const slide = heroSlides[currentHeroIdx];
       if (!slide) return;
-      const inList = myWatchlist.some((g) => String(g.id) === String(slide.id) || g.name === slide.name);
-      const txt = document.getElementById("heroWatchlistText");
-      if (txt) txt.textContent = inList ? "IN WATCHLIST" : "WATCHLIST";
+      const inList = wannaPlayList.some((g) => String(g.id) === String(slide.id) || g.name === slide.name);
+      const txt = document.getElementById("heroWannaPlayText");
+      const icon = document.getElementById("heroWannaPlayIcon");
+      if (txt) txt.textContent = inList ? "IN WANNA PLAY" : "WANNA PLAY";
+      if (icon) {
+        icon.innerHTML = inList
+          ? `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>`
+          : `<path stroke-linecap="round" d="M12 5v14m-7-7h14"/>`;
+      }
     }
 
     async function showHeroSlide(index) {
@@ -1512,7 +1780,7 @@
 
       updateHeroCounter();
       renderHeroIndicators();
-      syncHeroWatchlistButton();
+      syncHeroWannaPlayButton();
 
       const videoShell = document.getElementById("heroVideoShell");
       videoShell.innerHTML = "";
@@ -1520,7 +1788,7 @@
 
       const snapshotIdx = currentHeroIdx;
       heroVideoFadeTimer = setTimeout(async () => {
-        if (currentHeroIdx !== snapshotIdx) return;
+        if (currentHeroIdx !== snapshotIdx || isSearchActive) return;
         if (!document.getElementById("reviewModal").classList.contains("hidden")) return;
 
         let ytId = slide.yt;
@@ -1528,7 +1796,7 @@
           ytId = await fetchYouTubeTrailerId(slide.name);
           if (ytId) slide.yt = ytId;
         }
-        if (!ytId || currentHeroIdx !== snapshotIdx) return;
+        if (!ytId || currentHeroIdx !== snapshotIdx || isSearchActive) return;
 
         const muteParam = heroMuted ? 1 : 0;
         const iframe = document.createElement("iframe");
@@ -1537,21 +1805,21 @@
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
         iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=${muteParam}&playsinline=1&loop=1&playlist=${ytId}&controls=0&enablejsapi=1&rel=0&modestbranding=1`;
         iframe.onload = () => {
-          setTimeout(() => iframe.classList.add("is-playing"), 220);
+          setTimeout(() => iframe.classList.add("is-playing"), 200);
         };
         videoShell.innerHTML = "";
         videoShell.appendChild(iframe);
-      }, 750);
+      }, 700);
 
       restartHeroAutoAdvance();
     }
 
-    // Strict 50-Second (50000ms) Auto-Slide Interval — No Progress Bar
+    // Strict 50-Second Auto-Advance (50000ms), NO Progress Bar
     function restartHeroAutoAdvance() {
       clearInterval(heroAutoTimer);
       if (!heroMuted) return;
       heroAutoTimer = setInterval(() => {
-        if (document.getElementById("reviewModal").classList.contains("hidden")) {
+        if (!isSearchActive && document.getElementById("reviewModal").classList.contains("hidden")) {
           nextHeroSlide();
         }
       }, 50000);
@@ -1580,23 +1848,16 @@
 
       const iframe = document.getElementById("activeHeroIframe");
       if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage(
-          JSON.stringify({ event: "command", func: heroMuted ? "mute" : "unMute", args: [] }),
-          "*"
-        );
+        iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: heroMuted ? "mute" : "unMute", args: [] }), "*");
         if (!heroMuted) {
-          iframe.contentWindow.postMessage(
-            JSON.stringify({ event: "command", func: "setVolume", args: [100] }),
-            "*"
-          );
+          iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "setVolume", args: [100] }), "*");
         }
       }
     }
 
     function bindHeroGestures() {
       const el = document.getElementById("heroBillboard");
-      let startX = 0;
-      let isDown = false;
+      let startX = 0, isDown = false;
       el.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
       el.addEventListener("touchend", (e) => {
         const dx = startX - e.changedTouches[0].clientX;
@@ -1617,19 +1878,18 @@
 
     function openHeroModal(tab = "reviews") {
       const slide = heroSlides[currentHeroIdx];
-      if (!slide) return;
-      openReviewModal(slide, tab);
+      if (slide) openReviewModal(slide, tab);
     }
 
-    function toggleHeroWatchlist() {
+    function toggleHeroWannaPlay() {
       const slide = heroSlides[currentHeroIdx];
       if (!slide) return;
-      toggleGameInWatchlist(slide);
-      syncHeroWatchlistButton();
+      toggleGameInWannaPlay(slide);
+      syncHeroWannaPlayButton();
     }
 
     // =========================================================================
-    // 8. YOUTUBE DATA API v3 FETCH + LOCALSTORAGE CACHE
+    // 10. YOUTUBE DATA API v3 FETCH + LOCALSTORAGE CACHE
     // =========================================================================
     async function fetchYouTubeTrailerId(gameName) {
       const key = (gameName || "").toLowerCase().trim();
@@ -1642,23 +1902,21 @@
         const vid = data?.items?.[0]?.id?.videoId;
         if (vid) {
           ytCache[key] = vid;
-          localStorage.setItem("fps_yt_cache_v4", JSON.stringify(ytCache));
+          localStorage.setItem("fps_yt_cache_v5", JSON.stringify(ytCache));
           return vid;
         }
-      } catch (err) {
-        console.warn("YouTube API fallback:", err);
-      }
+      } catch (_) {}
       return null;
     }
 
     // =========================================================================
-    // 9. ENDLESS DEDUPLICATED HORIZONTAL & VERTICAL CAROUSELS
+    // 11. PARALLEL FAST CAROUSELS + SHIMMER SKELETONS + ENDLESS SCROLLING
     // =========================================================================
     const ALL_CATALOG_ROWS = [
-      { id: "row-rockstar", title: "Rockstar Vault", tag: "EXCLUSIVE EDITIONS", accent: "bg-amber-400", query: "developers=rockstar-games&ordering=-rating" },
-      { id: "row-peak", title: "Peak Tier", tag: "9.5 – 10.0 CRITIC", accent: "bg-amber-500", query: "ordering=-metacritic&metacritic=94,100" },
+      { id: "row-rockstar", title: "Rockstar Vault", tag: "EXCLUSIVE EDITIONS", accent: "bg-[#FFAB00]", query: "developers=rockstar-games&ordering=-rating" },
+      { id: "row-peak", title: "Peak Tier", tag: "9.5 – 10.0 CRITIC", accent: "bg-amber-400", query: "ordering=-metacritic&metacritic=94,100" },
       { id: "row-cinema", title: "Absolute Cinema", tag: "9.0 – 9.4 CRITIC", accent: "bg-blue-500", query: "ordering=-metacritic&metacritic=90,93" },
-      { id: "row-shooters", title: "Action & Shooters", tag: "HIGH OCTANE", accent: "bg-[#e50914]", query: "genres=shooter,action&ordering=-added" },
+      { id: "row-shooters", title: "Tactical & Action Shooters", tag: "HIGH OCTANE", accent: "bg-[#E50914]", query: "genres=shooter,action&ordering=-added" },
       { id: "row-openworld", title: "Open World Epics", tag: "MASSIVE WORLDS", accent: "bg-emerald-500", query: "tags=open-world&ordering=-metacritic&metacritic=84,99" },
       { id: "row-rpg", title: "RPG Masterpieces", tag: "DEEP LORE", accent: "bg-purple-500", query: "genres=role-playing-games-rpg&ordering=-metacritic&metacritic=84,99" },
       { id: "row-horror", title: "Survival Horror", tag: "DARK ATMOSPHERE", accent: "bg-red-700", query: "tags=horror,survival-horror&ordering=-metacritic" },
@@ -1672,10 +1930,10 @@
     let nextVerticalRowIndex = 0;
     let isLoadingVertical = false;
 
-    function createGameCard(game) {
+    function createGameCard(game, fullWidth = false) {
       const rating = getOfficialRatingInfo(game);
       const card = document.createElement("article");
-      card.className = "game-card relative flex-shrink-0 w-44 sm:w-52 md:w-56 bg-[#12151f] rounded-xl overflow-hidden border border-white/10 shadow-xl select-none";
+      card.className = `game-card relative ${fullWidth ? "w-full" : "flex-shrink-0 w-44 sm:w-52 md:w-56"} bg-[#12151f] rounded-xl overflow-hidden border border-white/10 shadow-xl select-none`;
       const year = (game.released || "2024").split("-")[0];
 
       card.innerHTML = `
@@ -1684,6 +1942,7 @@
             src="${game.background_image}"
             alt="${escapeHtml(game.name)}"
             loading="lazy"
+            decoding="async"
             class="w-full h-full object-cover"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent pointer-events-none"></div>
@@ -1693,8 +1952,8 @@
           <div class="absolute bottom-3 left-3 right-3 space-y-1">
             <h3 class="text-white text-xs sm:text-sm font-extrabold line-clamp-1 drop-shadow">${escapeHtml(game.name)}</h3>
             <div class="flex items-center justify-between font-mono-num text-[11px] font-bold">
-              <span class="inline-flex items-center gap-1 text-amber-400">
-                <svg class="w-3 h-3 fill-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span class="inline-flex items-center gap-1 text-[#FFAB00]">
+                <svg class="w-3 h-3 fill-[#FFAB00]" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 ${rating.score}
               </span>
               <span class="text-gray-300">${year}</span>
@@ -1711,7 +1970,7 @@
       return card;
     }
 
-    async function mountCatalogRow(rowConfig) {
+    function createRowShell(rowConfig) {
       const container = document.getElementById("catalogRowsContainer");
       const sliderId = `${rowConfig.id}-slider`;
 
@@ -1726,71 +1985,76 @@
             <span class="hidden sm:inline text-[10px] font-bold tracking-widest uppercase text-gray-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">${rowConfig.tag}</span>
           </div>
           <div class="flex items-center gap-2 flex-shrink-0">
-            <button onclick="FPS.scrollSlider('${sliderId}', -640)" aria-label="Scroll left" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#e50914] border border-white/15 text-white flex items-center justify-center transition">
+            <button onclick="FPS.scrollSlider('${sliderId}', -640)" aria-label="Scroll left" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/15 text-white flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button onclick="FPS.scrollSlider('${sliderId}', 640)" aria-label="Scroll right" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#e50914] border border-white/15 text-white flex items-center justify-center transition">
+            <button onclick="FPS.scrollSlider('${sliderId}', 640)" aria-label="Scroll right" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FFAB00] hover:text-black border border-white/15 text-white flex items-center justify-center transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
         </div>
-        <div id="${sliderId}" data-page="1" data-loading="0" data-has-more="1" class="drag-scroll flex gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-0.5 scroll-smooth"></div>
+        <div id="${sliderId}" data-page="1" data-loading="0" data-has-more="1" class="drag-scroll flex gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-0.5 scroll-smooth">
+          ${Array.from({ length: 7 }).map(() => `<div class="flex-shrink-0 w-44 sm:w-52 md:w-56 aspect-[3/4] rounded-xl skeleton-shimmer border border-white/5"></div>`).join("")}
+        </div>
       `;
 
       container.appendChild(section);
       const slider = document.getElementById(sliderId);
       enableMouseDragScroll(slider);
 
-      await fetchRowPage(slider, rowConfig.query, 1);
-
       slider.addEventListener("scroll", () => {
         if (slider.dataset.loading === "1" || slider.dataset.hasMore === "0") return;
         if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 420) {
           const nextPage = parseInt(slider.dataset.page || "1", 10) + 1;
-          fetchRowPage(slider, rowConfig.query, nextPage);
+          fetchRowPage(slider, rowConfig.query, nextPage, false);
         }
       });
+
+      return slider;
     }
 
-    async function fetchRowPage(slider, queryStr, page) {
+    async function fetchRowPage(slider, queryStr, page, clearSkeletons = false) {
       slider.dataset.loading = "1";
       slider.dataset.page = String(page);
       try {
-        const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&${queryStr}&page=${page}&page_size=16`);
-        const data = await res.json();
+        const url = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&${queryStr}&page=${page}&page_size=16`;
+        const data = await cachedFetchJSON(url);
+        if (clearSkeletons) slider.innerHTML = "";
         if (!data.results || !data.results.length) {
           slider.dataset.hasMore = "0";
           return;
         }
+        const frag = document.createDocumentFragment();
         let appended = 0;
         for (const game of data.results) {
           if (!game.background_image || globalRenderedIds.has(game.id)) continue;
           globalRenderedIds.add(game.id);
-          slider.appendChild(createGameCard(game));
+          frag.appendChild(createGameCard(game));
           appended++;
         }
+        slider.appendChild(frag);
         if (!data.next) {
           slider.dataset.hasMore = "0";
-        } else if (appended < 4 && page < 5) {
-          await fetchRowPage(slider, queryStr, page + 1);
+        } else if (appended < 4 && page < 4) {
+          await fetchRowPage(slider, queryStr, page + 1, false);
         }
       } catch (err) {
-        console.warn("Row fetch failed:", err);
+        if (clearSkeletons) slider.innerHTML = "";
       } finally {
         slider.dataset.loading = "0";
       }
     }
 
+    async function mountInitialRowsParallel() {
+      const batch = ALL_CATALOG_ROWS.slice(0, 4);
+      nextVerticalRowIndex = batch.length;
+      const sliders = batch.map((cfg) => ({ cfg, slider: createRowShell(cfg) }));
+      await Promise.all(sliders.map(({ cfg, slider }) => fetchRowPage(slider, cfg.query, 1, true)));
+    }
+
     function scrollSlider(sliderId, delta) {
       const el = document.getElementById(sliderId);
       if (el) el.scrollBy({ left: delta, behavior: "smooth" });
-    }
-
-    function scrollToSection(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const y = el.getBoundingClientRect().top + window.scrollY - 82;
-      window.scrollTo({ top: y, behavior: "smooth" });
     }
 
     function enableMouseDragScroll(slider) {
@@ -1802,10 +2066,7 @@
         startX = e.pageX - slider.offsetLeft;
         scrollLeft = slider.scrollLeft;
       });
-      slider.addEventListener("mouseleave", () => {
-        isDown = false;
-        slider.classList.remove("is-dragging");
-      });
+      slider.addEventListener("mouseleave", () => { isDown = false; slider.classList.remove("is-dragging"); });
       slider.addEventListener("mouseup", () => {
         isDown = false;
         slider.classList.remove("is-dragging");
@@ -1826,22 +2087,23 @@
     function setupEndlessVerticalObserver() {
       const sentinel = document.getElementById("verticalSentinel");
       const observer = new IntersectionObserver(async (entries) => {
-        if (!entries[0].isIntersecting || isLoadingVertical) return;
+        if (!entries[0].isIntersecting || isLoadingVertical || isSearchActive) return;
         if (nextVerticalRowIndex >= ALL_CATALOG_ROWS.length) {
           sentinel.classList.add("hidden");
           return;
         }
         isLoadingVertical = true;
         const cfg = ALL_CATALOG_ROWS[nextVerticalRowIndex++];
-        await mountCatalogRow(cfg);
+        const slider = createRowShell(cfg);
+        await fetchRowPage(slider, cfg.query, 1, true);
         isLoadingVertical = false;
         if (nextVerticalRowIndex >= ALL_CATALOG_ROWS.length) sentinel.classList.add("hidden");
-      }, { rootMargin: "450px" });
+      }, { rootMargin: "500px" });
       observer.observe(sentinel);
     }
 
     // =========================================================================
-    // 10. GAME REVIEW MODAL — INSTANT AUTOPLAY TRAILER + OFFICIAL STOREFRONTS
+    // 12. REVIEW THEATER MODAL + AUTOPLAY TRAILER + OFFICIAL STOREFRONTS
     // =========================================================================
     function syncModalSoundUI() {
       const iconMuted = document.getElementById("modalSoundIconMuted");
@@ -1891,7 +2153,6 @@
         loader.classList.add("hidden");
       }
 
-      // Guard if user already switched or closed modal while fetching
       if (!currentModalGame || currentModalGame.name !== targetName) return;
 
       if (ytId) {
@@ -1965,7 +2226,6 @@
       const storeMap = new Map();
       const gameId = details?.id || game.rawgId || (typeof game.id === "number" ? game.id : null);
 
-      // Step 1: Cross-reference game.stores from /api/games/{id} or initial card payload
       const baseStores = details?.stores || game.stores || [];
       for (const s of baseStores) {
         const key = resolveStoreKey(s.store?.id, s.store?.slug);
@@ -1974,19 +2234,10 @@
         }
       }
 
-      // Step 2: Fetch direct store URLs from /api/games/{id}/stores
       if (gameId) {
         try {
-          let liveStores = rawgStoresCache.get(String(gameId));
-          if (!liveStores) {
-            const res = await fetch(`https://api.rawg.io/api/games/${gameId}/stores?key=${RAWG_API_KEY}`);
-            if (res.ok) {
-              const data = await res.json();
-              liveStores = data.results || [];
-              rawgStoresCache.set(String(gameId), liveStores);
-            }
-          }
-          for (const item of (liveStores || [])) {
+          const data = await cachedFetchJSON(`https://api.rawg.io/api/games/${gameId}/stores?key=${RAWG_API_KEY}`);
+          for (const item of (data?.results || [])) {
             const key = resolveStoreKey(item.store_id, "");
             if (key && STORE_CATALOG[key]) {
               const existing = storeMap.get(key);
@@ -1995,12 +2246,9 @@
               }
             }
           }
-        } catch (err) {
-          console.warn("RAWG stores endpoint fallback:", err);
-        }
+        } catch (_) {}
       }
 
-      // Add official Rockstar Games Launcher for Rockstar titles
       const devStr = (details?.developers || []).map((d) => d.name.toLowerCase()).join(" ");
       const pubStr = (details?.publishers || []).map((p) => p.name.toLowerCase()).join(" ");
       const studioStr = (game.studio || "").toLowerCase();
@@ -2010,7 +2258,6 @@
         }
       }
 
-      // Order storefronts cleanly: PS, Xbox, Steam, Epic, Rockstar, Nintendo, GOG, App Store, Google Play
       const priority = ["playstation-store", "xbox-store", "steam", "epic-games", "rockstar", "nintendo", "gog", "apple-appstore", "google-play"];
       const ordered = priority.filter((k) => storeMap.has(k)).map((k) => storeMap.get(k));
 
@@ -2030,7 +2277,7 @@
             onclick="FPS.toggleVerdictTag('${escapeHtml(tag)}')"
             class="px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider uppercase border transition ${
               active
-                ? "bg-[#e50914] border-[#e50914] text-white shadow-[0_0_14px_rgba(229,9,20,0.55)]"
+                ? "bg-[#FFAB00] border-[#FFAB00] text-black shadow-[0_0_14px_rgba(255,171,0,0.5)]"
                 : "bg-white/5 border-white/15 text-gray-300 hover:bg-white/15 hover:text-white"
             }"
           >${escapeHtml(tag)}</button>
@@ -2079,9 +2326,7 @@
       }
     }
 
-    function setSliderPreset(val) {
-      updateInteractiveGauge(val);
-    }
+    function setSliderPreset(val) { updateInteractiveGauge(val); }
 
     function resetReviewComposer() {
       editingReviewId = null;
@@ -2116,7 +2361,7 @@
       resetReviewComposer();
       updateReviewAuthorStatus();
 
-      // Immediately pause hero background trailer
+      // Pause hero background trailer immediately
       clearTimeout(heroVideoFadeTimer);
       const heroShell = document.getElementById("heroVideoShell");
       if (heroShell) heroShell.innerHTML = "";
@@ -2131,14 +2376,12 @@
       badge.className = `px-3 py-1 rounded-md text-[11px] font-black tracking-widest uppercase ${rating.badgeClass}`;
       badge.textContent = rating.label;
 
-      // Critic Circular Ring
       document.getElementById("criticRingScore").textContent = rating.score;
       const criticLabel = document.getElementById("criticRingLabel");
       criticLabel.textContent = rating.label;
       criticLabel.style.color = rating.color;
       setCircularRing("criticRingArc", "criticRingGlow", rating.scoreNum, rating.color);
 
-      // Initial Metadata
       document.getElementById("metaDeveloper").textContent = game.studio || "Loading...";
       document.getElementById("metaPublisher").textContent = game.studio || "Loading...";
       document.getElementById("metaLaunchDate").textContent = formatExactDate(game.released);
@@ -2159,14 +2402,13 @@
       document.getElementById("modalSynopsis").textContent =
         game.description || "Fetching verified game overview from RAWG database...";
 
-      // Editorial 5-Bar Breakdown
       const base = rating.scoreNum;
       const metrics = [
-        { label: "GAMEPLAY", val: Math.min(10, base + 0.1), color: "bg-[#e50914]" },
-        { label: "NARRATIVE", val: Math.min(10, base + 0.2), color: "bg-amber-400" },
+        { label: "GAMEPLAY", val: Math.min(10, base + 0.1), color: "bg-[#FFAB00]" },
+        { label: "NARRATIVE", val: Math.min(10, base + 0.2), color: "bg-[#E50914]" },
         { label: "VISUALS", val: Math.min(10, base), color: "bg-blue-500" },
         { label: "AUDIO DESIGN", val: Math.min(10, base + 0.1), color: "bg-purple-400" },
-        { label: "REPLAYABILITY", val: Math.max(4.5, base - 0.2), color: "bg-emerald-400" }
+        { label: "REPLAYABILITY", val: Math.max(4.5, base - 0.2), color: "bg-green-500" }
       ];
       document.getElementById("modalScoreBars").innerHTML = metrics.map((m) => `
         <div class="bg-white/[0.04] border border-white/10 rounded-xl p-3.5">
@@ -2185,19 +2427,15 @@
       document.getElementById("modalFullScreenshotsGrid").innerHTML = `<div class="col-span-full py-6 text-xs font-bold uppercase tracking-widest text-gray-400">Loading official HD screenshots...</div>`;
       renderPcSpecs(game.platforms || []);
 
-      syncModalWatchlistButton();
+      syncModalWannaPlayButton();
       switchModalTab(defaultTab);
       modal.classList.remove("hidden");
       modal.scrollTop = 0;
       document.body.style.overflow = "hidden";
 
-      // 1. GUARANTEED INSTANT AUTOPLAY TRAILER INSIDE MODAL
+      // Parallel non-blocking modal hydration
       launchModalAutoplayTrailer(game);
-
-      // 2. Load Live Community Reviews from Firestore
       loadGameReviews(currentModalGameKey);
-
-      // 3. Live RAWG Enrichment (Details, Storefronts, Screenshots)
       enrichModalWithLiveRAWG(game);
     }
 
@@ -2209,16 +2447,7 @@
       }
 
       try {
-        let details = rawgDetailCache.get(String(lookupId));
-        if (!details) {
-          const res = await fetch(`https://api.rawg.io/api/games/${lookupId}?key=${RAWG_API_KEY}`);
-          if (res.ok) {
-            details = await res.json();
-            rawgDetailCache.set(String(lookupId), details);
-          }
-        }
-
-        // Hydrate Official Storefronts immediately using details + /stores endpoint
+        const details = await cachedFetchJSON(`https://api.rawg.io/api/games/${lookupId}?key=${RAWG_API_KEY}`).catch(() => null);
         hydrateStorefronts(game, details);
 
         if (details && currentModalGame && currentModalGame.name === game.name) {
@@ -2265,25 +2494,16 @@
             renderGenresBadges(details.genres);
           }
 
-          // Fetch HD Screenshots
-          const ssKey = String(details.id || lookupId);
-          let shots = rawgScreenshotsCache.get(ssKey);
-          if (!shots) {
-            const ssRes = await fetch(`https://api.rawg.io/api/games/${ssKey}/screenshots?key=${RAWG_API_KEY}`);
-            if (ssRes.ok) {
-              const ssData = await ssRes.json();
-              shots = (ssData.results || []).map((s) => s.image).filter(Boolean);
-              rawgScreenshotsCache.set(ssKey, shots);
-            }
-          }
-          if (shots && shots.length && currentModalGame && currentModalGame.name === game.name) {
+          const ssId = details.id || lookupId;
+          const ssData = await cachedFetchJSON(`https://api.rawg.io/api/games/${ssId}/screenshots?key=${RAWG_API_KEY}`).catch(() => null);
+          const shots = (ssData?.results || []).map((s) => s.image).filter(Boolean);
+          if (shots.length && currentModalGame && currentModalGame.name === game.name) {
             renderScreenshotsUI(shots);
           } else {
             document.getElementById("modalFullScreenshotsGrid").innerHTML = `<div class="col-span-full py-4 text-xs text-gray-400">No additional screenshots listed for this title.</div>`;
           }
         }
-      } catch (err) {
-        console.warn("RAWG live detail enrichment failed:", err);
+      } catch (_) {
         hydrateStorefronts(game, null);
       }
     }
@@ -2316,14 +2536,14 @@
 
       stripWrap.classList.remove("hidden");
       strip.innerHTML = shots.slice(0, 8).map((url) => `
-        <button type="button" onclick="FPS.openLightbox('${url}')" class="relative flex-shrink-0 w-36 sm:w-44 aspect-video rounded-lg overflow-hidden border border-white/15 hover:border-[#e50914] transition group">
-          <img src="${url}" alt="In-game screenshot" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+        <button type="button" onclick="FPS.openLightbox('${url}')" class="relative flex-shrink-0 w-36 sm:w-44 aspect-video rounded-lg overflow-hidden border border-white/15 hover:border-[#FFAB00] transition group">
+          <img src="${url}" alt="In-game screenshot" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
         </button>
       `).join("");
 
       fullGrid.innerHTML = shots.map((url) => `
-        <button type="button" onclick="FPS.openLightbox('${url}')" class="relative aspect-video rounded-xl overflow-hidden border border-white/15 hover:border-[#e50914] transition group bg-black">
-          <img src="${url}" alt="In-game screenshot" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+        <button type="button" onclick="FPS.openLightbox('${url}')" class="relative aspect-video rounded-xl overflow-hidden border border-white/15 hover:border-[#FFAB00] transition group bg-black">
+          <img src="${url}" alt="In-game screenshot" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
         </button>
       `).join("");
     }
@@ -2341,8 +2561,8 @@
           <span class="inline-block px-2.5 py-0.5 rounded bg-white/10 text-[10px] font-black tracking-widest uppercase text-gray-300">MINIMUM REQUIREMENTS</span>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed whitespace-pre-line">${escapeHtml(minText)}</p>
         </div>
-        <div class="bg-white/[0.04] border border-[#e50914]/35 rounded-xl p-5 space-y-2">
-          <span class="inline-block px-2.5 py-0.5 rounded bg-[#e50914]/20 text-[10px] font-black tracking-widest uppercase text-red-300">RECOMMENDED REQUIREMENTS</span>
+        <div class="bg-white/[0.04] border border-[#FFAB00]/35 rounded-xl p-5 space-y-2">
+          <span class="inline-block px-2.5 py-0.5 rounded bg-[#FFAB00]/20 text-[10px] font-black tracking-widest uppercase text-[#FFAB00]">RECOMMENDED REQUIREMENTS</span>
           <p class="text-xs sm:text-sm text-gray-200 leading-relaxed whitespace-pre-line">${escapeHtml(recText)}</p>
         </div>
       `;
@@ -2362,7 +2582,7 @@
       document.getElementById("modalIframe").src = "";
       document.getElementById("reviewModal").classList.add("hidden");
       document.body.style.overflow = "";
-      showHeroSlide(currentHeroIdx);
+      if (!isSearchActive) showHeroSlide(currentHeroIdx);
     }
 
     function switchModalTab(tab) {
@@ -2371,7 +2591,7 @@
         const btn = document.getElementById(`tabBtn-${t}`);
         if (t === tab) {
           pane.classList.remove("hidden");
-          btn.className = "pb-3.5 text-white border-b-2 border-[#e50914] whitespace-nowrap transition";
+          btn.className = "pb-3.5 text-white border-b-2 border-[#FFAB00] whitespace-nowrap transition";
         } else {
           pane.classList.add("hidden");
           btn.className = "pb-3.5 text-gray-400 hover:text-white border-b-2 border-transparent whitespace-nowrap transition";
@@ -2383,19 +2603,19 @@
           document.querySelectorAll("#modalScoreBars .score-bar-fill").forEach((bar) => {
             bar.style.width = bar.dataset.target;
           });
-        }, 60);
+        }, 50);
       }
     }
 
     // =========================================================================
-    // 11. FIRESTORE COMMUNITY REVIEWS ENGINE + LOCALSTORAGE FALLBACK
+    // 13. OPTIMISTIC INSTANT REVIEW PUBLISHING (<50ms) + BACKGROUND FIRESTORE
     // =========================================================================
     function getActiveUserIdentity() {
       if (currentUser) {
         return {
           uid: currentUser.uid,
           name: currentUser.displayName || "FPS Critic",
-          photo: currentUser.photoURL || `https://placehold.co/80x80/e50914/ffffff?text=${encodeURIComponent((currentUser.displayName || "P")[0])}`
+          photo: currentUser.photoURL || `https://placehold.co/80x80/FFAB00/000000?text=${encodeURIComponent((currentUser.displayName || "P")[0])}`
         };
       }
       let guestId = localStorage.getItem("fps_guest_uid");
@@ -2411,30 +2631,33 @@
     }
 
     async function loadGameReviews(gameKey) {
-      const feed = document.getElementById("communityReviewsFeed");
-      feed.innerHTML = `<div class="py-8 text-center text-xs font-bold tracking-widest uppercase text-gray-400">Syncing reviews from Firestore...</div>`;
-
-      const mergedMap = new Map();
+      // Paint local reviews IMMEDIATELY (0ms latency)
       const localList = localReviewsStore[gameKey] || [];
-      localList.forEach((r) => mergedMap.set(r.docId, r));
+      currentModalReviews = [...localList].sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
+      updateCommunityScoreRing();
+      renderCommunityReviewsFeed();
 
+      // Hydrate from Firestore asynchronously in background with 5s timeout
       try {
         const q = query(collection(db, "game_reviews"), where("gameId", "==", gameKey));
-        const snap = await getDocs(q);
+        const snap = await withTimeout(getDocs(q), 5000);
+        if (currentModalGameKey !== gameKey) return;
+
+        const mergedMap = new Map();
+        (localReviewsStore[gameKey] || []).forEach((r) => mergedMap.set(r.docId, r));
         snap.forEach((docSnap) => {
           const d = docSnap.data();
           const ts = d.updatedAt?.toMillis ? d.updatedAt.toMillis() : (d.clientTimestamp || Date.now());
           mergedMap.set(docSnap.id, { docId: docSnap.id, ...d, timestampMs: ts });
         });
-        document.getElementById("dbSyncBadge").innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>FIRESTORE LIVE SYNC</span>`;
-      } catch (err) {
-        console.warn("Firestore read fallback to localStorage:", err);
-        document.getElementById("dbSyncBadge").innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span><span>LOCAL STORAGE SYNC</span>`;
-      }
 
-      currentModalReviews = Array.from(mergedMap.values()).sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
-      updateCommunityScoreRing();
-      renderCommunityReviewsFeed();
+        currentModalReviews = Array.from(mergedMap.values()).sort((a, b) => (b.timestampMs || 0) - (a.timestampMs || 0));
+        updateCommunityScoreRing();
+        renderCommunityReviewsFeed();
+        document.getElementById("dbSyncBadge").innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>FIRESTORE LIVE SYNC</span>`;
+      } catch (_) {
+        document.getElementById("dbSyncBadge").innerHTML = `<span class="w-2 h-2 rounded-full bg-[#FFAB00]"></span><span>INSTANT LOCAL SYNC</span>`;
+      }
     }
 
     function updateCommunityScoreRing() {
@@ -2450,7 +2673,7 @@
         scoreEl.textContent = "--";
         labelEl.textContent = "BE THE FIRST";
         labelEl.style.color = "#9ca3af";
-        setCircularRing("communityRingArc", "communityRingGlow", null, "#3b82f6");
+        setCircularRing("communityRingArc", "communityRingGlow", null, "#3B82F6");
         return;
       }
 
@@ -2471,7 +2694,7 @@
     function updateTierFilterButtons() {
       document.querySelectorAll(".tier-filter-btn").forEach((btn) => {
         btn.className = btn.dataset.filter === activeTierFilter
-          ? "tier-filter-btn px-3 py-1 rounded-full bg-[#e50914] text-white transition"
+          ? "tier-filter-btn px-3 py-1 rounded-full bg-[#FFAB00] text-black transition"
           : "tier-filter-btn px-3 py-1 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition";
       });
     }
@@ -2510,7 +2733,7 @@
           <article class="bg-white/[0.03] border border-white/10 hover:border-white/20 rounded-2xl p-5 space-y-3.5 transition">
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div class="flex items-center gap-3">
-                <img src="${r.userPhoto || "https://placehold.co/80x80/e50914/ffffff?text=P"}" alt="${escapeHtml(r.userName)}" class="w-10 h-10 rounded-full object-cover border border-white/20" />
+                <img src="${r.userPhoto || "https://placehold.co/80x80/FFAB00/000000?text=P"}" alt="${escapeHtml(r.userName)}" class="w-10 h-10 rounded-full object-cover border border-white/20" />
                 <div>
                   <div class="text-sm font-extrabold text-white">${escapeHtml(r.userName || "FPS Member")}</div>
                   <div class="text-[11px] font-semibold text-gray-400">${dateLabel}</div>
@@ -2540,7 +2763,8 @@
       }).join("");
     }
 
-    async function submitUserReview() {
+    // OPTIMISTIC UI: Instant <50ms publish, background non-blocking Firestore write
+    function submitUserReview() {
       if (!currentModalGame) return;
 
       const score = parseFloat(document.getElementById("reviewScoreSlider").value);
@@ -2551,11 +2775,6 @@
         showToast("Write a headline or critique before publishing");
         return;
       }
-
-      const btn = document.getElementById("publishReviewBtn");
-      const btnText = document.getElementById("publishReviewBtnText");
-      btn.disabled = true;
-      btnText.textContent = "PUBLISHING...";
 
       const identity = getActiveUserIdentity();
       const tier = getScoreTierMeta(score);
@@ -2577,29 +2796,31 @@
         clientTimestamp: nowMs
       };
 
-      let syncedToCloud = false;
-      try {
-        await setDoc(doc(db, "game_reviews", docId), {
-          ...payload,
-          updatedAt: serverTimestamp()
-        });
-        syncedToCloud = true;
-      } catch (err) {
-        console.warn("Firestore write fallback to localStorage:", err);
-      }
-
-      const list = localReviewsStore[currentModalGameKey] || [];
-      const existingIdx = list.findIndex((r) => r.docId === docId);
       const record = { docId, ...payload, timestampMs: nowMs };
-      if (existingIdx >= 0) list[existingIdx] = record;
+
+      // 1. IMMEDIATELY update localStorage & live state (<50ms)
+      const list = localReviewsStore[currentModalGameKey] || [];
+      const localIdx = list.findIndex((r) => r.docId === docId);
+      if (localIdx >= 0) list[localIdx] = record;
       else list.unshift(record);
       localReviewsStore[currentModalGameKey] = list;
-      localStorage.setItem("fps_local_reviews_v4", JSON.stringify(localReviewsStore));
+      localStorage.setItem("fps_local_reviews_v5", JSON.stringify(localReviewsStore));
 
-      btn.disabled = false;
+      const liveIdx = currentModalReviews.findIndex((r) => r.docId === docId);
+      if (liveIdx >= 0) currentModalReviews[liveIdx] = record;
+      else currentModalReviews.unshift(record);
+
+      // 2. IMMEDIATELY recalculate average, render feed, reset composer & toast
+      updateCommunityScoreRing();
+      renderCommunityReviewsFeed();
       resetReviewComposer();
-      await loadGameReviews(currentModalGameKey);
-      showToast(syncedToCloud ? "Review published to Firestore" : "Review saved locally");
+      showToast("Review Published!");
+
+      // 3. Fire-and-forget background Firestore sync with 5s timeout (never freezes UI)
+      withTimeout(
+        setDoc(doc(db, "game_reviews", docId), { ...payload, updatedAt: serverTimestamp() }),
+        5000
+      ).catch(() => {});
     }
 
     function startEditReview(docId) {
@@ -2617,34 +2838,45 @@
       document.getElementById("reviewModal").scrollTo({ top: 520, behavior: "smooth" });
     }
 
-    async function deleteUserReview(docId) {
-      try {
-        await deleteDoc(doc(db, "game_reviews", docId));
-      } catch (err) {
-        console.warn("Firestore delete fallback:", err);
-      }
-      const list = localReviewsStore[currentModalGameKey] || [];
-      localReviewsStore[currentModalGameKey] = list.filter((r) => r.docId !== docId);
-      localStorage.setItem("fps_local_reviews_v4", JSON.stringify(localReviewsStore));
+    function deleteUserReview(docId) {
+      // Optimistic instant delete
+      localReviewsStore[currentModalGameKey] = (localReviewsStore[currentModalGameKey] || []).filter((r) => r.docId !== docId);
+      localStorage.setItem("fps_local_reviews_v5", JSON.stringify(localReviewsStore));
+      currentModalReviews = currentModalReviews.filter((r) => r.docId !== docId);
       if (editingReviewId === docId) resetReviewComposer();
-      await loadGameReviews(currentModalGameKey);
-      showToast("Review deleted");
+      updateCommunityScoreRing();
+      renderCommunityReviewsFeed();
+      showToast("Review Deleted");
+
+      // Background Firestore delete
+      withTimeout(deleteDoc(doc(db, "game_reviews", docId)), 5000).catch(() => {});
     }
 
     // =========================================================================
-    // 12. WATCHLIST & CLIPBOARD
+    // 14. WANNA PLAY QUEUE (LOCALSTORAGE + BACKGROUND FIRESTORE SYNC)
     // =========================================================================
-    function updateWatchlistBadgeCount() {
-      document.getElementById("navWatchlistCount").textContent = String(myWatchlist.length);
+    function updateWannaPlayBadgeCount() {
+      document.getElementById("navWannaPlayCount").textContent = String(wannaPlayList.length);
     }
 
-    function toggleGameInWatchlist(game) {
-      const idx = myWatchlist.findIndex((g) => String(g.id) === String(game.id) || g.name === game.name);
+    function persistWannaPlay() {
+      localStorage.setItem("fps_wanna_play", JSON.stringify(wannaPlayList));
+      updateWannaPlayBadgeCount();
+      if (currentUser) {
+        withTimeout(
+          setDoc(doc(db, "user_wanna_play", currentUser.uid), { games: wannaPlayList, updatedAt: serverTimestamp() }),
+          5000
+        ).catch(() => {});
+      }
+    }
+
+    function toggleGameInWannaPlay(game) {
+      const idx = wannaPlayList.findIndex((g) => String(g.id) === String(game.id) || g.name === game.name);
       if (idx >= 0) {
-        myWatchlist.splice(idx, 1);
-        showToast("Removed from Watchlist");
+        wannaPlayList.splice(idx, 1);
+        showToast("Removed from WANNA PLAY");
       } else {
-        myWatchlist.push({
+        wannaPlayList.push({
           id: game.id,
           rawgId: game.rawgId || (typeof game.id === "number" ? game.id : null),
           name: game.name,
@@ -2660,92 +2892,90 @@
           platforms: game.platforms,
           stores: game.stores
         });
-        showToast("Added to Watchlist");
+        showToast("Added to WANNA PLAY");
       }
-      localStorage.setItem("fps_watchlist_v4", JSON.stringify(myWatchlist));
-      updateWatchlistBadgeCount();
+      persistWannaPlay();
     }
 
-    function syncModalWatchlistButton() {
+    function syncModalWannaPlayButton() {
       if (!currentModalGame) return;
-      const exists = myWatchlist.some((g) => String(g.id) === String(currentModalGame.id) || g.name === currentModalGame.name);
-      const label = document.getElementById("modalWatchlistLabel");
-      const icon = document.getElementById("modalWatchlistIcon");
+      const exists = wannaPlayList.some((g) => String(g.id) === String(currentModalGame.id) || g.name === currentModalGame.name);
+      const label = document.getElementById("modalWannaPlayLabel");
+      const icon = document.getElementById("modalWannaPlayIcon");
       if (exists) {
-        label.textContent = "IN WATCHLIST";
+        label.textContent = "IN WANNA PLAY";
         icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>`;
       } else {
-        label.textContent = "ADD TO WATCHLIST";
+        label.textContent = "WANNA PLAY";
         icon.innerHTML = `<path stroke-linecap="round" d="M12 5v14m-7-7h14"/>`;
       }
     }
 
-    function toggleCurrentWatchlist() {
+    function toggleCurrentWannaPlay() {
       if (!currentModalGame) return;
-      toggleGameInWatchlist(currentModalGame);
-      syncModalWatchlistButton();
-      syncHeroWatchlistButton();
+      toggleGameInWannaPlay(currentModalGame);
+      syncModalWannaPlayButton();
+      syncHeroWannaPlayButton();
     }
 
-    function openWatchlistModal() {
-      const list = document.getElementById("watchlistList");
+    function openWannaPlayModal() {
+      const list = document.getElementById("wannaPlayList");
       list.innerHTML = "";
-      if (!myWatchlist.length) {
+      if (!wannaPlayList.length) {
         list.innerHTML = `
           <div class="py-12 text-center space-y-2 text-gray-400">
-            <p class="text-sm font-black uppercase tracking-wider text-white">Your Watchlist is Empty</p>
-            <p class="text-xs">Open any game and add it to build your personal queue.</p>
+            <p class="text-sm font-black uppercase tracking-wider text-white">Your WANNA PLAY List is Empty</p>
+            <p class="text-xs">Tap + WANNA PLAY on any game to build your personal queue.</p>
           </div>
         `;
       } else {
-        myWatchlist.forEach((game, idx) => {
+        wannaPlayList.forEach((game, idx) => {
           const rating = getOfficialRatingInfo(game);
           const item = document.createElement("div");
-          item.className = "flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-white/25 transition";
+          item.className = "flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-[#FFAB00]/40 transition";
           item.innerHTML = `
-            <div class="flex items-center gap-3.5 cursor-pointer min-w-0 flex-grow" onclick="FPS.openFromWatchlist(${idx})">
-              <img src="${game.background_image}" alt="${escapeHtml(game.name)}" class="w-16 h-12 rounded-lg object-cover flex-shrink-0" />
+            <div class="flex items-center gap-3.5 cursor-pointer min-w-0 flex-grow" onclick="FPS.openFromWannaPlay(${idx})">
+              <img src="${game.background_image}" alt="${escapeHtml(game.name)}" loading="lazy" class="w-16 h-12 rounded-lg object-cover flex-shrink-0" />
               <div class="min-w-0">
                 <h4 class="text-sm font-bold text-white truncate">${escapeHtml(game.name)}</h4>
                 <div class="flex items-center gap-2 mt-1">
-                  <span class="font-mono-num text-xs font-black text-amber-400">${rating.score}</span>
+                  <span class="font-mono-num text-xs font-black text-[#FFAB00]">${rating.score}</span>
                   <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${rating.badgeClass}">${rating.label}</span>
                 </div>
               </div>
             </div>
-            <button onclick="FPS.removeWatchlistItem(${idx})" class="p-2 text-gray-400 hover:text-red-500 transition" title="Remove">
+            <button onclick="FPS.removeWannaPlayItem(${idx})" class="p-2 text-gray-400 hover:text-red-500 transition" title="Remove">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             </button>
           `;
           list.appendChild(item);
         });
       }
-      document.getElementById("watchlistModal").classList.remove("hidden");
+      document.getElementById("wannaPlayModal").classList.remove("hidden");
     }
 
-    function closeWatchlistModal() {
-      document.getElementById("watchlistModal").classList.add("hidden");
+    function closeWannaPlayModal() {
+      document.getElementById("wannaPlayModal").classList.add("hidden");
     }
 
-    function openFromWatchlist(idx) {
-      const g = myWatchlist[idx];
+    function openFromWannaPlay(idx) {
+      const g = wannaPlayList[idx];
       if (!g) return;
-      closeWatchlistModal();
+      closeWannaPlayModal();
       openReviewModal(g, "reviews");
     }
 
-    function removeWatchlistItem(idx) {
-      myWatchlist.splice(idx, 1);
-      localStorage.setItem("fps_watchlist_v4", JSON.stringify(myWatchlist));
-      updateWatchlistBadgeCount();
-      syncHeroWatchlistButton();
-      openWatchlistModal();
+    function removeWannaPlayItem(idx) {
+      wannaPlayList.splice(idx, 1);
+      persistWannaPlay();
+      syncHeroWannaPlayButton();
+      openWannaPlayModal();
     }
 
     function copyShareLink() {
       if (!currentModalGame) return;
       const input = document.createElement("input");
-      input.value = `${currentModalGame.name} — Reviewed on FPS (${window.location.href})`;
+      input.value = `${currentModalGame.name} — Rated on FPS (${window.location.href})`;
       document.body.appendChild(input);
       input.select();
       document.execCommand("copy");
@@ -2754,56 +2984,13 @@
     }
 
     // =========================================================================
-    // 13. LIVE DEBOUNCED SEARCH + GLOBAL DISMISS LISTENERS
+    // 15. GLOBAL DISMISS LISTENERS & PUBLIC API
     // =========================================================================
-    const searchInput = document.getElementById("searchInput");
-    const clearSearchBtn = document.getElementById("clearSearchBtn");
-    const searchSection = document.getElementById("searchSection");
-    const searchGrid = document.getElementById("searchGrid");
-    const searchCountText = document.getElementById("searchCountText");
-    let searchTimer = null;
-
-    searchInput.addEventListener("input", (e) => {
-      const q = e.target.value.trim();
-      clearTimeout(searchTimer);
-      if (!q) {
-        clearSearchBtn.classList.add("hidden");
-        searchSection.classList.add("hidden");
-        return;
-      }
-      clearSearchBtn.classList.remove("hidden");
-      searchTimer = setTimeout(async () => {
-        searchSection.classList.remove("hidden");
-        searchGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs font-bold tracking-widest uppercase text-gray-400">Searching RAWG database...</div>`;
-        try {
-          const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(q)}&page_size=18`);
-          const data = await res.json();
-          searchGrid.innerHTML = "";
-          const valid = (data.results || []).filter((g) => g.background_image);
-          searchCountText.textContent = `${valid.length} TITLES FOUND`;
-          if (!valid.length) {
-            searchGrid.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-gray-400">No games found for "${escapeHtml(q)}".</div>`;
-            return;
-          }
-          valid.forEach((g) => searchGrid.appendChild(createGameCard(g)));
-          scrollToSection("searchSection");
-        } catch (err) {
-          searchGrid.innerHTML = `<div class="col-span-full py-8 text-center text-sm text-red-400">Search error. Please try again.</div>`;
-        }
-      }, 360);
-    });
-
-    clearSearchBtn.addEventListener("click", () => {
-      searchInput.value = "";
-      clearSearchBtn.classList.add("hidden");
-      searchSection.classList.add("hidden");
-    });
-
     document.getElementById("reviewModal").addEventListener("click", (e) => {
       if (e.target.id === "reviewModal") closeReviewModal();
     });
-    document.getElementById("watchlistModal").addEventListener("click", (e) => {
-      if (e.target.id === "watchlistModal") closeWatchlistModal();
+    document.getElementById("wannaPlayModal").addEventListener("click", (e) => {
+      if (e.target.id === "wannaPlayModal") closeWannaPlayModal();
     });
     document.addEventListener("click", (e) => {
       if (!e.target.closest("#navUserWrap")) toggleUserDropdown(false);
@@ -2812,26 +2999,27 @@
       if (e.key === "Escape") {
         if (!document.getElementById("screenshotLightbox").classList.contains("hidden")) closeLightbox();
         else if (!document.getElementById("reviewModal").classList.contains("hidden")) closeReviewModal();
-        else if (!document.getElementById("watchlistModal").classList.contains("hidden")) closeWatchlistModal();
+        else if (!document.getElementById("wannaPlayModal").classList.contains("hidden")) closeWannaPlayModal();
+        else if (isSearchActive) exitSearchToHome(false);
       }
     });
 
-    // =========================================================================
-    // 14. EXPOSE PUBLIC API ON WINDOW
-    // =========================================================================
     window.FPS = {
+      skipSplash,
       loginWithGoogle,
       logout,
       openLoginModal,
       dismissLoginAsGuest,
       toggleUserDropdown,
-      scrollToSection,
+      returnToHome,
+      jumpToHomeSection,
+      exitSearchToHome,
       scrollSlider,
       nextHeroSlide,
       prevHeroSlide,
       toggleHeroSound,
       openHeroModal,
-      toggleHeroWatchlist,
+      toggleHeroWannaPlay,
       openReviewModal,
       closeReviewModal,
       switchModalTab,
@@ -2846,41 +3034,36 @@
       startEditReview,
       deleteUserReview,
       setReviewTierFilter,
-      toggleCurrentWatchlist,
-      openWatchlistModal,
-      closeWatchlistModal,
-      openFromWatchlist,
-      removeWatchlistItem,
+      toggleCurrentWannaPlay,
+      openWannaPlayModal,
+      closeWannaPlayModal,
+      openFromWannaPlay,
+      removeWannaPlayItem,
       copyShareLink
     };
 
     // =========================================================================
-    // 15. BOOTSTRAP APPLICATION
+    // 16. ULTRA-FAST APPLICATION BOOTSTRAP
     // =========================================================================
-    window.addEventListener("load", async () => {
-      updateWatchlistBadgeCount();
+    window.addEventListener("DOMContentLoaded", () => {
+      updateWannaPlayBadgeCount();
       renderVerdictTagButtons();
       updateInteractiveGauge(9.2);
 
-      // Remove 1.85s studio splash & present Google Sign-In Gate on first visit
+      // Remove 1.65s Rockstar-style FPS SVG Splash automatically
       setTimeout(() => {
         const splash = document.getElementById("studioSplash");
         if (splash) splash.remove();
         if (!localStorage.getItem("fps_guest_dismissed") && !currentUser) {
           openLoginModal();
         }
-      }, 1900);
+      }, 1700);
 
-      // Launch 22-Game Hero Billboard (50s interval, no progress bar)
+      // Instant Hero First Paint + Parallel Initial 4 Carousels
       initHeroBillboard();
-
-      // Mount Initial 4 Core Deduplicated Rows
-      for (let i = 0; i < 4; i++) {
-        await mountCatalogRow(ALL_CATALOG_ROWS[nextVerticalRowIndex++]);
-      }
-
-      // Activate Endless Vertical Scrolling
-      setupEndlessVerticalObserver();
+      mountInitialRowsParallel().then(() => {
+        setupEndlessVerticalObserver();
+      });
     });
   </script>
 </body>
